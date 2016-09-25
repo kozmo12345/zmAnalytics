@@ -14,25 +14,25 @@ data = sp.genfromtxt(filePath, delimiter="\t", dtype='|S20')
 colors = ['g', 'k', 'b', 'm', 'r']
 linestyles = ['-', '-.', '--', ':', '-']
 
-t = data[:, 0]
-g = data[:, 1].astype('i8')
-n = data[:, 2].astype('i8')
-r = data[:, 3].astype('f8')
-q = data[:, 4].astype('i8')
-ms = data[:, 5].astype('i8')
-md = data[:, 6].astype('i8')
+# t = data[:, 0].astype(int)
+g = data[:, 1].astype(int)
+n = data[:, 2].astype(int)
+r = data[:, 3].astype(float)
+q = data[:, 4].astype(int)
+ms = data[:, 5].astype(int)
+md = data[:, 6].astype(int)
 c = data[:, 7]
-v = data[:, 8].astype('i8')
-# # print("Number of invalid entries:", sp.sum(sp.isnan(r)))
-# t = t[~sp.isnan(r)]
-g = g[~sp.isnan(g)]
-# n = n[~sp.isnan(r)]
-# r = r[~sp.isnan(r)]
-# q = q[~sp.isnan(r)]
-# ms = ms[~sp.isnan(r)]
-# md = md[~sp.isnan(r)]
-# c = c[~sp.isnan(r)]
-# v = v[~sp.isnan(r)]
+v = data[:, 8].astype(int)
+# print("Number of invalid entries:", sp.sum(sp.isnan(r)))
+# t = t[~sp.isnan(q)]
+g = g[~sp.isnan(q)]
+n = n[~sp.isnan(q)]
+r = r[~sp.isnan(q)]
+q = q[~sp.isnan(q)]
+ms = ms[~sp.isnan(q)]
+md = md[~sp.isnan(q)]
+c = c[~sp.isnan(q)]
+v = v[~sp.isnan(q)]
 
 # r = r[~sp.isnan(r)]
 # q = q[~sp.isnan(r)]
