@@ -1,3 +1,5 @@
+#-*- coding: utf-8 -*-
+
 import os
 from utils import DATA_DIR, CHART_DIR
 import scipy as sp
@@ -6,8 +8,7 @@ import matplotlib.pyplot as plt
 sp.random.seed(3)  # 이후에 같은 데이터를 생성하기 위해
 
 date = "2016-09-23"
-filePath = os.path.join("C:\\", "Data\\2016-09-23.txt");
-# dtype = sp.dtype([('time','|S20'),('grade','i8'),('name','O'),('rate','f8'),('quality','i8'),('mesu','i8'),('medo','i8'),('code','|S20'),('value','i8')])
+filePath = os.path.join("C:\\", "Data\\2016-10-07.txt");
 data = sp.genfromtxt(filePath, delimiter="\t", dtype='|S20')
 
 # # 예제는 3갸지 범주이다
@@ -17,22 +18,22 @@ linestyles = ['-', '-.', '--', ':', '-']
 # t = data[:, 0].astype(int)
 g = data[:, 1].astype(int)
 n = data[:, 2].astype(int)
-r = data[:, 3].astype(float)
+# r = data[:, 3].astype(float)
 q = data[:, 4].astype(int)
 ms = data[:, 5].astype(int)
 md = data[:, 6].astype(int)
-c = data[:, 7]
-v = data[:, 8].astype(int)
+# c = data[:, 7]
+# v = data[:, 8].astype(int)
 # print("Number of invalid entries:", sp.sum(sp.isnan(r)))
 # t = t[~sp.isnan(q)]
-g = g[~sp.isnan(q)]
-n = n[~sp.isnan(q)]
-r = r[~sp.isnan(q)]
-q = q[~sp.isnan(q)]
-ms = ms[~sp.isnan(q)]
-md = md[~sp.isnan(q)]
-c = c[~sp.isnan(q)]
-v = v[~sp.isnan(q)]
+g = g[~sp.isnan(g)]
+# n = n[~sp.isnan(q)]
+# r = r[~sp.isnan(q)]
+# q = q[~sp.isnan(q)]
+# ms = ms[~sp.isnan(q)]
+# md = md[~sp.isnan(q)]
+# c = c[~sp.isnan(q)]
+# v = v[~sp.isnan(q)]
 
 # r = r[~sp.isnan(r)]
 # q = q[~sp.isnan(r)]

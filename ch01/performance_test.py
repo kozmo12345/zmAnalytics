@@ -7,7 +7,6 @@
 #
 # It is made available under the MIT License
 
-
 import timeit
 
 normal_py_sec = timeit.timeit('sum(x*x for x in range(1000))',
