@@ -45,8 +45,7 @@ for i, t in enumerate(times):
         str_medoTime = t.decode('utf-8')
         break;
 
-
-for i, code in enumerate(codes):
+for ci, code in enumerate(codes):
     exportData = data[data[:,7] == code]
 
     # firstTime for time conver to index
@@ -56,9 +55,13 @@ for i, code in enumerate(codes):
     maxlist = sp.array([])
     ti = sp.array([])
     f_rate = exportData[:, 3].astype(float)
-    i_volume = exportData[:, 4].astype(int)
-    i_mesur = exportData[:, 5].astype(int)
-    i_medor = exportData[:, 6].astype(int)
+    f_mean_rate = sp.mean(f_rate)
+    f_volume = exportData[:, 4].astype(int)
+    f_mean_volume = sp.mean(f_volume)
+    f_mesur = exportData[:, 5].astype(int)
+    f_mean_mesur = sp.mean(f_mesur)
+    f_medor = exportData[:, 6].astype(int)
+    f_mean_medor = sp.mean(f_medor)
     maxIndex = sp.argmax(f_rate)
     maxTime = time.strptime(exportData[maxIndex,0].decode('utf-8'), '%H:%M:%S')
     maxSecond = datetime.timedelta(hours=maxTime.tm_hour,minutes=maxTime.tm_min,seconds=maxTime.tm_sec).total_seconds()
@@ -84,14 +87,14 @@ for i, code in enumerate(codes):
         elif(second_standardTime < second and second <= second_medoTime and code.decode('utf-8') in downCost and downCost[code.decode('utf-8')] >= float(str_currentRate)):
             downCost[code.decode('utf-8')] = float(str_currentRate)
 
-
-    plt.clf()
-    plt.plot(ti, f_rate, 'r--', ti, i_volume, 'bs', ti, i_mesur, 'g^', ti, i_medor)
-    # plt.plot(ti, f_rate)
-    plt.title("ZM")
-    plt.xlabel("Time")
-    plt.ylabel("Value")
-    plt.autoscale(tight=True)
-    plt.ylim(ymin=0)
-    plt.grid(True, linestyle='-', color='0.75')
-    plt.show()
+    if(ci == 124):
+        plt.clf()
+        plt.plot(ti, (f_rate/f_mean_rate)*10, 'r-', ti, (f_volume/f_mean_volume)*10, 'b-', ti, (f_mesur/f_mean_mesur)*10, 'g-', ti, (f_medor/f_mean_medor)*10, 'y-')
+        # plt.plot(ti, f_rate)
+        plt.title("ZM")
+        plt.xlabel("Time")
+        plt.ylabel("Value")
+        plt.autoscale(tight=True)
+        plt.ylim(ymin=0)
+        plt.grid(True, linestyle='-', color='0.75')
+        plt.show()
