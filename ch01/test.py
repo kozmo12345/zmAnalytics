@@ -31,7 +31,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
         downCost = dict()
         
         str_standardTime = datetime.timedelta(hours=9,minutes=2,seconds=00).total_seconds()
-        str_medoTime = datetime.timedelta(hours=14,minutes=29,seconds=00).total_seconds()
+        str_medoTime = datetime.timedelta(hours=9,minutes=10,seconds=00).total_seconds()
         
         second_standardTime = 0
         for i, t in enumerate(times):
@@ -64,7 +64,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
             maxIndex = sp.argmax(c)
             maxTime = time.strptime(exportData[maxIndex,0].decode('utf-8'), '%H:%M:%S')
             maxSecond = datetime.timedelta(hours=maxTime.tm_hour,minutes=maxTime.tm_min,seconds=maxTime.tm_sec).total_seconds()
-        	minIndex = sp.argmin(c)
+            minIndex = sp.argmin(c)
             minTime = time.strptime(exportData[minIndex,0].decode('utf-8'), '%H:%M:%S')
             minSecond = datetime.timedelta(hours=minTime.tm_hour,minutes=minTime.tm_min,seconds=minTime.tm_sec).total_seconds()
 
@@ -93,8 +93,8 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
         
                 if(second_standardTime < second and second <= second_medoTime and code.decode('utf-8') in upCost and upCost[code.decode('utf-8')] < float(rate)):
                     upCost[code.decode('utf-8')] = float(rate)
-        		elif(second_standardTime < second and second <= second_medoTime and code.decode('utf-8') in downCost and downCost[code.decode('utf-8')] >= float(rate)):
-        			downCost[code.decode('utf-8')] = float(rate)
+                elif(second_standardTime < second and second <= second_medoTime and code.decode('utf-8') in downCost and downCost[code.decode('utf-8')] >= float(rate)):
+                    downCost[code.decode('utf-8')] = float(rate)
         
         for k, v in upCost.items():
             upFile.write( str(k) + ' ' + str(mesuCost[k]) + ' ' + str(v) + ' ' + str(v - mesuCost[k]) + '\n')
