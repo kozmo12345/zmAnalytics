@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{525685c1-755d-4842-887f-10554fb1d2ac}</ProjectGuid>
+    <ProjectHome />
+    <StartupFile>ch01\gradient.py</StartupFile>
+    <SearchPath />
+    <WorkingDirectory>.</WorkingDirectory>
+    <OutputPath>.</OutputPath>
+    <ProjectTypeGuids>{888888a0-9f3d-457c-b088-3a5042f75d52}</ProjectTypeGuids>
+    <LaunchProvider>Standard Python launcher</LaunchProvider>
+    <InterpreterId>{6b6d8b8b-fe04-4dd3-86da-b329d73578fc}</InterpreterId>
+    <InterpreterVersion>3.5</InterpreterVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'" />
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'" />
+  <PropertyGroup>
+    <VisualStudioVersion Condition=" '$(VisualStudioVersion)' == '' ">10.0</VisualStudioVersion>
+    <PtvsTargetsFile>$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets</PtvsTargetsFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="ch01\analyze_webstats.py" />
+    <Compile Include="ch01\gradient.py" />
+    <Compile Include="ch01\grid.py" />
+    <Compile Include="ch01\grid_graph.py" />
+    <Compile Include="ch01\performance_test.py" />
+    <Compile Include="ch01\test.py" />
+    <Compile Include="ch01\test2.py" />
+    <Compile Include="ch01\utils.py" />
+    <Compile Include="sample\ch01\analyze_webstats.py" />
+    <Compile Include="sample\ch01\gen_webstats.py" />
+    <Compile Include="sample\ch01\performance_test.py" />
+    <Compile Include="sample\ch01\test.py" />
+    <Compile Include="sample\ch01\utils.py" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="ch01" />
+    <Folder Include="sample\" />
+    <Folder Include="sample\ch01" />
+  </ItemGroup>
+  <ItemGroup>
+    <InterpreterReference Include="{6b6d8b8b-fe04-4dd3-86da-b329d73578fc}\3.5" />
+  </ItemGroup>
+  <Import Project="$(PtvsTargetsFile)" Condition="Exists($(PtvsTargetsFile))" />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.Common.targets" Condition="!Exists($(PtvsTargetsFile))" />
+</Project>

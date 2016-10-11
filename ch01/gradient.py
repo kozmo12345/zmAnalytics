@@ -10,7 +10,7 @@ import time
 sp.random.seed(3)  # 이후에 같은 데이터를 생성하기 위해
 
 
-def plot_models(x, y, models, fname, mx=None, ymax=None, xmin=None):
+def plot_models(x, y, models, fname=None, mx=None, ymax=None, xmin=None):
     colors = ['g', 'k', 'b', 'm', 'r']
     linestyles = ['-', '-.', '--', ':', '-']
     plt.clf()
@@ -33,7 +33,7 @@ def plot_models(x, y, models, fname, mx=None, ymax=None, xmin=None):
         plt.ylim(ymax=ymax)
     if xmin:
         plt.xlim(xmin=xmin)
-    plt.ylim(ymax=10)        
+    plt.ylim(ymax=30)        
     plt.grid(True, linestyle='-', color='0.75')
     plt.show()
 
@@ -94,7 +94,7 @@ for ci, code in enumerate(codes):
     minIndex = sp.argmin(c)
     minTime = time.strptime(exportData[minIndex,0].decode('utf-8'), '%H:%M:%S')
     minSecond = datetime.timedelta(hours=minTime.tm_hour,minutes=minTime.tm_min,seconds=minTime.tm_sec).total_seconds()
-    
+
     for i, b_currentTime in enumerate(exportData[:,0]):
         t_currentTime = time.strptime(b_currentTime.decode('utf-8'), '%H:%M:%S')
         second = datetime.timedelta(hours=t_currentTime.tm_hour,minutes=t_currentTime.tm_min,seconds=t_currentTime.tm_sec).total_seconds()
@@ -102,25 +102,15 @@ for ci, code in enumerate(codes):
         ti = sp.append(ti, v_time)
         rate = exportData[i, 3].decode('UTF-8')
         grade = int(exportData[i, 1].decode('UTF-8'))
-
-        if(b_currentTime.decode('utf-8') == str_standardTime and ci == 2):
+        fa = sp.array([])
+        if(b_currentTime.decode('utf-8') == str_standardTime and grade == 0):
             mesuCost[code.decode('utf-8')] = float(rate)
             upCost[code.decode('utf-8')] = float(rate)
             downCost[code.decode('utf-8')] = float(rate)
             x = ti
             y = exportData[:i+1,3].astype(float)
-            level = 2
+            level = 3
             f = sp.poly1d(sp.polyfit(x, y, level))
-            plot_models(x, y, [f], os.path.join("c:\\", "1400_01_01.png"))
+            fa = sp.append(fa, f)
 
-        # if(second_standardTime < second and second <= second_medoTime and code.decode('utf-8') in upCost and upCost[code.decode('utf-8')] < float(rate)):
-        #     upCost[code.decode('utf-8')] = float(rate)
-        # elif(second_standardTime < second and second <= second_medoTime and code.decode('utf-8') in downCost and downCost[code.decode('utf-8')] >= float(rate)):
-        #     downCost[code.decode('utf-8')] = float(rate)
-
-# for k, v in upCost.items():
-#     upFile.write( str(k) + ' ' + str(mesuCost[k]) + ' ' + str(v) + ' ' + str(v - mesuCost[k]) + '\n')
-
-# for k, v in downCost.items():
-#     downFile.write( str(k) + ' ' + str(mesuCost[k]) + ' ' + str(v) + ' ' + str(v - mesuCost[k]) + '\n')
-
+    plot_models(ti,  c, fa)
