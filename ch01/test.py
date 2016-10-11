@@ -51,7 +51,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
                 str_medoTime = t.decode('utf-8')
                 break;
         
-        for i, code in enumerate(codes):
+        for ci, code in enumerate(codes):
             exportData = data[data[:,7] == code]
             
             # firstTime for time conver to index
@@ -76,7 +76,9 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
                 # timeFile.write(time.strftime("%H:%M:%S", t_currentTime) + '\t' + str(v_time) + '\n')
                 rate = exportData[i, 3].decode('UTF-8')
                 grade = int(exportData[i, 1].decode('UTF-8'))
-        
+                
+                
+                
                 if(b_currentTime.decode('utf-8') == str_standardTime and grade < 15 ):
                     mesuCost[code.decode('utf-8')] = float(rate)
                     upCost[code.decode('utf-8')] = float(rate)
