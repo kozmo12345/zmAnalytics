@@ -77,7 +77,9 @@ for i, t in enumerate(times):
         str_medoTime = t.decode('utf-8')
         break;
 
-
+fa = []
+seecode = ''
+sd = 0
 for ci, code in enumerate(codes):
     exportData = data[data[:,7] == code]
 
@@ -99,18 +101,25 @@ for ci, code in enumerate(codes):
         t_currentTime = time.strptime(b_currentTime.decode('utf-8'), '%H:%M:%S')
         second = datetime.timedelta(hours=t_currentTime.tm_hour,minutes=t_currentTime.tm_min,seconds=t_currentTime.tm_sec).total_seconds()
         v_time = second - firstSecond
-        ti = sp.append(ti, v_time)
+        ti = sp.append(ti, sp.sqrt(v_time)/2)
         rate = exportData[i, 3].decode('UTF-8')
         grade = int(exportData[i, 1].decode('UTF-8'))
-        fa = sp.array([])
         if(b_currentTime.decode('utf-8') == str_standardTime and grade == 0):
             mesuCost[code.decode('utf-8')] = float(rate)
             upCost[code.decode('utf-8')] = float(rate)
             downCost[code.decode('utf-8')] = float(rate)
             x = ti
             y = exportData[:i+1,3].astype(float)
-            level = 3
-            f = sp.poly1d(sp.polyfit(x, y, level))
-            fa = sp.append(fa, f)
+            level = 1
+            fit = sp.polyfit(x, y, level)
+            print(fit[0])
+            print(sp.poly1d(fit))
+            fa.insert(0, sp.poly1d(fit))
+            sd = sp.std(sp.array([x, y]))
+            seecode = code.decode('utf-8')
 
-    plot_models(ti,  c, fa)
+    
+    if( code.decode('utf-8') == seecode):
+        print(fa)
+        print(sd)
+        plot_models(ti,  c, fa)
