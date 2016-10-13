@@ -1,0 +1,27 @@
+dt <- read.csv("alldata_9200.txt")
+dt$ud <- ifelse(dt$X10c_msc > 0,2,1)
+dt$ud <- factor(dt$ud, levels = c(1,2), labels = c("N","Y"))
+dt <- dt[dt$grad != "Inf",]
+dt.model <- glm(ud ~ grade + grad + sd + rgrad  + rsd + mesu, data=dt, family = "binomial")
+dt.fit <- fitted(dt.model)
+dt.test <- read.csv("data2016-10-13.txt")
+dt.test$ud <- ifelse(dt.test$X10c_msc > 0,2,1)
+dt.test$ud <- factor(dt.test$ud, levels = c(1,2), labels = c("N","Y"))
+dt.test <- dt.test[dt.test$grad != "Inf",]
+dt.p <- predict(dt.model, newdata=dt.test, type="response")
+dt.pr <- prediction(dt.p, dt.test$ud)
+dt.prf <- performance(dt.pr, measure = "tpr", x.measure = "fpr")
+plot(dt.prf)
+auc <- performance(dt.pr, measure = "auc")
+auc <- auc@y.values[[1]]
+auc
+
+
+
+dt <- dt[dt$grade < 6,]
+
+write.csv(f.dt,"c:\\dt.csv")
+
+t <- table(dt$mesu,dt$ud)
+propt <- prop.table(t)
+plot(propt)

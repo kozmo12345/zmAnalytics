@@ -10,7 +10,7 @@ import time
 sp.random.seed(3)  # 이후에 같은 데이터를 생성하기 위해
 
 dataFile = open(os.path.join("C:\\", "Data\\alldata.txt"), 'w')
-dataFile.write( 'grade,code,grad,sd,rgrad,rsd,mesu,maxc_msc,10c_msc,20c_msc,30c_msc,max,min,10c,min10c,20c,min20c,30c,min30c\n')
+dataFile.write( 'grade,code,sgrad,ssd,grad,sd,srgrad,srsd,rgrad,rsd,mesu,maxc_msc,10c_msc,20c_msc,30c_msc,max,min,10c,min10c,20c,min20c,30c,min30c\n')
 for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
     for subdirname in dirnames:
         date = subdirname
@@ -32,9 +32,13 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
         ten2Cost = dict()
         ten3Cost = dict()
         sd = dict()
+        ssd = dict()
         rsd = dict()
+        srsd = dict()
         gradient = dict()
+        sgradient = dict()
         rgradient = dict()
+        srgradient = dict()
         gradeDic = dict()
         mintenCost = dict()
         minten2Cost = dict()
@@ -115,8 +119,35 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
                 ti = sp.append(ti, sp.sqrt(v_time)/2)
                 rate = exportData[i, 3].decode('UTF-8')
                 grade = int(exportData[i, 1].decode('UTF-8'))
-        
-                if(b_currentTime.decode('utf-8') == str_standardTime and grade < 30 ):
+                ms =  int(exportData[i, 5].decode('UTF-8'))
+                md =  int(exportData[i, 6].decode('UTF-8'))
+
+                if(b_currentTime.decode('utf-8') == str_standardTime and grade < 30 and ~(ms == 0 and md == 0)):
+                    x = ti
+                    y = exportData[:i+1,3].astype(float)
+                    if(len(y) <= 1):
+                        continue
+                    level = 1
+                    fit = sp.polyfit(x, y, level)
+                    sd[code.decode('utf-8')] = sp.std(sp.array([x, y]))
+                    gradient[code.decode('utf-8')] = sp.around(fit[0], decimals=2)
+
+                    slist = [b - a for a,b in zip(y,y[1:])]
+                    sfit = sp.polyfit(x[:-1], slist, level)
+                    ssd[code.decode('utf-8')] = sp.std(sp.array([x[:-1], slist]))
+                    sgradient[code.decode('utf-8')] = sp.around(sfit[0], decimals=2)
+
+                    maxr = (max(exportData[:,4].astype(float)))/30
+                    ry = (exportData[:i+1,4].astype(float))/maxr
+                    rfit = sp.polyfit(x, ry, level)
+                    rsd[code.decode('utf-8')] = sp.std(sp.array([x, ry]))
+                    rgradient[code.decode('utf-8')] = sp.around(rfit[0], decimals=2)
+
+                    srlist = [b - a for a,b in zip(ry,ry[1:])]
+                    srfit = sp.polyfit(x[:-1], srlist, level)
+                    srsd[code.decode('utf-8')] = sp.std(sp.array([x[:-1], srlist]))
+                    srgradient[code.decode('utf-8')] = sp.around(srfit[0], decimals=2)
+
                     mesuCost[code.decode('utf-8')] = float(rate)
                     upCost[code.decode('utf-8')] = float(rate)
                     downCost[code.decode('utf-8')] = float(rate)
@@ -128,18 +159,6 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
                     minten3Cost[code.decode('utf-8')] = float(rate)
                     maxCost[code.decode('utf-8')] = max(c)
                     minCost[code.decode('utf-8')] = min(c)
-                    x = ti
-                    y = exportData[:i+1,3].astype(float)
-                    level = 1
-                    fit = sp.polyfit(x, y, level)
-                    sd[code.decode('utf-8')] = sp.std(sp.array([x, y]))
-                    gradient[code.decode('utf-8')] = sp.around(fit[0], decimals=2)
-
-                    maxr = (max(exportData[:,4].astype(float)))/30
-                    ry = (exportData[:i+1,4].astype(float))/maxr
-                    rfit = sp.polyfit(x, ry, level)
-                    rsd[code.decode('utf-8')] = sp.std(sp.array([x, ry]))
-                    rgradient[code.decode('utf-8')] = sp.around(rfit[0], decimals=2)
                     gradeDic[code.decode('utf-8')] = grade
 
                 if(second_standardTime < second and second <= second_tenTime and code.decode('utf-8') in tenCost and tenCost[code.decode('utf-8')] < float(rate)):
@@ -168,4 +187,4 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
         
         
         for k, v in mesuCost.items():
-            dataFile.write( str(gradeDic[k]) + ',' + str(k) + ',' + str(gradient[k]) + ',' + str(sd[k]) + ',' + str(rgradient[k]) + ',' + str(rsd[k]) + ',' + str(v) + ',' + str(maxCost[k]-mesuCost[k]) + ',' + str(tenCost[k]-mesuCost[k]) + ',' + str(ten2Cost[k]-mesuCost[k]) + ',' + str(ten3Cost[k]-mesuCost[k]) + ',' + str(maxCost[k]) + ',' + str(minCost[k]) + ',' + str(tenCost[k]) + ',' + str(mintenCost[k]) +',' + str(ten2Cost[k]) + ',' + str(minten2Cost[k]) +',' + str(ten3Cost[k]) + ',' + str(minten3Cost[k]) + '\n')
+            dataFile.write( str(gradeDic[k]) + ',' + str(k) + ',' + str(sgradient[k]) + ',' + str(ssd[k]) + ',' + str(gradient[k]) + ',' + str(sd[k]) + ',' + str(srgradient[k]) + ',' + str(srsd[k]) + ',' + str(rgradient[k]) + ',' + str(rsd[k]) + ',' + str(v) + ',' + str(maxCost[k]-mesuCost[k]) + ',' + str(tenCost[k]-mesuCost[k]) + ',' + str(ten2Cost[k]-mesuCost[k]) + ',' + str(ten3Cost[k]-mesuCost[k]) + ',' + str(maxCost[k]) + ',' + str(minCost[k]) + ',' + str(tenCost[k]) + ',' + str(mintenCost[k]) +',' + str(ten2Cost[k]) + ',' + str(minten2Cost[k]) +',' + str(ten3Cost[k]) + ',' + str(minten3Cost[k]) + '\n')
