@@ -122,7 +122,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
                 ms =  int(exportData[i, 5].decode('UTF-8'))
                 md =  int(exportData[i, 6].decode('UTF-8'))
 
-                if(b_currentTime.decode('utf-8') == str_standardTime and grade < 30 and ~(ms == 0 and md == 0)):
+                if(b_currentTime.decode('utf-8') == str_standardTime and grade < 15):
                     x = ti
                     y = exportData[:i+1,3].astype(float)
                     if(len(y) <= 1):
