@@ -44,7 +44,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
         minten2Cost = dict()
         minten3Cost = dict()
 
-        str_standardTime = datetime.timedelta(hours=9,minutes=2,seconds=00).total_seconds()
+        str_standardTime = datetime.timedelta(hours=9,minutes=1,seconds=20).total_seconds()
         str_medoTime = datetime.timedelta(hours=15,minutes=20,seconds=00).total_seconds()
         str_tenTime = datetime.timedelta(hours=9,minutes=10,seconds=00).total_seconds()
         str_ten2Time = datetime.timedelta(hours=9,minutes=20,seconds=00).total_seconds()
@@ -122,7 +122,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
                 ms =  int(exportData[i, 5].decode('UTF-8'))
                 md =  int(exportData[i, 6].decode('UTF-8'))
 
-                if(b_currentTime.decode('utf-8') == str_standardTime and grade < 15):
+                if(b_currentTime.decode('utf-8') == str_standardTime and grade < 15 and ~(ms == 0 and md == 0)):
                     x = ti
                     y = exportData[:i+1,3].astype(float)
                     if(len(y) <= 1):

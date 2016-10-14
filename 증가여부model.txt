@@ -16,9 +16,18 @@ auc <- performance(dt.pr, measure = "auc")
 auc <- auc@y.values[[1]]
 auc
 
+-----------------------------------------------------
+
+dt <- read.csv("alldata2.txt")
+dt$ud <- ifelse(dt$X10c_msc > 0,2,1)
+dt <- dt[dt$grad != "Inf",]
+dt <- dt[dt$sgrad != "Inf",]
+dt <- dt[dt$grade <6,]
+dt$ud <- factor(dt$ud, levels = c(1,2), labels = c("N","Y"))
+View(dt)
 
 
-dt <- dt[dt$grade < 6,]
+-----------------------------------------------------
 
 write.csv(f.dt,"c:\\dt.csv")
 
