@@ -11,7 +11,7 @@ dt$ud2 <- factor(dt$ud2, levels = c(1,2), labels = c("N","Y"))
 dt$ud3 <- factor(dt$ud3, levels = c(1,2), labels = c("N","Y"))
 dt$udm <- factor(dt$udm, levels = c(1,2), labels = c("N","Y"))
 dump("dt", file="dt0.R")
-
+ 
 dt <- read.csv("alldata1.txt")
 dt$ud <- ifelse(dt$X10c_msc > 0,2,1)
 dt$ud2 <- ifelse(dt$X20c_msc > 0,2,1)

@@ -9,7 +9,7 @@ dt1 <- dt1$value[dt1$value$sgrad > 0 & !is.na(dt1$value$sgrad) ,]
 dt2 <- dt2$value[dt2$value$sgrad > 0 & !is.na(dt2$value$sgrad) ,]
 dt3 <- dt3$value[dt3$value$sgrad > 0 & !is.na(dt3$value$sgrad) ,]
 dt4 <- dt4$value[dt4$value$sgrad > 0 & !is.na(dt4$value$sgrad) ,]
-
+ 
 View(dt0)
 View(dt1)
 View(dt2)

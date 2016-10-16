@@ -15,7 +15,7 @@ plot(dt.prf)
 auc <- performance(dt.pr, measure = "auc")
 auc <- auc@y.values[[1]]
 auc
-
+ 
 -----------------------------------------------------
 
 dt <- read.csv("alldata2.txt")
