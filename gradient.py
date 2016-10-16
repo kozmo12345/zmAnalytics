@@ -10,7 +10,7 @@ import time
 sp.random.seed(3)  # 이후에 같은 데이터를 생성하기 위해
 
 
-def plot_models(x, cs, gr, models, fname=None, mx=None, ymax=None, xmin=None):
+def plot_models(x, cs, msy, mdy, models, fname=None, mx=None, ymax=None, xmin=None):
     colors = ['g', 'k', 'b', 'm', 'r']
     linestyles = ['-', '-.', '--', ':', '-']
     plt.clf()
@@ -18,7 +18,8 @@ def plot_models(x, cs, gr, models, fname=None, mx=None, ymax=None, xmin=None):
     plt.title("graph")
     plt.xlabel("Time")
     plt.ylabel("Rate")
-    plt.scatter(x, gr, s=10, marker='*')
+    plt.scatter(x, msy, s=10, marker='*')
+    plt.scatter(x, mdy, s=10, marker='_')
     
     # if models:
     #     if mx is None:
@@ -38,8 +39,8 @@ def plot_models(x, cs, gr, models, fname=None, mx=None, ymax=None, xmin=None):
     plt.grid(True, linestyle='-', color='0.75')
     plt.show()
 
-date = '2016-09-21'
-setcode = b'100090'
+date = '2016-09-29'
+setcode = b'036620'
 
 filePath = os.path.join("C:\\", "Dropbox\\Data\\" + date + "\\" + date + ".txt");
 data = sp.genfromtxt(filePath, delimiter="\t", dtype='|S20')
@@ -105,7 +106,9 @@ for ci, code in enumerate(codes):
         ti = sp.append(ti, sp.sqrt(v_time)/2)
         maxr = (max(exportData[:,4].astype(float)))/30
         ry = (exportData[:i+1,4].astype(float))/maxr        
+        msy = (exportData[:i+1,5].astype(float))/maxr        
+        mdy = (exportData[:i+1,6].astype(float))/maxr        
         rate = exportData[i, 3].decode('UTF-8')
         grade = int(exportData[i, 1].decode('UTF-8'))
     
-    plot_models(ti, c, ry, fa)
+    plot_models(ti, c, msy, mdy, fa)
