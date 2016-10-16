@@ -17,6 +17,7 @@ mstimes = [
     datetime.timedelta(hours=9,minutes=1,seconds=40).total_seconds(),
     datetime.timedelta(hours=9,minutes=1,seconds=50).total_seconds(),
     datetime.timedelta(hours=9,minutes=2,seconds=00).total_seconds()
+    datetime.timedelta(hours=9,minutes=2,seconds=10).total_seconds()
 ]
 for mesui, mstime in enumerate(mstimes):
     dataFile = open(os.path.join("C:\\", "Data\\alldata" + str(mesui) + ".txt"), 'w')
@@ -143,24 +144,24 @@ for mesui, mstime in enumerate(mstimes):
                             continue
                         level = 1
                         fit = sp.polyfit(x, y, level)
-                        sd[code.decode('utf-8')] = sp.std(sp.array([x, y]))
-                        gradient[code.decode('utf-8')] = sp.around(fit[0], decimals=2)
+                        sd[code.decode('utf-8')] = (sp.std(sp.array([x, y])))*10
+                        gradient[code.decode('utf-8')] = sp.around(fit[0]*10, decimals=2)
     
                         slist = [b - a for a,b in zip(y,y[1:])]
                         sfit = sp.polyfit(x[:-1], slist, level)
-                        ssd[code.decode('utf-8')] = sp.std(sp.array([x[:-1], slist]))
-                        sgradient[code.decode('utf-8')] = sp.around(sfit[0], decimals=2)
+                        ssd[code.decode('utf-8')] = (sp.std(sp.array([x[:-1], slist])))*10
+                        sgradient[code.decode('utf-8')] = sp.around(sfit[0]*10, decimals=2)
     
                         maxr = (max(exportData[:,4].astype(float)))/30
                         ry = (exportData[:i+1,4].astype(float))/maxr
                         rfit = sp.polyfit(x, ry, level)
-                        rsd[code.decode('utf-8')] = sp.std(sp.array([x, ry]))
-                        rgradient[code.decode('utf-8')] = sp.around(rfit[0], decimals=2)
+                        rsd[code.decode('utf-8')] = (sp.std(sp.array([x, ry])))*10
+                        rgradient[code.decode('utf-8')] = sp.around(rfit[0]*10, decimals=2)
     
                         srlist = [b - a for a,b in zip(ry,ry[1:])]
                         srfit = sp.polyfit(x[:-1], srlist, level)
-                        srsd[code.decode('utf-8')] = sp.std(sp.array([x[:-1], srlist]))
-                        srgradient[code.decode('utf-8')] = sp.around(srfit[0], decimals=2)
+                        srsd[code.decode('utf-8')] = (sp.std(sp.array([x[:-1], srlist])))*10
+                        srgradient[code.decode('utf-8')] = sp.around(srfit[0]*10, decimals=2)
     
                         mesuCost[code.decode('utf-8')] = float(rate)
                         upCost[code.decode('utf-8')] = float(rate)
