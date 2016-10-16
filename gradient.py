@@ -10,15 +10,15 @@ import time
 sp.random.seed(3)  # 이후에 같은 데이터를 생성하기 위해
 
 
-def plot_models(x, y, z, models, fname=None, mx=None, ymax=None, xmin=None):
+def plot_models(x, cs, gr, models, fname=None, mx=None, ymax=None, xmin=None):
     colors = ['g', 'k', 'b', 'm', 'r']
     linestyles = ['-', '-.', '--', ':', '-']
     plt.clf()
-    plt.scatter(x, y, s=20)
+    plt.scatter(x, cs, s=10)
     plt.title("graph")
     plt.xlabel("Time")
     plt.ylabel("Rate")
-    plt.scatter(x, z, s=20, marker='*')
+    plt.scatter(x, gr, s=10, marker='*')
     
     # if models:
     #     if mx is None:
@@ -38,14 +38,15 @@ def plot_models(x, y, z, models, fname=None, mx=None, ymax=None, xmin=None):
     plt.grid(True, linestyle='-', color='0.75')
     plt.show()
 
-date = '2016-09-23'
+date = '2016-09-21'
+setcode = b'100090'
 
 filePath = os.path.join("C:\\", "Dropbox\\Data\\" + date + "\\" + date + ".txt");
 data = sp.genfromtxt(filePath, delimiter="\t", dtype='|S20')
 
 # code to analysis
-codes = sp.unique(data[data[:,7] != b''][:,7])
-times = sp.unique(data[data[:,0] != b''][:,0])
+codes = sp.unique(data[data[:,7] == setcode][:,7])
+times = sp.unique(data[data[:,0] == setcode][:,0])
 
 plusCnt = 0
 minusCnt = 0
@@ -79,8 +80,8 @@ seecode = ''
 sd = 0
 for ci, code in enumerate(codes):
     # print(code.decode('utf-8'))
-    if(code.decode('utf-8') != "100660"):
-        continue
+    # if(code.decode('utf-8') != "073240"):
+    #     continue
 
     exportData = data[data[:,7] == code]
     # firstTime for time conver to index
