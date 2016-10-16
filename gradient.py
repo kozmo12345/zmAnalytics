@@ -10,22 +10,23 @@ import time
 sp.random.seed(3)  # 이후에 같은 데이터를 생성하기 위해
 
 
-def plot_models(x, y, models, fname=None, mx=None, ymax=None, xmin=None):
+def plot_models(x, y, z, models, fname=None, mx=None, ymax=None, xmin=None):
     colors = ['g', 'k', 'b', 'm', 'r']
     linestyles = ['-', '-.', '--', ':', '-']
     plt.clf()
-    plt.scatter(x, y, s=10)
+    plt.scatter(x, y, s=20)
     plt.title("graph")
     plt.xlabel("Time")
     plt.ylabel("Rate")
+    plt.scatter(x, z, s=20, marker='*')
+    
+    # if models:
+    #     if mx is None:
+    #         mx = sp.linspace(0, x[-1], 100)
+    #     for model, style, color in zip(models, linestyles, colors):
+    #         plt.plot(mx, model(mx), linestyle=style, linewidth=2, c=color)
 
-    if models:
-        if mx is None:
-            mx = sp.linspace(0, x[-1], 100)
-        for model, style, color in zip(models, linestyles, colors):
-            plt.plot(mx, model(mx), linestyle=style, linewidth=2, c=color)
-
-        plt.legend(["d=%i" % m.order for m in models], loc="upper left")
+    #     plt.legend(["d=%i" % m.order for m in models], loc="upper left")
 
     plt.autoscale(tight=True)
     plt.ylim(ymin=0)
@@ -37,7 +38,7 @@ def plot_models(x, y, models, fname=None, mx=None, ymax=None, xmin=None):
     plt.grid(True, linestyle='-', color='0.75')
     plt.show()
 
-date = '2016-09-27'
+date = '2016-09-23'
 
 filePath = os.path.join("C:\\", "Dropbox\\Data\\" + date + "\\" + date + ".txt");
 data = sp.genfromtxt(filePath, delimiter="\t", dtype='|S20')
@@ -45,10 +46,6 @@ data = sp.genfromtxt(filePath, delimiter="\t", dtype='|S20')
 # code to analysis
 codes = sp.unique(data[data[:,7] != b''][:,7])
 times = sp.unique(data[data[:,0] != b''][:,0])
-maxFile = open(os.path.join("C:\\", "Data\\maxlist.txt"), 'w')
-# timeFile = open(os.path.join("C:\\", "Data\\timeConver.txt"), 'w')
-upFile = open(os.path.join("C:\\", "Data\\upList" + date + ".txt"), 'w')
-downFile = open(os.path.join("C:\\", "Data\\downList" + date + ".txt"), 'w')
 
 plusCnt = 0
 minusCnt = 0
@@ -81,8 +78,11 @@ fa = []
 seecode = ''
 sd = 0
 for ci, code in enumerate(codes):
-    exportData = data[data[:,7] == code]
+    # print(code.decode('utf-8'))
+    if(code.decode('utf-8') != "100660"):
+        continue
 
+    exportData = data[data[:,7] == code]
     # firstTime for time conver to index
     x = time.strptime(exportData[0,0].decode('utf-8'), '%H:%M:%S')
     firstSecond = datetime.timedelta(hours=x.tm_hour,minutes=x.tm_min,seconds=x.tm_sec).total_seconds()
@@ -96,30 +96,15 @@ for ci, code in enumerate(codes):
     minIndex = sp.argmin(c)
     minTime = time.strptime(exportData[minIndex,0].decode('utf-8'), '%H:%M:%S')
     minSecond = datetime.timedelta(hours=minTime.tm_hour,minutes=minTime.tm_min,seconds=minTime.tm_sec).total_seconds()
-
     for i, b_currentTime in enumerate(exportData[:,0]):
         t_currentTime = time.strptime(b_currentTime.decode('utf-8'), '%H:%M:%S')
         second = datetime.timedelta(hours=t_currentTime.tm_hour,minutes=t_currentTime.tm_min,seconds=t_currentTime.tm_sec).total_seconds()
         v_time = second - firstSecond
+
         ti = sp.append(ti, sp.sqrt(v_time)/2)
+        maxr = (max(exportData[:,4].astype(float)))/30
+        ry = (exportData[:i+1,4].astype(float))/maxr        
         rate = exportData[i, 3].decode('UTF-8')
         grade = int(exportData[i, 1].decode('UTF-8'))
-        if(b_currentTime.decode('utf-8') == str_standardTime and grade == 0):
-            mesuCost[code.decode('utf-8')] = float(rate)
-            upCost[code.decode('utf-8')] = float(rate)
-            downCost[code.decode('utf-8')] = float(rate)
-            x = ti
-            y = exportData[:i+1,3].astype(float)
-            level = 1
-            fit = sp.polyfit(x, y, level)
-            print(fit[0])
-            print(sp.poly1d(fit))
-            fa.insert(0, sp.poly1d(fit))
-            sd = sp.std(sp.array([x, y]))
-            seecode = code.decode('utf-8')
-
     
-    if( code.decode('utf-8') == seecode):
-        print(fa)
-        print(sd)
-        plot_models(ti,  c, fa)
+    plot_models(ti, c, ry, fa)
