@@ -11,12 +11,9 @@ sp.random.seed(3)  # 이후에 같은 데이터를 생성하기 위해
 
 mstimes = [
     datetime.timedelta(hours=9,minutes=1,seconds=00).total_seconds(),
-    datetime.timedelta(hours=9,minutes=1,seconds=10).total_seconds(),
-    datetime.timedelta(hours=9,minutes=1,seconds=20).total_seconds(),
+    datetime.timedelta(hours=9,minutes=1,seconds=15).total_seconds(),
     datetime.timedelta(hours=9,minutes=1,seconds=30).total_seconds(),
-    datetime.timedelta(hours=9,minutes=1,seconds=40).total_seconds(),
-    datetime.timedelta(hours=9,minutes=1,seconds=50).total_seconds(),
-    datetime.timedelta(hours=9,minutes=2,seconds=00).total_seconds(),
+    datetime.timedelta(hours=9,minutes=1,seconds=55).total_seconds(),
     datetime.timedelta(hours=9,minutes=2,seconds=10).total_seconds()
 ]
 for mesui, mstime in enumerate(mstimes):
@@ -218,4 +215,4 @@ for mesui, mstime in enumerate(mstimes):
             
             
             for k, v in mesuCost.items():
-                dataFile.write( date + ',' + str(gradeDic[k]) + ',' + str(k) + ',' + str(medor[k]) + ',' + str(medor[k]) + ',' + str(mesur_medor[k]) + ',' + str(sgradient[k]) + ',' + str(ssd[k]) + ',' + str(gradient[k]) + ',' + str(sd[k]) + ',' + str(srgradient[k]) + ',' + str(srsd[k]) + ',' + str(rgradient[k]) + ',' + str(rsd[k]) + ',' + str(grd[k]) + ',' + str(v) + ',' + str(maxCost[k]-mesuCost[k]) + ',' + str(tenCost[k]-mesuCost[k]) + ',' + str(ten2Cost[k]-mesuCost[k]) + ',' + str(ten3Cost[k]-mesuCost[k]) + ',' + str(mintenCost[k] - mesuCost[k]) + ',' + str(minten2Cost[k] - mesuCost[k]) + ',' + str(minten3Cost[k] - mesuCost[k]) + ',' + str(maxCost[k]) + ',' + str(minCost[k]) + ',' + str(Cost[k]) + '\n')
+                dataFile.write( date + ',' + str(gradeDic[k]) + ',' + str(k) + ',' + str(mesur[k]) + ',' + str(medor[k]) + ',' + str(mesur_medor[k]) + ',' + str(sgradient[k]) + ',' + str(ssd[k]) + ',' + str(gradient[k]) + ',' + str(sd[k]) + ',' + str(srgradient[k]) + ',' + str(srsd[k]) + ',' + str(rgradient[k]) + ',' + str(rsd[k]) + ',' + str(grd[k]) + ',' + str(v) + ',' + str(maxCost[k]-mesuCost[k]) + ',' + str(tenCost[k]-mesuCost[k]) + ',' + str(ten2Cost[k]-mesuCost[k]) + ',' + str(ten3Cost[k]-mesuCost[k]) + ',' + str(mintenCost[k] - mesuCost[k]) + ',' + str(minten2Cost[k] - mesuCost[k]) + ',' + str(minten3Cost[k] - mesuCost[k]) + ',' + str(maxCost[k]) + ',' + str(minCost[k]) + ',' + str(Cost[k]) + '\n')
