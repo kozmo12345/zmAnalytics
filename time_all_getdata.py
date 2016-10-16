@@ -16,7 +16,7 @@ mstimes = [
     datetime.timedelta(hours=9,minutes=1,seconds=30).total_seconds(),
     datetime.timedelta(hours=9,minutes=1,seconds=40).total_seconds(),
     datetime.timedelta(hours=9,minutes=1,seconds=50).total_seconds(),
-    datetime.timedelta(hours=9,minutes=2,seconds=00).total_seconds()
+    datetime.timedelta(hours=9,minutes=2,seconds=00).total_seconds(),
     datetime.timedelta(hours=9,minutes=2,seconds=10).total_seconds()
 ]
 for mesui, mstime in enumerate(mstimes):
