@@ -156,7 +156,7 @@ for mesui, mstime in enumerate(mstimes):
                         ssd[code.decode('utf-8')] = (sp.std(sp.array([x[:-1], slist])))*10
                         sgradient[code.decode('utf-8')] = sp.around(sfit[0]*10, decimals=2)
     
-                        maxr = (max(exportData[:,4].astype(float)))/30
+                        maxr = (max(exportData[:i+1,4].astype(float)))/30
                         ry = (exportData[:i+1,4].astype(float))/maxr
                         rfit = sp.polyfit(x, ry, level)
                         rsd[code.decode('utf-8')] = (sp.std(sp.array([x, ry])))*10

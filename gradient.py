@@ -14,12 +14,12 @@ def plot_models(x, cs, msy, mdy, models, fname=None, mx=None, ymax=None, xmin=No
     colors = ['g', 'k', 'b', 'm', 'r']
     linestyles = ['-', '-.', '--', ':', '-']
     plt.clf()
-    plt.scatter(x, cs, s=10)
+    plt.scatter(x, cs, s=15)
     plt.title("graph")
     plt.xlabel("Time")
     plt.ylabel("Rate")
-    plt.scatter(x, msy, s=10, marker='*')
-    plt.scatter(x, mdy, s=10, marker='_')
+    plt.scatter(x, msy, s=15, marker='*')
+    plt.scatter(x, mdy, s=15, marker='_')
     
     # if models:
     #     if mx is None:
@@ -39,8 +39,8 @@ def plot_models(x, cs, msy, mdy, models, fname=None, mx=None, ymax=None, xmin=No
     plt.grid(True, linestyle='-', color='0.75')
     plt.show()
 
-date = '2016-09-29'
-setcode = b'036620'
+date = '2016-09-21'
+setcode = b'038950'
 
 filePath = os.path.join("C:\\", "Dropbox\\Data\\" + date + "\\" + date + ".txt");
 data = sp.genfromtxt(filePath, delimiter="\t", dtype='|S20')
