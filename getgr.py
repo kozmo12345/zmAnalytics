@@ -177,4 +177,4 @@ for mesui, mstime in enumerate(mstimes):
                         minCost[code.decode('utf-8')] = float(rate)                                          
             
             for k, v in mesuCost.items():
-                dataFile.write( date + ',' + str(gradeDic[k]) + ',' + str(k) + ',' + str(sgradient[k]) + ',' + str(rgradient[k]) + ',' + str(rsd[k]) + ',' + str(grd[k]) + ',' + str(maxgr[k]) + ',' + str(v) + ',' + str(maxCost[k]-mesuCost[k]) + '\n')
+                dataFile.write( date + ',' + str(gradeDic[k]) + ',' + str(k) + ',' + str(sgradient[k]) + ',' + str(rgradient[k]) + ',' + str(rsd[k]) + ',' + str(grd[k]) + ',' + str(maxgr[k]) + ',' + str(v) + ',' + str(maxCost[k]-mesuCost[k]) + ',' + str(Cost[k]) + '\n')

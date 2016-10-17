@@ -11,7 +11,7 @@ sp.random.seed(3)  # 이후에 같은 데이터를 생성하기 위해
 
 mstimes = [
     datetime.timedelta(hours=9,minutes=2,seconds=00).total_seconds(),
-    datetime.timedelta(hours=9,minutes=2,seconds=05).total_seconds(),
+    datetime.timedelta(hours=9,minutes=2,seconds=5).total_seconds(),
     datetime.timedelta(hours=9,minutes=2,seconds=10).total_seconds(),
     datetime.timedelta(hours=9,minutes=2,seconds=15).total_seconds(),
 ]
