@@ -10,25 +10,25 @@ import time
 sp.random.seed(3)  # 이후에 같은 데이터를 생성하기 위해
 
 mstimes = [
-    datetime.timedelta(hours=9,minutes=1,seconds=55).total_seconds(),
-    datetime.timedelta(hours=9,minutes=1,seconds=58).total_seconds(),
-    datetime.timedelta(hours=9,minutes=2,seconds=1).total_seconds(),
-    datetime.timedelta(hours=9,minutes=1,seconds=4).total_seconds(),
-    datetime.timedelta(hours=9,minutes=2,seconds=7).total_seconds(),
+    datetime.timedelta(hours=9,minutes=2,seconds=00).total_seconds(),
+    datetime.timedelta(hours=9,minutes=2,seconds=05).total_seconds(),
     datetime.timedelta(hours=9,minutes=2,seconds=10).total_seconds(),
-    datetime.timedelta(hours=9,minutes=2,seconds=13).total_seconds(),
-    datetime.timedelta(hours=9,minutes=2,seconds=16).total_seconds()
+    datetime.timedelta(hours=9,minutes=2,seconds=15).total_seconds(),
 ]
 for mesui, mstime in enumerate(mstimes):
-    dataFile = open(os.path.join("C:\\", "Data\\alldata" + str(mesui) + ".txt"), 'w')
+    dataFile = open(os.path.join("C:\\", "Test\\test" + str(mesui) + ".txt"), 'w')
     dataFile.write( 'date,grade,code,mesur,medor,msr_mdr,sgrad,ssd,grad,sd,srgrad,srsd,rgrad,rsd,gr,mesu,maxc_msc,10c_msc,20c_msc,30c_msc,msc_min10c,msc_min20c,msc_min30c,max,min,cost\n')
-    for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
+    for dirname, dirnames, filenames in os.walk("C:\\Test\\"):
         for subdirname in dirnames:
             date = subdirname
     
-            filePath = os.path.join("C:\\", "Dropbox\\Data\\" + date + "\\" + date + ".txt");
+            filePath = os.path.join("C:\\", "Test\\" + date + "\\" + date + ".txt");
             data = sp.genfromtxt(filePath, delimiter="\t", dtype='|S20')
-            
+
+            realfilePath = os.path.join("C:\\", "Dropbox\\Data\\" + date + "\\" + date + ".txt");
+            realdata = sp.genfromtxt(realfilePath, delimiter="\t", dtype='|S20')
+
+            realcodes = sp.unique(realdata[realdata[:,7] != b''][:,7])
             codes = sp.unique(data[data[:,7] != b''][:,7])
             times = sp.unique(data[data[:,0] != b''][:,0])
             
@@ -113,6 +113,7 @@ for mesui, mstime in enumerate(mstimes):
             
             for ci, code in enumerate(codes):
                 exportData = data[data[:,7] == code]
+                realexportData = realdata[realdata[:,7] == code]
             
                 # firstTime for time conver to index
                 x = time.strptime(exportData[0,0].decode('utf-8'), '%H:%M:%S')
@@ -122,6 +123,7 @@ for mesui, mstime in enumerate(mstimes):
                 ti = sp.array([])
                 ms_md = sp.array([])
                 c = exportData[:, 3].astype(float)
+                realc = realexportData[:, 3].astype(float)
                 maxIndex = sp.argmax(c)
                 maxTime = time.strptime(exportData[maxIndex,0].decode('utf-8'), '%H:%M:%S')
                 maxSecond = datetime.timedelta(hours=maxTime.tm_hour,minutes=maxTime.tm_min,seconds=maxTime.tm_sec).total_seconds()
@@ -141,7 +143,7 @@ for mesui, mstime in enumerate(mstimes):
                     ms =  int(exportData[i, 5].decode('UTF-8'))
                     md =  int(exportData[i, 6].decode('UTF-8'))
     
-                    if(b_currentTime.decode('utf-8') == str_standardTime and grade < 15 and ms != 0 and md != 0):
+                    if(b_currentTime.decode('utf-8') == str_standardTime and grade < 6 and ms != 0 and md != 0):
                         x = ti
                         y = exportData[:i+1,3].astype(float)
                         if(len(y) <= 1):
@@ -168,7 +170,6 @@ for mesui, mstime in enumerate(mstimes):
                         medoy = (exportData[:i+1,6].astype(float))/maxr
                         mdfit = sp.polyfit(x, medoy, level)
                         medor[code.decode('utf-8')] = sp.around(mdfit[0]*10, decimals=2)
-                        ms_md = sp.append(ms_md, (mesuy.astype(float))/(medoy.astype(float)))
                         ms_mdfit = sp.polyfit(x, mesuy, level)
                         mesur_medor[code.decode('utf-8')] = sp.around(ms_mdfit[0]*10, decimals=2)
 
@@ -186,7 +187,7 @@ for mesui, mstime in enumerate(mstimes):
                         mintenCost[code.decode('utf-8')] = float(rate)
                         minten2Cost[code.decode('utf-8')] = float(rate)
                         minten3Cost[code.decode('utf-8')] = float(rate)
-                        maxCost[code.decode('utf-8')] = max(c)
+                        maxCost[code.decode('utf-8')] = max(realc)
                         minCost[code.decode('utf-8')] = min(c)
                         gradeDic[code.decode('utf-8')] = grade
                         Cost[code.decode('utf-8')] = cost

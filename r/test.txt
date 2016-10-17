@@ -1,0 +1,78 @@
+tdt0 <- read.csv("test0.txt")
+tdt0$ud <- ifelse(tdt0$X10c_msc > 0,2,1)
+tdt0$ud2 <- ifelse(tdt0$X20c_msc > 0,2,1)
+tdt0$ud3 <- ifelse(tdt0$X30c_msc > 0,2,1)
+tdt0$udm <- ifelse(tdt0$maxc_msc > 0,2,1)
+tdt0 <- tdt0[tdt0$grad != "Inf",]
+tdt0 <- tdt0[tdt0$sgrad != "Inf",]
+tdt0$ud <- factor(tdt0$ud, levels = c(1,2), labels = c("N","Y"))
+tdt0$ud2 <- factor(tdt0$ud2, levels = c(1,2), labels = c("N","Y"))
+tdt0$ud3 <- factor(tdt0$ud3, levels = c(1,2), labels = c("N","Y"))
+tdt0$udm <- factor(tdt0$udm, levels = c(1,2), labels = c("N","Y"))
+tdt0 <- tdt0[tdt0$grade < 10,]
+tdt0 <- tdt0[tdt0$sgrad > 0 & !is.na(tdt0$sgrad) ,]
+
+tdt1 <- read.csv("test1.txt")
+tdt1$ud <- ifelse(tdt1$X10c_msc > 0,2,1)
+tdt1$ud2 <- ifelse(tdt1$X20c_msc > 0,2,1)
+tdt1$ud3 <- ifelse(tdt1$X30c_msc > 0,2,1)
+tdt1$udm <- ifelse(tdt1$maxc_msc > 0,2,1)
+tdt1 <- tdt1[tdt1$grad != "Inf",]
+tdt1 <- tdt1[tdt1$sgrad != "Inf",]
+tdt1$ud <- factor(tdt1$ud, levels = c(1,2), labels = c("N","Y"))
+tdt1$ud2 <- factor(tdt1$ud2, levels = c(1,2), labels = c("N","Y"))
+tdt1$ud3 <- factor(tdt1$ud3, levels = c(1,2), labels = c("N","Y"))
+tdt1$udm <- factor(tdt1$udm, levels = c(1,2), labels = c("N","Y"))
+tdt1 <- tdt1[tdt1$grade < 10,]
+tdt1 <- tdt1[tdt1$sgrad > 0 & !is.na(tdt1$sgrad) ,]
+
+tdt2 <- read.csv("test2.txt")
+tdt2$ud <- ifelse(tdt2$X10c_msc > 0,2,1)
+tdt2$ud2 <- ifelse(tdt2$X20c_msc > 0,2,1)
+tdt2$ud3 <- ifelse(tdt2$X30c_msc > 0,2,1)
+tdt2$udm <- ifelse(tdt2$maxc_msc > 0,2,1)
+tdt2 <- tdt2[tdt2$grad != "Inf",]
+tdt2 <- tdt2[tdt2$sgrad != "Inf",]
+tdt2$ud <- factor(tdt2$ud, levels = c(1,2), labels = c("N","Y"))
+tdt2$ud2 <- factor(tdt2$ud2, levels = c(1,2), labels = c("N","Y"))
+tdt2$ud3 <- factor(tdt2$ud3, levels = c(1,2), labels = c("N","Y"))
+tdt2$udm <- factor(tdt2$udm, levels = c(1,2), labels = c("N","Y"))
+tdt2 <- tdt2[tdt2$grade < 10,]
+tdt2 <- tdt2[tdt2$sgrad > 0 & !is.na(tdt2$sgrad) ,]
+
+
+tdt3 <- read.csv("test3.txt")
+tdt3$ud <- ifelse(tdt3$X10c_msc > 0,2,1)
+tdt3$ud2 <- ifelse(tdt3$X20c_msc > 0,2,1)
+tdt3$ud3 <- ifelse(tdt3$X30c_msc > 0,2,1)
+tdt3$udm <- ifelse(tdt3$maxc_msc > 0,2,1)
+tdt3 <- tdt3[tdt3$grad != "Inf",]
+tdt3 <- tdt3[tdt3$sgrad != "Inf",]
+tdt3$ud <- factor(tdt3$ud, levels = c(1,2), labels = c("N","Y"))
+tdt3$ud2 <- factor(tdt3$ud2, levels = c(1,2), labels = c("N","Y"))
+tdt3$ud3 <- factor(tdt3$ud3, levels = c(1,2), labels = c("N","Y"))
+tdt3$udm <- factor(tdt3$udm, levels = c(1,2), labels = c("N","Y"))
+tdt3 <- tdt3[tdt3$grade < 10,]
+tdt3 <- tdt3[tdt3$sgrad > 0 & !is.na(tdt3$sgrad) ,]
+
+
+tdt4 <- read.csv("test4.txt")
+tdt4$ud <- ifelse(tdt4$X10c_msc > 0,2,1)
+tdt4$ud2 <- ifelse(tdt4$X20c_msc > 0,2,1)
+tdt4$ud3 <- ifelse(tdt4$X30c_msc > 0,2,1)
+tdt4$udm <- ifelse(tdt4$maxc_msc > 0,2,1)
+tdt4 <- tdt4[tdt4$grad != "Inf",]
+tdt4 <- tdt4[tdt4$sgrad != "Inf",]
+tdt4$ud <- factor(tdt4$ud, levels = c(1,2), labels = c("N","Y"))
+tdt4$ud2 <- factor(tdt4$ud2, levels = c(1,2), labels = c("N","Y"))
+tdt4$ud3 <- factor(tdt4$ud3, levels = c(1,2), labels = c("N","Y"))
+tdt4$udm <- factor(tdt4$udm, levels = c(1,2), labels = c("N","Y"))
+tdt4 <- tdt4[tdt4$grade < 10,]
+tdt4 <- tdt4[tdt4$sgrad > 0 & !is.na(tdt4$sgrad) ,]
+
+
+View(tdt0)
+View(tdt1)
+View(tdt2)
+View(tdt3)
+View(tdt4)

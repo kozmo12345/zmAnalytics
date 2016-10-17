@@ -3,15 +3,24 @@ dt1 <- source("dt1.R")
 dt2 <- source("dt2.R")
 dt3 <- source("dt3.R")
 dt4 <- source("dt4.R")
+dt5 <- source("dt5.R")
+dt6 <- source("dt6.R")
+dt7 <- source("dt7.R")
 
 dt0 <- dt0$value[dt0$value$sgrad > 0 & !is.na(dt0$value$sgrad) ,]
 dt1 <- dt1$value[dt1$value$sgrad > 0 & !is.na(dt1$value$sgrad) ,]
 dt2 <- dt2$value[dt2$value$sgrad > 0 & !is.na(dt2$value$sgrad) ,]
 dt3 <- dt3$value[dt3$value$sgrad > 0 & !is.na(dt3$value$sgrad) ,]
 dt4 <- dt4$value[dt4$value$sgrad > 0 & !is.na(dt4$value$sgrad) ,]
+dt5 <- dt5$value[dt5$value$sgrad > 0 & !is.na(dt5$value$sgrad) ,]
+dt6 <- dt6$value[dt6$value$sgrad > 0 & !is.na(dt6$value$sgrad) ,]
+dt7 <- dt7$value[dt7$value$sgrad > 0 & !is.na(dt7$value$sgrad) ,]
  
 View(dt0)
 View(dt1)
 View(dt2)
 View(dt3)
 View(dt4)
+View(dt5)
+View(dt6)
+View(dt7)
