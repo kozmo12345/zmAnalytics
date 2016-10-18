@@ -163,4 +163,12 @@ gmean <-aggregate(dt5, by=list(dt5$udm2), FUN=mean, na.rm=TRUE)
 View(gmean)
 
 tempdt5 <- dt5[dt5$mult >= 3538.599 ,]
-View(tempdt5)
+tempdt5 <- dt5[dt5$mult2 >= 6261.456 ,]
+tempdt5 <- dt5[dt5$gr >= 591895.2 ,]
+tempdt5 <- dt5[dt5$medor <= 1.412857 ,]
+tempdt5 <- dt5[dt5$grad <= 5.176429 ,]
+tempdt5 <- dt5[dt5$srgrad <= -0.04214286 ,]
+
+tempdt6 <- dt6[dt6$gr >= 1000000 ,]
+
+View(tempdt6)

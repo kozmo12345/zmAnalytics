@@ -10,6 +10,7 @@ import time
 sp.random.seed(3)  # 이후에 같은 데이터를 생성하기 위해
 
 mstimes = [
+    datetime.timedelta(hours=9,minutes=00,seconds=20).total_seconds(),
     datetime.timedelta(hours=9,minutes=00,seconds=30).total_seconds(),
     datetime.timedelta(hours=9,minutes=00,seconds=40).total_seconds(),
     datetime.timedelta(hours=9,minutes=00,seconds=50).total_seconds(),
@@ -17,6 +18,10 @@ mstimes = [
     datetime.timedelta(hours=9,minutes=1,seconds=10).total_seconds(),
     datetime.timedelta(hours=9,minutes=1,seconds=20).total_seconds(),
     datetime.timedelta(hours=9,minutes=1,seconds=30).total_seconds(),
+    datetime.timedelta(hours=9,minutes=1,seconds=40).total_seconds(),
+    datetime.timedelta(hours=9,minutes=1,seconds=50).total_seconds(),
+    datetime.timedelta(hours=9,minutes=2,seconds=00).total_seconds(),
+    datetime.timedelta(hours=9,minutes=2,seconds=10).total_seconds(),
 ]
 for mesui, mstime in enumerate(mstimes):
     dataFile = open(os.path.join("C:\\", "Data\\ealldata" + str(mesui) + ".txt"), 'w')
@@ -140,7 +145,7 @@ for mesui, mstime in enumerate(mstimes):
                     ms =  int(exportData[i, 5].decode('UTF-8'))
                     md =  int(exportData[i, 6].decode('UTF-8'))
     
-                    if(b_currentTime.decode('utf-8') == str_standardTime and grade < 15 and ms != 0 and md != 0):
+                    if(b_currentTime.decode('utf-8') == str_standardTime and grade < 20 and ms != 0 and md != 0):
                         x = ti
                         y = exportData[:i+1,3].astype(float)
                         if(len(y) <= 1):
