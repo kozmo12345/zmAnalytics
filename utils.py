@@ -1,14 +1,15 @@
-#-*- coding: utf-8 -*-
-
-import os
-
-folderPath, fileName = os.path.split(os.path.realpath(__file__))
-drive, restPath = os.path.splitdrive(folderPath)
-
-DATA_DIR = os.path.join(drive, "\\Dropbox\\data\\")
-
-CHART_DIR = os.path.join(folderPath, "charts")
-
-for d in [DATA_DIR, CHART_DIR]:
-    if not os.path.exists(d):
-        os.mkdir(d)
+print(2.809524 - 1.631534)
+print(59461.43 - 50214.21)
+print(2.137143 - 4.140577)
+print(0.382381 - 3.511185)
+print(0.0347619 - 3.425816)
+print(1.509524 - 1.319259)
+print(19.00728 - 1.608578)
+print(4.827143 - 6.167294)
+print(25.97320 - 7.928746)
+print(0.07333333 - 3.084619)
+print(15.17952 - 2.331947)
+print(45.43571 - 5.862687)
+print(91.67871 - 8.837263)
+print(756888.6 - 721775.2)
+print(9.909524 - 2.453126)
