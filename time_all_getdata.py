@@ -5,7 +5,7 @@ import datetime
 import scipy as sp
 import matplotlib.pyplot as plt
 import datetime
-import time
+import time 
 
 sp.random.seed(3)  # 이후에 같은 데이터를 생성하기 위해
 
