@@ -127,4 +127,4 @@ for datei, da in enumerate(dates):
             grade = int(exportData[i, 1].decode('UTF-8'))
         
         img_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)), "img")
-        plot_models(ti, c, msy, mdy, fa, fname = os.path.join(img_dir, rates[datei] +".png")) 
+        plot_models(ti, c, msy, mdy, fa, fname = os.path.join(img_dir, str(bcodes[datei])+ rates[datei] +".png")) 
