@@ -31,7 +31,7 @@ def plot_models(x, cs, msy, mdy, models, fname=None, mx=None, ymax=None, xmin=No
 
     plt.autoscale(tight=True)
     plt.ylim(ymin=0)
-    if ymax:
+    if ymax: 
         plt.ylim(ymax=ymax)
     if xmin:
         plt.xlim(xmin=xmin)
