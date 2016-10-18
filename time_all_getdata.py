@@ -24,7 +24,7 @@ mstimes = [
     datetime.timedelta(hours=9,minutes=2,seconds=10).total_seconds(),
 ]
 for mesui, mstime in enumerate(mstimes):
-    dataFile = open(os.path.join("C:\\", "Data\\ealldata" + str(mesui) + ".txt"), 'w')
+    dataFile = open(os.path.join("C:\\", "Data\\alldata" + str(mesui) + ".txt"), 'w')
     dataFile.write( 'date,grade,code,mesur,medor,msr_mdr,sgrad,ssd,grad,sd,srgrad,srsd,rgrad,rsd,gr,mesu,maxc_msc,10c_msc,20c_msc,30c_msc,msc_min10c,msc_min20c,msc_min30c,max,min,cost\n')
     for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
         for subdirname in dirnames:
@@ -137,7 +137,7 @@ for mesui, mstime in enumerate(mstimes):
                     t_currentTime = time.strptime(b_currentTime.decode('utf-8'), '%H:%M:%S')
                     second = datetime.timedelta(hours=t_currentTime.tm_hour,minutes=t_currentTime.tm_min,seconds=t_currentTime.tm_sec).total_seconds()
                     v_time = second - firstSecond
-                    ti = sp.append(ti, sp.sqrt(v_time)/2)
+                    ti = sp.append(ti, (v_time)/10)
                     rate = exportData[i, 3].decode('UTF-8')
                     grade = int(exportData[i, 1].decode('UTF-8'))
                     cost = int(exportData[i, 8].decode('UTF-8'))
@@ -160,7 +160,8 @@ for mesui, mstime in enumerate(mstimes):
                         ssd[code.decode('utf-8')] = (sp.std(sp.array([x[:-1], slist])))*10
                         sgradient[code.decode('utf-8')] = sp.around(sfit[0]*10, decimals=2)
     
-                        maxr = (max(exportData[:i+1,4].astype(float)))/30
+                        # maxr = exportData[i,4].astype(float)/30
+                        maxr = 100000
                         ry = (exportData[:i+1,4].astype(float))/maxr
                         rfit = sp.polyfit(x, ry, level)
                         rsd[code.decode('utf-8')] = (sp.std(sp.array([x, ry])))*10
