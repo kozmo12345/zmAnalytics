@@ -10,19 +10,22 @@ import time
 sp.random.seed(3)  # 이후에 같은 데이터를 생성하기 위해
 
 mstimes = [
-    datetime.timedelta(hours=9,minutes=1,seconds=34).total_seconds(),
-    datetime.timedelta(hours=9,minutes=1,seconds=37).total_seconds(),
+    datetime.timedelta(hours=9,minutes=1,seconds=00).total_seconds(),
+    datetime.timedelta(hours=9,minutes=1,seconds=10).total_seconds(),
+    datetime.timedelta(hours=9,minutes=1,seconds=20).total_seconds(),
+    datetime.timedelta(hours=9,minutes=1,seconds=30).total_seconds(),
+    datetime.timedelta(hours=9,minutes=1,seconds=35).total_seconds(),
     datetime.timedelta(hours=9,minutes=1,seconds=40).total_seconds(),
     datetime.timedelta(hours=9,minutes=1,seconds=45).total_seconds(),
     datetime.timedelta(hours=9,minutes=1,seconds=50).total_seconds(),
     datetime.timedelta(hours=9,minutes=1,seconds=55).total_seconds(),
-    datetime.timedelta(hours=9,minutes=1,seconds=10).total_seconds(),
-    datetime.timedelta(hours=9,minutes=1,seconds=20).total_seconds(),
+    datetime.timedelta(hours=9,minutes=2,seconds=00).total_seconds(),
+    datetime.timedelta(hours=9,minutes=2,seconds=10).total_seconds(),
 ]
 
 for mesui, mstime in enumerate(mstimes):
-    dataFile = open(os.path.join("C:\\", "Data\\salldata" + str(mesui) + ".txt"), 'w')
-    dataFile.write( 'date,grade,code,mesur,medor,msr_mdr,sgrad,ssd,grad,sd,second,srsd,rgrad,rsd,gr,mesu,maxc_msc,10c_msc,20c_msc,30c_msc,msc_min10c,msc_min20c,msc_min30c,max,min,cost\n')
+    dataFile = open(os.path.join("C:\\", "Data\\talldata" + str(mesui) + ".txt"), 'w')
+    dataFile.write( 'date,grade,code,mesur,medor,msr_mdr,sgrad,ssd,grad,sd,second,srsd,rgrad,rsd,gr,mesu,maxc_msc,3c_msc,5c_msc,7c_msc,10c_msc,15c_msc,20c_msc,30c_msc,msc_min10c,msc_min20c,msc_min30c,max,min,cost\n')
     for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
         for subdirname in dirnames:
             date = subdirname
@@ -40,7 +43,11 @@ for mesui, mstime in enumerate(mstimes):
             downCost = dict()
             maxCost = dict()
             minCost = dict()
+            trCost = dict()
+            fiCost = dict()
+            seCost = dict()
             tenCost = dict()
+            tenfCost = dict()
             ten2Cost = dict()
             ten3Cost = dict()
             sd = dict()   #cost증가율 1차 편차
@@ -63,7 +70,11 @@ for mesui, mstime in enumerate(mstimes):
 
             str_standardTime = mstime
             str_medoTime = datetime.timedelta(hours=15,minutes=20,seconds=00).total_seconds()
+            str_trTime = datetime.timedelta(hours=9,minutes=3,seconds=00).total_seconds()
+            str_fiTime = datetime.timedelta(hours=9,minutes=5,seconds=00).total_seconds()
+            str_seTime = datetime.timedelta(hours=9,minutes=7,seconds=00).total_seconds()
             str_tenTime = datetime.timedelta(hours=9,minutes=10,seconds=00).total_seconds()
+            str_tenfTime = datetime.timedelta(hours=9,minutes=15,seconds=00).total_seconds()
             str_ten2Time = datetime.timedelta(hours=9,minutes=20,seconds=00).total_seconds()
             str_ten3Time = datetime.timedelta(hours=9,minutes=30,seconds=00).total_seconds()
             
@@ -85,6 +96,33 @@ for mesui, mstime in enumerate(mstimes):
                     str_medoTime = t.decode('utf-8')
                     break;
             
+            second_trTime = 0
+            for i, t in enumerate(times):
+                x = time.strptime(t.decode('utf-8'), '%H:%M:%S')
+                nt = datetime.timedelta(hours=x.tm_hour,minutes=x.tm_min,seconds=x.tm_sec).total_seconds()
+                second_trTime = nt
+                if(nt > str_trTime):
+                    str_trTime = t.decode('utf-8')
+                    break;            
+            
+            second_fiTime = 0
+            for i, t in enumerate(times):
+                x = time.strptime(t.decode('utf-8'), '%H:%M:%S')
+                nt = datetime.timedelta(hours=x.tm_hour,minutes=x.tm_min,seconds=x.tm_sec).total_seconds()
+                second_fiTime = nt
+                if(nt > str_fiTime):
+                    str_fiTime = t.decode('utf-8')
+                    break;
+
+            second_seTime = 0
+            for i, t in enumerate(times):
+                x = time.strptime(t.decode('utf-8'), '%H:%M:%S')
+                nt = datetime.timedelta(hours=x.tm_hour,minutes=x.tm_min,seconds=x.tm_sec).total_seconds()
+                second_seTime = nt
+                if(nt > str_seTime):
+                    str_seTime = t.decode('utf-8')
+                    break;
+
             second_tenTime = 0
             for i, t in enumerate(times):
                 x = time.strptime(t.decode('utf-8'), '%H:%M:%S')
@@ -92,6 +130,15 @@ for mesui, mstime in enumerate(mstimes):
                 second_tenTime = nt
                 if(nt > str_tenTime):
                     str_tenTime = t.decode('utf-8')
+                    break;
+
+            second_tenfTime = 0
+            for i, t in enumerate(times):
+                x = time.strptime(t.decode('utf-8'), '%H:%M:%S')
+                nt = datetime.timedelta(hours=x.tm_hour,minutes=x.tm_min,seconds=x.tm_sec).total_seconds()
+                second_tenfTime = nt
+                if(nt > str_tenfTime):
+                    str_tenfTime = t.decode('utf-8')
                     break;
             
             second_ten2Time = 0
@@ -142,7 +189,7 @@ for mesui, mstime in enumerate(mstimes):
                     ms =  int(exportData[i, 5].decode('UTF-8'))
                     md =  int(exportData[i, 6].decode('UTF-8'))
     
-                    if(b_currentTime.decode('utf-8') == str_standardTime and grade < 15 and ms != 0 and md != 0):
+                    if(b_currentTime.decode('utf-8') == str_standardTime and grade < 20 and ms != 0 and md != 0):
                         x = ti
                         y = exportData[:i+1,3].astype(float)
                         if(len(y) <= 1):
@@ -182,7 +229,11 @@ for mesui, mstime in enumerate(mstimes):
                         mesuCost[code.decode('utf-8')] = float(rate)
                         upCost[code.decode('utf-8')] = float(rate)
                         downCost[code.decode('utf-8')] = float(rate)
+                        trCost[code.decode('utf-8')] = float(rate)
+                        fiCost[code.decode('utf-8')] = float(rate)
+                        seCost[code.decode('utf-8')] = float(rate)
                         tenCost[code.decode('utf-8')] = float(rate)
+                        tenfCost[code.decode('utf-8')] = float(rate)
                         ten2Cost[code.decode('utf-8')] = float(rate)
                         ten3Cost[code.decode('utf-8')] = float(rate)
                         mintenCost[code.decode('utf-8')] = float(rate)
@@ -194,16 +245,28 @@ for mesui, mstime in enumerate(mstimes):
                         Cost[code.decode('utf-8')] = cost
                         grd[code.decode('utf-8')] = gr
 
-                    if(second_standardTime < second and second <= second_tenTime and code.decode('utf-8') in tenCost and tenCost[code.decode('utf-8')] < float(rate)):
+                    if(second_standardTime < second and second <= second_trTime and code.decode('utf-8') in trCost and trCost[code.decode('utf-8')] < float(rate)):
+                        trCost[code.decode('utf-8')] = float(rate)
+
+                    if(second_trTime < second and second <= second_fiTime and code.decode('utf-8') in fiCost and fiCost[code.decode('utf-8')] < float(rate)):
+                        fiCost[code.decode('utf-8')] = float(rate)
+
+                    if(second_fiTime < second and second <= second_seTime and code.decode('utf-8') in seCost and seCost[code.decode('utf-8')] < float(rate)):
+                        seCost[code.decode('utf-8')] = float(rate)
+
+                    if(second_seTime < second and second <= second_tenTime and code.decode('utf-8') in tenCost and tenCost[code.decode('utf-8')] < float(rate)):
                         tenCost[code.decode('utf-8')] = float(rate)
-    
-                    if(second_standardTime < second and second <= second_tenTime and code.decode('utf-8') in mintenCost and mintenCost[code.decode('utf-8')] >= float(rate)):
+
+                    if(second_seTime < second and second <= second_tenTime and code.decode('utf-8') in mintenCost and mintenCost[code.decode('utf-8')] >= float(rate)):
                         mintenCost[code.decode('utf-8')] = float(rate) 
-            
-                    if(second_tenTime < second and second <= second_ten2Time and code.decode('utf-8') in ten2Cost and ten2Cost[code.decode('utf-8')] < float(rate)):
+
+                    if(second_tenTime < second and second <= second_tenfTime and code.decode('utf-8') in tenfCost and tenfCost[code.decode('utf-8')] < float(rate)):
+                        second_tenfTime[code.decode('utf-8')] = float(rate)
+
+                    if(second_tenfTime < second and second <= second_ten2Time and code.decode('utf-8') in ten2Cost and ten2Cost[code.decode('utf-8')] < float(rate)):
                         ten2Cost[code.decode('utf-8')] = float(rate)
             
-                    if(second_tenTime < second and second <= second_ten2Time and code.decode('utf-8') in minten2Cost and minten2Cost[code.decode('utf-8')] >= float(rate)):
+                    if(second_tenfTime < second and second <= second_ten2Time and code.decode('utf-8') in minten2Cost and minten2Cost[code.decode('utf-8')] >= float(rate)):
                         minten2Cost[code.decode('utf-8')] = float(rate)         
     
                     if(second_ten2Time < second and second <= second_ten3Time and code.decode('utf-8') in ten3Cost and ten3Cost[code.decode('utf-8')] < float(rate)):
@@ -218,6 +281,5 @@ for mesui, mstime in enumerate(mstimes):
                     if(second_standardTime < second and second <= str_medoTime and code.decode('utf-8') in minCost and minCost[code.decode('utf-8')] >= float(rate)):
                         minCost[code.decode('utf-8')] = float(rate)                                          
             
-            
             for k, v in mesuCost.items():
-                dataFile.write( date + ',' + str(gradeDic[k]) + ',' + str(k) + ',' + str(mesur[k]) + ',' + str(medor[k]) + ',' + str(mesur_medor[k]) + ',' + str(sgradient[k]) + ',' + str(ssd[k]) + ',' + str(gradient[k]) + ',' + str(sd[k]) + ',' + str(srgradient[k]) + ',' + str(srsd[k]) + ',' + str(rgradient[k]) + ',' + str(rsd[k]) + ',' + str(grd[k]) + ',' + str(v) + ',' + str(maxCost[k]-mesuCost[k]) + ',' + str(tenCost[k]-mesuCost[k]) + ',' + str(ten2Cost[k]-mesuCost[k]) + ',' + str(ten3Cost[k]-mesuCost[k]) + ',' + str(mintenCost[k] - mesuCost[k]) + ',' + str(minten2Cost[k] - mesuCost[k]) + ',' + str(minten3Cost[k] - mesuCost[k]) + ',' + str(maxCost[k]) + ',' + str(minCost[k]) + ',' + str(Cost[k]) + '\n')
+                dataFile.write( date + ',' + str(gradeDic[k]) + ',' + str(k) + ',' + str(mesur[k]) + ',' + str(medor[k]) + ',' + str(mesur_medor[k]) + ',' + str(sgradient[k]) + ',' + str(ssd[k]) + ',' + str(gradient[k]) + ',' + str(sd[k]) + ',' + str(srgradient[k]) + ',' + str(srsd[k]) + ',' + str(rgradient[k]) + ',' + str(rsd[k]) + ',' + str(grd[k]) + ',' + str(v) + ',' + str(maxCost[k]-mesuCost[k]) + ',' + str(trCost[k]-mesuCost[k]) + ',' + str(fiCost[k]-mesuCost[k]) + ',' + str(seCost[k]-mesuCost[k]) + ',' + str(tenCost[k]-mesuCost[k]) + ',' + str(tenfCost[k]-mesuCost[k]) + ',' + str(ten2Cost[k]-mesuCost[k]) + ',' + str(ten3Cost[k]-mesuCost[k]) + ',' + str(mintenCost[k] - mesuCost[k]) + ',' + str(minten2Cost[k] - mesuCost[k]) + ',' + str(minten3Cost[k] - mesuCost[k]) + ',' + str(maxCost[k]) + ',' + str(minCost[k]) + ',' + str(Cost[k]) + '\n')

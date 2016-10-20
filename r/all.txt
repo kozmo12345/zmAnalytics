@@ -1,4 +1,4 @@
-dt <- read.csv("alldata0.txt")
+dt <- read.csv("salldata0.txt")
 dt$mult <- (dt$cost/1000) * (dt$gr/1000)
 dt$mult2 <- (dt$mesu) * (dt$gr/1000)
 dt$ud <- ifelse(dt$X10c_msc > 0,2,1)
@@ -8,7 +8,7 @@ dt$udm <- ifelse(dt$maxc_msc > 0,2,1)
 dt$udm2 <- ifelse(dt$maxc_msc > 2,2,1)
 dt <- dt[dt$grad != "Inf",]
 dt <- dt[dt$sgrad != "Inf",]
-dt <- dt[dt$grade < 8,]
+
 
 dt$ud <- factor(dt$ud, levels = c(1,2), labels = c("N","Y"))
 dt$ud2 <- factor(dt$ud2, levels = c(1,2), labels = c("N","Y"))
@@ -18,7 +18,7 @@ dt$udm2 <- factor(dt$udm2, levels = c(1,2), labels = c("N","Y"))
 dump("dt", file="dt0.R")
 
 
-dt <- read.csv("alldata1.txt")
+dt <- read.csv("salldata1.txt")
 dt$mult <- (dt$cost/1000) * (dt$gr/1000)
 dt$mult2 <- (dt$mesu) * (dt$gr/1000)
 dt$ud <- ifelse(dt$X10c_msc > 0,2,1)
@@ -28,7 +28,7 @@ dt$udm <- ifelse(dt$maxc_msc > 0,2,1)
 dt$udm2 <- ifelse(dt$maxc_msc > 2,2,1)
 dt <- dt[dt$grad != "Inf",]
 dt <- dt[dt$sgrad != "Inf",]
-dt <- dt[dt$grade < 8,]
+
 
 dt$ud <- factor(dt$ud, levels = c(1,2), labels = c("N","Y"))
 dt$ud2 <- factor(dt$ud2, levels = c(1,2), labels = c("N","Y"))
@@ -37,7 +37,7 @@ dt$udm <- factor(dt$udm, levels = c(1,2), labels = c("N","Y"))
 dt$udm2 <- factor(dt$udm2, levels = c(1,2), labels = c("N","Y"))
 dump("dt", file="dt1.R")
 
-dt <- read.csv("alldata2.txt")
+dt <- read.csv("salldata2.txt")
 dt$mult <- (dt$cost/1000) * (dt$gr/1000)
 dt$mult2 <- (dt$mesu) * (dt$gr/1000)
 dt$ud <- ifelse(dt$X10c_msc > 0,2,1)
@@ -47,7 +47,7 @@ dt$udm <- ifelse(dt$maxc_msc > 0,2,1)
 dt$udm2 <- ifelse(dt$maxc_msc > 2,2,1)
 dt <- dt[dt$grad != "Inf",]
 dt <- dt[dt$sgrad != "Inf",]
-dt <- dt[dt$grade < 8,]
+
 
 dt$ud <- factor(dt$ud, levels = c(1,2), labels = c("N","Y"))
 dt$ud2 <- factor(dt$ud2, levels = c(1,2), labels = c("N","Y"))
@@ -56,7 +56,7 @@ dt$udm <- factor(dt$udm, levels = c(1,2), labels = c("N","Y"))
 dt$udm2 <- factor(dt$udm2, levels = c(1,2), labels = c("N","Y"))
 dump("dt", file="dt2.R")
 
-dt <- read.csv("alldata3.txt")
+dt <- read.csv("salldata3.txt")
 dt$mult <- (dt$cost/1000) * (dt$gr/1000)
 dt$mult2 <- (dt$mesu) * (dt$gr/1000)
 dt$ud <- ifelse(dt$X10c_msc > 0,2,1)
@@ -66,7 +66,7 @@ dt$udm <- ifelse(dt$maxc_msc > 0,2,1)
 dt$udm2 <- ifelse(dt$maxc_msc > 2,2,1)
 dt <- dt[dt$grad != "Inf",]
 dt <- dt[dt$sgrad != "Inf",]
-dt <- dt[dt$grade < 8,]
+
 
 dt$ud <- factor(dt$ud, levels = c(1,2), labels = c("N","Y"))
 dt$ud2 <- factor(dt$ud2, levels = c(1,2), labels = c("N","Y"))
@@ -75,7 +75,7 @@ dt$udm <- factor(dt$udm, levels = c(1,2), labels = c("N","Y"))
 dt$udm2 <- factor(dt$udm2, levels = c(1,2), labels = c("N","Y"))
 dump("dt", file="dt3.R")
 
-dt <- read.csv("alldata4.txt")
+dt <- read.csv("salldata4.txt")
 dt$mult <- (dt$cost/1000) * (dt$gr/1000)
 dt$mult2 <- (dt$mesu) * (dt$gr/1000)
 dt$ud <- ifelse(dt$X10c_msc > 0,2,1)
@@ -85,7 +85,7 @@ dt$udm <- ifelse(dt$maxc_msc > 0,2,1)
 dt$udm2 <- ifelse(dt$maxc_msc > 2,2,1)
 dt <- dt[dt$grad != "Inf",]
 dt <- dt[dt$sgrad != "Inf",]
-dt <- dt[dt$grade < 8,]
+
 
 dt$ud <- factor(dt$ud, levels = c(1,2), labels = c("N","Y"))
 dt$ud2 <- factor(dt$ud2, levels = c(1,2), labels = c("N","Y"))
@@ -94,7 +94,7 @@ dt$udm <- factor(dt$udm, levels = c(1,2), labels = c("N","Y"))
 dt$udm2 <- factor(dt$udm2, levels = c(1,2), labels = c("N","Y"))
 dump("dt", file="dt4.R")
 
-dt <- read.csv("alldata5.txt")
+dt <- read.csv("salldata5.txt")
 dt$mult <- (dt$cost/1000) * (dt$gr/1000)
 dt$mult2 <- (dt$mesu) * (dt$gr/1000)
 dt$ud <- ifelse(dt$X10c_msc > 0,2,1)
@@ -104,7 +104,6 @@ dt$udm <- ifelse(dt$maxc_msc > 0,2,1)
 dt$udm2 <- ifelse(dt$maxc_msc > 2,2,1)
 dt <- dt[dt$grad != "Inf",]
 dt <- dt[dt$sgrad != "Inf",]
-dt <- dt[dt$grade < 8,]
 
 dt$ud <- factor(dt$ud, levels = c(1,2), labels = c("N","Y"))
 dt$ud2 <- factor(dt$ud2, levels = c(1,2), labels = c("N","Y"))
@@ -113,19 +112,59 @@ dt$udm <- factor(dt$udm, levels = c(1,2), labels = c("N","Y"))
 dt$udm2 <- factor(dt$udm2, levels = c(1,2), labels = c("N","Y"))
 dump("dt", file="dt5.R")
 
+dt <- read.csv("salldata6.txt")
+dt$mult <- (dt$cost/1000) * (dt$gr/1000)
+dt$mult2 <- (dt$mesu) * (dt$gr/1000)
+dt$ud <- ifelse(dt$X10c_msc > 0,2,1)
+dt$ud2 <- ifelse(dt$X20c_msc > 0,2,1)
+dt$ud3 <- ifelse(dt$X30c_msc > 0,2,1)
+dt$udm <- ifelse(dt$maxc_msc > 0,2,1)
+dt$udm2 <- ifelse(dt$maxc_msc > 2,2,1)
+dt <- dt[dt$grad != "Inf",]
+dt <- dt[dt$sgrad != "Inf",]
+
+dt$ud <- factor(dt$ud, levels = c(1,2), labels = c("N","Y"))
+dt$ud2 <- factor(dt$ud2, levels = c(1,2), labels = c("N","Y"))
+dt$ud3 <- factor(dt$ud3, levels = c(1,2), labels = c("N","Y"))
+dt$udm <- factor(dt$udm, levels = c(1,2), labels = c("N","Y"))
+dt$udm2 <- factor(dt$udm2, levels = c(1,2), labels = c("N","Y"))
+dump("dt", file="dt6.R")
+
+dt <- read.csv("salldata7.txt")
+dt$mult <- (dt$cost/1000) * (dt$gr/1000)
+dt$mult2 <- (dt$mesu) * (dt$gr/1000)
+dt$ud <- ifelse(dt$X10c_msc > 0,2,1)
+dt$ud2 <- ifelse(dt$X20c_msc > 0,2,1)
+dt$ud3 <- ifelse(dt$X30c_msc > 0,2,1)
+dt$udm <- ifelse(dt$maxc_msc > 0,2,1)
+dt$udm2 <- ifelse(dt$maxc_msc > 2,2,1)
+dt <- dt[dt$grad != "Inf",]
+dt <- dt[dt$sgrad != "Inf",]
+
+dt$ud <- factor(dt$ud, levels = c(1,2), labels = c("N","Y"))
+dt$ud2 <- factor(dt$ud2, levels = c(1,2), labels = c("N","Y"))
+dt$ud3 <- factor(dt$ud3, levels = c(1,2), labels = c("N","Y"))
+dt$udm <- factor(dt$udm, levels = c(1,2), labels = c("N","Y"))
+dt$udm2 <- factor(dt$udm2, levels = c(1,2), labels = c("N","Y"))
+dump("dt", file="dt7.R")
+
 dt0 <- source("dt0.R")
 dt1 <- source("dt1.R")
 dt2 <- source("dt2.R")
 dt3 <- source("dt3.R")
 dt4 <- source("dt4.R")
 dt5 <- source("dt5.R")
+dt6 <- source("dt6.R")
+dt7 <- source("dt7.R")
 
 dt0 <- dt0$value[!is.na(dt0$value$sgrad) ,]
 dt1 <- dt1$value[!is.na(dt1$value$sgrad) ,]
 dt2 <- dt2$value[!is.na(dt2$value$sgrad) ,]
 dt3 <- dt3$value[!is.na(dt3$value$sgrad) ,]
 dt4 <- dt4$value[!is.na(dt4$value$sgrad) ,]
-dt5 <- dt4$value[!is.na(dt5$value$sgrad) ,]
+dt5 <- dt5$value[!is.na(dt5$value$sgrad) ,]
+dt6 <- dt6$value[!is.na(dt6$value$sgrad) ,]
+dt7 <- dt7$value[!is.na(dt7$value$sgrad) ,]
  
 View(dt0)
 View(dt1)
@@ -133,6 +172,8 @@ View(dt2)
 View(dt3)
 View(dt4)
 View(dt5)
+View(dt6)
+View(dt7)
 
 gmean0 <-aggregate(dt0, by=list(dt0$udm2), FUN=mean, na.rm=TRUE)
 gmean1 <-aggregate(dt1, by=list(dt1$udm2), FUN=mean, na.rm=TRUE)
@@ -140,6 +181,8 @@ gmean2 <-aggregate(dt2, by=list(dt2$udm2), FUN=mean, na.rm=TRUE)
 gmean3 <-aggregate(dt3, by=list(dt3$udm2), FUN=mean, na.rm=TRUE)
 gmean4 <-aggregate(dt4, by=list(dt4$udm2), FUN=mean, na.rm=TRUE)
 gmean5 <-aggregate(dt5, by=list(dt5$udm2), FUN=mean, na.rm=TRUE)
+gmean6 <-aggregate(dt6, by=list(dt6$udm2), FUN=mean, na.rm=TRUE)
+gmean7 <-aggregate(dt7, by=list(dt7$udm2), FUN=mean, na.rm=TRUE)
 
 View(gmean0)
 View(gmean1)
@@ -147,8 +190,9 @@ View(gmean2)
 View(gmean3)
 View(gmean4)
 View(gmean5)
+View(gmean6)
+View(gmean7)
 
 dt <- dt0
-
-tempdt <- dt0[dt0$gr >= 364221 & dt0$mesu < 11, ]
+tempdt <- dt[dt$gr >= mean(dt) , ]
 View(tempdt)
