@@ -10,22 +10,17 @@ import time
 sp.random.seed(3)  # 이후에 같은 데이터를 생성하기 위해
 
 mstimes = [
-    datetime.timedelta(hours=9,minutes=00,seconds=20).total_seconds(),
-    datetime.timedelta(hours=9,minutes=00,seconds=30).total_seconds(),
-    datetime.timedelta(hours=9,minutes=00,seconds=40).total_seconds(),
-    datetime.timedelta(hours=9,minutes=00,seconds=50).total_seconds(),
-    datetime.timedelta(hours=9,minutes=1,seconds=00).total_seconds(),
-    datetime.timedelta(hours=9,minutes=1,seconds=10).total_seconds(),
-    datetime.timedelta(hours=9,minutes=1,seconds=20).total_seconds(),
-    datetime.timedelta(hours=9,minutes=1,seconds=30).total_seconds(),
+    datetime.timedelta(hours=9,minutes=1,seconds=34).total_seconds(),
+    datetime.timedelta(hours=9,minutes=1,seconds=37).total_seconds(),
     datetime.timedelta(hours=9,minutes=1,seconds=40).total_seconds(),
+    datetime.timedelta(hours=9,minutes=1,seconds=45).total_seconds(),
     datetime.timedelta(hours=9,minutes=1,seconds=50).total_seconds(),
-    datetime.timedelta(hours=9,minutes=2,seconds=00).total_seconds(),
-    datetime.timedelta(hours=9,minutes=2,seconds=10).total_seconds(),
+    datetime.timedelta(hours=9,minutes=1,seconds=55).total_seconds(),
 ]
+
 for mesui, mstime in enumerate(mstimes):
     dataFile = open(os.path.join("C:\\", "Data\\alldata" + str(mesui) + ".txt"), 'w')
-    dataFile.write( 'date,grade,code,mesur,medor,msr_mdr,sgrad,ssd,grad,sd,srgrad,srsd,rgrad,rsd,gr,mesu,maxc_msc,10c_msc,20c_msc,30c_msc,msc_min10c,msc_min20c,msc_min30c,max,min,cost\n')
+    dataFile.write( 'date,grade,code,mesur,medor,msr_mdr,sgrad,ssd,grad,sd,second,srsd,rgrad,rsd,gr,mesu,maxc_msc,10c_msc,20c_msc,30c_msc,msc_min10c,msc_min20c,msc_min30c,max,min,cost\n')
     for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
         for subdirname in dirnames:
             date = subdirname
@@ -145,7 +140,7 @@ for mesui, mstime in enumerate(mstimes):
                     ms =  int(exportData[i, 5].decode('UTF-8'))
                     md =  int(exportData[i, 6].decode('UTF-8'))
     
-                    if(b_currentTime.decode('utf-8') == str_standardTime and grade < 20 and ms != 0 and md != 0):
+                    if(b_currentTime.decode('utf-8') == str_standardTime and grade < 15 and ms != 0 and md != 0):
                         x = ti
                         y = exportData[:i+1,3].astype(float)
                         if(len(y) <= 1):
@@ -169,18 +164,18 @@ for mesui, mstime in enumerate(mstimes):
     
                         mesuy = (exportData[:i+1,5].astype(float))/maxr
                         msfit = sp.polyfit(x, mesuy, level)
-                        mesur[code.decode('utf-8')] = sp.around(msfit[0]*10, decimals=2)
+                        mesur[code.decode('utf-8')] = exportData[i,5].astype(float)
                         medoy = (exportData[:i+1,6].astype(float))/maxr
                         mdfit = sp.polyfit(x, medoy, level)
-                        medor[code.decode('utf-8')] = sp.around(mdfit[0]*10, decimals=2)
+                        medor[code.decode('utf-8')] = exportData[i,6].astype(float)
                         ms_md = sp.append(ms_md, (mesuy.astype(float))/(medoy.astype(float)))
                         ms_mdfit = sp.polyfit(x, mesuy, level)
-                        mesur_medor[code.decode('utf-8')] = sp.around(ms_mdfit[0]*10, decimals=2)
-
+                        mesur_medor[code.decode('utf-8')] = (exportData[i,5].astype(float))/(exportData[i,6].astype(float))
+                        
                         srlist = [b - a for a,b in zip(ry,ry[1:])]
                         srfit = sp.polyfit(x[:-1], srlist, level)
                         srsd[code.decode('utf-8')] = (sp.std(sp.array([x[:-1], srlist])))*10
-                        srgradient[code.decode('utf-8')] = sp.around(srfit[0]*10, decimals=2)
+                        srgradient[code.decode('utf-8')] = mstime #sp.around(srfit[0]*10, decimals=2)
     
                         mesuCost[code.decode('utf-8')] = float(rate)
                         upCost[code.decode('utf-8')] = float(rate)

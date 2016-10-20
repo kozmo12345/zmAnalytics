@@ -1,156 +1,114 @@
 #-*- coding: utf-8 -*-
 
 import os
-from utils import DATA_DIR, CHART_DIR
+import datetime
 import scipy as sp
 import matplotlib.pyplot as plt
+import datetime
+import time
 
 sp.random.seed(3)  # 이후에 같은 데이터를 생성하기 위해
 
-data = sp.genfromtxt(os.path.join(DATA_DIR, "web_traffic.tsv"), delimiter="\t")
-print(data[:10])
-print(data.shape)
-
-# 예제는 3갸지 범주이다
-colors = ['g', 'k', 'b', 'm', 'r']
-linestyles = ['-', '-.', '--', ':', '-']
-
-x = data[:, 0]
-y = data[:, 1]
-print("Number of invalid entries:", sp.sum(sp.isnan(y)))
-x = x[~sp.isnan(y)]
-y = y[~sp.isnan(y)]
-
-# 입력 데이터 그리기
-def plot_models(x, y, models, fname, mx=None, ymax=None, xmin=None):
-
-    plt.figure(num=None, figsize=(8, 6))
+def plot_models(x, cs, msy, mdy, models, fname=None, mx=None, ymax=None, xmin=None):
+    colors = ['g', 'k', 'b', 'm', 'r']
+    linestyles = ['-', '-.', '--', ':', '-']
     plt.clf()
-    plt.scatter(x, y, s=10)
-    plt.title("Web traffic over the last month")
+    plt.scatter(x, cs, s=5)
+    plt.title("graph")
     plt.xlabel("Time")
-    plt.ylabel("Hits/hour")
-    plt.xticks(
-        [w * 7 * 24 for w in range(10)], ['week %i' % w for w in range(10)])
-
-    if models:
-        if mx is None:
-            mx = sp.linspace(0, x[-1], 1000)
-        for model, style, color in zip(models, linestyles, colors):
-            # print "Model:",model
-            # print "Coeffs:",model.coeffs
-            plt.plot(mx, model(mx), linestyle=style, linewidth=2, c=color)
-
-        plt.legend(["d=%i" % m.order for m in models], loc="upper left")
-
+    plt.ylabel("Rate")
+    plt.scatter(x, msy, s=5, marker='*')
+    plt.scatter(x, mdy, s=5, marker='_')
+    
     plt.autoscale(tight=True)
     plt.ylim(ymin=0)
-    if ymax:
+    if ymax: 
         plt.ylim(ymax=ymax)
     if xmin:
         plt.xlim(xmin=xmin)
+    plt.ylim(ymax=30)        
     plt.grid(True, linestyle='-', color='0.75')
-    plt.savefig(fname)
+    plt.show()
 
-# 데이터 얼핏 보기
-plot_models(x, y, None, os.path.join(CHART_DIR, "1400_01_01.png"))
+dates = ["2016-10-18"]
 
-# 모델 생성과 그리기
-fp1, res1, rank1, sv1, rcond1 = sp.polyfit(x, y, 1, full=True)
-print("Model parameters of fp1: %s" % fp1)
-print("Error of the model of fp1:", res1)
-f1 = sp.poly1d(fp1)
+bcodes = [b'208640']
 
-fp2, res2, rank2, sv2, rcond2 = sp.polyfit(x, y, 2, full=True)
-print("Model parameters of fp2: %s" % fp2)
-print("Error of the model of fp2:", res2)
-f2 = sp.poly1d(fp2)
-f3 = sp.poly1d(sp.polyfit(x, y, 3))
-f10 = sp.poly1d(sp.polyfit(x, y, 10))
-f100 = sp.poly1d(sp.polyfit(x, y, 100))
+rates = ["0.9",]
 
-plot_models(x, y, [f1], os.path.join(CHART_DIR, "1400_01_02.png"))
-plot_models(x, y, [f1, f2], os.path.join(CHART_DIR, "1400_01_03.png"))
-plot_models(
-    x, y, [f1, f2, f3, f10, f100], os.path.join(CHART_DIR, "1400_01_04.png"))
-
-# 변곡점에 대한 정보를 사용하여 모델 생성과 그리기
-inflection = 3.5 * 7 * 24
-xa = x[:inflection]
-ya = y[:inflection]
-xb = x[inflection:]
-yb = y[inflection:]
-
-fa = sp.poly1d(sp.polyfit(xa, ya, 1))
-fb = sp.poly1d(sp.polyfit(xb, yb, 1))
-
-plot_models(x, y, [fa, fb], os.path.join(CHART_DIR, "1400_01_05.png"))
-
-
-def error(f, x, y):
-    return sp.sum((f(x) - y) ** 2)
-
-print("Errors for the complete data set:")
-for f in [f1, f2, f3, f10, f100]:
-    print("Error d=%i: %f" % (f.order, error(f, x, y)))
-
-print("Errors for only the time after inflection point")
-for f in [f1, f2, f3, f10, f100]:
-    print("Error d=%i: %f" % (f.order, error(f, xb, yb)))
-
-print("Error inflection=%f" % (error(fa, xa, ya) + error(fb, xb, yb)))
-
-
-# 미래 추정하기
-plot_models(
-    x, y, [f1, f2, f3, f10, f100],
-    os.path.join(CHART_DIR, "1400_01_06.png"),
-    mx=sp.linspace(0 * 7 * 24, 6 * 7 * 24, 100),
-    ymax=10000, xmin=0 * 7 * 24)
-
-print("Trained only on data after inflection point")
-fb1 = fb
-fb2 = sp.poly1d(sp.polyfit(xb, yb, 2))
-fb3 = sp.poly1d(sp.polyfit(xb, yb, 3))
-fb10 = sp.poly1d(sp.polyfit(xb, yb, 10))
-fb100 = sp.poly1d(sp.polyfit(xb, yb, 100))
-
-print("Errors for only the time after inflection point")
-for f in [fb1, fb2, fb3, fb10, fb100]:
-    print("Error d=%i: %f" % (f.order, error(f, xb, yb)))
-
-plot_models(
-    x, y, [fb1, fb2, fb3, fb10, fb100],
-    os.path.join(CHART_DIR, "1400_01_07.png"),
-    mx=sp.linspace(0 * 7 * 24, 6 * 7 * 24, 100),
-    ymax=10000, xmin=0 * 7 * 24)
-
-# 테스트 데이터와 훈련 데이터 분리
-frac = 0.3
-split_idx = int(frac * len(xb))
-shuffled = sp.random.permutation(list(range(len(xb))))
-test = sorted(shuffled[:split_idx])
-train = sorted(shuffled[split_idx:])
-fbt1 = sp.poly1d(sp.polyfit(xb[train], yb[train], 1))
-fbt2 = sp.poly1d(sp.polyfit(xb[train], yb[train], 2))
-print("fbt2(x)= \n%s"%fbt2)
-print("fbt2(x)-100,000= \n%s"%(fbt2-100000))
-fbt3 = sp.poly1d(sp.polyfit(xb[train], yb[train], 3))
-fbt10 = sp.poly1d(sp.polyfit(xb[train], yb[train], 10))
-fbt100 = sp.poly1d(sp.polyfit(xb[train], yb[train], 100))
-
-print("Test errors for only the time after inflection point")
-for f in [fbt1, fbt2, fbt3, fbt10, fbt100]:
-    print("Error d=%i: %f" % (f.order, error(f, xb[test], yb[test])))
-
-plot_models(
-    x, y, [fbt1, fbt2, fbt3, fbt10, fbt100],
-    os.path.join(CHART_DIR, "1400_01_08.png"),
-    mx=sp.linspace(0 * 7 * 24, 6 * 7 * 24, 100),
-    ymax=10000, xmin=0 * 7 * 24)
-
-from scipy.optimize import fsolve
-print(fbt2)
-print(fbt2 - 100000)
-reached_max = fsolve(fbt2 - 100000, x0=800) / (7 * 24)
-print("100,000 hits/hour expected at week %f" % reached_max[0])
+for datei, da in enumerate(dates):
+    
+    date = da
+    setcode = bcodes[datei] #b'038950'
+    
+    filePath = os.path.join("C:\\", "Dropbox\\Data\\" + date + "\\" + date + ".txt");
+    data = sp.genfromtxt(filePath, delimiter="\t", dtype='|S20')
+    
+    # code to analysis
+    codes = sp.unique(data[data[:,7] == setcode][:,7])
+    times = sp.unique(data[data[:,0] == setcode][:,0])
+    
+    plusCnt = 0
+    minusCnt = 0
+    mesuCost = dict()
+    upCost = dict()
+    downCost = dict()
+    
+    str_standardTime = datetime.timedelta(hours=9,minutes=2,seconds=00).total_seconds()
+    str_medoTime = datetime.timedelta(hours=15,minutes=20,seconds=00).total_seconds()
+    
+    second_standardTime = 0
+    for i, t in enumerate(times):
+        x = time.strptime(t.decode('utf-8'), '%H:%M:%S')
+        nt = datetime.timedelta(hours=x.tm_hour,minutes=x.tm_min,seconds=x.tm_sec).total_seconds()
+        second_standardTime = nt    
+        if(nt > str_standardTime):
+            str_standardTime = t.decode('utf-8')
+            break;
+    
+    second_medoTime = 0
+    for i, t in enumerate(times):
+        x = time.strptime(t.decode('utf-8'), '%H:%M:%S')
+        nt = datetime.timedelta(hours=x.tm_hour,minutes=x.tm_min,seconds=x.tm_sec).total_seconds()
+        second_medoTime = nt
+        if(nt > str_medoTime):
+            str_medoTime = t.decode('utf-8')
+            break;
+    
+    fa = []
+    seecode = ''
+    sd = 0
+    for ci, code in enumerate(codes):
+        # print(code.decode('utf-8'))
+        # if(code.decode('utf-8') != "073240"):
+        #     continue
+    
+        exportData = data[data[:,7] == code]
+        # firstTime for time conver to index
+        x = time.strptime(exportData[0,0].decode('utf-8'), '%H:%M:%S')
+        firstSecond = datetime.timedelta(hours=x.tm_hour,minutes=x.tm_min,seconds=x.tm_sec).total_seconds()
+    
+        maxlist = sp.array([])
+        ti = sp.array([])
+        c = exportData[:, 3].astype(float)
+        maxIndex = sp.argmax(c)
+        maxTime = time.strptime(exportData[maxIndex,0].decode('utf-8'), '%H:%M:%S')
+        maxSecond = datetime.timedelta(hours=maxTime.tm_hour,minutes=maxTime.tm_min,seconds=maxTime.tm_sec).total_seconds()
+        minIndex = sp.argmin(c)
+        minTime = time.strptime(exportData[minIndex,0].decode('utf-8'), '%H:%M:%S')
+        minSecond = datetime.timedelta(hours=minTime.tm_hour,minutes=minTime.tm_min,seconds=minTime.tm_sec).total_seconds()
+        for i, b_currentTime in enumerate(exportData[:,0]):
+            t_currentTime = time.strptime(b_currentTime.decode('utf-8'), '%H:%M:%S')
+            second = datetime.timedelta(hours=t_currentTime.tm_hour,minutes=t_currentTime.tm_min,seconds=t_currentTime.tm_sec).total_seconds()
+            v_time = second - firstSecond
+    
+            ti = sp.append(ti, sp.sqrt(v_time)/2)
+            maxr = 50000
+            ry = (exportData[:i+1,4].astype(float))/maxr        
+            msy = (exportData[:i+1,5].astype(float))/maxr        
+            mdy = (exportData[:i+1,6].astype(float))/maxr        
+            rate = exportData[i, 3].decode('UTF-8')
+            grade = int(exportData[i, 1].decode('UTF-8'))
+        
+        img_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)), "img")
+        plot_models(ti, c, msy, mdy, fa, fname = os.path.join(img_dir, str(bcodes[datei])+ rates[datei] +".png")) 
