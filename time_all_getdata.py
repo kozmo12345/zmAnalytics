@@ -16,10 +16,12 @@ mstimes = [
     datetime.timedelta(hours=9,minutes=1,seconds=45).total_seconds(),
     datetime.timedelta(hours=9,minutes=1,seconds=50).total_seconds(),
     datetime.timedelta(hours=9,minutes=1,seconds=55).total_seconds(),
+    datetime.timedelta(hours=9,minutes=1,seconds=10).total_seconds(),
+    datetime.timedelta(hours=9,minutes=1,seconds=20).total_seconds(),
 ]
 
 for mesui, mstime in enumerate(mstimes):
-    dataFile = open(os.path.join("C:\\", "Data\\alldata" + str(mesui) + ".txt"), 'w')
+    dataFile = open(os.path.join("C:\\", "Data\\salldata" + str(mesui) + ".txt"), 'w')
     dataFile.write( 'date,grade,code,mesur,medor,msr_mdr,sgrad,ssd,grad,sd,second,srsd,rgrad,rsd,gr,mesu,maxc_msc,10c_msc,20c_msc,30c_msc,msc_min10c,msc_min20c,msc_min30c,max,min,cost\n')
     for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
         for subdirname in dirnames:
@@ -164,13 +166,13 @@ for mesui, mstime in enumerate(mstimes):
     
                         mesuy = (exportData[:i+1,5].astype(float))/maxr
                         msfit = sp.polyfit(x, mesuy, level)
-                        mesur[code.decode('utf-8')] = exportData[i,5].astype(float)
+                        mesur[code.decode('utf-8')] = sp.sum(exportData[:i+1,5].astype(float))/1000
                         medoy = (exportData[:i+1,6].astype(float))/maxr
                         mdfit = sp.polyfit(x, medoy, level)
-                        medor[code.decode('utf-8')] = exportData[i,6].astype(float)
+                        medor[code.decode('utf-8')] = sp.sum(exportData[:i+1,6].astype(float))/1000
                         ms_md = sp.append(ms_md, (mesuy.astype(float))/(medoy.astype(float)))
                         ms_mdfit = sp.polyfit(x, mesuy, level)
-                        mesur_medor[code.decode('utf-8')] = (exportData[i,5].astype(float))/(exportData[i,6].astype(float))
+                        mesur_medor[code.decode('utf-8')] = (mesur[code.decode('utf-8')])/(medor[code.decode('utf-8')])
                         
                         srlist = [b - a for a,b in zip(ry,ry[1:])]
                         srfit = sp.polyfit(x[:-1], srlist, level)
