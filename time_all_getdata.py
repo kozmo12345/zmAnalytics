@@ -261,7 +261,7 @@ for mesui, mstime in enumerate(mstimes):
                         mintenCost[code.decode('utf-8')] = float(rate) 
 
                     if(second_tenTime < second and second <= second_tenfTime and code.decode('utf-8') in tenfCost and tenfCost[code.decode('utf-8')] < float(rate)):
-                        second_tenfTime[code.decode('utf-8')] = float(rate)
+                        tenfCost[code.decode('utf-8')] = float(rate)
 
                     if(second_tenfTime < second and second <= second_ten2Time and code.decode('utf-8') in ten2Cost and ten2Cost[code.decode('utf-8')] < float(rate)):
                         ten2Cost[code.decode('utf-8')] = float(rate)
