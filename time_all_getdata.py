@@ -24,7 +24,7 @@ mstimes = [
 ]
 
 for mesui, mstime in enumerate(mstimes):
-    dataFile = open(os.path.join("C:\\", "Data\\talldata" + str(mesui) + ".txt"), 'w')
+    dataFile = open(os.path.join("C:\\", "Data\\ealldata" + str(mesui) + ".txt"), 'w')
     dataFile.write( 'date,grade,code,mesur,medor,msr_mdr,sgrad,ssd,grad,sd,second,srsd,rgrad,rsd,gr,mesu,maxc_msc,3c_msc,5c_msc,7c_msc,10c_msc,15c_msc,20c_msc,30c_msc,msc_min10c,msc_min20c,msc_min30c,max,min,cost\n')
     for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
         for subdirname in dirnames:
@@ -213,10 +213,10 @@ for mesui, mstime in enumerate(mstimes):
     
                         mesuy = (exportData[:i+1,5].astype(float))/maxr
                         msfit = sp.polyfit(x, mesuy, level)
-                        mesur[code.decode('utf-8')] = sp.sum(exportData[:i+1,5].astype(float))/1000
+                        mesur[code.decode('utf-8')] = exportData[i,5].astype(float)
                         medoy = (exportData[:i+1,6].astype(float))/maxr
                         mdfit = sp.polyfit(x, medoy, level)
-                        medor[code.decode('utf-8')] = sp.sum(exportData[:i+1,6].astype(float))/1000
+                        medor[code.decode('utf-8')] = exportData[i,6].astype(float)
                         ms_md = sp.append(ms_md, (mesuy.astype(float))/(medoy.astype(float)))
                         ms_mdfit = sp.polyfit(x, mesuy, level)
                         mesur_medor[code.decode('utf-8')] = (mesur[code.decode('utf-8')])/(medor[code.decode('utf-8')])
