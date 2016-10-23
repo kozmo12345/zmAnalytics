@@ -10,6 +10,7 @@ import time
 sp.random.seed(3)  # 이후에 같은 데이터를 생성하기 위해
 
 mstimes = [
+    datetime.timedelta(hours=9,minutes=00,seconds=50).total_seconds(),
     datetime.timedelta(hours=9,minutes=1,seconds=00).total_seconds(),
     datetime.timedelta(hours=9,minutes=1,seconds=10).total_seconds(),
     datetime.timedelta(hours=9,minutes=1,seconds=20).total_seconds(),
@@ -23,9 +24,10 @@ mstimes = [
     datetime.timedelta(hours=9,minutes=2,seconds=10).total_seconds(),
 ]
 
+dataFile = open(os.path.join("C:\\", "Data\\alldata" + ".txt"), 'w')
+dataFile.write( 'date,grade,code,mesur,medor,msr_mdr,smesur,smedor,smsr_mdr,sgrad,ssd,grad,sd,second,srsd,rgrad,rsd,gr,mesu,maxc_msc,3c_msc,5c_msc,7c_msc,10c_msc,15c_msc,20c_msc,30c_msc,msc_min10c,msc_min20c,msc_min30c,max,min,cost\n')
+
 for mesui, mstime in enumerate(mstimes):
-    dataFile = open(os.path.join("C:\\", "Data\\ealldata" + str(mesui) + ".txt"), 'w')
-    dataFile.write( 'date,grade,code,mesur,medor,msr_mdr,sgrad,ssd,grad,sd,second,srsd,rgrad,rsd,gr,mesu,maxc_msc,3c_msc,5c_msc,7c_msc,10c_msc,15c_msc,20c_msc,30c_msc,msc_min10c,msc_min20c,msc_min30c,max,min,cost\n')
     for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
         for subdirname in dirnames:
             date = subdirname
@@ -61,9 +63,12 @@ for mesui, mstime in enumerate(mstimes):
             srgradient = dict()#r증가율 2차
             gradeDic = dict() #등급
             Cost = dict() #가격
-            mesur = dict() #수량 1차
-            medor = dict() #도량 1차
-            mesur_medor = dict() #수량/도량 증가율 1차
+            mesur = dict() #수량
+            medor = dict() #도량
+            mesur_medor = dict() #수량/도량 
+            smesur = dict() #수량 sum
+            smedor = dict() #도량 sum
+            smesur_medor = dict() #수량/도량 sum            
             mintenCost = dict()
             minten2Cost = dict()
             minten3Cost = dict()
@@ -214,12 +219,15 @@ for mesui, mstime in enumerate(mstimes):
                         mesuy = (exportData[:i+1,5].astype(float))/maxr
                         msfit = sp.polyfit(x, mesuy, level)
                         mesur[code.decode('utf-8')] = exportData[i,5].astype(float)
+                        smesur[code.decode('utf-8')] = sp.sum(exportData[:i+1,5].astype(float))
                         medoy = (exportData[:i+1,6].astype(float))/maxr
                         mdfit = sp.polyfit(x, medoy, level)
                         medor[code.decode('utf-8')] = exportData[i,6].astype(float)
+                        smedor[code.decode('utf-8')] = sp.sum(exportData[:i+1,6].astype(float))
                         ms_md = sp.append(ms_md, (mesuy.astype(float))/(medoy.astype(float)))
                         ms_mdfit = sp.polyfit(x, mesuy, level)
                         mesur_medor[code.decode('utf-8')] = (mesur[code.decode('utf-8')])/(medor[code.decode('utf-8')])
+                        smesur_medor[code.decode('utf-8')] = sp.sum((smesur[code.decode('utf-8')])/(smedor[code.decode('utf-8')]))
                         
                         srlist = [b - a for a,b in zip(ry,ry[1:])]
                         srfit = sp.polyfit(x[:-1], srlist, level)
@@ -282,4 +290,4 @@ for mesui, mstime in enumerate(mstimes):
                         minCost[code.decode('utf-8')] = float(rate)                                          
             
             for k, v in mesuCost.items():
-                dataFile.write( date + ',' + str(gradeDic[k]) + ',' + str(k) + ',' + str(mesur[k]) + ',' + str(medor[k]) + ',' + str(mesur_medor[k]) + ',' + str(sgradient[k]) + ',' + str(ssd[k]) + ',' + str(gradient[k]) + ',' + str(sd[k]) + ',' + str(srgradient[k]) + ',' + str(srsd[k]) + ',' + str(rgradient[k]) + ',' + str(rsd[k]) + ',' + str(grd[k]) + ',' + str(v) + ',' + str(maxCost[k]-mesuCost[k]) + ',' + str(trCost[k]-mesuCost[k]) + ',' + str(fiCost[k]-mesuCost[k]) + ',' + str(seCost[k]-mesuCost[k]) + ',' + str(tenCost[k]-mesuCost[k]) + ',' + str(tenfCost[k]-mesuCost[k]) + ',' + str(ten2Cost[k]-mesuCost[k]) + ',' + str(ten3Cost[k]-mesuCost[k]) + ',' + str(mintenCost[k] - mesuCost[k]) + ',' + str(minten2Cost[k] - mesuCost[k]) + ',' + str(minten3Cost[k] - mesuCost[k]) + ',' + str(maxCost[k]) + ',' + str(minCost[k]) + ',' + str(Cost[k]) + '\n')
+                dataFile.write( date + ',' + str(gradeDic[k]) + ',' + str(k) + ',' + str(mesur[k]) + ',' + str(medor[k]) + ',' + str(mesur_medor[k]) + ',' + str(smesur[k]) + ',' + str(smedor[k]) + ',' + str(smesur_medor[k]) + ',' + str(sgradient[k]) + ',' + str(ssd[k]) + ',' + str(gradient[k]) + ',' + str(sd[k]) + ',' + str(srgradient[k]) + ',' + str(srsd[k]) + ',' + str(rgradient[k]) + ',' + str(rsd[k]) + ',' + str(grd[k]) + ',' + str(v) + ',' + str(maxCost[k]-mesuCost[k]) + ',' + str(trCost[k]-mesuCost[k]) + ',' + str(fiCost[k]-mesuCost[k]) + ',' + str(seCost[k]-mesuCost[k]) + ',' + str(tenCost[k]-mesuCost[k]) + ',' + str(tenfCost[k]-mesuCost[k]) + ',' + str(ten2Cost[k]-mesuCost[k]) + ',' + str(ten3Cost[k]-mesuCost[k]) + ',' + str(mintenCost[k] - mesuCost[k]) + ',' + str(minten2Cost[k] - mesuCost[k]) + ',' + str(minten3Cost[k] - mesuCost[k]) + ',' + str(maxCost[k]) + ',' + str(minCost[k]) + ',' + str(Cost[k]) + '\n')
