@@ -1,0 +1,30 @@
+dt <- read.csv("alldata.txt")
+dt$mult <- (dt$cost/1000) * (dt$gr/1000)
+dt$mult2 <- (dt$mesu) * (dt$gr/1000)
+dt$ud <- ifelse(dt$X10c_msc > 0,2,1)
+dt$ud2 <- ifelse(dt$X20c_msc > 0,2,1)
+dt$ud3 <- ifelse(dt$X30c_msc > 0,2,1)
+dt$udm <- ifelse(dt$maxc_msc > 0,2,1)
+dt$udm2 <- ifelse(dt$maxc_msc > 2,2,1)
+dt <- dt[dt$grad != "Inf",]
+dt <- dt[dt$sgrad != "Inf",]
+
+dt$ud <- factor(dt$ud, levels = c(1,2), labels = c("N","Y"))
+dt$ud2 <- factor(dt$ud2, levels = c(1,2), labels = c("N","Y"))
+dt$ud3 <- factor(dt$ud3, levels = c(1,2), labels = c("N","Y"))
+dt$udm <- factor(dt$udm, levels = c(1,2), labels = c("N","Y"))
+dt$udm2 <- factor(dt$udm2, levels = c(1,2), labels = c("N","Y"))
+dump("dt", file="dt.R")
+
+dt <- source("dt.R")
+
+dt <- dt$value[!is.na(dt$value$sgrad) ,]
+
+View(dt)
+
+gmean <-aggregate(dt, by=list(dt$udm2), FUN=mean, na.rm=TRUE)
+
+View(gmean)
+
+library(xlsx)
+write.xlsx(dt, "c:/data/excel/data.xlsx")
