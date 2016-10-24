@@ -1,0 +1,5 @@
+tempdt <- dt[dt$gr >= 690000 & dt$grade >= 2 & dt$grade <= 20 & dt$second == '32520', ]
+View(tempdt)
+
+gmean <-aggregate(tempdt, by=list(tempdt$udm2), FUN=mean, na.rm=TRUE)
+View(gmean)

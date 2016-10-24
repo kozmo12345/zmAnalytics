@@ -17,7 +17,7 @@ def plot_models(x, cs, msy, mdy, models, fname=None, mx=None, ymax=None, xmin=No
     plt.title("graph")
     plt.xlabel("Time")
     plt.ylabel("Rate")
-    # plt.scatter(x, msy, s=5, marker='_')
+    plt.scatter(x, msy, s=5, marker='*')
     # plt.scatter(x, mdy, s=5, marker='_')
     
     plt.autoscale(tight=True)
@@ -30,9 +30,9 @@ def plot_models(x, cs, msy, mdy, models, fname=None, mx=None, ymax=None, xmin=No
     plt.grid(True, linestyle='-', color='0.75')
     plt.show()
 
-dates = ["2016-09-26"]
+dates = ["2016-10-12"]
 
-bcodes = [b'003280']
+bcodes = [b'067730']
 
 rates = ["0.9",]
 
@@ -103,7 +103,7 @@ for datei, da in enumerate(dates):
             v_time = second - firstSecond
     
             ti = sp.append(ti, sp.sqrt(v_time)/2)
-            maxr = 50000
+            maxr = max(exportData[:i+1,5].astype(float))/30
             ry = (exportData[:i+1,4].astype(float))/maxr        
             msy = (exportData[:i+1,5].astype(float))/maxr        
             mdy = (exportData[:i+1,6].astype(float))/maxr        
@@ -111,4 +111,4 @@ for datei, da in enumerate(dates):
             grade = int(exportData[i, 1].decode('UTF-8'))
         
         img_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)), "img")
-        plot_models(ti, c, ry, mdy, fa, fname = os.path.join(img_dir, str(bcodes[datei])+ rates[datei] +".png")) 
+        plot_models(ti, c, msy, mdy, fa, fname = os.path.join(img_dir, str(bcodes[datei])+ rates[datei] +".png")) 

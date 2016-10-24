@@ -25,7 +25,7 @@ mstimes = [
 ]
 
 dataFile = open(os.path.join("C:\\", "Data\\alldata" + ".txt"), 'w')
-dataFile.write( 'date,grade,code,mesur,medor,msr_mdr,smesur,smedor,smsr_mdr,sgrad,ssd,grad,sd,second,srsd,rgrad,rsd,gr,mesu,maxc_msc,3c_msc,5c_msc,7c_msc,10c_msc,15c_msc,20c_msc,30c_msc,msc_min10c,msc_min20c,msc_min30c,max,min,cost\n')
+dataFile.write( 'date,grade,code,mesur,medor,msr_mdr,smesur,smedor,smsr_mdr,sgrad,ssd,grad,sd,second, srgrad,srsd,rgrad,rsd,gr,mesu,maxc_msc,3c_msc,5c_msc,7c_msc,10c_msc,15c_msc,20c_msc,30c_msc,msc_min10c,msc_min20c,msc_min30c,max,min,cost\n')
 
 for mesui, mstime in enumerate(mstimes):
     for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
@@ -72,6 +72,7 @@ for mesui, mstime in enumerate(mstimes):
             mintenCost = dict()
             minten2Cost = dict()
             minten3Cost = dict()
+            mesusecond = dict()
 
             str_standardTime = mstime
             str_medoTime = datetime.timedelta(hours=15,minutes=20,seconds=00).total_seconds()
@@ -194,7 +195,7 @@ for mesui, mstime in enumerate(mstimes):
                     ms =  int(exportData[i, 5].decode('UTF-8'))
                     md =  int(exportData[i, 6].decode('UTF-8'))
     
-                    if(b_currentTime.decode('utf-8') == str_standardTime and grade < 20 and ms != 0 and md != 0):
+                    if(b_currentTime.decode('utf-8') == str_standardTime and grade < 20):
                         x = ti
                         y = exportData[:i+1,3].astype(float)
                         if(len(y) <= 1):
@@ -232,8 +233,8 @@ for mesui, mstime in enumerate(mstimes):
                         srlist = [b - a for a,b in zip(ry,ry[1:])]
                         srfit = sp.polyfit(x[:-1], srlist, level)
                         srsd[code.decode('utf-8')] = (sp.std(sp.array([x[:-1], srlist])))*10
-                        srgradient[code.decode('utf-8')] = mstime #sp.around(srfit[0]*10, decimals=2)
-    
+                        srgradient[code.decode('utf-8')] = sp.around(srfit[0]*10, decimals=2)
+                        mesusecond[code.decode('utf-8')] = mstime
                         mesuCost[code.decode('utf-8')] = float(rate)
                         upCost[code.decode('utf-8')] = float(rate)
                         downCost[code.decode('utf-8')] = float(rate)
@@ -290,4 +291,4 @@ for mesui, mstime in enumerate(mstimes):
                         minCost[code.decode('utf-8')] = float(rate)                                          
             
             for k, v in mesuCost.items():
-                dataFile.write( date + ',' + str(gradeDic[k]) + ',' + str(k) + ',' + str(mesur[k]) + ',' + str(medor[k]) + ',' + str(mesur_medor[k]) + ',' + str(smesur[k]) + ',' + str(smedor[k]) + ',' + str(smesur_medor[k]) + ',' + str(sgradient[k]) + ',' + str(ssd[k]) + ',' + str(gradient[k]) + ',' + str(sd[k]) + ',' + str(srgradient[k]) + ',' + str(srsd[k]) + ',' + str(rgradient[k]) + ',' + str(rsd[k]) + ',' + str(grd[k]) + ',' + str(v) + ',' + str(maxCost[k]-mesuCost[k]) + ',' + str(trCost[k]-mesuCost[k]) + ',' + str(fiCost[k]-mesuCost[k]) + ',' + str(seCost[k]-mesuCost[k]) + ',' + str(tenCost[k]-mesuCost[k]) + ',' + str(tenfCost[k]-mesuCost[k]) + ',' + str(ten2Cost[k]-mesuCost[k]) + ',' + str(ten3Cost[k]-mesuCost[k]) + ',' + str(mintenCost[k] - mesuCost[k]) + ',' + str(minten2Cost[k] - mesuCost[k]) + ',' + str(minten3Cost[k] - mesuCost[k]) + ',' + str(maxCost[k]) + ',' + str(minCost[k]) + ',' + str(Cost[k]) + '\n')
+                dataFile.write( date + ',' + str(gradeDic[k]) + ',' + str(k) + ',' + str(mesur[k]) + ',' + str(medor[k]) + ',' + str(mesur_medor[k]) + ',' + str(smesur[k]) + ',' + str(smedor[k]) + ',' + str(smesur_medor[k]) + ',' + str(sgradient[k]) + ',' + str(ssd[k]) + ',' + str(gradient[k]) + ',' + str(sd[k]) + ',' + str(mesusecond[k]) +  ',' + str(srgradient[k]) + ',' + str(srsd[k]) + ',' + str(rgradient[k]) + ',' + str(rsd[k]) + ',' + str(grd[k]) + ',' + str(v) + ',' + str(maxCost[k]-mesuCost[k]) + ',' + str(trCost[k]-mesuCost[k]) + ',' + str(fiCost[k]-mesuCost[k]) + ',' + str(seCost[k]-mesuCost[k]) + ',' + str(tenCost[k]-mesuCost[k]) + ',' + str(tenfCost[k]-mesuCost[k]) + ',' + str(ten2Cost[k]-mesuCost[k]) + ',' + str(ten3Cost[k]-mesuCost[k]) + ',' + str(mintenCost[k] - mesuCost[k]) + ',' + str(minten2Cost[k] - mesuCost[k]) + ',' + str(minten3Cost[k] - mesuCost[k]) + ',' + str(maxCost[k]) + ',' + str(minCost[k]) + ',' + str(Cost[k]) + '\n')
