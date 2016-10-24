@@ -18,101 +18,43 @@ mstimes = [
 
 today = datetime.now().strftime('%Y-%m-%d')
 
-for mesui, mstime in enumerate(mstimes):
-    dataFile = open(os.path.join("C:\\", "Test\\test" + str(mesui) + ".txt"), 'w')
-    dataFile.write( 'date,grade,code,mesur,medor,msr_mdr,sgrad,ssd,grad,sd,srgrad,srsd,rgrad,rsd,gr,mesu,maxc_msc,10c_msc,20c_msc,30c_msc,msc_min10c,msc_min20c,msc_min30c,max,min,cost\n')
-    for dirname, dirnames, filenames in os.walk("C:\\Test\\"):
-        for subdirname in dirnames:
-            date = subdirname
-    
-            filePath = os.path.join("C:\\", "Test\\" + date + "\\" + date + ".txt");
-            data = sp.genfromtxt(filePath, delimiter="\t", dtype='|S20')
+dataFile = open(os.path.join("C:\\", "Dropbox\\mesu\\" + str(today) + ".txt"), 'w')
 
-            realfilePath = os.path.join("C:\\", "Dropbox\\Data\\" + date + "\\" + date + ".txt");
-            realdata = sp.genfromtxt(realfilePath, delimiter="\t", dtype='|S20')
+realfilePath = os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + ".txt");
+realdata = sp.genfromtxt(realfilePath, delimiter="\t", dtype='|S20')
 
-            realcodes = sp.unique(realdata[realdata[:,7] != b''][:,7])
-            codes = sp.unique(data[data[:,7] != b''][:,7])
-            times = sp.unique(data[data[:,0] != b''][:,0])
+realcodes = sp.unique(realdata[realdata[:,7] != b''][:,7])
+codes = sp.unique(data[data[:,7] != b''][:,7])
+times = sp.unique(data[data[:,0] != b''][:,0])
             
-            plusCnt = 0
-            minusCnt = 0
-            mesuCost = dict()
-            upCost = dict()
-            downCost = dict()
-            maxCost = dict()
-            minCost = dict()
-            tenCost = dict()
-            ten2Cost = dict()
-            ten3Cost = dict()
-            sd = dict()   #cost증가율 1차 편차
-            ssd = dict()  #cost증가율 2차 편차
-            rsd = dict()  #r증가율 1차 편차
-            srsd = dict() #r증가율 2차 편차
-            grd = dict() #r량
-            gradient = dict() #cost증가율 1차
-            sgradient = dict() #cost증가율 2차
-            rgradient = dict() #r증가율 1차
-            srgradient = dict()#r증가율 2차
-            gradeDic = dict() #등급
-            Cost = dict() #가격
-            mesur = dict() #수량 1차
-            medor = dict() #도량 1차
-            mesur_medor = dict() #수량/도량 증가율 1차
-            mintenCost = dict()
-            minten2Cost = dict()
-            minten3Cost = dict()
+grd = dict() #r량
+gradient = dict() #cost증가율 1차
+gradeDic = dict() #등급
 
-            str_standardTime = mstime
-            str_medoTime = datetime.timedelta(hours=15,minutes=20,seconds=00).total_seconds()
-            str_tenTime = datetime.timedelta(hours=9,minutes=10,seconds=00).total_seconds()
-            str_ten2Time = datetime.timedelta(hours=9,minutes=20,seconds=00).total_seconds()
-            str_ten3Time = datetime.timedelta(hours=9,minutes=30,seconds=00).total_seconds()
-            
-            second_standardTime = 0
-            for i, t in enumerate(times):
-                x = time.strptime(t.decode('utf-8'), '%H:%M:%S')
-                nt = datetime.timedelta(hours=x.tm_hour,minutes=x.tm_min,seconds=x.tm_sec).total_seconds()
-                second_standardTime = nt    
-                if(nt > str_standardTime):
-                    str_standardTime = t.decode('utf-8')
-                    break;
-            
-            second_medoTime = 0
-            for i, t in enumerate(times):
-                x = time.strptime(t.decode('utf-8'), '%H:%M:%S')
-                nt = datetime.timedelta(hours=x.tm_hour,minutes=x.tm_min,seconds=x.tm_sec).total_seconds()
-                second_medoTime = nt
-                if(nt > str_medoTime):
-                    str_medoTime = t.decode('utf-8')
-                    break;
-            
-            second_tenTime = 0
-            for i, t in enumerate(times):
-                x = time.strptime(t.decode('utf-8'), '%H:%M:%S')
-                nt = datetime.timedelta(hours=x.tm_hour,minutes=x.tm_min,seconds=x.tm_sec).total_seconds()
-                second_tenTime = nt
-                if(nt > str_tenTime):
-                    str_tenTime = t.decode('utf-8')
-                    break;
-            
-            second_ten2Time = 0
-            for i, t in enumerate(times):
-                x = time.strptime(t.decode('utf-8'), '%H:%M:%S')
-                nt = datetime.timedelta(hours=x.tm_hour,minutes=x.tm_min,seconds=x.tm_sec).total_seconds()
-                second_ten2Time = nt
-                if(nt > str_ten2Time):
-                    str_ten2Time = t.decode('utf-8')
-                    break;
-            
-            second_ten3Time = 0
-            for i, t in enumerate(times):
-                x = time.strptime(t.decode('utf-8'), '%H:%M:%S')
-                nt = datetime.timedelta(hours=x.tm_hour,minutes=x.tm_min,seconds=x.tm_sec).total_seconds()
-                second_ten3Time = nt
-                if(nt > str_ten3Time):
-                    str_ten3Time = t.decode('utf-8')
-                    break;
+str_oTime = datetime.timedelta(hours=9,minutes=1,seconds=10).total_seconds()
+str_tTime = datetime.timedelta(hours=9,minutes=1,seconds=40).total_seconds()
+
+str_oTime = 0
+str_tTime = 0
+for i, t in enumerate(times):
+    x = time.strptime(t.decode('utf-8'), '%H:%M:%S')
+    nt = datetime.timedelta(hours=x.tm_hour,minutes=x.tm_min,seconds=x.tm_sec).total_seconds()
+    str_oTime = nt    
+    str_tTime = nt
+    if(nt > str_standardTime):
+        str_standardTime = t.decode('utf-8')
+        break;
+    if(nt > str_medoTime):
+        str_medoTime = t.decode('utf-8')
+        break;
+        
+for i, t in enumerate(times):
+    x = time.strptime(t.decode('utf-8'), '%H:%M:%S')
+    nt = datetime.timedelta(hours=x.tm_hour,minutes=x.tm_min,seconds=x.tm_sec).total_seconds()
+    str_tTime = nt
+    if(nt > str_medoTime):
+        str_medoTime = t.decode('utf-8')
+        break;
             
             for ci, code in enumerate(codes):
                 exportData = data[data[:,7] == code]
