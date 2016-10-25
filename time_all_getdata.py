@@ -22,6 +22,12 @@ mstimes = [
     datetime.timedelta(hours=9,minutes=1,seconds=55).total_seconds(),
     datetime.timedelta(hours=9,minutes=2,seconds=00).total_seconds(),
     datetime.timedelta(hours=9,minutes=2,seconds=10).total_seconds(),
+    datetime.timedelta(hours=9,minutes=2,seconds=20).total_seconds(),
+    datetime.timedelta(hours=9,minutes=2,seconds=30).total_seconds(),
+    datetime.timedelta(hours=9,minutes=2,seconds=50).total_seconds(),
+    datetime.timedelta(hours=9,minutes=3,seconds=10).total_seconds(),
+    datetime.timedelta(hours=9,minutes=4,seconds=10).total_seconds(),
+    datetime.timedelta(hours=9,minutes=5,seconds=10).total_seconds(),
 ]
 
 dataFile = open(os.path.join("C:\\", "Data\\alldata" + ".txt"), 'w')
@@ -195,7 +201,7 @@ for mesui, mstime in enumerate(mstimes):
                     ms =  int(exportData[i, 5].decode('UTF-8'))
                     md =  int(exportData[i, 6].decode('UTF-8'))
     
-                    if(b_currentTime.decode('utf-8') == str_standardTime and grade < 20):
+                    if(b_currentTime.decode('utf-8') == str_standardTime and grade < 30):
                         x = ti
                         y = exportData[:i+1,3].astype(float)
                         if(len(y) <= 1):
