@@ -1,7 +1,7 @@
 USE [zm]
 GO
 
-/****** Object:  Table [dbo].[zmA]    Script Date: 2016-10-24 ¿ÀÀü 12:03:05 ******/
+/****** Object:  Table [dbo].[zmA]    Script Date: 2016-10-31 ì˜¤ì „ 1:25:07 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -27,6 +27,7 @@ CREATE TABLE [dbo].[zmA](
 	[grad] [float] NULL,
 	[sd] [float] NULL,
 	[second] [float] NULL,
+	[srgrad] [float] NULL,
 	[srsd] [float] NULL,
 	[rgrad] [float] NULL,
 	[rsd] [float] NULL,

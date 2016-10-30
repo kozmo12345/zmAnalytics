@@ -16,7 +16,7 @@ mstimes = [
     datetime.timedelta(hours=9,minutes=40,seconds=50).total_seconds()
 ]
 
-dataFile = open(os.path.join("C:\\", "Data\\alldata2" + ".txt"), 'w')
+dataFile = open(os.path.join("C:\\", "Data\\alldata3" + ".txt"), 'w')
 dataFile.write( 'date,grade,code,mesur,medor,msr_mdr,smesur,smedor,smsr_mdr,sgrad,ssd,grad,sd,second, srgrad,srsd,rgrad,rsd,gr,mesu,maxc_msc,3c_msc,5c_msc,7c_msc,10c_msc,15c_msc,20c_msc,30c_msc,msc_min10c,msc_min20c,msc_min30c,max,min,cost\n')
 
 for mesui, mstime in enumerate(mstimes):
@@ -68,7 +68,14 @@ for mesui, mstime in enumerate(mstimes):
 
             str_standardTime = mstime
             str_medoTime = datetime.timedelta(hours=15,minutes=20,seconds=00).total_seconds()
+            str_trTime = datetime.timedelta(hours=9,minutes=1,seconds=40).total_seconds()
+            str_trTime = datetime.timedelta(hours=9,minutes=1,seconds=50).total_seconds()
+            str_trTime = datetime.timedelta(hours=9,minutes=2,seconds=00).total_seconds()
+            str_trTime = datetime.timedelta(hours=9,minutes=2,seconds=20).total_seconds()
+            str_trTime = datetime.timedelta(hours=9,minutes=2,seconds=40).total_seconds()
             str_trTime = datetime.timedelta(hours=9,minutes=3,seconds=00).total_seconds()
+            str_trTime = datetime.timedelta(hours=9,minutes=3,seconds=30).total_seconds()
+            str_trTime = datetime.timedelta(hours=9,minutes=4,seconds=00).total_seconds()
             str_fiTime = datetime.timedelta(hours=9,minutes=5,seconds=00).total_seconds()
             str_seTime = datetime.timedelta(hours=9,minutes=7,seconds=00).total_seconds()
             str_tenTime = datetime.timedelta(hours=9,minutes=10,seconds=00).total_seconds()
@@ -240,8 +247,8 @@ for mesui, mstime in enumerate(mstimes):
                         mintenCost[code.decode('utf-8')] = float(rate)
                         minten2Cost[code.decode('utf-8')] = float(rate)
                         minten3Cost[code.decode('utf-8')] = float(rate)
-                        maxCost[code.decode('utf-8')] = max(c)
-                        minCost[code.decode('utf-8')] = min(c)
+                        maxCost[code.decode('utf-8')] = float(rate)
+                        minCost[code.decode('utf-8')] = float(rate)
                         gradeDic[code.decode('utf-8')] = grade
                         Cost[code.decode('utf-8')] = cost
                         grd[code.decode('utf-8')] = gr
