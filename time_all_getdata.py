@@ -10,27 +10,13 @@ import time
 sp.random.seed(3)  # 이후에 같은 데이터를 생성하기 위해
 
 mstimes = [
-    datetime.timedelta(hours=9,minutes=00,seconds=50).total_seconds(),
-    datetime.timedelta(hours=9,minutes=1,seconds=00).total_seconds(),
-    datetime.timedelta(hours=9,minutes=1,seconds=10).total_seconds(),
-    datetime.timedelta(hours=9,minutes=1,seconds=20).total_seconds(),
-    datetime.timedelta(hours=9,minutes=1,seconds=30).total_seconds(),
-    datetime.timedelta(hours=9,minutes=1,seconds=35).total_seconds(),
-    datetime.timedelta(hours=9,minutes=1,seconds=40).total_seconds(),
-    datetime.timedelta(hours=9,minutes=1,seconds=45).total_seconds(),
-    datetime.timedelta(hours=9,minutes=1,seconds=50).total_seconds(),
-    datetime.timedelta(hours=9,minutes=1,seconds=55).total_seconds(),
-    datetime.timedelta(hours=9,minutes=2,seconds=00).total_seconds(),
-    datetime.timedelta(hours=9,minutes=2,seconds=10).total_seconds(),
-    datetime.timedelta(hours=9,minutes=2,seconds=20).total_seconds(),
-    datetime.timedelta(hours=9,minutes=2,seconds=30).total_seconds(),
-    datetime.timedelta(hours=9,minutes=2,seconds=50).total_seconds(),
-    datetime.timedelta(hours=9,minutes=3,seconds=10).total_seconds(),
-    datetime.timedelta(hours=9,minutes=4,seconds=10).total_seconds(),
-    datetime.timedelta(hours=9,minutes=5,seconds=10).total_seconds(),
+    datetime.timedelta(hours=9,minutes=15,seconds=50).total_seconds(),
+    datetime.timedelta(hours=9,minutes=20,seconds=50).total_seconds(),
+    datetime.timedelta(hours=9,minutes=30,seconds=50).total_seconds(),
+    datetime.timedelta(hours=9,minutes=40,seconds=50).total_seconds()
 ]
 
-dataFile = open(os.path.join("C:\\", "Data\\alldata" + ".txt"), 'w')
+dataFile = open(os.path.join("C:\\", "Data\\alldata2" + ".txt"), 'w')
 dataFile.write( 'date,grade,code,mesur,medor,msr_mdr,smesur,smedor,smsr_mdr,sgrad,ssd,grad,sd,second, srgrad,srsd,rgrad,rsd,gr,mesu,maxc_msc,3c_msc,5c_msc,7c_msc,10c_msc,15c_msc,20c_msc,30c_msc,msc_min10c,msc_min20c,msc_min30c,max,min,cost\n')
 
 for mesui, mstime in enumerate(mstimes):
