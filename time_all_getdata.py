@@ -10,7 +10,19 @@ import time
 sp.random.seed(3)  # 이후에 같은 데이터를 생성하기 위해
 
 mstimes = [
-    datetime.timedelta(hours=9,minutes=15,seconds=50).total_seconds(),
+    datetime.timedelta(hours=9,minutes=1,seconds=40).total_seconds(),
+    datetime.timedelta(hours=9,minutes=1,seconds=50).total_seconds(),
+    datetime.timedelta(hours=9,minutes=2,seconds=10).total_seconds(),
+    datetime.timedelta(hours=9,minutes=2,seconds=20).total_seconds(),
+    datetime.timedelta(hours=9,minutes=2,seconds=30).total_seconds(),
+    datetime.timedelta(hours=9,minutes=2,seconds=45).total_seconds(),
+    datetime.timedelta(hours=9,minutes=3,seconds=00).total_seconds(),
+    datetime.timedelta(hours=9,minutes=3,seconds=30).total_seconds(),
+    datetime.timedelta(hours=9,minutes=4,seconds=00).total_seconds(),
+    datetime.timedelta(hours=9,minutes=5,seconds=00).total_seconds(),
+    datetime.timedelta(hours=9,minutes=6,seconds=50).total_seconds(),
+    datetime.timedelta(hours=9,minutes=9,seconds=50).total_seconds(),
+    datetime.timedelta(hours=9,minutes=12,seconds=50).total_seconds(),
     datetime.timedelta(hours=9,minutes=20,seconds=50).total_seconds(),
     datetime.timedelta(hours=9,minutes=30,seconds=50).total_seconds(),
     datetime.timedelta(hours=9,minutes=40,seconds=50).total_seconds()
@@ -68,14 +80,7 @@ for mesui, mstime in enumerate(mstimes):
 
             str_standardTime = mstime
             str_medoTime = datetime.timedelta(hours=15,minutes=20,seconds=00).total_seconds()
-            str_trTime = datetime.timedelta(hours=9,minutes=1,seconds=40).total_seconds()
-            str_trTime = datetime.timedelta(hours=9,minutes=1,seconds=50).total_seconds()
-            str_trTime = datetime.timedelta(hours=9,minutes=2,seconds=00).total_seconds()
-            str_trTime = datetime.timedelta(hours=9,minutes=2,seconds=20).total_seconds()
-            str_trTime = datetime.timedelta(hours=9,minutes=2,seconds=40).total_seconds()
-            str_trTime = datetime.timedelta(hours=9,minutes=3,seconds=00).total_seconds()
-            str_trTime = datetime.timedelta(hours=9,minutes=3,seconds=30).total_seconds()
-            str_trTime = datetime.timedelta(hours=9,minutes=4,seconds=00).total_seconds()
+            str_trTime = datetime.timedelta(hours=9,minutes=1,seconds=30).total_seconds()
             str_fiTime = datetime.timedelta(hours=9,minutes=5,seconds=00).total_seconds()
             str_seTime = datetime.timedelta(hours=9,minutes=7,seconds=00).total_seconds()
             str_tenTime = datetime.timedelta(hours=9,minutes=10,seconds=00).total_seconds()
