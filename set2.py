@@ -10,7 +10,7 @@ import time
 sp.random.seed(3)
 
 now = datetime.datetime.now()
-today = now.strftime('%Y-%m-%d')
+today = '2016-10-20'#now.strftime('%Y-%m-%d')
 hour = now.hour
 minute = now.minute
 second = now.second - 1
@@ -23,7 +23,7 @@ codes = sp.unique(data[data[:,7] != b''][:,7])
 times = sp.unique(data[data[:,0] != b''][:,0])
 
 for timeIndex, ttime in enumerate(times):
-    
+    print(ttime)
     xstime = time.strptime(ttime.decode('utf-8'), '%H:%M:%S')
     second_oTime = datetime.timedelta(hours=xstime.tm_hour,minutes=xstime.tm_min,seconds=xstime.tm_sec).total_seconds() #계산시간
     str_oTime = ""
