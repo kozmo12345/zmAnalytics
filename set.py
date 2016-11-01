@@ -23,7 +23,7 @@ def readData(filePath):
 
 today = datetime.datetime.now().strftime('%Y-%m-%d')
 startTime = datetime.timedelta(hours=9,minutes=00,seconds=10).total_seconds()
-endTime = datetime.timedelta(hours=13,minutes=30,seconds=30).total_seconds()
+endTime = datetime.timedelta(hours=10,minutes=00,seconds=30).total_seconds()
 temp_sec = 0
 while(True):
     now = datetime.datetime.now()
