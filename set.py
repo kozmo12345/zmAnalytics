@@ -9,6 +9,18 @@ import time
 
 sp.random.seed(3)
 
+def readData(filePath):
+    try:
+        fdata = sp.genfromtxt(filePath, delimiter="\t", dtype='|S20')
+    except Exception as e:
+        fdata = readData(filePath)
+    else:
+        return fdata
+    finally:
+        return fdata
+
+    return fdata
+
 today = datetime.datetime.now().strftime('%Y-%m-%d')
 startTime = datetime.timedelta(hours=9,minutes=00,seconds=10).total_seconds()
 endTime = datetime.timedelta(hours=13,minutes=30,seconds=30).total_seconds()
@@ -36,13 +48,11 @@ while(True):
 
     if(endTime < second_now):
         print("end")
-        setFile.write("");
         break
 
-    setFile = open(os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + "m.txt"), 'w')
     realfilePath = os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + ".txt");
     
-    data = sp.genfromtxt(realfilePath, delimiter="\t", dtype='|S20')
+    data = readData(realfilePath)
     codes = sp.unique(data[-100:-50,7])
     times = data[-99,0]
     
@@ -80,14 +90,14 @@ while(True):
                 
             if(i == -1): continue
     
-            rate = exportData[i, 3].decode('UTF-8')
+            rate = float(exportData[i, 3].decode('UTF-8'))
             grade = int(exportData[i, 1].decode('UTF-8'))
             gr = int(exportData[i, 4].decode('UTF-8'))
             
             if(grade < 30 and gr > 460000 and rate < 26):
                 ms_md = (exportData[i,5].astype(float))/(exportData[i,6].astype(float))
                 sms_md = sp.sum((sp.sum(exportData[:i+1,5].astype(float)))/(sp.sum(exportData[:i+1,6].astype(float))))
-            
+                
                 if(ms_md > 1 and sms_md > 1):
                     x = ti
                     y = exportData[:i+1,3].astype(float)
@@ -102,6 +112,8 @@ while(True):
                     srlist = [b - a for a,b in zip(ry,ry[1:])]
                     srfit = sp.polyfit(x[:-1], srlist, level)
                     srgrad = sp.around(srfit[0]*10, decimals=2)
-                    
+
                     if(gradient >= 0.7 and srgrad > -0.01):
+                        setFile = open(os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + "m.txt"), 'w')
                         setFile.write( str(code.decode('utf-8')) + ',' + str(float(rate)) + ',' + str(gradient) +  ',' + str_oTime + '\n')
+                        setFile.close()
