@@ -23,7 +23,10 @@ def readData(filePath):
 
 today = datetime.datetime.now().strftime('%Y-%m-%d')
 startTime = datetime.timedelta(hours=9,minutes=00,seconds=10).total_seconds()
-endTime = datetime.timedelta(hours=10,minutes=00,seconds=30).total_seconds()
+endTime = datetime.timedelta(hours=9,minutes=29,seconds=30).total_seconds()
+ttTime = datetime.timedelta(hours=10,minutes=30,seconds=10).total_seconds()
+ttEndTime = datetime.timedelta(hours=11,minutes=10,seconds=30).total_seconds()
+
 temp_sec = 0
 while(True):
     now = datetime.datetime.now()
@@ -42,13 +45,64 @@ while(True):
 
     temp_sec = second_now
 
-    if(second_now < 32500):
+    if(second_now < 32460):
         print("morning")
         continue
 
-    if(endTime < second_now):
+    if(second_now > ttTime and second_now < ttEndTime):
+        for ci, code in enumerate(codes):
+            exportData = data[data[:,7] == code]
+            
+            xtime = time.strptime(exportData[0,0].decode('utf-8'), '%H:%M:%S')
+            firstSecond = datetime.timedelta(hours=xtime.tm_hour,minutes=xtime.tm_min,seconds=xtime.tm_sec).total_seconds()
+        
+            ti = sp.array([])
+            c = exportData[:, 3].astype(float)
+            i = -1
+            for ei, et in enumerate(exportData[:, 0]):
+                tsi = time.strptime(et.decode('utf-8'), '%H:%M:%S')
+                sect = datetime.timedelta(hours=tsi.tm_hour,minutes=tsi.tm_min,seconds=tsi.tm_sec).total_seconds()
+                v_time = sect - firstSecond
+                ti = sp.append(ti, sp.sqrt(v_time)/2)
+                if(second_oTime == sect):
+                    i = ei
+                    break;
+                
+            if(i == -1): continue
+    
+            rate = float(exportData[i, 3].decode('UTF-8'))
+            
+            if(rate < 20):
+                ms_md = (exportData[i,5].astype(float))/(exportData[i,6].astype(float))
+                sms_md = sp.sum((sp.sum(exportData[:i+1,5].astype(float)))/(sp.sum(exportData[:i+1,6].astype(float))))
+                
+                if(ms_md > 1 and sms_md > 1):
+                    x = ti
+                    y = exportData[:i+1,3].astype(float)
+                    if(len(y) <= 1):
+                        break
+                    level = 1
+                    fit = sp.polyfit(x, y, level)
+                    gradient = sp.around(fit[0]*10, decimals=2)
+    
+                    maxr = 100000
+                    ry = (exportData[:i+1,4].astype(float))/maxr
+                    srlist = [b - a for a,b in zip(ry,ry[1:])]
+                    srfit = sp.polyfit(x[:-1], srlist, level)
+                    srgrad = sp.around(srfit[0]*10, decimals=2)
+
+                    if(gradient <= 0 and srgrad > -0.01):
+                        setFile = open(os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + "m.txt"), 'w')
+                        setFile.write( str(code.decode('utf-8')) + ',' + str(float(rate)) + ',' + str(gradient) +  ',' + str_oTime +  ',' + '1.03' + '\n')
+                        setFile.close()        
+
+    if(second_now > ttEndTime):
         print("end")
         break
+
+    if(second_now > endTime):
+        print("morning end")
+        continue
 
     realfilePath = os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + ".txt");
     
@@ -65,9 +119,6 @@ while(True):
     str_oTime = times.decode('utf-8')
     second_oTime = nt
     bool_oTime = True
-    
-    if(second_oTime < 32500):
-        bool_oTime = False
     
     if(bool_oTime == True):
         for ci, code in enumerate(codes):
@@ -99,6 +150,14 @@ while(True):
                 sms_md = sp.sum((sp.sum(exportData[:i+1,5].astype(float)))/(sp.sum(exportData[:i+1,6].astype(float))))
                 
                 if(ms_md > 1 and sms_md > 1):
+
+                    if(second_oTime < 32500):
+                        if(gr > 2600000 and rate < 15):
+                            setFile = open(os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + "m.txt"), 'w')
+                            setFile.write( str(code.decode('utf-8')) + ',' + str(float(rate)) + ',' + '100' +  ',' + str_oTime + ',' + '1.05' +  '\n')
+                            setFile.close()                        
+                        continue;
+
                     x = ti
                     y = exportData[:i+1,3].astype(float)
                     if(len(y) <= 1):
@@ -115,5 +174,5 @@ while(True):
 
                     if(gradient >= 0.7 and srgrad > -0.01):
                         setFile = open(os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + "m.txt"), 'w')
-                        setFile.write( str(code.decode('utf-8')) + ',' + str(float(rate)) + ',' + str(gradient) +  ',' + str_oTime + '\n')
+                        setFile.write( str(code.decode('utf-8')) + ',' + str(float(rate)) + ',' + str(gradient) +  ',' + str_oTime + ',' + '1.015' + '\n')
                         setFile.close()
