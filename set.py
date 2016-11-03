@@ -22,7 +22,7 @@ def readData(filePath):
     return fdata
 
 today = datetime.datetime.now().strftime('%Y-%m-%d')
-startTime = datetime.timedelta(hours=9,minutes=00,seconds=10).total_seconds()
+startTime = datetime.timedelta(hours=9,minutes=2,seconds=00).total_seconds()
 endTime = datetime.timedelta(hours=9,minutes=29,seconds=30).total_seconds()
 ttTime = datetime.timedelta(hours=10,minutes=30,seconds=10).total_seconds()
 ttEndTime = datetime.timedelta(hours=11,minutes=10,seconds=30).total_seconds()
@@ -120,6 +120,10 @@ while(True):
     second_oTime = nt
     bool_oTime = True
     
+    if(second_now < startTime):
+        print("morning")
+        bool_oTime = False    
+
     if(bool_oTime == True):
         for ci, code in enumerate(codes):
             exportData = data[data[:,7] == code]
