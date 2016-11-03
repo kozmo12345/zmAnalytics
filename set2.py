@@ -123,5 +123,13 @@ while(True):
                     srfit = sp.polyfit(x[:-1], srlist, level)
                     srgrad = sp.around(srfit[0]*10, decimals=2)
 
+                    maxc = sp.argmax(exportData[i+1:,3].astype(float))
+
+                    smaxr = sp.mean(exportData[:i+1,4].astype(float))
+                    sry = (exportData[:i+1,4].astype(float))/smaxr
+                    ssrlist = [b - a for a,b in zip(sry,sry[1:])]
+                    ssrfit = sp.polyfit(x[:-1], ssrlist, level)
+                    ssrgrad = sp.around(ssrfit[0]*10, decimals=2)
+
                     if(gradient >= 0.7 and srgrad > -0.01):
-                        setFile.write( str(code.decode('utf-8')) + ',' + str(float(rate)) + ',' + str(gradient) +  ',' + str_oTime + ',' + str(gr) +'\n')
+                        setFile.write( str(code.decode('utf-8')) + ',' + str(float(rate)) + ',' + str(maxc) +  ',' + str(ssrgrad) +  ',' + str_oTime + ',' + str(gr) + '\n')
