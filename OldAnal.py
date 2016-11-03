@@ -10,7 +10,7 @@ import time
 sp.random.seed(3)
 
 now = datetime.datetime.now()
-today = '2016-10-19'
+today = '2016-11-03'
 hour = now.hour
 minute = now.minute
 second = now.second - 1
@@ -21,6 +21,9 @@ realfilePath = os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + "
 data = sp.genfromtxt(realfilePath, delimiter="\t", dtype='|S20')
 codes = sp.unique(data[data[:,7] != b''][:,7])
 times = sp.unique(data[data[:,0] != b''][:,0])
+
+startTime = datetime.timedelta(hours=9,minutes=1,seconds=00).total_seconds()
+endTime = datetime.timedelta(hours=9,minutes=10,seconds=00).total_seconds()
 
 for timeIndex, ttime in enumerate(times):
     print(ttime)
@@ -38,8 +41,12 @@ for timeIndex, ttime in enumerate(times):
             bool_oTime = True
             break;
     
-    if(second_oTime < 32500):
+    if(second_oTime < startTime):
         bool_oTime = False
+
+    if(second_oTime > endTime):
+        break;
+
     if(bool_oTime == True):
         for ci, code in enumerate(codes):
             exportData = data[data[:,7] == code]
