@@ -84,7 +84,7 @@ for timeIndex, ttime in enumerate(times):
                     srfit = sp.polyfit(x[:-1], srlist, level)
                     srgrad = sp.around(srfit[0]*10, decimals=2)
                     
-                    maxc = sp.max(exportData[i+1:,3].astype(float))
+                    maxc = sp.argmax(exportData[i+1:,3].astype(float))
 
                     smaxr = sp.mean(exportData[:i+1,4].astype(float))
                     sry = (exportData[:i+1,4].astype(float))/smaxr
