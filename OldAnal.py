@@ -10,7 +10,7 @@ import time
 sp.random.seed(3)
 
 now = datetime.datetime.now()
-today = '2016-10-10'#now.strftime('%Y-%m-%d')
+today = '2016-10-19'
 hour = now.hour
 minute = now.minute
 second = now.second - 1
@@ -93,4 +93,4 @@ for timeIndex, ttime in enumerate(times):
                     ssrgrad = sp.around(ssrfit[0]*10, decimals=2)
 
                     if(gradient >= 0.7 and srgrad > -0.01):
-                        setFile.write( str(code.decode('utf-8')) + ',' + str(float(rate)) + ',' + str(maxc) +  ',' + str(ssrgrad) +  ',' + str_oTime + '\n')
+                        setFile.write( str(code.decode('utf-8')) + ',' + str(float(rate)) + ',' + str(maxc) +  ',' + str(ssrgrad) +  ',' + str_oTime + ',' + str(gr)  + '\n')
