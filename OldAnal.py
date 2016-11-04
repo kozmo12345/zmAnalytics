@@ -10,7 +10,7 @@ import time
 sp.random.seed(3)
 
 now = datetime.datetime.now()
-today = '2016-11-03'
+today = '2016-10-25'
 hour = now.hour
 minute = now.minute
 second = now.second - 1
@@ -22,7 +22,7 @@ data = sp.genfromtxt(realfilePath, delimiter="\t", dtype='|S20')
 codes = sp.unique(data[data[:,7] != b''][:,7])
 times = sp.unique(data[data[:,0] != b''][:,0])
 
-startTime = datetime.timedelta(hours=9,minutes=1,seconds=00).total_seconds()
+startTime = datetime.timedelta(hours=9,minutes=0,seconds=30).total_seconds()
 endTime = datetime.timedelta(hours=13,minutes=30,seconds=00).total_seconds()
 
 for timeIndex, ttime in enumerate(times):
@@ -61,7 +61,7 @@ for timeIndex, ttime in enumerate(times):
                 tsi = time.strptime(et.decode('utf-8'), '%H:%M:%S')
                 sect = datetime.timedelta(hours=tsi.tm_hour,minutes=tsi.tm_min,seconds=tsi.tm_sec).total_seconds()
                 v_time = sect - firstSecond
-                ti = sp.append(ti, sp.sqrt(v_time)/2)
+                ti = sp.append(ti, (v_time)/10)
                 if(second_oTime == sect):
                     i = ei
                     break;
@@ -93,11 +93,13 @@ for timeIndex, ttime in enumerate(times):
                     
                     maxc = sp.argmax(exportData[i+1:,3].astype(float))
 
-                    smaxr = sp.mean(exportData[:i+1,4].astype(float))
+                    smaxr = exportData[i,4].astype(float)/(v_time)
+
                     sry = (exportData[:i+1,4].astype(float))/smaxr
                     ssrlist = [b - a for a,b in zip(sry,sry[1:])]
                     ssrfit = sp.polyfit(x[:-1], ssrlist, level)
                     ssrgrad = sp.around(ssrfit[0]*10, decimals=2)
 
                     if(gradient >= 0.7 and srgrad > -0.01):
-                        setFile.write( str(code.decode('utf-8')) + ',' + str(float(rate)) + ',' + str(maxc) +  ',' + str(ssrgrad) +  ',' + str_oTime + ',' + str(gr)  + '\n')
+                        setFile.write( str(code.decode('utf-8')) + ',' + str(float(rate)) + ',' + str(exportData[maxc,3]) +  ',' + str(ssrgrad) +  ',' + str_oTime + ',' + str(gr)  + '\n')
+print(today)

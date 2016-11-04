@@ -63,7 +63,7 @@ while(True):
                 tsi = time.strptime(et.decode('utf-8'), '%H:%M:%S')
                 sect = datetime.timedelta(hours=tsi.tm_hour,minutes=tsi.tm_min,seconds=tsi.tm_sec).total_seconds()
                 v_time = sect - firstSecond
-                ti = sp.append(ti, sp.sqrt(v_time)/2)
+                ti = sp.append(ti, (v_time)/10)
                 if(second_oTime == sect):
                     i = ei
                     break;
