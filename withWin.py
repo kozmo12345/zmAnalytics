@@ -149,7 +149,7 @@ while(True):
             grade = int(exportData[i, 1].decode('UTF-8'))
             gr = int(exportData[i, 4].decode('UTF-8'))
             
-            if(grade < 30 and gr > 460000 and rate < 26):
+            if(grade < 30 and gr > (500000 * (hour - 8)) and rate < 26):
                 ms_md = (exportData[i,5].astype(float))/(exportData[i,6].astype(float))
                 sms_md = sp.sum((sp.sum(exportData[:i+1,5].astype(float)))/(sp.sum(exportData[:i+1,6].astype(float))))
                 

@@ -20,7 +20,7 @@ def readData(filePath):
         return fdata
 
     return fdata
-
+today = datetime.datetime.now().strftime('%Y-%m-%d')
 filepath = os.path.join("C:\\", "Data\\" + today + "\\" + today + "ma.txt")
 dirn = os.path.dirname(filepath)
 
@@ -30,8 +30,9 @@ except:
     os.mkdir(dirn) 
 
 setFile = open(filepath, 'w')
+setFile.write( 'code' + ',' + 'rate' +  ',' + 'ssrgrad' +  ',' + 'time' + ',' + 'gr' + '\n')
+setFile.close()
 
-today = datetime.datetime.now().strftime('%Y-%m-%d')
 startTime = datetime.timedelta(hours=9,minutes=00,seconds=10).total_seconds()
 endTime = datetime.timedelta(hours=15,minutes=20,seconds=00).total_seconds()
 temp_sec = 0
@@ -104,7 +105,7 @@ while(True):
             grade = int(exportData[i, 1].decode('UTF-8'))
             gr = int(exportData[i, 4].decode('UTF-8'))
             
-            if(grade < 30 and gr > 460000 and rate < 26):
+            if(grade < 30 and gr > (500000 * (hour - 8)) and rate < 26):
                 ms_md = (exportData[i,5].astype(float))/(exportData[i,6].astype(float))
                 sms_md = sp.sum((sp.sum(exportData[:i+1,5].astype(float)))/(sp.sum(exportData[:i+1,6].astype(float))))
                 
@@ -122,9 +123,7 @@ while(True):
                     srlist = [b - a for a,b in zip(ry,ry[1:])]
                     srfit = sp.polyfit(x[:-1], srlist, level)
                     srgrad = sp.around(srfit[0]*10, decimals=2)
-
-                    maxc = sp.argmax(exportData[i+1:,3].astype(float))
-
+                    
                     smaxr = sp.mean(exportData[:i+1,4].astype(float))
                     sry = (exportData[:i+1,4].astype(float))/smaxr
                     ssrlist = [b - a for a,b in zip(sry,sry[1:])]
@@ -132,4 +131,6 @@ while(True):
                     ssrgrad = sp.around(ssrfit[0]*10, decimals=2)
 
                     if(gradient >= 0.7 and srgrad > -0.01):
-                        setFile.write( str(code.decode('utf-8')) + ',' + str(float(rate)) + ',' + str(maxc) +  ',' + str(ssrgrad) +  ',' + str_oTime + ',' + str(gr) + '\n')
+                        setFile = open(filepath, 'w')
+                        setFile.write( str(code.decode('utf-8')) + ',' + str(float(rate)) +  ',' + str(ssrgrad) +  ',' + str_oTime + ',' + str(gr) + '\n')
+                        setFile.close()

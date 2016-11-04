@@ -15,7 +15,7 @@ hour = now.hour
 minute = now.minute
 second = now.second - 1
 
-setFile = open(os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + "m.txt"), 'w')
+setFile = open(os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + "mo.txt"), 'w')
 realfilePath = os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + ".txt");
 
 data = sp.genfromtxt(realfilePath, delimiter="\t", dtype='|S20')
@@ -23,7 +23,7 @@ codes = sp.unique(data[data[:,7] != b''][:,7])
 times = sp.unique(data[data[:,0] != b''][:,0])
 
 startTime = datetime.timedelta(hours=9,minutes=1,seconds=00).total_seconds()
-endTime = datetime.timedelta(hours=9,minutes=10,seconds=00).total_seconds()
+endTime = datetime.timedelta(hours=13,minutes=30,seconds=00).total_seconds()
 
 for timeIndex, ttime in enumerate(times):
     print(ttime)
