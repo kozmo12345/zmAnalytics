@@ -27,6 +27,8 @@ endTime = datetime.timedelta(hours=9,minutes=29,seconds=30).total_seconds()
 ttTime = datetime.timedelta(hours=10,minutes=30,seconds=10).total_seconds()
 ttEndTime = datetime.timedelta(hours=11,minutes=10,seconds=30).total_seconds()
 
+realfilePath = os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + ".txt");
+
 temp_sec = 0
 while(True):
     now = datetime.datetime.now()
@@ -48,6 +50,10 @@ while(True):
     if(second_now < 32460):
         print("morning")
         continue
+    
+    data = readData(realfilePath)
+    codes = sp.unique(data[-100:-50,7])
+    times = data[-99,0]
 
     if(second_now > ttTime and second_now < ttEndTime):
         for ci, code in enumerate(codes):
@@ -103,12 +109,6 @@ while(True):
     if(second_now > endTime):
         print("morning end")
         continue
-
-    realfilePath = os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + ".txt");
-    
-    data = readData(realfilePath)
-    codes = sp.unique(data[-100:-50,7])
-    times = data[-99,0]
     
     second_oTime = datetime.timedelta(hours=hour,minutes=minute,seconds=second).total_seconds() #계산시간
     str_oTime = ""

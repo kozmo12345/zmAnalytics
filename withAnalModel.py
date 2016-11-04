@@ -27,7 +27,7 @@ dirn = os.path.dirname(filepath)
 try:
     os.stat(dirn)
 except:
-    os.mkdir(dirn) 
+    os.mkdir(dirn)
 
 setFile = open(filepath, 'w')
 setFile.write( 'code' + ',' + 'rate' +  ',' + 'ssrgrad' +  ',' + 'time' + ',' + 'gr' + '\n')

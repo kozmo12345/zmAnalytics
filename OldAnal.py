@@ -72,7 +72,7 @@ for timeIndex, ttime in enumerate(times):
             grade = int(exportData[i, 1].decode('UTF-8'))
             gr = int(exportData[i, 4].decode('UTF-8'))
             
-            if(grade < 30 and gr > 460000):
+            if(grade < 30 and gr > 460000  and float(rate) < 26):
                 ms_md = (exportData[i,5].astype(float))/(exportData[i,6].astype(float))
                 sms_md = sp.sum((sp.sum(exportData[:i+1,5].astype(float)))/(sp.sum(exportData[:i+1,6].astype(float))))
             
@@ -101,5 +101,5 @@ for timeIndex, ttime in enumerate(times):
                     ssrgrad = sp.around(ssrfit[0]*10, decimals=2)
 
                     if(gradient >= 0.7 and srgrad > -0.01):
-                        setFile.write( str(code.decode('utf-8')) + ',' + str(float(rate)) + ',' + str(exportData[maxc,3]) +  ',' + str(ssrgrad) +  ',' + str_oTime + ',' + str(gr)  + '\n')
+                        setFile.write( str(code.decode('utf-8')) + ',' + str(float(rate)) + ',' + str(exportData[maxc + i + 1,3]) +  ',' + str(ssrgrad) +  ',' + str_oTime + ',' + str(gr)  + '\n')
 print(today)
