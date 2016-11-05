@@ -10,11 +10,12 @@ import time
 sp.random.seed(3)
 
 now = datetime.datetime.now()
-today = '2016-10-25'
+today = '2016-11-01'
 hour = now.hour
 minute = now.minute
 second = now.second - 1
 
+setFile = open(os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + "mo.txt"), 'w')
 realfilePath = os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + ".txt");
 
 data = sp.genfromtxt(realfilePath, delimiter="\t", dtype='|S20')
@@ -100,7 +101,6 @@ for timeIndex, ttime in enumerate(times):
                     ssrgrad = sp.around(ssrfit[0]*10, decimals=2)
 
                     if(gradient >= 0.7 and srgrad > -0.01):
-                        setFile = open(os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + "mo.txt"), 'w')
                         setFile.write( str(code.decode('utf-8')) + ',' + str(float(rate)) + ',' + str(exportData[maxc + i + 1,3]) +  ',' + str(ssrgrad) +  ',' + str_oTime + ',' + str(gr)  + '\n')
-                        setFile.close()
+                        
 print(today)
