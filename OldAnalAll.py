@@ -21,7 +21,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
         times = sp.unique(data[data[:,0] != b''][:,0])
         
         startTime = datetime.timedelta(hours=9,minutes=1,seconds=40).total_seconds()
-        endTime = datetime.timedelta(hours=9,minutes=30,seconds=00).total_seconds()
+        endTime = datetime.timedelta(hours=10,minutes=00,seconds=00).total_seconds()
         
         for timeIndex, ttime in enumerate(times):
             print(ttime)
@@ -91,14 +91,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
                             
                             maxc = sp.argmax(exportData[i+1:,3].astype(float))
         
-                            smaxr = exportData[i,4].astype(float)/(v_time)
-        
-                            sry = (exportData[:i+1,4].astype(float))/smaxr
-                            ssrlist = [b - a for a,b in zip(sry,sry[1:])]
-                            ssrfit = sp.polyfit(x[:-1], ssrlist, level)
-                            ssrgrad = sp.around(ssrfit[0]*10, decimals=2)
-        
                             if(gradient >= 0.7 and srgrad > -0.01):
-                                setFile.write( str(code.decode('utf-8')) + ',' + str(float(rate)) + ',' + str(exportData[maxc + i + 1,3].decode('UTF-8')) +  ',' + str(ssrgrad) +  ',' + str_oTime + ',' + str(gr)  + '\n')
+                                setFile.write( str(code.decode('utf-8')) + ',' + str(float(rate)) + ',' + str(exportData[maxc + i + 1,3].decode('UTF-8')) + ',' + str_oTime + ',' + str(gr)  + '\n')
                                 
         print(today)            
