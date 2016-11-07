@@ -13,6 +13,12 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
     for subdirname in dirnames:
         today = subdirname
 
+        try:
+           thread.start_new_thread( print_time, ("Thread-1", 2, ) )
+           thread.start_new_thread( print_time, ("Thread-2", 4, ) )
+        except:
+           print "Error: unable to start thread"        
+
         setFilePath = os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + "moa.txt");
         realfilePath = os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + ".txt");
         analFilePath = os.path.join("C:\\", "Dropbox\\Data\\" + "anal.txt");
@@ -109,9 +115,16 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
                             sfit = sp.polyfit(x[:-1], slist, level)
                             sgrad = sp.around(sfit[0]*10, decimals=4)                            
                             
+                            smaxr = exportData[i,4].astype(float)/(v_time)
+                            
+                            dsry = (exportData[:i+1,4].astype(float))/smaxr
+                            dssrlist = [b - a for a,b in zip(dsry,dsry[1:])]
+                            dssrfit = sp.polyfit(x[:-1], dssrlist, level)
+                            dssrgrad = sp.around(dssrfit[0]*10, decimals=2)
+
                             maxc = sp.argmax(exportData[i+1:,3].astype(float))
         
                             if(gradient >= 0.7 and srgrad > -0.01):
-                                analFile.write( today + ',' +  str(code.decode('utf-8')) + ',' + str(msgrad) + ',' + str(mdgrad) + ',' + str(float(exportData[maxc + i + 1,3].decode('UTF-8')) - float(rate)) + ',' + str(exportData[maxc + i + 1,0].decode('UTF-8')) + ',' + str_oTime + ',' + str(gr) + ',' + str(i) + "," + str(sgrad) + '\n')
+                                analFile.write( today + ',' +  str(code.decode('utf-8')) + ',' + str(msgrad) + ',' + str(mdgrad) + ',' + str(float(exportData[maxc + i + 1,3].decode('UTF-8')) - float(rate)) + ',' + str(exportData[maxc + i + 1,0].decode('UTF-8')) + ',' + str_oTime + ',' + str(gr) + ',' + str(i) + "," + str(sgrad) + "," + str(dssrgrad) + "," + str(gradient) + '\n')
                                 
         print(today)            

@@ -10,7 +10,7 @@ import time
 sp.random.seed(3)
 
 now = datetime.datetime.now()
-today = '2016-11-01'
+today = '2016-11-03'
 hour = now.hour
 minute = now.minute
 second = now.second - 1
@@ -22,8 +22,8 @@ data = sp.genfromtxt(realfilePath, delimiter="\t", dtype='|S20')
 codes = sp.unique(data[data[:,7] != b''][:,7])
 times = sp.unique(data[data[:,0] != b''][:,0])
 
-startTime = datetime.timedelta(hours=9,minutes=0,seconds=30).total_seconds()
-endTime = datetime.timedelta(hours=13,minutes=30,seconds=00).total_seconds()
+startTime = datetime.timedelta(hours=9,minutes=1,seconds=30).total_seconds()
+endTime = datetime.timedelta(hours=9,minutes=20,seconds=00).total_seconds()
 
 for timeIndex, ttime in enumerate(times):
     print(ttime)

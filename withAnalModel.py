@@ -21,7 +21,7 @@ def readData(filePath):
 
     return fdata
 today = datetime.datetime.now().strftime('%Y-%m-%d')
-filepath = os.path.join("C:\\", "Data\\" + today + "\\" + today + "ma.txt")
+filepath = os.path.join("C:\\Dropbox\\", "Data\\" + today + "\\" + today + "ma.txt")
 dirn = os.path.dirname(filepath)
 
 try:
@@ -29,9 +29,11 @@ try:
 except:
     os.mkdir(dirn)
 
-setFile = open(filepath, 'w')
+print(str(filepath))
+setFile = open(filepath, 'a')
 setFile.write( 'code' + ',' + 'rate' +  ',' + 'ssrgrad' +  ',' + 'time' + ',' + 'gr' + '\n')
 setFile.close()
+print(2)
 
 startTime = datetime.timedelta(hours=9,minutes=00,seconds=10).total_seconds()
 endTime = datetime.timedelta(hours=15,minutes=20,seconds=00).total_seconds()
@@ -131,6 +133,6 @@ while(True):
                     ssrgrad = sp.around(ssrfit[0]*10, decimals=2)
 
                     if(gradient >= 0.7 and srgrad > -0.01):
-                        setFile = open(filepath, 'w')
+                        setFile = open(filepath, 'a')
                         setFile.write( str(code.decode('utf-8')) + ',' + str(float(rate)) +  ',' + str(ssrgrad) +  ',' + str_oTime + ',' + str(gr) + '\n')
                         setFile.close()
