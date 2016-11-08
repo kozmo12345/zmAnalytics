@@ -10,7 +10,7 @@ import time
 sp.random.seed(3)
 
 now = datetime.datetime.now()
-today = '2016-11-03'
+today = '2016-10-07'
 hour = now.hour
 minute = now.minute
 second = now.second - 1
@@ -18,11 +18,11 @@ second = now.second - 1
 realfilePath = os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + ".txt");
 
 data = sp.genfromtxt(realfilePath, delimiter="\t", dtype='|S20')
-codes = sp.unique(data[data[:,7] != b''][:,7])
 times = sp.unique(data[data[:,0] != b''][:,0])
 
-startTime = datetime.timedelta(hours=9,minutes=00,seconds=30).total_seconds()
-endTime = datetime.timedelta(hours=9,minutes=20,seconds=00).total_seconds()
+startTime = datetime.timedelta(hours=9,minutes=5,seconds=50).total_seconds()
+endTime = datetime.timedelta(hours=9,minutes=6,seconds=20).total_seconds()
+tmp_time = 0
 
 for timeIndex, ttime in enumerate(times):
     print(ttime)
@@ -30,7 +30,7 @@ for timeIndex, ttime in enumerate(times):
     second_oTime = datetime.timedelta(hours=xstime.tm_hour,minutes=xstime.tm_min,seconds=xstime.tm_sec).total_seconds() #계산시간
     str_oTime = ""
     bool_oTime = False
-    
+
     for i, t in enumerate(times):
         x = time.strptime(t.decode('utf-8'), '%H:%M:%S')
         nt = datetime.timedelta(hours=x.tm_hour,minutes=x.tm_min,seconds=x.tm_sec).total_seconds()
@@ -40,13 +40,19 @@ for timeIndex, ttime in enumerate(times):
             bool_oTime = True
             break;
     
+    if(tmp_time + 8 > second_oTime):
+        continue;
+
+    tmp_time = second_oTime
+    print('--------' +  str(second_oTime))
     if(second_oTime < startTime):
         bool_oTime = False
-
+    
     if(second_oTime > endTime):
         break;
-
+    
     if(bool_oTime == True):
+        codes = data[data[:,0] == ttime][:,7]
         for ci, code in enumerate(codes):
             exportData = data[data[:,7] == code]
             
@@ -81,7 +87,7 @@ for timeIndex, ttime in enumerate(times):
                     if(len(y) <= 10):
                         break
                     level = 1
-                    fit = sp.polyfit(x[:10], y[:10], level)
+                    fit = sp.polyfit(x, y, level)
                     gradient = sp.around(fit[0]*10, decimals=2)
     
                     maxr = 100000
@@ -100,7 +106,8 @@ for timeIndex, ttime in enumerate(times):
                     ssrgrad = sp.around(ssrfit[0]*10, decimals=2)
 
                     if(gradient >= 0.7 and srgrad > -0.01):
-                        setFile = open(os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + "mo.txt"), 'a')
+                        setFile = open(os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + "mo3.txt"), 'a')
                         setFile.write( str(code.decode('utf-8')) + ',' + str(float(rate)) + ',' + str(exportData[maxc + i + 1,3]) +  ',' + str(ssrgrad) +  ',' + str_oTime + ',' + str(gr)  + '\n')
                         setFile.close()
+        
 print(today)

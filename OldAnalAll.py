@@ -49,6 +49,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
                 break;
         
             if(bool_oTime == True):
+                codes = data[data[:,0] == ttime][:,7]
                 for ci, code in enumerate(codes):
                     exportData = data[data[:,7] == code]
                     
@@ -62,7 +63,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
                         tsi = time.strptime(et.decode('utf-8'), '%H:%M:%S')
                         sect = datetime.timedelta(hours=tsi.tm_hour,minutes=tsi.tm_min,seconds=tsi.tm_sec).total_seconds()
                         v_time = sect - firstSecond
-                        ti = sp.append(ti, (v_time)/3)
+                        ti = sp.append(ti, (v_time)/10)
                         if(second_oTime == sect):
                             i = ei
                             break;

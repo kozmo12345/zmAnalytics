@@ -33,8 +33,8 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
         codes = sp.unique(setData[setData[:,0] != b''][:,0])
         times = sp.unique(data[data[:,0] != b''][:,0])
         
-        startTime = datetime.timedelta(hours=9,minutes=1,seconds=40).total_seconds()
-        endTime = datetime.timedelta(hours=10,minutes=00,seconds=00).total_seconds()
+        startTime = datetime.timedelta(hours=9,minutes=2,seconds=50).total_seconds()
+        endTime = datetime.timedelta(hours=9,minutes=3,seconds=10).total_seconds()
         
         for timeIndex, ttime in enumerate(times):
             print(ttime)
