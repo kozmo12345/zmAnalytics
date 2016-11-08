@@ -20,7 +20,7 @@ realfilePath = os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + "
 data = sp.genfromtxt(realfilePath, delimiter="\t", dtype='|S20')
 times = sp.unique(data[data[:,0] != b''][:,0])
 
-startTime = datetime.timedelta(hours=9,minutes=5,seconds=50).total_seconds()
+startTime = datetime.timedelta(hours=9,minutes=1,seconds=00).total_seconds()
 endTime = datetime.timedelta(hours=9,minutes=6,seconds=20).total_seconds()
 tmp_time = 0
 
@@ -44,7 +44,6 @@ for timeIndex, ttime in enumerate(times):
         continue;
 
     tmp_time = second_oTime
-    print('--------' +  str(second_oTime))
     if(second_oTime < startTime):
         bool_oTime = False
     
