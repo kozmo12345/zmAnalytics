@@ -25,7 +25,8 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
         
         startTime = datetime.timedelta(hours=9,minutes=1,seconds=00).total_seconds()
         endTime = datetime.timedelta(hours=9,minutes=16,seconds=00).total_seconds()
-        
+        tmp_time = 0
+
         for timeIndex, ttime in enumerate(times):
             print(ttime)
             xstime = time.strptime(ttime.decode('utf-8'), '%H:%M:%S')
@@ -43,11 +44,14 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
                     break;
             
             if(second_oTime < startTime):
-                bool_oTime = False
+                continue;
         
             if(second_oTime > endTime):
                 break;
-        
+            
+            if(tmp_time + 8 > second_oTime):
+                continue;
+
             if(bool_oTime == True):
                 codes = data[data[:,0] == ttime][:,7]
                 for ci, code in enumerate(codes):
