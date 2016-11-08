@@ -13,7 +13,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
     for subdirname in dirnames:
         today = subdirname
         
-        if((today.split('-')[1] == '09') or (today.split('-')[1] == '10' and today.split('-')[2] == '04')):
+        if((today.split('-')[1] == '09') or (today.split('-')[1] == '10' and today.split('-')[2] in ('04','05','06'))):
             continue;
         print(today)
         setFile = open(os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + "moa2.txt"), 'w')
@@ -61,6 +61,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
                     firstSecond = datetime.timedelta(hours=xtime.tm_hour,minutes=xtime.tm_min,seconds=xtime.tm_sec).total_seconds()
                 
                     ti = sp.array([])
+                    print(exportData[:, 3])
                     c = exportData[:, 3].astype(float)
                     i = -1
                     for ei, et in enumerate(exportData[:, 0]):
