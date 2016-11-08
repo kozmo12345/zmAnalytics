@@ -21,7 +21,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
         times = sp.unique(data[data[:,0] != b''][:,0])
         
         startTime = datetime.timedelta(hours=9,minutes=1,seconds=00).total_seconds()
-        endTime = datetime.timedelta(hours=10,minutes=00,seconds=00).total_seconds()
+        endTime = datetime.timedelta(hours=9,minutes=30,seconds=00).total_seconds()
         
         for timeIndex, ttime in enumerate(times):
             print(ttime)
