@@ -9,7 +9,7 @@ import time
 
 sp.random.seed(3)  # 이후에 같은 데이터를 생성하기 위해
 
-def plot_models(x, cs, msy, mdy, gry, models, fname=None, mx=None, ymax=None, xmin=None):
+def plot_models(x, cs, msy, mdy, gry, models, mstime, fname=None, mx=None, ymax=None, xmin=None):
     colors = ['g', 'k', 'b', 'm', 'r']
     linestyles = ['-', '-.', '--', ':', '-']
     plt.clf()
@@ -20,16 +20,15 @@ def plot_models(x, cs, msy, mdy, gry, models, fname=None, mx=None, ymax=None, xm
     plt.scatter(x, gry, s=5, marker='*', c=colors[0])
     # plt.scatter(x, msy, s=5, marker='_', c=colors[1])
     # plt.scatter(x, mdy, s=5, marker='.', c=colors[3])
-
+    mx = sp.linspace(0, x[-1], 1000)
+    plt.plot([mstime]*len(mx), mx, linestyle=':', linewidth=2, c='m')
     # if models:
-    #     if mx is None:
-    #         mx = sp.linspace(0, x[-1], 1000)
+    #     # if mx is None:
+    #         # mx = sp.linspace(0, x[-1], 1000)
     #     for model, style, color in zip(models, linestyles, colors):
-    #         # print "Model:",model
-    #         # print "Coeffs:",model.coeffs
     #         plt.plot(mx, model(mx), linestyle=style, linewidth=2, c=color)
 
-        # plt.legend(["d=%i" % m.order for m in models], loc="upper right")
+    plt.legend(["d=%i" % m.order for m in models], loc="upper right")
 
     plt.autoscale(tight=True)
     plt.ylim(ymin=0)
@@ -135,14 +134,14 @@ for datei, da in enumerate(dates):
         if(len(y) <= 1):
             break
 
-        level = 2
+        level = 1
         fit = sp.polyfit(ti[:mesuIndex+1], y, level)
         gradient = sp.around(fit[0]*10, decimals=2)
-        # f1 = sp.poly1d(fit)
-        # f2 = sp.poly1d(sp.polyfit(ti[:mesuIndex+1], y, 3))
-        # f3 = sp.poly1d(sp.polyfit(ti[:mesuIndex+1], y, 4))
-        # f10 = sp.poly1d(sp.polyfit(ti[:mesuIndex+1], y, 15))
-        # f100 = sp.poly1d(sp.polyfit(ti[:mesuIndex+1], y, 30))
+        f1 = sp.poly1d(fit)
+        f2 = sp.poly1d(sp.polyfit(ti[:mesuIndex+1], y, 3))
+        f3 = sp.poly1d(sp.polyfit(ti[:mesuIndex+1], y, 4))
+        f10 = sp.poly1d(sp.polyfit(ti[:mesuIndex+1], y, 15))
+        f100 = sp.poly1d(sp.polyfit(ti[:mesuIndex+1], y, 30))
 
         img_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)), "img")
-        plot_models(ti, c, msy, mdy, ry,[], fname = os.path.join(img_dir, str(dates[datei])+ '_' +str(bcodes[datei]) + '_' + str(gradient) + ".png")) 
+        plot_models(ti, c, msy, mdy, ry,[f1, f2, f3, f10, f100], mstime = ((sec_mesutime - firstSecond)/10) ,fname = os.path.join(img_dir, str(dates[datei])+ '_' +str(bcodes[datei]) + '_' + str(gradient) + ".png")) 

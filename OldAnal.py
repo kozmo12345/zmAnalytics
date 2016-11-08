@@ -15,14 +15,13 @@ hour = now.hour
 minute = now.minute
 second = now.second - 1
 
-setFile = open(os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + "mo.txt"), 'w')
 realfilePath = os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + ".txt");
 
 data = sp.genfromtxt(realfilePath, delimiter="\t", dtype='|S20')
 codes = sp.unique(data[data[:,7] != b''][:,7])
 times = sp.unique(data[data[:,0] != b''][:,0])
 
-startTime = datetime.timedelta(hours=9,minutes=1,seconds=30).total_seconds()
+startTime = datetime.timedelta(hours=9,minutes=00,seconds=30).total_seconds()
 endTime = datetime.timedelta(hours=9,minutes=20,seconds=00).total_seconds()
 
 for timeIndex, ttime in enumerate(times):
@@ -79,10 +78,10 @@ for timeIndex, ttime in enumerate(times):
                 if(ms_md > 1 and sms_md > 1):
                     x = ti
                     y = exportData[:i+1,3].astype(float)
-                    if(len(y) <= 1):
+                    if(len(y) <= 10):
                         break
                     level = 1
-                    fit = sp.polyfit(x, y, level)
+                    fit = sp.polyfit(x[:10], y[:10], level)
                     gradient = sp.around(fit[0]*10, decimals=2)
     
                     maxr = 100000
@@ -101,6 +100,7 @@ for timeIndex, ttime in enumerate(times):
                     ssrgrad = sp.around(ssrfit[0]*10, decimals=2)
 
                     if(gradient >= 0.7 and srgrad > -0.01):
+                        setFile = open(os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + "mo.txt"), 'a')
                         setFile.write( str(code.decode('utf-8')) + ',' + str(float(rate)) + ',' + str(exportData[maxc + i + 1,3]) +  ',' + str(ssrgrad) +  ',' + str_oTime + ',' + str(gr)  + '\n')
-                        
+                        setFile.close()
 print(today)

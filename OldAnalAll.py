@@ -13,7 +13,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
     for subdirname in dirnames:
         today = subdirname
 
-        setFile = open(os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + "moa.txt"), 'w')
+        setFile = open(os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + "moa2.txt"), 'w')
         realfilePath = os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + ".txt");
         
         data = sp.genfromtxt(realfilePath, delimiter="\t", dtype='|S20')
@@ -77,10 +77,10 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
                         if(ms_md > 1 and sms_md > 1):
                             x = ti
                             y = exportData[:i+1,3].astype(float)
-                            if(len(y) <= 1):
+                            if(len(y) <= 10):
                                 break
                             level = 1
-                            fit = sp.polyfit(x, y, level)
+                            fit = sp.polyfit(x[:10], y[:10], level)
                             gradient = sp.around(fit[0]*10, decimals=2)
             
                             maxr = 100000
