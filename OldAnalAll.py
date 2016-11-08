@@ -20,7 +20,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
         codes = sp.unique(data[data[:,7] != b''][:,7])
         times = sp.unique(data[data[:,0] != b''][:,0])
         
-        startTime = datetime.timedelta(hours=9,minutes=1,seconds=40).total_seconds()
+        startTime = datetime.timedelta(hours=9,minutes=1,seconds=00).total_seconds()
         endTime = datetime.timedelta(hours=10,minutes=00,seconds=00).total_seconds()
         
         for timeIndex, ttime in enumerate(times):
@@ -70,7 +70,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
                     grade = int(exportData[i, 1].decode('UTF-8'))
                     gr = int(exportData[i, 4].decode('UTF-8'))
                     
-                    if(grade < 30 and gr > 460000  and float(rate) < 26):
+                    if(grade < 30 and gr > 500000  and float(rate) < 24):
                         ms_md = (exportData[i,5].astype(float))/(exportData[i,6].astype(float))
                         sms_md = sp.sum((sp.sum(exportData[:i+1,5].astype(float)))/(sp.sum(exportData[:i+1,6].astype(float))))
                     
