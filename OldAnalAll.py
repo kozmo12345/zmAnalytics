@@ -12,7 +12,10 @@ sp.random.seed(3)
 for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
     for subdirname in dirnames:
         today = subdirname
-
+        
+        if((today.split('-')[1] == '09') or (today.split('-')[1] == '10' and today.split('-')[2] == '04')):
+            continue;
+        print(today)
         setFile = open(os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + "moa2.txt"), 'w')
         realfilePath = os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + ".txt");
         
@@ -21,7 +24,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
         times = sp.unique(data[data[:,0] != b''][:,0])
         
         startTime = datetime.timedelta(hours=9,minutes=1,seconds=00).total_seconds()
-        endTime = datetime.timedelta(hours=9,minutes=30,seconds=00).total_seconds()
+        endTime = datetime.timedelta(hours=9,minutes=16,seconds=00).total_seconds()
         
         for timeIndex, ttime in enumerate(times):
             print(ttime)
@@ -59,7 +62,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
                         tsi = time.strptime(et.decode('utf-8'), '%H:%M:%S')
                         sect = datetime.timedelta(hours=tsi.tm_hour,minutes=tsi.tm_min,seconds=tsi.tm_sec).total_seconds()
                         v_time = sect - firstSecond
-                        ti = sp.append(ti, (v_time)/10)
+                        ti = sp.append(ti, (v_time)/3)
                         if(second_oTime == sect):
                             i = ei
                             break;
@@ -70,17 +73,17 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
                     grade = int(exportData[i, 1].decode('UTF-8'))
                     gr = int(exportData[i, 4].decode('UTF-8'))
                     
-                    if(grade < 30 and gr > 500000  and float(rate) < 24):
+                    if(grade < 30 and gr > 460000  and float(rate) < 25):
                         ms_md = (exportData[i,5].astype(float))/(exportData[i,6].astype(float))
                         sms_md = sp.sum((sp.sum(exportData[:i+1,5].astype(float)))/(sp.sum(exportData[:i+1,6].astype(float))))
                     
                         if(ms_md > 1 and sms_md > 1):
                             x = ti
                             y = exportData[:i+1,3].astype(float)
-                            if(len(y) <= 10):
+                            if(len(y) <= 1):
                                 break
                             level = 1
-                            fit = sp.polyfit(x[:10], y[:10], level)
+                            fit = sp.polyfit(x, y, level)
                             gradient = sp.around(fit[0]*10, decimals=2)
             
                             maxr = 100000
