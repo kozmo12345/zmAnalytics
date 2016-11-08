@@ -10,7 +10,7 @@ import time
 sp.random.seed(3)
 
 now = datetime.datetime.now()
-today = '2016-10-07'
+today = '2016-10-06'
 hour = now.hour
 minute = now.minute
 second = now.second - 1
