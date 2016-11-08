@@ -21,7 +21,6 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
         
         print("file open")
         for line in setFile:
-            print(line)
-            analFile.write(line)
+            analFile.write(today + ',' + line)
                                 
         print("end")            
