@@ -13,8 +13,9 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
     for subdirname in dirnames:
         today = subdirname
         
-        if((today.split('-')[1] == '09') or (today.split('-')[1] == '10' and today.split('-')[2] in ('04','05'))):
+        if(not((today.split('-')[1] == '09') or (today.split('-')[1] == '10' and today.split('-')[2] in ('04')))):
             continue;
+            
         print(today)
         setFile = open(os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + "moa2.txt"), 'w')
         realfilePath = os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + ".txt");
