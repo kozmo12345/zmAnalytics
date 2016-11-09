@@ -14,7 +14,7 @@ sp.random.seed(3)
 def anal(dirnames):
     for subdirname in dirnames:
         today = subdirname
-        
+        today = '2016-11-09'
         # if(not((today.split('-')[1] == '09') or (today.split('-')[1] == '10' and today.split('-')[2] in ('04')))):
         #     continue;
         print(today)
@@ -53,9 +53,12 @@ def anal(dirnames):
                 break;
             
             if(tmp_time + 8 > second_oTime):
+                if(second_oTime - tmp_time == 8 ):
+                    print(tmp_time)
+                    print(second_oTime)
                 continue;
             tmp_time = second_oTime
-            print(today + str(ttime))
+            # print(today + str(ttime))
             if(bool_oTime == True):
                 codes = data[data[:,0] == ttime][:,7]
                 for ci, code in enumerate(codes):
