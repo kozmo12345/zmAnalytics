@@ -6,32 +6,32 @@ import scipy as sp
 import matplotlib.pyplot as plt
 import datetime
 import time
-
+import logging
+import sys
+import _thread
 sp.random.seed(3)
 
-for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
+def anal(dirnames):
     for subdirname in dirnames:
         today = subdirname
-
-        setFilePath = os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + "moa.txt");
+        
+        # if(not((today.split('-')[1] == '09') or (today.split('-')[1] == '10' and today.split('-')[2] in ('04')))):
+        #     continue;
+        print(today)
+        setFile = open(os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + "moa3.txt"), 'w')
         realfilePath = os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + ".txt");
-        analFilePath = os.path.join("C:\\", "Dropbox\\Data\\" + "anal.txt");
-        analFile = open(analFilePath, 'a')
         
         data = sp.genfromtxt(realfilePath, delimiter="\t", dtype='|S20')
-        setData = sp.genfromtxt(setFilePath, delimiter=",", dtype='|S20')
-        
-        if(len(setData) == 0):
-            continue;
-
-        codes = sp.unique(setData[setData[:,0] != b''][:,0])
+        codes = sp.unique(data[data[:,7] != b''][:,7])
         times = sp.unique(data[data[:,0] != b''][:,0])
         
-        startTime = datetime.timedelta(hours=9,minutes=2,seconds=50).total_seconds()
-        endTime = datetime.timedelta(hours=9,minutes=00,seconds=00).total_seconds()
-        
+        startTime = datetime.timedelta(hours=9,minutes=1,seconds=00).total_seconds()
+        endTime = datetime.timedelta(hours=9,minutes=13,seconds=00).total_seconds()
+        tmp_time = 0
+        mesuDict = dict()
+
         for timeIndex, ttime in enumerate(times):
-            print(ttime)
+            
             xstime = time.strptime(ttime.decode('utf-8'), '%H:%M:%S')
             second_oTime = datetime.timedelta(hours=xstime.tm_hour,minutes=xstime.tm_min,seconds=xstime.tm_sec).total_seconds() #계산시간
             str_oTime = ""
@@ -47,20 +47,27 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
                     break;
             
             if(second_oTime < startTime):
-                bool_oTime = False
+                continue;
         
             if(second_oTime > endTime):
                 break;
-        
+            
+            if(tmp_time + 8 > second_oTime):
+                continue;
+            tmp_time = second_oTime
+            print(today + str(ttime))
             if(bool_oTime == True):
+                codes = data[data[:,0] == ttime][:,7]
                 for ci, code in enumerate(codes):
+                    if(code == b''):
+                        continue;
                     exportData = data[data[:,7] == code]
                     
                     xtime = time.strptime(exportData[0,0].decode('utf-8'), '%H:%M:%S')
                     firstSecond = datetime.timedelta(hours=xtime.tm_hour,minutes=xtime.tm_min,seconds=xtime.tm_sec).total_seconds()
-                    
+                
                     ti = sp.array([])
-                    c = exportData[:, 3].astype(float)
+
                     i = -1
                     for ei, et in enumerate(exportData[:, 0]):
                         tsi = time.strptime(et.decode('utf-8'), '%H:%M:%S')
@@ -72,12 +79,15 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
                             break;
                         
                     if(i == -1): continue
-            
+                    c = exportData[:i+1, 3].astype(float)
+
+                    if(True in (c > 25)):
+                        continue;            
                     rate = exportData[i, 3].decode('UTF-8')
                     grade = int(exportData[i, 1].decode('UTF-8'))
                     gr = int(exportData[i, 4].decode('UTF-8'))
                     
-                    if(grade < 30 and gr > 460000  and float(rate) < 26):
+                    if(grade < 35 and gr > 460000  and float(rate) < 25):
                         ms_md = (exportData[i,5].astype(float))/(exportData[i,6].astype(float))
                         sms_md = sp.sum((sp.sum(exportData[:i+1,5].astype(float)))/(sp.sum(exportData[:i+1,6].astype(float))))
                     
@@ -88,37 +98,52 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
                                 break
                             level = 1
                             fit = sp.polyfit(x, y, level)
-                            gradient = sp.around(fit[0]*10, decimals=4)
+                            gradient = sp.around(fit[0]*10, decimals=2)
             
                             maxr = 100000
                             ry = (exportData[:i+1,4].astype(float))/maxr
                             srlist = [b - a for a,b in zip(ry,ry[1:])]
                             srfit = sp.polyfit(x[:-1], srlist, level)
-                            srgrad = sp.around(srfit[0]*10, decimals=4)
+                            srgrad = sp.around(srfit[0]*10, decimals=2)
                             
-                            tmaxr = maxr/2
-                            ttry = (exportData[:i+1,5].astype(float))/maxr
-                            tsrfit = sp.polyfit(x[:], ttry, level)
-                            msgrad = sp.around(tsrfit[0]*10, decimals=4)
-
-                            t2try = (exportData[:i+1,6].astype(float))/maxr
-                            t2srfit = sp.polyfit(x[:], t2try, level)
-                            mdgrad = sp.around(t2srfit[0]*10, decimals=4)
-
-                            slist = [b - a for a,b in zip(y,y[1:])]
-                            sfit = sp.polyfit(x[:-1], slist, level)
-                            sgrad = sp.around(sfit[0]*10, decimals=4)                            
-                            
-                            smaxr = exportData[i,4].astype(float)/(v_time)
-                            
-                            dsry = (exportData[:i+1,4].astype(float))/smaxr
-                            dssrlist = [b - a for a,b in zip(dsry,dsry[1:])]
-                            dssrfit = sp.polyfit(x[:-1], dssrlist, level)
-                            dssrgrad = sp.around(dssrfit[0]*10, decimals=2)
-
                             maxc = sp.argmax(exportData[i+1:,3].astype(float))
-        
+
                             if(gradient >= 0.7 and srgrad > -0.01):
-                                analFile.write( today + ',' +  str(code.decode('utf-8')) + ',' + str(msgrad) + ',' + str(mdgrad) + ',' + str(float(exportData[maxc + i + 1,3].decode('UTF-8')) - float(rate)) + ',' + str(exportData[maxc + i + 1,0].decode('UTF-8')) + ',' + str_oTime + ',' + str(gr) + ',' + str(i) + "," + str(sgrad) + "," + str(dssrgrad) + "," + str(gradient) + '\n')
+           
+                                if(code.decode('utf-8') in mesuDict):
+                                    mesuDict[code.decode('utf-8')] = mesuDict[code.decode('utf-8')] + 1
+                                else:
+                                    mesuDict[code.decode('utf-8')] = mesuDict.get(code.decode('utf-8'), 0)
                                 
-        print(today)            
+                                if(mesuDict[code.decode('utf-8')] == 1):
+                                    setFile.write( str(code.decode('utf-8')) + ',' + str(float(rate)) +  ',' + str(float(exportData[i+1, 3].decode('UTF-8'))) + ',' + str(exportData[maxc + i + 1,3].decode('UTF-8')) + ',' + str_oTime + ',' + str(gr)  + ',' + str(i)  + ',' + str( min(exportData[i:i + maxc, 3].astype(float)) )  + ',' + str( max(exportData[:i, 3].astype(float)) )  + ',' + str(exportData[i +maxc, 0].decode('UTF-8'))  + ',' + str( max(exportData[:i, 1].astype(float)) )  + ',' + str( min(exportData[:i, 1].astype(float)) )  +  ',' + str( grade )  +  '\n')
+                                
+        print(today)
+
+
+now = datetime.datetime.now()
+print(str(datetime.datetime.now()))
+for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
+    if(len(dirnames) == 0):
+    	break
+
+    lenNames = len(dirnames)/3
+    lenNames = int(lenNames)
+    nameso = dirnames[0:lenNames]
+    namest =  dirnames[lenNames:lenNames*2]
+    namesth =  dirnames[lenNames*2:len(dirnames)]
+    jobs = []
+    
+    if __name__ == '__main__':
+        try:
+           _thread.start_new_thread( anal, (nameso, ) )
+           _thread.start_new_thread( anal, (namest, ) )
+           _thread.start_new_thread( anal, (namesth, ) )
+        except:
+           print ("Error: unable to start thread")
+        
+        while 1:
+           pass
+
+now = datetime.datetime.now()
+print(str(datetime.datetime.now()))    

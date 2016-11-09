@@ -16,7 +16,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
     for subdirname in dirnames:
         today = subdirname
 
-        setFilePath = os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + "moa2.txt");
+        setFilePath = os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + "moa3.txt");
         setFile = open(setFilePath, 'r')
         
         print("file open")
