@@ -30,7 +30,10 @@ endTime = datetime.timedelta(hours=9,minutes=13,seconds=00).total_seconds()
 comps = []
 
 realfilePath = os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + ".txt");
-setFile = open(os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + "m.txt"), 'w')
+realfile = open(realfilePath, 'a')
+realfile.close()
+setFilePath = os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + "m.txt");
+setFile = open(setFilePath, 'w')
 setFile.close()
 
 while(True):
@@ -44,7 +47,15 @@ while(True):
     
     mesuDict = dict()
     tmp_time = 0
+
+    now = datetime.datetime.now()
+    nowTime = datetime.timedelta(hours=now.hour,minutes=now.minute,seconds=now.second).total_seconds()
+
+    if(nowTime > endTime):
+        break;
+
     print(today + str(times[len(times)-1]))
+
     for ttime in (times):
         
         try:
@@ -141,7 +152,8 @@ while(True):
                             
                             if(mesuDict[code.decode('utf-8')] == 3 and (str(code.decode('utf-8')) not in comps)):
                                 comps.append(str(code.decode('utf-8')))
-                                setFile = open(os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + "m.txt"), 'a')
+                                print(comps)
+                                setFile = open(setFilePath, 'a')
                                 setFile.write( str(code.decode('utf-8')) + ',' + str(float(rate)) + ',' + str(gradient) +  ',' + str_oTime + ',' + '2' + '\n')
                                 setFile.close()
                              
