@@ -30,9 +30,35 @@ endTime = datetime.timedelta(hours=9,minutes=13,seconds=00).total_seconds()
 comps = []
 
 realfilePath = os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + ".txt");
+dirn = os.path.dirname(realfilePath)
+try:
+    os.stat(dirn)
+except:
+    try:
+        os.makedirs(dirn)
+    except OSError as exc: 
+        if exc.errno == errno.EEXIST and os.path.isdir(dirn):
+            pass
+        else:
+            raise
+
+setFilePath = os.path.join("C:\\", "Dropbox\\mesu\\Data\\" + today + "\\" + today + "m.txt");
+dirn2 = os.path.dirname(setFilePath)
+
+try:
+    os.stat(dirn2)
+except:
+    try:
+        os.makedirs(dirn2)
+    except OSError as exc: 
+        if exc.errno == errno.EEXIST and os.path.isdir(dirn2):
+            pass
+        else:
+            raise
+
 realfile = open(realfilePath, 'a')
 realfile.close()
-setFilePath = os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + "m.txt");
+
 setFile = open(setFilePath, 'w')
 setFile.close()
 
@@ -154,7 +180,7 @@ while(True):
                                 comps.append(str(code.decode('utf-8')))
                                 print(comps)
                                 setFile = open(setFilePath, 'a')
-                                setFile.write( str(code.decode('utf-8')) + ',' + str(float(rate)) + ',' + str(gradient) +  ',' + str_oTime + ',' + '2' + '\n')
+                                setFile.write( str(code.decode('utf-8')) + ',' + str(float(rate)) + ',' + str(gradient) +  ',' + str_oTime + ',' + '1.02' + '\n')
                                 setFile.close()
                              
         except Exception as e:
