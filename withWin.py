@@ -30,7 +30,36 @@ endTime = datetime.timedelta(hours=9,minutes=13,seconds=00).total_seconds()
 comps = []
 
 realfilePath = os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + ".txt");
-setFile = open(os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + "m.txt"), 'w')
+dirn = os.path.dirname(realfilePath)
+try:
+    os.stat(dirn)
+except:
+    try:
+        os.makedirs(dirn)
+    except OSError as exc: 
+        if exc.errno == errno.EEXIST and os.path.isdir(dirn):
+            pass
+        else:
+            raise
+
+setFilePath = os.path.join("C:\\", "Dropbox\\mesu\\Data\\" + today + "\\" + today + "m.txt");
+dirn2 = os.path.dirname(setFilePath)
+
+try:
+    os.stat(dirn2)
+except:
+    try:
+        os.makedirs(dirn2)
+    except OSError as exc: 
+        if exc.errno == errno.EEXIST and os.path.isdir(dirn2):
+            pass
+        else:
+            raise
+
+realfile = open(realfilePath, 'a')
+realfile.close()
+
+setFile = open(setFilePath, 'w')
 setFile.close()
 
 while(True):
@@ -44,7 +73,15 @@ while(True):
     
     mesuDict = dict()
     tmp_time = 0
+
+    now = datetime.datetime.now()
+    nowTime = datetime.timedelta(hours=now.hour,minutes=now.minute,seconds=now.second).total_seconds()
+
+    if(nowTime > endTime):
+        break;
+
     print(today + str(times[len(times)-1]))
+
     for ttime in (times):
         
         try:
@@ -141,8 +178,9 @@ while(True):
                             
                             if(mesuDict[code.decode('utf-8')] == 3 and (str(code.decode('utf-8')) not in comps)):
                                 comps.append(str(code.decode('utf-8')))
-                                setFile = open(os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + "m.txt"), 'a')
-                                setFile.write( str(code.decode('utf-8')) + ',' + str(float(rate)) + ',' + str(gradient) +  ',' + str_oTime + ',' + '2' + '\n')
+                                print(comps)
+                                setFile = open(setFilePath, 'a')
+                                setFile.write( str(code.decode('utf-8')) + ',' + str(float(rate)) + ',' + str(gradient) +  ',' + str_oTime + ',' + '1.02' + '\n')
                                 setFile.close()
                              
         except Exception as e:
