@@ -21,162 +21,133 @@ def readData(filePath):
 
     return fdata
 
-today = datetime.datetime.now().strftime('%Y-%m-%d')
-startTime = datetime.timedelta(hours=9,minutes=2,seconds=10).total_seconds()
-endTime = datetime.timedelta(hours=9,minutes=29,seconds=30).total_seconds()
-ttTime = datetime.timedelta(hours=10,minutes=30,seconds=10).total_seconds()
-ttEndTime = datetime.timedelta(hours=11,minutes=10,seconds=30).total_seconds()
+now = datetime.datetime.now()
+today = now.strftime('%Y-%m-%d')
+today = '2016-11-01'
+
+startTime = datetime.timedelta(hours=9,minutes=00,seconds=00).total_seconds()
+endTime = datetime.timedelta(hours=9,minutes=13,seconds=00).total_seconds()
+
+comps = []
 
 realfilePath = os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + ".txt");
+setFile = open(os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + "m.txt"), 'w')
+setFile.close()
 
-temp_sec = 0
 while(True):
-    now = datetime.datetime.now()
-    hour = now.hour
-    minute = now.minute
-    second = now.second
-    second_now = datetime.timedelta(hours=hour,minutes=minute,seconds=second).total_seconds()
+    data = sp.genfromtxt(realfilePath, delimiter="\t", dtype='|S20')
 
-    if((second_now - temp_sec) < 10):
-        time.sleep(10 - (second_now - temp_sec))
-        now = datetime.datetime.now()
-        hour = now.hour
-        minute = now.minute
-        second = now.second
-        second_now = datetime.timedelta(hours=hour,minutes=minute,seconds=second).total_seconds()
-
-    temp_sec = second_now
-
-    if(second_now < 32460):
-        print("morning")
+    try:
+        times = sp.unique(data[data[:,0] != b''][:,0])
+    except Exception as e:
+        print('not yet')
         continue
     
-    data = readData(realfilePath)
-    codes = sp.unique(data[-100:-50,7])
-    times = data[-99,0]
-
-    if(second_now > ttTime and second_now < ttEndTime):
-        for ci, code in enumerate(codes):
-            exportData = data[data[:,7] == code]
-            
-            xtime = time.strptime(exportData[0,0].decode('utf-8'), '%H:%M:%S')
-            firstSecond = datetime.timedelta(hours=xtime.tm_hour,minutes=xtime.tm_min,seconds=xtime.tm_sec).total_seconds()
+    mesuDict = dict()
+    tmp_time = 0
+    print(today + str(times[len(times)-1]))
+    for ttime in (times):
         
-            ti = sp.array([])
-            c = exportData[:, 3].astype(float)
-            i = -1
-            for ei, et in enumerate(exportData[:, 0]):
-                tsi = time.strptime(et.decode('utf-8'), '%H:%M:%S')
-                sect = datetime.timedelta(hours=tsi.tm_hour,minutes=tsi.tm_min,seconds=tsi.tm_sec).total_seconds()
-                v_time = sect - firstSecond
-                ti = sp.append(ti, (v_time)/10)
-                if(second_oTime == sect):
-                    i = ei
+        try:
+            xstime = time.strptime(ttime.decode('utf-8'), '%H:%M:%S')
+            second_oTime = datetime.timedelta(hours=xstime.tm_hour,minutes=xstime.tm_min,seconds=xstime.tm_sec).total_seconds() #계산시간
+            str_oTime = ""
+            bool_oTime = False
+            
+            for t in times:
+                x = time.strptime(t.decode('utf-8'), '%H:%M:%S')
+                nt = datetime.timedelta(hours=x.tm_hour,minutes=x.tm_min,seconds=x.tm_sec).total_seconds()
+                if(nt > second_oTime):
+                    str_oTime = t.decode('utf-8')
+                    second_oTime = nt
+                    bool_oTime = True
                     break;
-                
-            if(i == -1): continue
-    
-            rate = float(exportData[i, 3].decode('UTF-8'))
             
-            if(rate < 20):
-                ms_md = (exportData[i,5].astype(float))/(exportData[i,6].astype(float))
-                sms_md = sp.sum((sp.sum(exportData[:i+1,5].astype(float)))/(sp.sum(exportData[:i+1,6].astype(float))))
-                
-                if(ms_md > 1 and sms_md > 1):
-                    x = ti
-                    y = exportData[:i+1,3].astype(float)
-                    if(len(y) <= 1):
-                        break
-                    level = 1
-                    fit = sp.polyfit(x, y, level)
-                    gradient = sp.around(fit[0]*10, decimals=2)
-    
-                    maxr = 100000
-                    ry = (exportData[:i+1,4].astype(float))/maxr
-                    srlist = [b - a for a,b in zip(ry,ry[1:])]
-                    srfit = sp.polyfit(x[:-1], srlist, level)
-                    srgrad = sp.around(srfit[0]*10, decimals=2)
-
-                    if(gradient <= 0 and srgrad > -0.01):
-                        setFile = open(os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + "m.txt"), 'w')
-                        setFile.write( str(code.decode('utf-8')) + ',' + str(float(rate)) + ',' + str(gradient) +  ',' + str_oTime +  ',' + '1.03' + '\n')
-                        setFile.close()        
-
-    if(second_now > ttEndTime):
-        print("end")
-        break
-
-    if(second_now > endTime):
-        print("morning end")
-        continue
-    
-    second_oTime = datetime.timedelta(hours=hour,minutes=minute,seconds=second).total_seconds() #계산시간
-    str_oTime = ""
-    bool_oTime = False
-    
-    x = time.strptime(times.decode('utf-8'), '%H:%M:%S')
-    nt = datetime.timedelta(hours=x.tm_hour,minutes=x.tm_min,seconds=x.tm_sec).total_seconds()
-    str_oTime = times.decode('utf-8')
-    second_oTime = nt
-    bool_oTime = True
-    
-    if(second_now < startTime):
-        print("morning")
-        bool_oTime = False    
-
-    if(bool_oTime == True):
-        for ci, code in enumerate(codes):
-            exportData = data[data[:,7] == code]
-            
-            xtime = time.strptime(exportData[0,0].decode('utf-8'), '%H:%M:%S')
-            firstSecond = datetime.timedelta(hours=xtime.tm_hour,minutes=xtime.tm_min,seconds=xtime.tm_sec).total_seconds()
+            if(second_oTime < startTime):
+                continue;
         
-            ti = sp.array([])
-            c = exportData[:, 3].astype(float)
-            i = -1
-            for ei, et in enumerate(exportData[:, 0]):
-                tsi = time.strptime(et.decode('utf-8'), '%H:%M:%S')
-                sect = datetime.timedelta(hours=tsi.tm_hour,minutes=tsi.tm_min,seconds=tsi.tm_sec).total_seconds()
-                v_time = sect - firstSecond
-                ti = sp.append(ti, sp.sqrt(v_time)/2)
-                if(second_oTime == sect):
-                    i = ei
-                    break;
-                
-            if(i == -1): continue
-    
-            rate = float(exportData[i, 3].decode('UTF-8'))
-            grade = int(exportData[i, 1].decode('UTF-8'))
-            gr = int(exportData[i, 4].decode('UTF-8'))
+            if(second_oTime > endTime):
+                break;
             
-            if(grade < 30 and gr > (500000 * (hour - 8)) and rate < 26):
-                ms_md = (exportData[i,5].astype(float))/(exportData[i,6].astype(float))
-                sms_md = sp.sum((sp.sum(exportData[:i+1,5].astype(float)))/(sp.sum(exportData[:i+1,6].astype(float))))
-                
-                if(ms_md > 1 and sms_md > 1):
-
-                    if(second_oTime < 32500):
-                        if(gr > 2600000 and rate < 15):
-                            setFile = open(os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + "m.txt"), 'w')
-                            setFile.write( str(code.decode('utf-8')) + ',' + str(float(rate)) + ',' + '100' +  ',' + str_oTime + ',' + '1.05' +  '\n')
-                            setFile.close()                        
+            if(tmp_time + 8 > second_oTime):
+                continue;
+            tmp_time = second_oTime
+            
+            if(bool_oTime == True):
+                ttimeData = data[data[:,0] == ttime]
+                ttimeData2 = ttimeData[ttimeData[:,1].astype(int) < 30]
+                ttimeData3 = ttimeData2[ttimeData2[:,4].astype(int) > 460000]
+                ttimeData4 = ttimeData3[ttimeData3[:,3].astype(float) < 25]
+                codes = ttimeData4[:,7]
+            
+                for code in (codes):
+                    if(code == b''):
                         continue;
-
-                    x = ti
-                    y = exportData[:i+1,3].astype(float)
-                    if(len(y) <= 1):
-                        break
-                    level = 1
-                    fit = sp.polyfit(x, y, level)
-                    gradient = sp.around(fit[0]*10, decimals=2)
+                    exportData = data[data[:,7] == code]
+                    
+                    xtime = time.strptime(exportData[0,0].decode('utf-8'), '%H:%M:%S')
+                    firstSecond = datetime.timedelta(hours=xtime.tm_hour,minutes=xtime.tm_min,seconds=xtime.tm_sec).total_seconds()
+                
+                    ti = sp.array([])
     
-                    maxr = 100000
-                    ry = (exportData[:i+1,4].astype(float))/maxr
-                    srlist = [b - a for a,b in zip(ry,ry[1:])]
-                    srfit = sp.polyfit(x[:-1], srlist, level)
-                    srgrad = sp.around(srfit[0]*10, decimals=2)
+                    i = -1
+                    for ei, et in enumerate(exportData[:, 0]):
+                        tsi = time.strptime(et.decode('utf-8'), '%H:%M:%S')
+                        sect = datetime.timedelta(hours=tsi.tm_hour,minutes=tsi.tm_min,seconds=tsi.tm_sec).total_seconds()
+                        v_time = sect - firstSecond
+                        ti = sp.append(ti, (v_time)/10)
+                        if(second_oTime == sect):
+                            i = ei
+                            break;
+                        
+                    if(i == -1): continue
+                    c = exportData[:i+1, 3].astype(float)
+    
+                    if(True in (c > 25)):
+                        continue;
+                    rate = exportData[i, 3].decode('UTF-8')
+                    grade = int(exportData[i, 1].decode('UTF-8'))
+                    gr = int(exportData[i, 4].decode('UTF-8'))
+    
+                    ms_md = (exportData[i,5].astype(float))/(exportData[i,6].astype(float))
+                    sms_md = sp.sum((sp.sum(exportData[:i+1,5].astype(float)))/(sp.sum(exportData[:i+1,6].astype(float))))
 
-                    if(gradient >= 0.7 and srgrad > -0.01):
-                        setFile = open(os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + "m.txt"), 'w')
-                        setFile.write( str(code.decode('utf-8')) + ',' + str(float(rate)) + ',' + str(gradient) +  ',' + str_oTime + ',' + '1.05' + '\n')
-                        setFile.close()
+                    if(ms_md > 1 and sms_md > 1):
+                        if(code.decode('utf-8') == '002140'):
+                            print(ttime.decode('utf-8'))
+                            print(code.decode('utf-8'))
+
+                        x = ti
+                        y = exportData[:i+1,3].astype(float)
+                        if(len(y) <= 1):
+                            break
+                        level = 1
+                        fit = sp.polyfit(x, y, level)
+                        gradient = sp.around(fit[0]*10, decimals=2)
+            
+                        maxr = 100000
+                        ry = (exportData[:i+1,4].astype(float))/maxr
+                        srlist = [b - a for a,b in zip(ry,ry[1:])]
+                        srfit = sp.polyfit(x[:-1], srlist, level)
+                        srgrad = sp.around(srfit[0]*10, decimals=2)
+                        
+                        maxc = sp.argmax(exportData[i+1:,3].astype(float))
+    
+                        if(gradient >= 0.7 and srgrad > -0.01):
+           
+                            if(code.decode('utf-8') in mesuDict):
+                                mesuDict[code.decode('utf-8')] = mesuDict[code.decode('utf-8')] + 1
+                            else:
+                                mesuDict[code.decode('utf-8')] = mesuDict.get(code.decode('utf-8'), 0)
+                            
+                            if(mesuDict[code.decode('utf-8')] == 3 and (str(code.decode('utf-8')) not in comps)):
+                                comps.append(str(code.decode('utf-8')))
+                                setFile = open(os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + "m.txt"), 'a')
+                                setFile.write( str(code.decode('utf-8')) + ',' + str(float(rate)) + ',' + str(gradient) +  ',' + str_oTime + ',' + '2' + '\n')
+                                setFile.close()
+                             
+        except Exception as e:
+            continue
+
+
+print(today)
