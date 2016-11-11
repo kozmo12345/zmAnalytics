@@ -17,16 +17,16 @@ def plot_models(x, cs, msy, mdy, gry, models, mstime, fname=None, mx=None, ymax=
     plt.title("graph")
     plt.xlabel("Time")
     plt.ylabel("Rate")
-    plt.scatter(x, gry, s=5, marker='*', c=colors[0])
+    # plt.scatter(x, gry, s=5, marker='*', c=colors[0])
     # plt.scatter(x, msy, s=5, marker='_', c=colors[1])
     # plt.scatter(x, mdy, s=5, marker='.', c=colors[3])
     mx = sp.linspace(0, x[-1], 1000)
     plt.plot([mstime]*len(mx), mx, linestyle=':', linewidth=2, c='m')
-    # if models:
-    #     # if mx is None:
-    #         # mx = sp.linspace(0, x[-1], 1000)
-    #     for model, style, color in zip(models, linestyles, colors):
-    #         plt.plot(mx, model(mx), linestyle=style, linewidth=2, c=color)
+    if models:
+        if mx is None:
+            mx = sp.linspace(0, x[-1], 1000)
+        for model, style, color in zip(models, linestyles, colors):
+            plt.plot(mx, model(mx), linestyle=style, linewidth=2, c=color)
 
     plt.legend(["d=%i" % m.order for m in models], loc="upper right")
 
@@ -44,16 +44,17 @@ def toSecond(s):
     x = time.strptime(s.split(',')[0],'%H:%M:%S')
     return datetime.timedelta(hours=x.tm_hour,minutes=x.tm_min,seconds=x.tm_sec).total_seconds()
 
-# dates = ['2016-11-02', '2016-11-02', '2016-10-27', '2016-11-07', '2016-11-01', '2016-10-20', '2016-10-24', '2016-10-19', '2016-10-31', '2016-11-03', '2016-10-26', '2016-09-28', '2016-09-28', '2016-10-17', '2016-10-07', '2016-11-01', '2016-10-18', '2016-10-12', '2016-09-29', '2016-10-31', '2016-11-08', '2016-09-23', '2016-11-02', '2016-10-14', '2016-11-02', '2016-11-07', '2016-10-12', '2016-10-21', '2016-10-12', '2016-10-13', '2016-10-05', '2016-10-05', '2016-11-08', '2016-09-26', '2016-09-22', '2016-10-26', '2016-09-28', '2016-09-26', '2016-09-23', '2016-11-03', '2016-11-02', '2016-10-19', '2016-10-28', '2016-10-05', '2016-09-21', '2016-11-07', '2016-10-31', '2016-10-24', '2016-10-04', '2016-10-24', '2016-09-21', '2016-10-28', '2016-10-07']
+dates = ['2016-09-21', '2016-09-21', '2016-09-22', '2016-09-23', '2016-09-23', '2016-09-28', '2016-09-28', '2016-09-29', '2016-09-30', '2016-10-04', '2016-10-05', '2016-10-05', '2016-10-12', '2016-10-12', '2016-10-13', '2016-10-19', '2016-10-20', '2016-10-24', '2016-10-24', '2016-10-24', '2016-10-26', '2016-10-28', '2016-11-03', '2016-11-03', '2016-11-07', '2016-11-07', '2016-11-08', '2016-11-08', '2016-11-09', '2016-11-10', '2016-11-11']
 
-# bcodes = [b'011090', b'058220', b'051170', b'064480', b'002140', b'032280', b'017040', b'011500', b'139050', b'068330', b'201490', b'053950', b'057030', b'047400', b'005030', b'090150', b'007190', b'208640', b'012340', b'900280', b'104040', b'052600', b'090150', b'201490', b'049120', b'045660', b'220260', b'001420', b'049120', b'032800', b'047440', b'131100', b'090370', b'106240', b'100660', b'020180', b'050890', b'005030', b'049120', b'069330', b'201490', b'079170', b'086670', b'011500', b'049120', b'014990', b'002140', b'900280', b'002140', b'950140', b'007610', b'002140', b'004060']
+bcodes = [b'049120', b'007610', b'054540', b'100660', b'052600', b'057030', b'050890', b'012340', b'075970', b'002140', b'011500', b'131100', b'208640', b'049120', b'032800', b'011500', b'032280', b'950140', b'900280', b'017040', b'201490', b'086670', b'069330', b'068330', b'045660', b'064480', b'104040', b'090370', b'226350', b'042670', b'044380']
 
-# mesutimes = ['09:04:19', '09:07:46', '09:02:23', '09:11:05', '09:03:33', '09:04:54', '09:07:37', '09:04:56', '09:02:30', '09:11:05', '09:04:29', '09:06:30', '09:07:20', '09:12:47', '09:07:26', '09:07:27', '09:10:55', '09:03:35', '09:11:56', '09:06:15', '09:07:29', '09:11:12', '09:09:17', '09:06:26', '09:07:19', '09:03:35', '09:09:35', '09:12:53', '09:10:29', '09:07:36', '09:04:32', '09:04:14', '09:05:59', '09:02:44', '09:11:39', '09:03:44', '09:10:20', '09:05:04', '09:05:42', '09:08:59', '09:03:26', '09:12:17', '09:06:08', '09:03:26', '09:02:56', '09:02:41', '09:12:42', '09:02:58', '09:02:16', '09:02:31', '09:05:46', '09:07:29', '09:06:05']
-dates = ['2016-10-13', '2016-09-30']
+mesutimes = ['09:03:36', '09:09:06', '09:02:09', '09:02:52', '09:11:42', '09:08:00', '09:10:50', '09:12:36', '09:02:43', '09:03:16', '09:04:26', '09:04:53', '09:04:35', '09:10:53', '09:08:03', '09:05:20', '09:05:39', '09:03:04', '09:04:07', '09:07:52', '09:04:53', '09:06:41', '09:09:23', '09:11:38', '09:04:53', '09:11:38', '09:07:53', '09:08:20', '09:09:07', '09:01:12', '09:05:39']
 
-bcodes = [b'032800', b'075970']
+# dates = ['2016-10-13', '2016-09-30']
 
-mesutimes = ['09:08:03', '09:02:43']
+# bcodes = [b'032800', b'075970']
+
+# mesutimes = ['09:08:03', '09:02:43']
 
 for datei, da in enumerate(dates):
     
@@ -94,7 +95,6 @@ for datei, da in enumerate(dates):
             str_medoTime = t.decode('utf-8')
             break;
     
-    # fa = []
     seecode = ''
     sd = 0
     for ci, code in enumerate(codes):
@@ -133,6 +133,8 @@ for datei, da in enumerate(dates):
 
         mesuIndex = mesuIndex+1
         y = exportData[:mesuIndex+1,3].astype(float)
+        maxRate = max(exportData[mesuIndex:, 3].astype(float))
+        mesuRate = exportData[mesuIndex,3].astype(float)
         print(len(y))
         print(dates[datei])
         print(bcodes[datei])
@@ -140,13 +142,13 @@ for datei, da in enumerate(dates):
             break
 
         level = 1
-        fit = sp.polyfit(ti[:mesuIndex+1], y, 7)
+        fit = sp.polyfit(ti[:mesuIndex+1], y, 1)
         gradient = sp.around(fit[0]*10, decimals=2)
         f1 = sp.poly1d(fit)
-        f2 = sp.poly1d(sp.polyfit(ti[:mesuIndex+1], y, 11))
-        f3 = sp.poly1d(sp.polyfit(ti[:mesuIndex+1], y, 20))
-        f10 = sp.poly1d(sp.polyfit(ti[:mesuIndex+1], y, 30))
-        f100 = sp.poly1d(sp.polyfit(ti[:mesuIndex+1], y, 40))
+        # f2 = sp.poly1d(sp.polyfit(ti[:mesuIndex+1], y, 11))
+        # f3 = sp.poly1d(sp.polyfit(ti[:mesuIndex+1], y, 20))
+        # f10 = sp.poly1d(sp.polyfit(ti[:mesuIndex+1], y, 30))
+        # f100 = sp.poly1d(sp.polyfit(ti[:mesuIndex+1], y, 40))
 
         img_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)), "img")
-        plot_models(ti, c, msy, mdy, ry,[f1, f2, f3, f10, f100], mstime = ((sec_mesutime - firstSecond)/10) ,fname = os.path.join(img_dir, str(dates[datei])+ '_' +str(bcodes[datei]) + '_' + str(gradient) + ".png")) 
+        plot_models(ti, c, msy, mdy, ry,[f1], mstime = ((sec_mesutime - firstSecond)/10) ,fname = os.path.join(img_dir, str(dates[datei])+ '_' +str(bcodes[datei]) + '_' + str(maxRate - mesuRate) + ".png")) 

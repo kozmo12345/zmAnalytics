@@ -10,7 +10,7 @@ import time
 sp.random.seed(3)
 
 now = datetime.datetime.now()
-today = '2016-10-13'
+today = '2016-11-11'
 hour = now.hour
 minute = now.minute
 second = now.second - 1
@@ -82,45 +82,43 @@ for timeIndex, ttime in enumerate(times):
             grade = int(exportData[i, 1].decode('UTF-8'))
             gr = int(exportData[i, 4].decode('UTF-8'))
             
-            if(grade < 30 and gr > 500000  and float(rate) < 26):
-                ms_md = (exportData[i,5].astype(float))/(exportData[i,6].astype(float))
-                sms_md = sp.sum((sp.sum(exportData[:i+1,5].astype(float)))/(sp.sum(exportData[:i+1,6].astype(float))))
+            ms_md = (exportData[i,5].astype(float))/(exportData[i,6].astype(float))
+            sms_md = sp.sum((sp.sum(exportData[:i+1,5].astype(float)))/(sp.sum(exportData[:i+1,6].astype(float))))
             
-                if(ms_md > 1 and sms_md > 1):
-                    x = ti
-                    y = exportData[:i+1,3].astype(float)
-                    if(len(y) <= 10):
-                        break
-                    level = 1
-                    fit = sp.polyfit(x, y, level)
-                    gradient = sp.around(fit[0]*10, decimals=2)
+            if(ms_md > 1 and sms_md > 1):
+                x = ti
+                y = exportData[:i+1,3].astype(float)
+                if(len(y) <= 10):
+                    break
+                level = 1
+                fit = sp.polyfit(x, y, level)
+                gradient = sp.around(fit[0]*10, decimals=2)
     
-                    maxr = 100000
-                    ry = (exportData[:i+1,4].astype(float))/maxr
-                    srlist = [b - a for a,b in zip(ry,ry[1:])]
-                    srfit = sp.polyfit(x[:-1], srlist, level)
-                    srgrad = sp.around(srfit[0]*10, decimals=2)
-                    
-                    maxc = sp.argmax(exportData[i+1:,3].astype(float))
+                maxr = 100000
+                ry = (exportData[:i+1,4].astype(float))/maxr
+                srlist = [b - a for a,b in zip(ry,ry[1:])]
+                srfit = sp.polyfit(x[:-1], srlist, level)
+                srgrad = sp.around(srfit[0]*10, decimals=2)
+                
+                maxc = sp.argmax(exportData[i+1:,3].astype(float))
 
-                    smaxr = exportData[i,4].astype(float)/(v_time)
+                smaxr = exportData[i,4].astype(float)/(v_time)
 
-                    sry = (exportData[:i+1,4].astype(float))/smaxr
-                    ssrlist = [b - a for a,b in zip(sry,sry[1:])]
-                    ssrfit = sp.polyfit(x[:-1], ssrlist, level)
-                    ssrgrad = sp.around(ssrfit[0]*10, decimals=2)
+                sry = (exportData[:i+1,4].astype(float))/smaxr
+                ssrlist = [b - a for a,b in zip(sry,sry[1:])]
+                ssrfit = sp.polyfit(x[:-1], ssrlist, level)
+                ssrgrad = sp.around(ssrfit[0]*10, decimals=2)
 
-                    if(gradient >= 0.7 and srgrad > -0.01):
-                        if(code.decode('utf-8') in mesuDict):
-                            mesuDict[code.decode('utf-8')] = mesuDict[code.decode('utf-8')] + 1
-                        else:
-                            mesuDict[code.decode('utf-8')] = mesuDict.get(code.decode('utf-8'), 0)
-                        if(code.decode('utf-8') == '002140'):
-                            print(ttime.decode('utf-8') + '  ' + code.decode('utf-8'))
-                        if(mesuDict[code.decode('utf-8')] == 3):
-                            print(exportData[i:i + maxc + 1, 3].astype(float))
-                            setFile = open(os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + "mo3.txt"), 'a')
-                            setFile.write( str(code.decode('utf-8')) + ',' + str(float(rate)) + ',' + str(exportData[maxc + i + 1,3]) +  ',' + str(ssrgrad) +  ',' + str_oTime + ',' + str(gr)  + '\n')
-                            setFile.close()
+                if(gradient >= 0.7 and srgrad > -0.01):
+                    if(code.decode('utf-8') in mesuDict):
+                        mesuDict[code.decode('utf-8')] = mesuDict[code.decode('utf-8')] + 1
+                    else:
+                        mesuDict[code.decode('utf-8')] = mesuDict.get(code.decode('utf-8'), 0)
+
+                    if(mesuDict[code.decode('utf-8')] == 3):
+                        print(exportData[i:i + maxc + 1, 3].astype(float))
+                        setFile = open(os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + "mo3.txt"), 'a')
+                        setFile.write( str(code.decode('utf-8')) + ',' + str(float(rate)) + ',' + str(exportData[maxc + i + 1,3]) +  ',' + str(ssrgrad) +  ',' + str_oTime + ',' + str(gr)  + '\n')
+                        setFile.close()
         
 print(today)
