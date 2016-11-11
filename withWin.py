@@ -42,7 +42,7 @@ except:
         else:
             raise
 
-setFilePath = os.path.join("C:\\", "Dropbox\\mesu\\Data\\" + today + "\\" + today + "m.txt");
+setFilePath = os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + "m.txt");
 dirn2 = os.path.dirname(setFilePath)
 
 try:
@@ -178,7 +178,6 @@ while(True):
                             
                             if(mesuDict[code.decode('utf-8')] == 3 and (str(code.decode('utf-8')) not in comps)):
                                 comps.append(str(code.decode('utf-8')))
-                                print(comps)
                                 setFile = open(setFilePath, 'a')
                                 setFile.write( str(code.decode('utf-8')) + ',' + str(float(rate)) + ',' + str(gradient) +  ',' + str_oTime + ',' + '1.02' + '\n')
                                 setFile.close()
