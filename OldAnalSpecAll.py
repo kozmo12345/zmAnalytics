@@ -144,6 +144,7 @@ analFile.write( 'day,code,nextRate,maxRate,mesuTime,gr,index,minRate,nowMaxRate,
 for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
     for subdirname in dirnames:
         today = subdirname
+        setFilePath = os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + "moa4.txt");
 
         setFile = open(setFilePath, 'r')
         
