@@ -12,6 +12,8 @@ sp.random.seed(3)
 now = datetime.datetime.now()
 print(str(datetime.datetime.now()))
 
+def error(f, x, y):
+    return (f(x) - y)
 
 analFilePath = os.path.join("C:\\", "Dropbox\\Data\\" + "anal.txt");
 analFile = open(analFilePath, 'w')
@@ -29,6 +31,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
         codes = []
         msTimes = []
         mxTimes = []
+        errList = []
 
         print("file open")
         for line in setFile:
@@ -52,6 +55,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
         times = sp.unique(data[data[:,0] != b''][:,0])
 
         tmp_time = 0
+        tmp_index = 0
         mesuDict = dict()
 
         for timeIndex, ttime in enumerate(times):
@@ -65,6 +69,8 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
                 for i, t in enumerate(times):
                     x = time.strptime(t.decode('utf-8'), '%H:%M:%S')
                     nt = datetime.timedelta(hours=x.tm_hour,minutes=x.tm_min,seconds=x.tm_sec).total_seconds()
+                    if(tmp_index == 0):
+                        tmp_index = i
                     if(nt > second_oTime):
                         str_oTime = t.decode('utf-8')
                         second_oTime = nt
@@ -132,8 +138,12 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
                         
                         maxc = sp.argmax(exportData[i+1:,3].astype(float))
 
-                        setFile.write( str(code) +  ',' + str(float(exportData[i+1, 3].decode('UTF-8'))) + ',' + str(exportData[maxc + i + 1,3].decode('UTF-8')) + ',' + str_oTime + ',' + str(gr)  + ',' + str( grade )  +  ',' + str( gradient )  +  ',' + str( srgrad )  +  ',' + str( sms_md )  +  '\n')
-
+                        gry = exportData[:tmp_index,4].astype(float)
+                        gfit = sp.polyfit(x[:tmp_index], gry, level)
+                        err = error(gfit, x[i], gry[i])
+                        errList.append(int(err))
+                        setFile.write( str(code) +  ',' + str(float(exportData[i+1, 3].decode('UTF-8'))) + ',' + str(exportData[maxc + i + 1,3].decode('UTF-8')) + ',' + str_oTime + ',' + str(gr)  + ',' + str( grade )  +  ',' + str( gradient )  +  ',' + str( srgrad )  +  ',' + str( sms_md )  +  ',' + str( err )  +  ',' + str( sp.sum(errList) )  +  '\n')
+                        tmp_index = i
                                  
             except Exception as e:
                 print(e)
@@ -143,7 +153,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
 analFilePath = os.path.join("C:\\", "Dropbox\\Data\\" + "anal.txt");
 analFile = open(analFilePath, 'w')
 
-analFile.write( 'day,code,nextRate,maxRate,mesuTime,gr,grade,gradient,srgrad,sms_md\n')
+analFile.write( 'day,code,nextRate,maxRate,mesuTime,gr,grade,gradient,srgrad,sms_md,err,serr\n')
 
 for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
     for subdirname in dirnames:
