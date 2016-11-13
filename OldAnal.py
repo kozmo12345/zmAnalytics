@@ -10,7 +10,7 @@ import time
 sp.random.seed(3)
 
 now = datetime.datetime.now()
-today = '2016-11-11'
+today = '2016-09-21'
 hour = now.hour
 minute = now.minute
 second = now.second - 1
@@ -116,7 +116,6 @@ for timeIndex, ttime in enumerate(times):
                         mesuDict[code.decode('utf-8')] = mesuDict.get(code.decode('utf-8'), 0)
 
                     if(mesuDict[code.decode('utf-8')] == 3):
-                        print(exportData[i:i + maxc + 1, 3].astype(float))
                         setFile = open(os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + "mo3.txt"), 'a')
                         setFile.write( str(code.decode('utf-8')) + ',' + str(float(rate)) + ',' + str(exportData[maxc + i + 1,3]) +  ',' + str(ssrgrad) +  ',' + str_oTime + ',' + str(gr)  + '\n')
                         setFile.close()
