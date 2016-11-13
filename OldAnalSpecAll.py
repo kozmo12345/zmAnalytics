@@ -32,7 +32,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
         msTimes = []
         mxTimes = []
         errList = []
-
+        tmp_index = []
         print("file open")
         for line in setFile:
             codes.append(line.split(',')[0])
@@ -41,7 +41,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
             msTimes.append(msTime) 
             mxTime = datetime.timedelta(hours=int(line.split(',')[9].split(':')[0]),minutes=int(line.split(',')[9].split(':')[1]),seconds=int(line.split(',')[9].split(':')[2])).total_seconds()
             mxTimes.append(mxTime)
-
+            tmp_index.append(0)
 
         print(codes)           
         print(msTimes)           
@@ -55,7 +55,6 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
         times = sp.unique(data[data[:,0] != b''][:,0])
 
         tmp_time = 0
-        tmp_index = 0
         mesuDict = dict()
 
         for timeIndex, ttime in enumerate(times):
@@ -69,8 +68,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
                 for i, t in enumerate(times):
                     x = time.strptime(t.decode('utf-8'), '%H:%M:%S')
                     nt = datetime.timedelta(hours=x.tm_hour,minutes=x.tm_min,seconds=x.tm_sec).total_seconds()
-                    if(tmp_index == 0):
-                        tmp_index = i
+
                     if(nt > second_oTime):
                         str_oTime = t.decode('utf-8')
                         second_oTime = nt
@@ -83,11 +81,6 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
                 
                 print(today + str(ttime))
                 if(bool_oTime == True):
-                    # ttimeData = data[data[:,0] == ttime]
-                    # ttimeData2 = ttimeData[ttimeData[:,1].astype(int) < 30]
-                    # ttimeData3 = ttimeData2[ttimeData2[:,4].astype(int) > 460000]
-                    # ttimeData4 = ttimeData3[ttimeData3[:,3].astype(float) < 25]
-                    # codes = ttimeData4[:,7]
                     for codi,code in enumerate(codes):
                         if(code == b''):
                             continue;
@@ -96,7 +89,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
                             continue;
                         
                         exportData = data[data[:,7].astype(str) == code]
-                        # print(data)
+
                         xtime = time.strptime(exportData[0,0].decode('utf-8'), '%H:%M:%S')
                         firstSecond = datetime.timedelta(hours=xtime.tm_hour,minutes=xtime.tm_min,seconds=xtime.tm_sec).total_seconds()
                     
@@ -118,7 +111,6 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
                         rate = exportData[i, 3].decode('UTF-8')
                         grade = int(exportData[i, 1].decode('UTF-8'))
                         gr = int(exportData[i, 4].decode('UTF-8'))
-    
                         ms_md = (exportData[i,5].astype(float))/(exportData[i,6].astype(float))
                         sms_md = sp.sum((sp.sum(exportData[:i+1,5].astype(float)))/(sp.sum(exportData[:i+1,6].astype(float))))
                         
@@ -137,16 +129,19 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
                         srgrad = sp.around(srfit[0]*10, decimals=2)
                         
                         maxc = sp.argmax(exportData[i+1:,3].astype(float))
-
-                        gry = exportData[:tmp_index,4].astype(float)
-                        gfit = sp.polyfit(x[:tmp_index], gry, level)
-                        err = error(gfit, x[i], gry[i])
-                        errList.append(int(err))
+                        
+                        if(tmp_index[codi] != 0):
+                            gfit = sp.polyfit(x[:tmp_index[codi] + 1], exportData[:tmp_index[codi] + 1, 4].astype(int), level)
+                            f1 = sp.poly1d(gfit)
+                            err = error(f1, x[-1], gr) / 10000
+                            errList.append(int(err))
+                        else:
+                            err = 0
                         setFile.write( str(code) +  ',' + str(float(exportData[i+1, 3].decode('UTF-8'))) + ',' + str(exportData[maxc + i + 1,3].decode('UTF-8')) + ',' + str_oTime + ',' + str(gr)  + ',' + str( grade )  +  ',' + str( gradient )  +  ',' + str( srgrad )  +  ',' + str( sms_md )  +  ',' + str( err )  +  ',' + str( sp.sum(errList) )  +  '\n')
-                        tmp_index = i
+                        tmp_index[codi] = i
                                  
             except Exception as e:
-                print(e)
+                print("---------------------------------------" + str(e))
                 continue
 
 
