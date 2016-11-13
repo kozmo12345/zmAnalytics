@@ -17,25 +17,26 @@ def plot_models(x, cs, msy, mdy, gry, models, mstime, fname=None, mx=None, ymax=
     plt.title("graph")
     plt.xlabel("Time")
     plt.ylabel("Rate")
-    # plt.scatter(x, gry, s=5, marker='*', c=colors[0])
+    plt.scatter(x, gry, s=5, marker='*', c=colors[0])
     # plt.scatter(x, msy, s=5, marker='_', c=colors[1])
     # plt.scatter(x, mdy, s=5, marker='.', c=colors[3])
     mx = sp.linspace(0, x[-1], 1000)
     plt.plot([mstime]*len(mx), mx, linestyle=':', linewidth=2, c='m')
-    if models:
-        if mx is None:
-            mx = sp.linspace(0, x[-1], 1000)
-        for model, style, color in zip(models, linestyles, colors):
-            plt.plot(mx, model(mx), linestyle=style, linewidth=2, c=color)
+    # if models:
+    #     if mx is None:
+      #      mx = sp.linspace(0, x[-1], 1000)
+      #  for model, style, color in zip(models, linestyles, colors):
+       #     plt.plot(mx, model(mx), linestyle=style, linewidth=2, c=color)
 
     plt.legend(["d=%i" % m.order for m in models], loc="upper right")
-
+    
     plt.autoscale(tight=True)
     plt.ylim(ymin=0)
     if ymax: 
         plt.ylim(ymax=ymax)
     if xmin:
         plt.xlim(xmin=xmin)
+    plt.xlim(xmax=1000)
     plt.ylim(ymax=40)
     plt.grid(True, linestyle='-', color='0.75')
     plt.savefig(fname)
