@@ -127,7 +127,12 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
                         srlist = [b - a for a,b in zip(ry,ry[1:])]
                         srfit = sp.polyfit(x[:-1], srlist, level)
                         srgrad = sp.around(srfit[0]*10, decimals=2)
-                        
+
+                        ryt = (exportData[i-9:i+1,4].astype(float))/maxr
+                        srlistt = [b - a for a,b in zip(ryt,ryt[1:])]
+                        srfitt = sp.polyfit(x[:9], srlistt, level)
+                        srgradt = sp.around(srfitt[0]*10, decimals=2)
+
                         maxc = sp.argmax(exportData[i+1:,3].astype(float))
                         
                         if(tmp_index[codi] != 0):
@@ -137,7 +142,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
                             errList.append(int(err))
                         else:
                             err = 0
-                        setFile.write( str(code) +  ',' + str(float(exportData[i+1, 3].decode('UTF-8'))) + ',' + str(exportData[maxc + i + 1,3].decode('UTF-8')) + ',' + str_oTime + ',' + str(gr)  + ',' + str( grade )  +  ',' + str( gradient )  +  ',' + str( srgrad )  +  ',' + str( sms_md )  +  ',' + str( err )  +  ',' + str( sp.sum(errList) )  +  '\n')
+                        setFile.write( str(code) +  ',' + str(float(exportData[i+1, 3].decode('UTF-8'))) + ',' + str(exportData[maxc + i + 1,3].decode('UTF-8')) + ',' + str_oTime + ',' + str(gr)  + ',' + str( grade )  +  ',' + str( gradient )  +  ',' + str( srgrad )  +  ',' + str( sms_md )  +  ',' + str( err )  +  ',' + str( sp.sum(errList) )  +  ',' + str( srgradt )  +  '\n')
                         tmp_index[codi] = i
                                  
             except Exception as e:
