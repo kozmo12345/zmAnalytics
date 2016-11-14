@@ -86,7 +86,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
                         if(code == b''):
                             continue;
 
-                        if(second_oTime < msTimes[codi] or second_oTime > mxTimes[codi]):
+                        if(second_oTime < msTimes[codi] or second_oTime > mxTimes[codi] + 120):
                             continue;
                         
                         exportData = data[data[:,7].astype(str) == code]
@@ -135,7 +135,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
                             gfit = sp.polyfit(x[:tmp_index[codi] + 1], exportData[:tmp_index[codi] + 1, 4].astype(int), level)
                             f1 = sp.poly1d(gfit)
                             err = error(f1, x[-1], gr) / 10000
-                            errDic[code].append(int(err))
+                            errDic[code].append((gradient))
                             
                             if(len(errDic[code]) > 1):
                                srlistt = [b - a for a,b in zip(errDic[code],errDic[code][1:])]
