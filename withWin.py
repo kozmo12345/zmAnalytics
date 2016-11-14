@@ -64,7 +64,7 @@ setFile.close()
 
 while(True):
     data = sp.genfromtxt(realfilePath, delimiter="\t", dtype='|S20')
-
+    
     try:
         times = sp.unique(data[data[:,0] != b''][:,0])
     except Exception as e:
@@ -77,11 +77,11 @@ while(True):
     now = datetime.datetime.now()
     nowTime = datetime.timedelta(hours=now.hour,minutes=now.minute,seconds=now.second).total_seconds()
 
-    if(nowTime > endTime):
-        break;
-
+    # if(nowTime > endTime):
+    #     break;
+    print(1)
     print(today + str(times[len(times)-1]))
-
+    
     for ttime in (times):
         
         try:
@@ -179,7 +179,7 @@ while(True):
                             if(mesuDict[code.decode('utf-8')] == 3 and (str(code.decode('utf-8')) not in comps)):
                                 comps.append(str(code.decode('utf-8')))
                                 setFile = open(setFilePath, 'a')
-                                setFile.write( str(code.decode('utf-8')) + ',' + str(float(rate)) + ',' + str(gradient) +  ',' + str_oTime + ',' + '1.02' + '\n')
+                                setFile.write( str(code.decode('utf-8')) + ',' + str(float(rate)) + ',' + str(gradient) +  ',' + str_oTime + ',' + '1.02' + ',' + str(datetime.datetime.now()) + '\n')
                                 setFile.close()
                              
         except Exception as e:
