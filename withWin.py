@@ -26,6 +26,8 @@ today = now.strftime('%Y-%m-%d')
 
 startTime = datetime.timedelta(hours=9,minutes=00,seconds=00).total_seconds()
 endTime = datetime.timedelta(hours=9,minutes=13,seconds=00).total_seconds()
+earlyTime = datetime.timedelta(hours=9,minutes=4,seconds=00).total_seconds()
+rateTime = datetime.timedelta(hours=9,minutes=10,seconds=00).total_seconds()
 
 comps = []
 
@@ -176,8 +178,10 @@ while(True):
                             
                             if(mesuDict[code.decode('utf-8')] == 3 and (str(code.decode('utf-8')) not in comps)):
                                 comps.append(str(code.decode('utf-8')))
-                                if( sms_md > 1.2 and gradient > 2.5 ):
+                                if( second_oTime < rateTime and sms_md > 1.2 and gradient > 2 and gradient < 5 ):
                                     wanna = '1.05'
+                                elif(second_oTime < earlyTime):
+                                    wanna = '1.03'
                                 else:
                                     wanna = '1.02'
                                     
