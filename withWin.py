@@ -64,7 +64,7 @@ setFile.close()
 
 while(True):
     data = sp.genfromtxt(realfilePath, delimiter="\t", dtype='|S20')
-    
+
     try:
         times = sp.unique(data[data[:,0] != b''][:,0])
     except Exception as e:
@@ -77,11 +77,11 @@ while(True):
     now = datetime.datetime.now()
     nowTime = datetime.timedelta(hours=now.hour,minutes=now.minute,seconds=now.second).total_seconds()
 
-    # if(nowTime > endTime):
-    #     break;
-    print(1)
+    if(nowTime > endTime):
+        break;
+
     print(today + str(times[len(times)-1]))
-    
+
     for ttime in (times):
         
         try:
@@ -183,6 +183,7 @@ while(True):
                                 setFile.close()
                              
         except Exception as e:
+            print(e)
             continue
 
 
