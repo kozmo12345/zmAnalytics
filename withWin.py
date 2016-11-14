@@ -79,8 +79,8 @@ while(True):
     now = datetime.datetime.now()
     nowTime = datetime.timedelta(hours=now.hour,minutes=now.minute,seconds=now.second).total_seconds()
 
-    # if(nowTime > endTime):
-    #     break;
+    if(nowTime > endTime):
+        break;
 
     print(today + str(times[len(times)-1]))
 
