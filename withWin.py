@@ -77,8 +77,8 @@ while(True):
     now = datetime.datetime.now()
     nowTime = datetime.timedelta(hours=now.hour,minutes=now.minute,seconds=now.second).total_seconds()
 
-    if(nowTime > endTime):
-        break;
+    # if(nowTime > endTime):
+    #     break;
 
     print(today + str(times[len(times)-1]))
 
@@ -167,8 +167,6 @@ while(True):
                         srfit = sp.polyfit(x[:-1], srlist, level)
                         srgrad = sp.around(srfit[0]*10, decimals=2)
                         
-                        maxc = sp.argmax(exportData[i+1:,3].astype(float))
-    
                         if(gradient >= 0.7 and srgrad > -0.01):
            
                             if(code.decode('utf-8') in mesuDict):
@@ -178,13 +176,17 @@ while(True):
                             
                             if(mesuDict[code.decode('utf-8')] == 3 and (str(code.decode('utf-8')) not in comps)):
                                 comps.append(str(code.decode('utf-8')))
+                                if( sms_md > 1.2 and gradient > 2.5 ):
+                                    wanna = '1.05'
+                                else:
+                                    wanna = '1.02'
+                                    
                                 setFile = open(setFilePath, 'a')
-                                setFile.write( str(code.decode('utf-8')) + ',' + str(float(rate)) + ',' + str(gradient) +  ',' + str_oTime + ',' + '1.02' + ',' + str(datetime.datetime.now()) + '\n')
+                                setFile.write( str(code.decode('utf-8')) + ',' + str(float(rate)) + ',' + str(gradient) +  ',' + str_oTime + ',' + wanna + ',' + str(datetime.datetime.now().strftime('%H:%M:%S')) + '\n')
                                 setFile.close()
                              
         except Exception as e:
             print(e)
             continue
-
 
 print(today)

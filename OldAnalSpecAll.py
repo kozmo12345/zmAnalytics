@@ -31,7 +31,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
         codes = []
         msTimes = []
         mxTimes = []
-        errList = []
+        errDic = dict()
         tmp_index = []
         print("file open")
         for line in setFile:
@@ -41,6 +41,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
             msTimes.append(msTime) 
             mxTime = datetime.timedelta(hours=int(line.split(',')[9].split(':')[0]),minutes=int(line.split(',')[9].split(':')[1]),seconds=int(line.split(',')[9].split(':')[2])).total_seconds()
             mxTimes.append(mxTime)
+            errDic[line.split(',')[0]] = []
             tmp_index.append(0)
 
         print(codes)           
@@ -127,22 +128,23 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
                         srlist = [b - a for a,b in zip(ry,ry[1:])]
                         srfit = sp.polyfit(x[:-1], srlist, level)
                         srgrad = sp.around(srfit[0]*10, decimals=2)
-
-                        ryt = (exportData[i-9:i+1,4].astype(float))/maxr
-                        srlistt = [b - a for a,b in zip(ryt,ryt[1:])]
-                        srfitt = sp.polyfit(x[:9], srlistt, level)
-                        srgradt = sp.around(srfitt[0]*10, decimals=2)
-
+                        srgradt = 99999
                         maxc = sp.argmax(exportData[i+1:,3].astype(float))
                         
                         if(tmp_index[codi] != 0):
                             gfit = sp.polyfit(x[:tmp_index[codi] + 1], exportData[:tmp_index[codi] + 1, 4].astype(int), level)
                             f1 = sp.poly1d(gfit)
                             err = error(f1, x[-1], gr) / 10000
-                            errList.append(int(err))
+                            errDic[code].append(int(err))
+                            
+                            if(len(errDic[code]) > 1):
+                               srlistt = [b - a for a,b in zip(errDic[code],errDic[code][1:])]
+                               srfitt = sp.polyfit(x[:len(errDic[code]) - 1], srlistt, level)
+                               srgradt = sp.around(srfitt[0]*10, decimals=2)
+
                         else:
                             err = 0
-                        setFile.write( str(code) +  ',' + str(float(exportData[i+1, 3].decode('UTF-8'))) + ',' + str(exportData[maxc + i + 1,3].decode('UTF-8')) + ',' + str_oTime + ',' + str(gr)  + ',' + str( grade )  +  ',' + str( gradient )  +  ',' + str( srgrad )  +  ',' + str( sms_md )  +  ',' + str( err )  +  ',' + str( sp.sum(errList) )  +  ',' + str( srgradt )  +  '\n')
+                        setFile.write( str(code) +  ',' + str(float(exportData[i+1, 3].decode('UTF-8'))) + ',' + str(exportData[maxc + i + 1,3].decode('UTF-8')) + ',' + str_oTime + ',' + str(gr)  + ',' + str( grade )  +  ',' + str( gradient )  +  ',' + str( srgrad )  +  ',' + str( sms_md )  +  ',' + str( err )  +  ',' + str( sp.sum(errDic[code]) )  +  ',' + str( srgradt )  +  '\n')
                         tmp_index[codi] = i
                                  
             except Exception as e:
@@ -153,7 +155,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
 analFilePath = os.path.join("C:\\", "Dropbox\\Data\\" + "anal.txt");
 analFile = open(analFilePath, 'w')
 
-analFile.write( 'day,code,nextRate,maxRate,mesuTime,gr,grade,gradient,srgrad,sms_md,err,serr\n')
+analFile.write( 'day,code,nextRate,maxRate,mesuTime,gr,grade,gradient,srgrad,sms_md,err,serr,sserr\n')
 
 for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
     for subdirname in dirnames:
