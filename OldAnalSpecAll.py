@@ -33,6 +33,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
         mxTimes = []
         errDic = dict()
         tmp_index = []
+        mesuStart = []
         print("file open")
         for line in setFile:
             codes.append(line.split(',')[0])
@@ -43,7 +44,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
             mxTimes.append(mxTime)
             errDic[line.split(',')[0]] = []
             tmp_index.append(0)
-
+            mesuStart.append(0)
         print(codes)           
         print(msTimes)           
         print(mxTimes)           
@@ -86,7 +87,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
                         if(code == b''):
                             continue;
 
-                        if(second_oTime < msTimes[codi] or second_oTime > mxTimes[codi] + 120):
+                        if(second_oTime < msTimes[codi] or second_oTime > mxTimes[codi] + 360):
                             continue;
                         
                         exportData = data[data[:,7].astype(str) == code]
@@ -108,38 +109,40 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
                             
                         if(i == -1): continue
                         c = exportData[:i+1, 3].astype(float)
-    
+
+                        if(i > 3 and mesuStart[codi] == 0):
+                            mesuStart[codi] = i - 4
+
                         rate = exportData[i, 3].decode('UTF-8')
                         grade = int(exportData[i, 1].decode('UTF-8'))
                         gr = int(exportData[i, 4].decode('UTF-8'))
                         ms_md = (exportData[i,5].astype(float))/(exportData[i,6].astype(float))
-                        sms_md = sp.sum((sp.sum(exportData[:i+1,5].astype(float)))/(sp.sum(exportData[:i+1,6].astype(float))))
+                        sms_md = sp.sum((sp.sum(exportData[mesuStart[codi]:i+1,5].astype(float)))/(sp.sum(exportData[mesuStart[codi]:i+1,6].astype(float))))
                         
                         x = ti
                         y = exportData[:i+1,3].astype(float)
                         if(len(y) <= 1):
                             break
                         level = 1
-                        fit = sp.polyfit(x, y, level)
+                        
+                        fit = sp.polyfit(x[:i - (mesuStart[codi]) + 1], y[mesuStart[codi]:i+1], level)
                         gradient = sp.around(fit[0]*10, decimals=2)
             
                         maxr = 100000
-                        ry = (exportData[:i+1,4].astype(float))/maxr
+                        ry = (exportData[mesuStart[codi]:i+1,4].astype(float))/maxr
                         srlist = [b - a for a,b in zip(ry,ry[1:])]
-                        srfit = sp.polyfit(x[:-1], srlist, level)
+                        srfit = sp.polyfit(x[:i - (mesuStart[codi])], srlist, level)
                         srgrad = sp.around(srfit[0]*10, decimals=2)
                         srgradt = 99999
                         maxc = sp.argmax(exportData[i+1:,3].astype(float))
                         
                         if(tmp_index[codi] != 0):
-                            gfit = sp.polyfit(x[:tmp_index[codi] + 1], exportData[:tmp_index[codi] + 1, 4].astype(int), level)
-                            f1 = sp.poly1d(gfit)
-                            err = error(f1, x[-1], gr) / 10000
+                            err = 1
                             errDic[code].append((gradient))
                             
                             if(len(errDic[code]) > 1):
                                srlistt = [b - a for a,b in zip(errDic[code],errDic[code][1:])]
-                               srfitt = sp.polyfit(x[:len(errDic[code]) - 1], srlistt, level)
+                               srfitt = sp.polyfit(x[:len(errDic[code])], errDic[code], level)
                                srgradt = sp.around(srfitt[0]*10, decimals=2)
 
                         else:

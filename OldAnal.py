@@ -10,7 +10,7 @@ import time
 sp.random.seed(3)
 
 now = datetime.datetime.now()
-today = '2016-09-21'
+today = '2016-11-14'
 hour = now.hour
 minute = now.minute
 second = now.second - 1
@@ -20,8 +20,8 @@ realfilePath = os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + "
 data = sp.genfromtxt(realfilePath, delimiter="\t", dtype='|S20')
 times = sp.unique(data[data[:,0] != b''][:,0])
 
-startTime = datetime.timedelta(hours=9,minutes=1,seconds=00).total_seconds()
-endTime = datetime.timedelta(hours=9,minutes=6,seconds=20).total_seconds()
+startTime = datetime.timedelta(hours=9,minutes=00,seconds=00).total_seconds()
+endTime = datetime.timedelta(hours=9,minutes=13,seconds=00).total_seconds()
 tmp_time = 0
 mesuDict = dict()
 
@@ -85,7 +85,7 @@ for timeIndex, ttime in enumerate(times):
             ms_md = (exportData[i,5].astype(float))/(exportData[i,6].astype(float))
             sms_md = sp.sum((sp.sum(exportData[:i+1,5].astype(float)))/(sp.sum(exportData[:i+1,6].astype(float))))
             
-            if(ms_md > 1 and sms_md > 1):
+            if(sms_md > 1):
                 x = ti
                 y = exportData[:i+1,3].astype(float)
                 if(len(y) <= 10):
