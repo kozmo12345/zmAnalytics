@@ -23,11 +23,13 @@ def readData(filePath):
 
 now = datetime.datetime.now()
 today = now.strftime('%Y-%m-%d')
+today = '2016-09-21'
 
 startTime = datetime.timedelta(hours=9,minutes=00,seconds=00).total_seconds()
 endTime = datetime.timedelta(hours=9,minutes=13,seconds=00).total_seconds()
 earlyTime = datetime.timedelta(hours=9,minutes=4,seconds=00).total_seconds()
 rateTime = datetime.timedelta(hours=9,minutes=10,seconds=00).total_seconds()
+closeTime = datetime.timedelta(hours=15,minutes=15,seconds=00).total_seconds()
 
 comps = []
 
@@ -46,7 +48,6 @@ except:
 
 setFilePath = os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + "m.txt");
 dirn2 = os.path.dirname(setFilePath)
-
 try:
     os.stat(dirn2)
 except:
@@ -58,11 +59,27 @@ except:
         else:
             raise
 
+mdFilePath = os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + "d.txt");
+dirn3 = os.path.dirname(setFilePath)
+try:
+    os.stat(dirn3)
+except:
+    try:
+        os.makedirs(dirn3)
+    except OSError as exc: 
+        if exc.errno == errno.EEXIST and os.path.isdir(dirn3):
+            pass
+        else:
+            raise
+
 realfile = open(realfilePath, 'a')
 realfile.close()
 
 setFile = open(setFilePath, 'w')
 setFile.close()
+
+mdFile = open(mdFilePath, 'w')
+mdFile.close()
 
 while(True):
     data = sp.genfromtxt(realfilePath, delimiter="\t", dtype='|S20')
@@ -74,12 +91,23 @@ while(True):
         continue
     
     mesuDict = dict()
+    mesuStart = dict()
+    smm = dict()
+    
     tmp_time = 0
 
     now = datetime.datetime.now()
     nowTime = datetime.timedelta(hours=now.hour,minutes=now.minute,seconds=now.second).total_seconds()
 
-    if(nowTime > endTime):
+    if(nowTime > endTime and len(mesuDict) == 0):
+        break;
+
+    if(nowTime >= closeTime):
+        if(len(mesuDict) > 0):
+            for k, v in mesuDict:
+                mdFile = open(mdFilePath, 'a')
+                mdFile.write(str(k) + ',' + str('end') + ',' + str(datetime.datetime.now().strftime('%H:%M:%S')) + '\n')
+                mdFile.close()            
         break;
 
     print(today + str(times[len(times)-1]))
@@ -103,12 +131,13 @@ while(True):
             
             if(second_oTime < startTime):
                 continue;
-        
-            if(second_oTime > endTime):
-                break;
             
             if(tmp_time + 8 > second_oTime):
                 continue;
+
+            if(second_oTime > endTime and len(mesuDict) == 0):
+                break;
+
             tmp_time = second_oTime
             
             if(bool_oTime == True):
@@ -140,6 +169,19 @@ while(True):
                         
                     if(i == -1): continue
                     c = exportData[:i+1, 3].astype(float)
+
+                    if(code.decode('utf-8') in mesuDict and code.decode('utf-8') in mesuStart and mesuDict[code.decode('utf-8')] >= 3):
+                        mmRate = sp.sum((sp.sum(exportData[mesuStart[code.decode('utf-8')]:i+1,5].astype(float)))/(sp.sum(exportData[mesuStart[code.decode('utf-8')]:i+1,6].astype(float))))
+                        if(mmRate < 1 and smm[code.decode('utf-8')] == True):
+                            mdFile = open(mdFilePath, 'a')
+                            mdFile.write(str(code.decode('utf-8')) + ',' + str(float(exportData[i + 1, 3].decode('UTF-8'))) + ',' + str(datetime.datetime.now().strftime('%H:%M:%S')) + '\n')
+                            mdFile.close()
+                            del mesuDict[code.decode('utf-8')]
+                        else:
+                            smm[code.decode('utf-8')] = True
+
+                    if(second_oTime > endTime):
+                        continue;
     
                     if(True in (c > 25)):
                         continue;
@@ -151,10 +193,6 @@ while(True):
                     sms_md = sp.sum((sp.sum(exportData[:i+1,5].astype(float)))/(sp.sum(exportData[:i+1,6].astype(float))))
 
                     if(ms_md > 1 and sms_md > 1):
-                        if(code.decode('utf-8') == '002140'):
-                            print(ttime.decode('utf-8'))
-                            print(code.decode('utf-8'))
-
                         x = ti
                         y = exportData[:i+1,3].astype(float)
                         if(len(y) <= 1):
@@ -178,19 +216,17 @@ while(True):
                             
                             if(mesuDict[code.decode('utf-8')] == 3 and (str(code.decode('utf-8')) not in comps)):
                                 comps.append(str(code.decode('utf-8')))
-                                if( second_oTime < rateTime and sms_md > 1.2 and gradient > 2 and gradient < 5 ):
-                                    wanna = '1.05'
-                                elif(second_oTime < earlyTime):
-                                    wanna = '1.03'
-                                else:
+                                mesuStart[code.decode('utf-8')] = i - 4
+                                wanna = '1.08'
+                                smm[code.decode('utf-8')] = False
+                                if(grade == 0 or grade > 20)
                                     wanna = '1.02'
-                                    
                                 setFile = open(setFilePath, 'a')
                                 setFile.write( str(code.decode('utf-8')) + ',' + str(float(rate)) + ',' + str(gradient) +  ',' + str_oTime + ',' + wanna + ',' + str(datetime.datetime.now().strftime('%H:%M:%S')) + '\n')
                                 setFile.close()
                              
         except Exception as e:
-            print(e)
+            print('--------------------' + str(e))
             continue
 
 print(today)
