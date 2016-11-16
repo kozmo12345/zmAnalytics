@@ -171,9 +171,9 @@ while(True):
                     c = exportData[:i+1, 3].astype(float)
 
                     if(code in comps and code.decode('utf-8') in mesuStart and mesuDict[code.decode('utf-8')] >= 3):
-                        mmRate = sp.sum((sp.sum(exportData[mesuStart[code.decode('utf-8')]:i+1,5].astype(float)))/(sp.sum(exportData[mesuStart[code.decode('utf-8')]:i+1,6].astype(float))))
+                        mmRate = (sp.sum(exportData[i-4:i+1,5].astype(float)))/(sp.sum(exportData[i-4:i+1,6].astype(float)))
                         print(code.decode('utf-8') + '    ' + str(mmRate))
-                        if(mmRate < 1 and smm[code.decode('utf-8')] == True):
+                        if(mmRate < 0.4 and smm[code.decode('utf-8')] == True):
                             mdFile = open(mdFilePath, 'a')
                             mdFile.write(str(code.decode('utf-8')) + ',' + str(float(exportData[i + 1, 3].decode('UTF-8'))) + ',' + str(datetime.datetime.now().strftime('%H:%M:%S')) + '\n')
                             mdFile.close()
@@ -184,7 +184,7 @@ while(True):
                     if(second_oTime > endTime):
                         continue;
     
-                    if(True in (c > 25)):
+                    if(True in (c > 21)):
                         continue;
                     rate = exportData[i, 3].decode('UTF-8')
                     grade = int(exportData[i, 1].decode('UTF-8'))
@@ -219,10 +219,8 @@ while(True):
                                 print(str(ttime) + " " + str(gradient) + " " + str(srgrad) + " " + str(grade))
                                 comps.append((code))
                                 mesuStart[code.decode('utf-8')] = i - 4
-                                wanna = '1.045'
+                                wanna = '1.035'
                                 smm[code.decode('utf-8')] = False
-                                if(grade == 0 or grade > 20):
-                                    wanna = '1.02'
                                 setFile = open(setFilePath, 'a')
                                 setFile.write( str(code.decode('utf-8')) + ',' + str(float(rate)) + ',' + str(gradient) +  ',' + str_oTime + ',' + wanna + ',' + str(datetime.datetime.now().strftime('%H:%M:%S')) + '\n')
                                 setFile.close()

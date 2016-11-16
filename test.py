@@ -11,7 +11,7 @@ sp.random.seed(3)
 
 
 x = sp.array([1, 2, 3, 4, 5, 6, 7, 8])
-y = sp.array([2, 4, 6, 8, 10, 12, 14, 16])
+y = sp.array([0.09, 0.25, 0.15, 0.35, 0.15, 0.11, 0.23, 0.3])
 level = 1
 fit = sp.polyfit(x, y, level)
 gradient = sp.around(fit[0], decimals=2)

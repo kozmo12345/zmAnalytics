@@ -23,7 +23,6 @@ analFile.write( 'day,code, rate, nextRate, maxRate, mesuTime, gr, index, minRate
 for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
     for subdirname in dirnames:
         today = subdirname
-
         setFilePath = os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + "moa3.txt");
         setFile = open(setFilePath, 'r')
         
@@ -117,7 +116,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
                         grade = int(exportData[i, 1].decode('UTF-8'))
                         gr = int(exportData[i, 4].decode('UTF-8'))
                         ms_md = (exportData[i,5].astype(float))/(exportData[i,6].astype(float))
-                        sms_md = sp.sum((sp.sum(exportData[mesuStart[codi]:i+1,5].astype(float)))/(sp.sum(exportData[mesuStart[codi]:i+1,6].astype(float))))
+                        sms_md = ((sp.sum(exportData[mesuStart[codi]:i+1,5].astype(float)))/(sp.sum(exportData[mesuStart[codi]:i+1,6].astype(float))))
                         
                         x = ti
                         y = exportData[:i+1,3].astype(float)
@@ -128,26 +127,27 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
                         fit = sp.polyfit(x[:i - (mesuStart[codi]) + 1], y[mesuStart[codi]:i+1], level)
                         gradient = sp.around(fit[0]*10, decimals=2)
             
-                        maxr = 1000
+                        maxr = 100000
                         ry = (exportData[mesuStart[codi]:i+1,4].astype(float))/maxr
                         srlist = [b - a for a,b in zip(ry,ry[1:])]
                         srfit = sp.polyfit(x[:i - (mesuStart[codi])], srlist, level)
-                        srgrad = sp.around(srfit[0]*10, decimals=5)
+                        srgrad = sp.around(srfit[0]*10, decimals=2)
                         srgradt = 99999
                         maxc = sp.argmax(exportData[i+1:,3].astype(float))
                         
                         if(tmp_index[codi] != 0):
-                            err = 1
-                            errDic[code].append((gr/200000))
-                            
+                            err = (sp.sum(exportData[i-14:i+1,5].astype(float)))/(sp.sum(exportData[i-14:i+1,6].astype(float)))
+                            errDic[code].append((gradient))
+                            err2 = (sp.sum(exportData[i-4:i+1,5].astype(float)))/(sp.sum(exportData[i-4:i+1,6].astype(float)))
                             if(len(errDic[code]) > 1):
                                srlistt = [b - a for a,b in zip(errDic[code],errDic[code][1:])]
                                srfitt = sp.polyfit(x[:len(errDic[code])], errDic[code], level)
-                               srgradt = sp.around(srfitt[0]*10, decimals=5)
+                               srgradt = sp.around(srfitt[0]*10, decimals=2)
 
                         else:
                             err = 0
-                        setFile.write( str(code) +  ',' + str(float(exportData[i+1, 3].decode('UTF-8'))) + ',' + str(exportData[maxc + i + 1,3].decode('UTF-8')) + ',' + str_oTime + ',' + str(gr)  + ',' + str( grade )  +  ',' + str( gradient )  +  ',' + str( srgrad )  +  ',' + str( sms_md )  +  ',' + str( err )  +  ',' + str( sp.sum(errDic[code]) )  +  ',' + str( srgradt )  +  '\n')
+                            err2 = 0
+                        setFile.write( str(code) +  ',' + str(float(exportData[i+1, 3].decode('UTF-8'))) + ',' + str(exportData[maxc + i + 1,3].decode('UTF-8')) + ',' + str_oTime + ',' + str(gr)  + ',' + str( grade )  +  ',' + str( gradient )  +  ',' + str( srgrad )  +  ',' + str( sms_md )  +  ',' + str( err )  +  ',' + str( err2 )  +  ',' + str( srgradt )  +  '\n')
                         tmp_index[codi] = i
                                  
             except Exception as e:
@@ -155,20 +155,20 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
                 continue
 
 
-# analFilePath = os.path.join("C:\\", "Dropbox\\Data\\" + "anal.txt");
-# analFile = open(analFilePath, 'w')
+analFilePath = os.path.join("C:\\", "Dropbox\\Data\\" + "anal.txt");
+analFile = open(analFilePath, 'w')
 
-# analFile.write( 'day,code,nextRate,maxRate,mesuTime,gr,grade,gradient,srgrad,sms_md,err,serr,sserr\n')
+analFile.write( 'day,code,nextRate,maxRate,mesuTime,gr,grade,gradient,srgrad,sms_md,err,serr,sserr\n')
 
-# for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
-#     for subdirname in dirnames:
-#         today = subdirname
-#         setFilePath = os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + "moa4.txt");
+for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
+    for subdirname in dirnames:
+        today = subdirname
+        setFilePath = os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + "moa4.txt");
 
-#         setFile = open(setFilePath, 'r')
+        setFile = open(setFilePath, 'r')
         
-#         for line in setFile:
-#             analFile.write(today + ',' + line)
+        for line in setFile:
+            analFile.write(today + ',' + line)
                                 
 print("end")            
 
