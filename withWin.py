@@ -23,7 +23,6 @@ def readData(filePath):
 
 now = datetime.datetime.now()
 today = now.strftime('%Y-%m-%d')
-today = '2016-09-21'
 
 startTime = datetime.timedelta(hours=9,minutes=00,seconds=00).total_seconds()
 endTime = datetime.timedelta(hours=9,minutes=13,seconds=00).total_seconds()
@@ -81,6 +80,10 @@ setFile.close()
 mdFile = open(mdFilePath, 'w')
 mdFile.close()
 
+mesuDict = dict()
+mesuStart = dict()
+smm = dict()
+
 while(True):
     data = sp.genfromtxt(realfilePath, delimiter="\t", dtype='|S20')
 
@@ -90,17 +93,13 @@ while(True):
         print('not yet')
         continue
     
-    mesuDict = dict()
-    mesuStart = dict()
-    smm = dict()
-    
     tmp_time = 0
 
     now = datetime.datetime.now()
     nowTime = datetime.timedelta(hours=now.hour,minutes=now.minute,seconds=now.second).total_seconds()
 
-    if(nowTime > endTime and len(mesuDict) == 0):
-        break;
+    # if(nowTime > endTime and len(mesuDict) == 0):
+    #     break;
 
     if(nowTime >= closeTime):
         if(len(mesuDict) > 0):
@@ -111,7 +110,7 @@ while(True):
         break;
 
     print(today + str(times[len(times)-1]))
-
+    print((comps))
     for ttime in (times):
         
         try:
@@ -146,7 +145,8 @@ while(True):
                 ttimeData3 = ttimeData2[ttimeData2[:,4].astype(int) > 460000]
                 ttimeData4 = ttimeData3[ttimeData3[:,3].astype(float) < 25]
                 codes = ttimeData4[:,7]
-            
+                if(nowTime > endTime and len(comps) > 0):
+                    codes = comps;
                 for code in (codes):
                     if(code == b''):
                         continue;
@@ -172,6 +172,7 @@ while(True):
 
                     if(code.decode('utf-8') in mesuDict and code.decode('utf-8') in mesuStart and mesuDict[code.decode('utf-8')] >= 3):
                         mmRate = sp.sum((sp.sum(exportData[mesuStart[code.decode('utf-8')]:i+1,5].astype(float)))/(sp.sum(exportData[mesuStart[code.decode('utf-8')]:i+1,6].astype(float))))
+                        print(code.decode('utf-8') + '    ' + str(mmRate))
                         if(mmRate < 1 and smm[code.decode('utf-8')] == True):
                             mdFile = open(mdFilePath, 'a')
                             mdFile.write(str(code.decode('utf-8')) + ',' + str(float(exportData[i + 1, 3].decode('UTF-8'))) + ',' + str(datetime.datetime.now().strftime('%H:%M:%S')) + '\n')
@@ -214,12 +215,12 @@ while(True):
                             else:
                                 mesuDict[code.decode('utf-8')] = mesuDict.get(code.decode('utf-8'), 0)
                             
-                            if(mesuDict[code.decode('utf-8')] == 3 and (str(code.decode('utf-8')) not in comps)):
-                                comps.append(str(code.decode('utf-8')))
+                            if(mesuDict[code.decode('utf-8')] == 3 and ((code) not in comps)):
+                                comps.append((code))
                                 mesuStart[code.decode('utf-8')] = i - 4
-                                wanna = '1.08'
+                                wanna = '1.045'
                                 smm[code.decode('utf-8')] = False
-                                if(grade == 0 or grade > 20)
+                                if(grade == 0 or grade > 20):
                                     wanna = '1.02'
                                 setFile = open(setFilePath, 'a')
                                 setFile.write( str(code.decode('utf-8')) + ',' + str(float(rate)) + ',' + str(gradient) +  ',' + str_oTime + ',' + wanna + ',' + str(datetime.datetime.now().strftime('%H:%M:%S')) + '\n')
