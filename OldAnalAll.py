@@ -16,9 +16,6 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
     for subdirname in dirnames:
         today = subdirname
 
-        # if(not((today.split('-')[1] == '09') or (today.split('-')[1] == '10' and today.split('-')[2] in ('04')))):
-        #     continue;
-
         print(today)
         setFile = open(os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + "moa3.txt"), 'w')
         edFile = open(os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + "ed.txt"), 'w')
@@ -34,6 +31,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
         mesuDict = dict()
         mesuStart = dict()
         smm = dict()
+        comps = []
 
         for timeIndex, ttime in enumerate(times):
             
@@ -58,7 +56,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
                 if(tmp_time + 8 > second_oTime):
                     continue;
 
-                if(second_oTime > endTime and len(mesuDict) == 0):
+                if(second_oTime > endTime and len(comps) == 0):
                     break;
 
                 tmp_time = second_oTime
@@ -70,6 +68,9 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
                     ttimeData3 = ttimeData2[ttimeData2[:,4].astype(int) > 460000]
                     ttimeData4 = ttimeData3[ttimeData3[:,3].astype(float) < 25]
                     codes = ttimeData4[:,7]
+
+                    if(second_oTime > endTime):
+                        codes = comps
 
                     for code in (codes):
                         if(code == b''):
@@ -90,15 +91,23 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
                             if(second_oTime == sect):
                                 i = ei
                                 break;
-                            
+
                         if(i == -1): continue
                         c = exportData[:i+1, 3].astype(float)
 
-                        if(code.decode('utf-8') in mesuDict and code.decode('utf-8') in mesuStart and mesuDict[code.decode('utf-8')] >= 3):
+                        if(code in comps and code.decode('utf-8') in mesuStart and mesuDict[code.decode('utf-8')] >= 3):
                             mmRate = sp.sum((sp.sum(exportData[mesuStart[code.decode('utf-8')]:i+1,5].astype(float)))/(sp.sum(exportData[mesuStart[code.decode('utf-8')]:i+1,6].astype(float))))
                             if(mmRate < 1 and smm[code.decode('utf-8')] == True):
-                                edFile.write( str(code.decode('utf-8')) + ',' + str(float(exportData[i + 1, 3].decode('UTF-8')) - float(exportData[mesuStart[code.decode('utf-8')], 3].decode('UTF-8'))) + ',' + str(float(exportData[mesuStart[code.decode('utf-8')], 3].decode('UTF-8'))) + ',' + str(float(exportData[i + 1, 3].decode('UTF-8'))) + '\n')
-                                del mesuDict[code.decode('utf-8')]
+                                ed = float(exportData[i + 1, 3].decode('UTF-8')) - float(exportData[mesuStart[code.decode('utf-8')], 3].decode('UTF-8'))
+                                mdTime = str(ttime)
+                                if(ed < 2):
+                                    ed = max(exportData[i + 1:, 3].astype(float)) - float(exportData[mesuStart[code.decode('utf-8')], 3].decode('UTF-8'))
+                                    mdTime = 'dknow'
+                                    if(ed < 2):
+                                        ed = float(exportData[-3, 3].decode('UTF-8')) - float(exportData[mesuStart[code.decode('utf-8')], 3].decode('UTF-8'))
+                                        mdTime = 'endTime'
+                                edFile.write( str(code.decode('utf-8')) + ',' + str(ed) + ',' + str(float(exportData[mesuStart[code.decode('utf-8')], 3].decode('UTF-8'))) + ',' + str(float(exportData[i + 1, 3].decode('UTF-8'))) + ',' + mdTime + '\n')
+                                comps.remove(code)
                             else:
                                 smm[code.decode('utf-8')] = True
 
@@ -114,7 +123,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
                         ms_md = (exportData[i,5].astype(float))/(exportData[i,6].astype(float))
                         sms_md = sp.sum((sp.sum(exportData[:i+1,5].astype(float)))/(sp.sum(exportData[:i+1,6].astype(float))))
                         
-                        if(ms_md > 1 and sms_md > 1):
+                        if(ms_md > 1 and sms_md > 1 and grade < 20):
                             x = ti
                             y = exportData[:i+1,3].astype(float)
                             if(len(y) <= 1):
@@ -137,9 +146,8 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
                                     mesuDict[code.decode('utf-8')] = mesuDict[code.decode('utf-8')] + 1
                                 else:
                                     mesuDict[code.decode('utf-8')] = mesuDict.get(code.decode('utf-8'), 0)
-                                if(code.decode('utf-8') == '002140'):
-                                    print(ttime.decode('utf-8') + '  ' + code.decode('utf-8'))
-                                if(mesuDict[code.decode('utf-8')] == 3):
+                                if(mesuDict[code.decode('utf-8')] == 3 and ((code) not in comps)):
+                                    comps.append((code))
                                     mesuStart[code.decode('utf-8')] = i - 4
                                     smm[code.decode('utf-8')] = False
                                     setFile.write( str(code.decode('utf-8')) + ',' + str(float(rate)) +  ',' + str(float(exportData[i+1, 3].decode('UTF-8'))) + ',' + str(exportData[maxc + i + 1,3].decode('UTF-8')) + ',' + str_oTime + ',' + str(gr)  + ',' + str(i)  + ',' + str( min(exportData[i:i + maxc + 1, 3].astype(float)) )  + ',' + str( max(exportData[:i, 3].astype(float)) )  + ',' + str(exportData[i +maxc, 0].decode('UTF-8')) +  ',' + str( grade )  +  '\n')
@@ -152,20 +160,27 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
 
         print(today)
 
-# analFilePath = os.path.join("C:\\", "Dropbox\\Data\\" + "anal.txt");
-# analFile = open(analFilePath, 'w')
+analFilePath = os.path.join("C:\\", "Dropbox\\Data\\" + "anal.txt");
+analFile = open(analFilePath, 'w')
 
 edFilePath = os.path.join("C:\\", "Dropbox\\Data\\" + "ed.txt");
-edFile = open(analFilePath, 'w')
+edFile = open(edFilePath, 'w')
+
 for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
     for subdirname in dirnames:
         today = subdirname
 
-        setFilePath = os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + "ed.txt");
+        setFilePath = os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + "moa3.txt");
         setFile = open(setFilePath, 'r')
         
         for line in setFile:
-            edFile.write(today + ',' + line)
+            analFile.write(today + ',' + line)
+
+        set2FilePath = os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + "ed.txt");
+        set2File = open(set2FilePath, 'r')
+        
+        for line in set2File:
+            edFile.write(today + ',' + line)            
                                 
 print("end")            
 

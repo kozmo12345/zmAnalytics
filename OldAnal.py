@@ -10,7 +10,7 @@ import time
 sp.random.seed(3)
 
 now = datetime.datetime.now()
-today = '2016-11-14'
+today = '2016-11-16'
 hour = now.hour
 minute = now.minute
 second = now.second - 1
@@ -24,6 +24,7 @@ startTime = datetime.timedelta(hours=9,minutes=00,seconds=00).total_seconds()
 endTime = datetime.timedelta(hours=9,minutes=13,seconds=00).total_seconds()
 tmp_time = 0
 mesuDict = dict()
+comps = []
 
 for timeIndex, ttime in enumerate(times):
 
@@ -53,7 +54,7 @@ for timeIndex, ttime in enumerate(times):
     
     if(bool_oTime == True):
         ttimeData = data[data[:,0] == ttime]
-        ttimeData2 = ttimeData[ttimeData[:,1].astype(int) < 30]
+        ttimeData2 = ttimeData[ttimeData[:,1].astype(int) < 20]
         ttimeData3 = ttimeData2[ttimeData2[:,4].astype(int) > 460000]
         ttimeData4 = ttimeData3[ttimeData3[:,3].astype(float) < 25]
         codes = ttimeData4[:,7]        
@@ -85,7 +86,7 @@ for timeIndex, ttime in enumerate(times):
             ms_md = (exportData[i,5].astype(float))/(exportData[i,6].astype(float))
             sms_md = sp.sum((sp.sum(exportData[:i+1,5].astype(float)))/(sp.sum(exportData[:i+1,6].astype(float))))
             
-            if(sms_md > 1):
+            if(ms_md > 1 and sms_md > 1 and grade < 20):
                 x = ti
                 y = exportData[:i+1,3].astype(float)
                 if(len(y) <= 10):
@@ -115,7 +116,9 @@ for timeIndex, ttime in enumerate(times):
                     else:
                         mesuDict[code.decode('utf-8')] = mesuDict.get(code.decode('utf-8'), 0)
 
-                    if(mesuDict[code.decode('utf-8')] == 3):
+                    if(mesuDict[code.decode('utf-8')] == 3 and ((code) not in comps)):
+                        print(str(ttime) + " " + str(gradient) + " " + str(srgrad) + " " + str(grade))
+                        comps.append((code))
                         setFile = open(os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + "mo3.txt"), 'a')
                         setFile.write( str(code.decode('utf-8')) + ',' + str(float(rate)) + ',' + str(exportData[maxc + i + 1,3]) +  ',' + str(ssrgrad) +  ',' + str_oTime + ',' + str(gr)  + '\n')
                         setFile.close()
