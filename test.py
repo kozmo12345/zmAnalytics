@@ -118,15 +118,15 @@ for lange in range(4,10):
                                 msTime = exportData[mesuStart[code.decode('utf-8')],0].decode('UTF-8')
     
                                 if(float(exportData[i, 3].decode('UTF-8')) > 28.9):
-                                	edSum = edSum + ed
+                                    edSum = edSum + ed
                                     edFile.write( str(code.decode('utf-8')) + ',' + str(ed) + ',' + str(ms) + ',' + str(md) + ',' + str(msTime) + ',' + str(mdTime) + '\n')
                                     comps.remove(code)
                                 elif((mmRate < 0.4 or fMedoTime < second_oTime) and ed >= 2):
-                                	edSum = edSum + ed
+                                    edSum = edSum + ed
                                     edFile.write( str(code.decode('utf-8')) + ',' + str(ed) + ',' + str(ms) + ',' + str(md) + ',' + str(msTime) + ',' + str(mdTime) + '\n')
                                     comps.remove(code)
                                 elif(allMedoTime < second_oTime):
-                                	edSum = edSum + ed
+                                    edSum = edSum + ed
                                     edFile.write( str(code.decode('utf-8')) + ',' + str(ed) + ',' + str(ms) + ',' + str(md) + ',' + str(msTime) + ',' + str(mdTime) + '\n')
                                     comps.remove(code)
 
