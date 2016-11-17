@@ -109,17 +109,14 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
                             ms = float(exportData[mesuStart[code.decode('utf-8')] + 1, 3].decode('UTF-8'))
                             md = float(exportData[i + 1, 3].decode('UTF-8'))
                             mdTime = ttime
-                            
+
                             if(float(exportData[i, 3].decode('UTF-8')) > 28.9):
-                                print('1111')
                                 edFile.write( str(code.decode('utf-8')) + ',' + str(ed) + ',' + str(ms) + ',' + str(md) + ',' + str(mdTime) + '\n')
                                 comps.remove(code)
                             elif((mmRate < 0.4 or fMedoTime < second_oTime) and ed >= 1.4):
-                                print('2222')
                                 edFile.write( str(code.decode('utf-8')) + ',' + str(ed) + ',' + str(ms) + ',' + str(md) + ',' + str(mdTime) + '\n')
                                 comps.remove(code)
                             elif(allMedoTime < second_oTime):
-                                print('3333')
                                 edFile.write( str(code.decode('utf-8')) + ',' + str(ed) + ',' + str(ms) + ',' + str(md) + ',' + str(mdTime) + '\n')
                                 comps.remove(code)
                             # elif(mmRate < 0.4):
