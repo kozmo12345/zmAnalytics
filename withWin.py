@@ -26,8 +26,6 @@ today = now.strftime('%Y-%m-%d')
 
 startTime = datetime.timedelta(hours=9,minutes=00,seconds=00).total_seconds()
 endTime = datetime.timedelta(hours=9,minutes=13,seconds=00).total_seconds()
-earlyTime = datetime.timedelta(hours=9,minutes=4,seconds=00).total_seconds()
-rateTime = datetime.timedelta(hours=9,minutes=10,seconds=00).total_seconds()
 closeTime = datetime.timedelta(hours=15,minutes=15,seconds=00).total_seconds()
 
 comps = []
@@ -110,7 +108,8 @@ while(True):
         break;
 
     print(today + str(times[len(times)-1]))
-    print((comps))
+    print(comps)
+    print(mesuDict)
     for ttime in (times):
         
         try:
