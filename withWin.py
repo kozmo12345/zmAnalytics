@@ -26,6 +26,8 @@ today = now.strftime('%Y-%m-%d')
 
 startTime = datetime.timedelta(hours=9,minutes=00,seconds=00).total_seconds()
 endTime = datetime.timedelta(hours=9,minutes=13,seconds=00).total_seconds()
+fMedoTime = datetime.timedelta(hours=10,minutes=10,seconds=00).total_seconds()
+allMedoTime = datetime.timedelta(hours=10,minutes=45,seconds=00).total_seconds()
 closeTime = datetime.timedelta(hours=15,minutes=15,seconds=00).total_seconds()
 
 comps = []
@@ -97,6 +99,9 @@ while(True):
     nowTime = datetime.timedelta(hours=now.hour,minutes=now.minute,seconds=now.second).total_seconds()
 
     if(nowTime > endTime and len(comps) == 0):
+        break;
+
+    if(nowTime - 100 > allMedoTime):
         break;
 
     if(nowTime >= closeTime):
@@ -218,10 +223,11 @@ while(True):
                                 print(str(ttime) + " " + str(gradient) + " " + str(srgrad) + " " + str(grade))
                                 comps.append((code))
                                 mesuStart[code.decode('utf-8')] = i - 4
-                                wanna = '1.035'
+                                wanna = '1.19'
+                                cost = exportData[i, 8].decode('UTF-8')
                                 smm[code.decode('utf-8')] = False
                                 setFile = open(setFilePath, 'a')
-                                setFile.write( str(code.decode('utf-8')) + ',' + str(float(rate)) + ',' + str(gradient) +  ',' + str_oTime + ',' + wanna + ',' + str(datetime.datetime.now().strftime('%H:%M:%S')) + '\n')
+                                setFile.write( str(code.decode('utf-8')) + ',' + str(float(rate)) + ',' + str(gradient) +  ',' + str_oTime + ',' + wanna + ',' + str(datetime.datetime.now().strftime('%H:%M:%S')) + ',' + str(cost) + '\n')
                                 setFile.close()
                              
         except Exception as e:

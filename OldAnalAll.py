@@ -34,7 +34,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
         mesuDict = dict()
         mesuStart = dict()
         smm = dict()
-        msGrad = dict()
+        msRate = dict()
         comps = []
 
         for timeIndex, ttime in enumerate(times):
@@ -108,19 +108,19 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
                                 mmRate = (sp.sum(exportData[i-4:i+1,5].astype(float)))/(sp.sum(exportData[i-4:i+1,6].astype(float)))
                             
                             ed = float(exportData[i + 1, 3].decode('UTF-8')) - float(exportData[mesuStart[code.decode('utf-8')] + 1, 3].decode('UTF-8'))
-                            ms = float(exportData[mesuStart[code.decode('utf-8')] + 1, 3].decode('UTF-8'))
+                            ms = msRate[code.decode('utf-8')]
                             md = float(exportData[i + 1, 3].decode('UTF-8'))
                             mdTime = ttime.decode('UTF-8')
                             msTime = exportData[mesuStart[code.decode('utf-8')],0].decode('UTF-8')
 
                             if(float(exportData[i, 3].decode('UTF-8')) > 28.9):
-                                edFile.write( str(code.decode('utf-8')) + ',' + str(ed) + ',' + str(ms) + ',' + str(md) + ',' + str(msTime) + ',' + str(mdTime) +  ',' + str(msGrad[code.decode('utf-8')]) + '\n')
+                                edFile.write( str(code.decode('utf-8')) + ',' + str(ed) + ',' + str(ms) + ',' + str(md) + ',' + str(msTime) + ',' + str(mdTime) + '\n')
                                 comps.remove(code)
                             elif((mmRate < 0.4 or fMedoTime < second_oTime) and ed >= 2):
-                                edFile.write( str(code.decode('utf-8')) + ',' + str(ed) + ',' + str(ms) + ',' + str(md) + ',' + str(msTime) + ',' + str(mdTime) +  ',' + str(msGrad[code.decode('utf-8')]) + '\n')
+                                edFile.write( str(code.decode('utf-8')) + ',' + str(ed) + ',' + str(ms) + ',' + str(md) + ',' + str(msTime) + ',' + str(mdTime) + '\n')
                                 comps.remove(code)
                             elif(allMedoTime < second_oTime):
-                                edFile.write( str(code.decode('utf-8')) + ',' + str(ed) + ',' + str(ms) + ',' + str(md) + ',' + str(msTime) + ',' + str(mdTime) +  ',' + str(msGrad[code.decode('utf-8')]) + '\n')
+                                edFile.write( str(code.decode('utf-8')) + ',' + str(ed) + ',' + str(ms) + ',' + str(md) + ',' + str(msTime) + ',' + str(mdTime) + '\n')
                                 comps.remove(code)
                             # elif(mmRate < 0.4):
                             #     rowEdRate = 2
@@ -177,8 +177,8 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
                                     mesuDict[code.decode('utf-8')] = mesuDict.get(code.decode('utf-8'), 0)
                                 if(mesuDict[code.decode('utf-8')] == 3 and ((code) not in comps)):
                                     comps.append((code))
-                                    msGrad[code.decode('utf-8')] = gradient
                                     mesuStart[code.decode('utf-8')] = i - 4
+                                    msRate[code.decode('utf-8')] = float(exportData[i + 1, 3].decode('UTF-8'))
                                     setFile.write( str(code.decode('utf-8')) + ',' + str(float(rate)) +  ',' + str(float(exportData[i+1, 3].decode('UTF-8'))) + ',' + str(exportData[maxc + i + 1,3].decode('UTF-8')) + ',' + str_oTime + ',' + str(gr)  + ',' + str(i)  + ',' + str( min(exportData[i:i + maxc + 1, 3].astype(float)) )  + ',' + str( max(exportData[:i, 3].astype(float)) )  + ',' + str(exportData[i +maxc, 0].decode('UTF-8')) +  ',' + str( grade )  +  '\n')
                                  
             except Exception as e:
