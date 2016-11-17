@@ -96,17 +96,24 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
                         c = exportData[:i+1, 3].astype(float)
 
                         if(code in comps and code.decode('utf-8') in mesuStart and mesuDict[code.decode('utf-8')] >= 3):
-                            mmRate = sp.sum((sp.sum(exportData[mesuStart[code.decode('utf-8')]:i+1,5].astype(float)))/(sp.sum(exportData[mesuStart[code.decode('utf-8')]:i+1,6].astype(float))))
-                            if(mmRate < 1 and smm[code.decode('utf-8')] == True):
+                            mmRate  = (sp.sum(exportData[i-14:i+1,5].astype(float)))/(sp.sum(exportData[i-14:i+1,6].astype(float)))
+                            if(today.split('-')[1] == '09' or (today.split('-')[1] == '10' and today.split('-')[2] == '04')):
+                                mmRate = (sp.sum(exportData[i-4:i+1,5].astype(float)))/(sp.sum(exportData[i-4:i+1,6].astype(float)))
+
+                            if(mmRate < 0.4 and smm[code.decode('utf-8')] == True):
                                 ed = float(exportData[i + 1, 3].decode('UTF-8')) - float(exportData[mesuStart[code.decode('utf-8')], 3].decode('UTF-8'))
+                                ms = float(exportData[mesuStart[code.decode('utf-8')], 3].decode('UTF-8'))
+                                md = float(exportData[i + 1, 3].decode('UTF-8'))
                                 mdTime = str(ttime)
-                                if(ed < 2):
+                                if(ed < 1):
                                     ed = max(exportData[i + 1:, 3].astype(float)) - float(exportData[mesuStart[code.decode('utf-8')], 3].decode('UTF-8'))
+                                    md = 1
                                     mdTime = 'dknow'
-                                    if(ed < 2):
+                                    if(ed < 1):
                                         ed = float(exportData[-3, 3].decode('UTF-8')) - float(exportData[mesuStart[code.decode('utf-8')], 3].decode('UTF-8'))
+                                        md = float(exportData[-3, 3].decode('UTF-8'))
                                         mdTime = 'endTime'
-                                edFile.write( str(code.decode('utf-8')) + ',' + str(ed) + ',' + str(float(exportData[mesuStart[code.decode('utf-8')], 3].decode('UTF-8'))) + ',' + str(float(exportData[i + 1, 3].decode('UTF-8'))) + ',' + mdTime + '\n')
+                                edFile.write( str(code.decode('utf-8')) + ',' + str(ed) + ',' + str(ms) + ',' + str(md) + ',' + mdTime + '\n')
                                 comps.remove(code)
                             else:
                                 smm[code.decode('utf-8')] = True
@@ -114,7 +121,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
                         if(second_oTime > endTime):
                             continue;
     
-                        if(True in (c > 25)):
+                        if(True in (c > 21)):
                             continue;
                         rate = exportData[i, 3].decode('UTF-8')
                         grade = int(exportData[i, 1].decode('UTF-8'))
@@ -149,7 +156,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
                                 if(mesuDict[code.decode('utf-8')] == 3 and ((code) not in comps)):
                                     comps.append((code))
                                     mesuStart[code.decode('utf-8')] = i - 4
-                                    smm[code.decode('utf-8')] = False
+                                    smm[code.decode('utf-8')] = True
                                     setFile.write( str(code.decode('utf-8')) + ',' + str(float(rate)) +  ',' + str(float(exportData[i+1, 3].decode('UTF-8'))) + ',' + str(exportData[maxc + i + 1,3].decode('UTF-8')) + ',' + str_oTime + ',' + str(gr)  + ',' + str(i)  + ',' + str( min(exportData[i:i + maxc + 1, 3].astype(float)) )  + ',' + str( max(exportData[:i, 3].astype(float)) )  + ',' + str(exportData[i +maxc, 0].decode('UTF-8')) +  ',' + str( grade )  +  '\n')
 
                                  
