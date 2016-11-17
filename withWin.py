@@ -104,14 +104,6 @@ while(True):
     if(nowTime - 100 > allMedoTime):
         break;
 
-    if(nowTime >= closeTime):
-        if(len(mesuDict) > 0):
-            for k, v in mesuDict:
-                mdFile = open(mdFilePath, 'a')
-                mdFile.write(str(k) + ',' + str('end') + ',' + str(datetime.datetime.now().strftime('%H:%M:%S')) + '\n')
-                mdFile.close()            
-        break;
-
     print(today + str(times[len(times)-1]))
     print(comps)
     print(mesuDict)
