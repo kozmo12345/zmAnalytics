@@ -36,6 +36,9 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
         smm = dict()
         msRate = dict()
         comps = []
+        mesuLimit = 1
+        if((today.split('-')[1] == '10' and today.split('-')[2] in ['05','06','07','10','11','12','13','14','17','18','19','20','21','24','25','26','27','28','31']) or (today.split('-')[1] == '11' and today.split('-')[2] in ['01','02','03','07','08','09','10','11','14','15','16','17'])):
+            mesuLimit = 4
 
         for timeIndex, ttime in enumerate(times):
             
@@ -64,6 +67,16 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
                     break;
 
                 if(second_oTime - 100 > allMedoTime):
+                    for code in comps:
+                        ms = float(msRate[code.decode('utf-8')])
+                        md = 0
+                        ed = round(md - ms, 2)
+                        mdTime = 'endTime'
+                        msTime = exportData[mesuStart[code.decode('utf-8')],0].decode('UTF-8')
+                        allMax = max(exportData[:, 3].astype(float))
+                        termMax = max(exportData[mesuStart[code.decode('utf-8')]+3:, 3].astype(float))
+                        edFile.write(str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(ed) + ',' + str(msTime) + ',' + str(mdTime) + '\n')
+                        comps.remove(code)
                     break;
 
                 tmp_time = second_oTime
@@ -102,43 +115,28 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
                         if(i == -1): continue
                         c = exportData[:i+1, 3].astype(float)
 
-                        if(code in comps and code.decode('utf-8') in mesuStart and mesuDict[code.decode('utf-8')] >= 3):
-                            mmRate  = (sp.sum(exportData[i-14:i+1,5].astype(float)))/(sp.sum(exportData[i-14:i+1,6].astype(float)))
-                            if(today.split('-')[1] == '09' or (today.split('-')[1] == '10' and today.split('-')[2] == '04')):
-                                mmRate = (sp.sum(exportData[i-4:i+1,5].astype(float)))/(sp.sum(exportData[i-4:i+1,6].astype(float)))
+                        if(code in comps and code.decode('utf-8') in mesuStart and mesuDict[code.decode('utf-8')] >= mesuLimit):
+                            mmRate = (sp.sum(exportData[i-4:i+1,5].astype(float)))/(sp.sum(exportData[i-4:i+1,6].astype(float)))
+                            if((today.split('-')[1] == '10' and today.split('-')[2] in ['05','06','07','10','11','12','13','14','17','18','19','20','21','24','25','26','27','28','31']) or (today.split('-')[1] == '11' and today.split('-')[2] in ['01','02','03','07','08','09','10','11','14','15','16','17'])):
+                                mmRate  = (sp.sum(exportData[i-14:i+1,5].astype(float)))/(sp.sum(exportData[i-14:i+1,6].astype(float)))
                             
-                            ed = float(exportData[i + 1, 3].decode('UTF-8')) - float(exportData[mesuStart[code.decode('utf-8')] + 1, 3].decode('UTF-8'))
-                            ms = msRate[code.decode('utf-8')]
+                            ms = float(msRate[code.decode('utf-8')])
                             md = float(exportData[i + 1, 3].decode('UTF-8'))
+                            ed = round(md - ms, 2)
                             mdTime = ttime.decode('UTF-8')
                             msTime = exportData[mesuStart[code.decode('utf-8')],0].decode('UTF-8')
+                            allMax = max(exportData[:, 3].astype(float))
+                            termMax = max(exportData[mesuStart[code.decode('utf-8')]+3:i+1, 3].astype(float))
 
                             if(float(exportData[i, 3].decode('UTF-8')) > 28.9):
-                                edFile.write( str(code.decode('utf-8')) + ',' + str(ed) + ',' + str(ms) + ',' + str(md) + ',' + str(msTime) + ',' + str(mdTime) + '\n')
+                                edFile.write( str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(ed) + ',' + str(msTime) + ',' + str(mdTime) + '\n')
                                 comps.remove(code)
                             elif((mmRate < 0.4 or fMedoTime < second_oTime) and ed >= 2):
-                                edFile.write( str(code.decode('utf-8')) + ',' + str(ed) + ',' + str(ms) + ',' + str(md) + ',' + str(msTime) + ',' + str(mdTime) + '\n')
+                                edFile.write( str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(ed) + ',' + str(msTime) + ',' + str(mdTime) + '\n')
                                 comps.remove(code)
                             elif(allMedoTime < second_oTime):
-                                edFile.write( str(code.decode('utf-8')) + ',' + str(ed) + ',' + str(ms) + ',' + str(md) + ',' + str(msTime) + ',' + str(mdTime) + '\n')
+                                edFile.write( str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(ed) + ',' + str(msTime) + ',' + str(mdTime) + '\n')
                                 comps.remove(code)
-                            # elif(mmRate < 0.4):
-                            #     rowEdRate = 2
-
-                            #     if(ed < rowEdRate):
-                            #         ed = max(exportData[i + 1:, 3].astype(float)) - float(exportData[mesuStart[code.decode('utf-8')], 3].decode('UTF-8'))
-
-                            #         if(ed < rowEdRate):
-                            #             ed = float(exportData[-3, 3].decode('UTF-8')) - float(exportData[mesuStart[code.decode('utf-8')], 3].decode('UTF-8'))
-                            #             md = float(exportData[-3, 3].decode('UTF-8'))
-                            #             mdTime = exportData[-3, 0].decode('UTF-8')
-                            #         else:
-                            #             ed = rowEdRate2
-                            #             md = [r[3] for r in exportData[i + 1:] if r[3].astype(float) > ms + rowEdRate][0]
-                            #             mdTime = [r[0] for r in exportData[i + 1:] if r[3].astype(float) > ms + rowEdRate][0]
-
-                            #     edFile.write( str(code.decode('utf-8')) + ',' + str(ed) + ',' + str(ms) + ',' + str(md) + ',' + str(mdTime) + '\n')
-                            #     comps.remove(code)
 
                         if(second_oTime > endTime):
                             continue;
@@ -175,12 +173,13 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
                                     mesuDict[code.decode('utf-8')] = mesuDict[code.decode('utf-8')] + 1
                                 else:
                                     mesuDict[code.decode('utf-8')] = mesuDict.get(code.decode('utf-8'), 0)
-                                if(mesuDict[code.decode('utf-8')] == 3 and ((code) not in comps)):
+
+                                if(mesuDict[code.decode('utf-8')] == mesuLimit and ((code) not in comps)):
                                     comps.append((code))
                                     mesuStart[code.decode('utf-8')] = i - 4
-                                    msRate[code.decode('utf-8')] = float(exportData[i + 1, 3].decode('UTF-8'))
-                                    setFile.write( str(code.decode('utf-8')) + ',' + str(float(rate)) +  ',' + str(float(exportData[i+1, 3].decode('UTF-8'))) + ',' + str(exportData[maxc + i + 1,3].decode('UTF-8')) + ',' + str_oTime + ',' + str(gr)  + ',' + str(i)  + ',' + str( min(exportData[i:i + maxc + 1, 3].astype(float)) )  + ',' + str( max(exportData[:i, 3].astype(float)) )  + ',' + str(exportData[i +maxc, 0].decode('UTF-8')) +  ',' + str( grade )  +  '\n')
-                                 
+                                    msRate[code.decode('utf-8')] = float(exportData[i, 3].decode('UTF-8'))
+                                    setFile.write( str(code.decode('utf-8')) + ',' + str(float(rate)) +  ',' + str(float(exportData[i, 3].decode('UTF-8'))) + ',' + str(exportData[maxc + i + 1,3].decode('UTF-8')) + ',' + str_oTime + ',' + str(gr)  + ',' + str(i)  + ',' + str( min(exportData[i:i + maxc + 1, 3].astype(float)) )  + ',' + str( max(exportData[:i, 3].astype(float)) )  + ',' + str(exportData[i +maxc, 0].decode('UTF-8')) +  ',' + str( grade )  +  '\n')
+
             except Exception as e:
                 print("---------------------------------------" + str(e))
                 continue
@@ -193,6 +192,8 @@ analFile = open(analFilePath, 'w')
 
 edFilePath = os.path.join("C:\\", "Dropbox\\Data\\" + "ed.txt");
 edFile = open(edFilePath, 'w')
+
+edFile.write('day' +  ',' + 'code' +  ',' + 'max' +  ',' + 'termMax' +  ',' + 'md' +  ',' + 'ms' +  ',' + 'ed' +  ',' + 'msTime' +  ',' + 'mdTime' + '\n')
 
 for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
     for subdirname in dirnames:

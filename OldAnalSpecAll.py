@@ -19,7 +19,7 @@ analFilePath = os.path.join("C:\\", "Dropbox\\Data\\" + "anal.txt");
 analFile = open(analFilePath, 'w')
 
 analFile.write( 'day,code, rate, nextRate, maxRate, mesuTime, gr, index, minRate, nowMaxRate, maxTime, grade\n')
-
+allMedoTime = datetime.timedelta(hours=10,minutes=45,seconds=00).total_seconds()
 for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
     for subdirname in dirnames:
         today = subdirname
@@ -86,9 +86,12 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
                         if(code == b''):
                             continue;
 
-                        if(second_oTime < msTimes[codi] or second_oTime > mxTimes[codi] + 360):
+                        if(second_oTime < msTimes[codi]):
                             continue;
                         
+                        if(second_oTime > allMedoTime):
+                            break;
+
                         exportData = data[data[:,7].astype(str) == code]
 
                         xtime = time.strptime(exportData[0,0].decode('utf-8'), '%H:%M:%S')

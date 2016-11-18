@@ -58,7 +58,7 @@ except:
         else:
             raise
 
-mdFilePath = os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + "d.txt");
+mdFilePath = os.path.join("C:\\", "Dropbox\\temp\\Data\\" + today + "\\" + today + "d.txt");
 dirn3 = os.path.dirname(setFilePath)
 try:
     os.stat(dirn3)
@@ -80,13 +80,12 @@ setFile.close()
 mdFile = open(mdFilePath, 'w')
 mdFile.close()
 
-mesuDict = dict()
 mesuStart = dict()
 smm = dict()
 
 while(True):
     data = sp.genfromtxt(realfilePath, delimiter="\t", dtype='|S20')
-
+    
     try:
         times = sp.unique(data[data[:,0] != b''][:,0])
     except Exception as e:
@@ -94,7 +93,7 @@ while(True):
         continue
     
     tmp_time = 0
-
+    mesuDict = dict()
     now = datetime.datetime.now()
     nowTime = datetime.timedelta(hours=now.hour,minutes=now.minute,seconds=now.second).total_seconds()
 
@@ -166,12 +165,12 @@ while(True):
                     if(i == -1): continue
                     c = exportData[:i+1, 3].astype(float)
 
-                    if(code in comps and code.decode('utf-8') in mesuStart and mesuDict[code.decode('utf-8')] >= 3):
+                    if(code in comps and code.decode('utf-8') in mesuStart and mesuDict[code.decode('utf-8')] >= 1):
                         mmRate = (sp.sum(exportData[i-4:i+1,5].astype(float)))/(sp.sum(exportData[i-4:i+1,6].astype(float)))
                         print(code.decode('utf-8') + '    ' + str(mmRate))
                         if(mmRate < 0.4 and smm[code.decode('utf-8')] == True):
                             mdFile = open(mdFilePath, 'a')
-                            mdFile.write(str(code.decode('utf-8')) + ',' + str(float(exportData[i + 1, 3].decode('UTF-8'))) + ',' + str(datetime.datetime.now().strftime('%H:%M:%S')) + '\n')
+                            mdFile.write(str(code.decode('utf-8')) + ',' + str(float(exportData[i + 1, 3].decode('UTF-8'))) + ',' + str(exportData[i, 0].decode('UTF-8')) + ',' + str(datetime.datetime.now().strftime('%H:%M:%S')) + '\n')
                             mdFile.close()
                             comps.remove(code)
                         else:
@@ -211,7 +210,7 @@ while(True):
                             else:
                                 mesuDict[code.decode('utf-8')] = mesuDict.get(code.decode('utf-8'), 0)
                             
-                            if(mesuDict[code.decode('utf-8')] == 3 and ((code) not in comps)):
+                            if(mesuDict[code.decode('utf-8')] == 1 and ((code) not in comps)):
                                 print(str(ttime) + " " + str(gradient) + " " + str(srgrad) + " " + str(grade))
                                 comps.append((code))
                                 mesuStart[code.decode('utf-8')] = i - 4
