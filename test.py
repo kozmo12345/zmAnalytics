@@ -13,8 +13,10 @@ now = datetime.datetime.now()
 print(str(datetime.datetime.now()))
 
 edList = []
+fmList = []
+amList = []
 
-for lange in range(4,10):
+for lange in range(3,4):
     edSum = 0
     for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
         for subdirname in dirnames:
@@ -121,7 +123,7 @@ for lange in range(4,10):
                                     edSum = edSum + ed
                                     edFile.write( str(code.decode('utf-8')) + ',' + str(ed) + ',' + str(ms) + ',' + str(md) + ',' + str(msTime) + ',' + str(mdTime) + '\n')
                                     comps.remove(code)
-                                elif((mmRate < 0.4 or fMedoTime < second_oTime) and ed >= 2):
+                                elif((mmRate < 0.4 or fMedoTime < second_oTime) and ed >= 0.3):
                                     edSum = edSum + ed
                                     edFile.write( str(code.decode('utf-8')) + ',' + str(ed) + ',' + str(ms) + ',' + str(md) + ',' + str(msTime) + ',' + str(mdTime) + '\n')
                                     comps.remove(code)
@@ -204,7 +206,7 @@ for lange in range(4,10):
                 edFile.write(today + ',' + line)
 
 for ed in edList:
-    edFile.write(str(ed))
+    edFile.write(str(ed) + ' ')
 print("end")            
 
 now = datetime.datetime.now()
