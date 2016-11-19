@@ -22,11 +22,12 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
         today = subdirname
         # if(today != '2016-09-21'):
         #     break;
-        # today = '2016-09-22'
+        # today = '2016-11-15'
         print(today)
         setFile = open(os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + "moa3.txt"), 'w')
         edFile = open(os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + "ed.txt"), 'w')
         realfilePath = os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + ".txt");
+        tempFile = open(os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + "tempFile.txt"), 'w')
         
         data = sp.genfromtxt(realfilePath, delimiter="\t", dtype='|S20')
         codes = sp.unique(data[data[:,7] != b''][:,7])
@@ -58,6 +59,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
                         break
     
                 except Exception as e:
+                    print('*************' + str())
                     raise
     
             data = termData;
@@ -69,12 +71,11 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
         mesuStart = dict()
         msRate = dict()
         comps = []
-        mesuLimit = 0
+        mesuLimit = 1
         # if((today.split('-')[1] == '10' and today.split('-')[2] in ['05','06','07','10','11','12','13','14','17','18','19','20','21','24','25','26','27','28','31']) or (today.split('-')[1] == '11' and today.split('-')[2] in ['01','02','03','07','08','09','10','11','14','15','16','17'])):
         #     mesuLimit = 1
 
-        for timeIndex, ttime in enumerate(times):
-            
+        for ttime in times:
             try:
                 xstime = time.strptime(ttime.decode('utf-8'), '%H:%M:%S')
                 second_oTime = datetime.timedelta(hours=xstime.tm_hour,minutes=xstime.tm_min,seconds=xstime.tm_sec).total_seconds() #계산시간
@@ -202,7 +203,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
                             
                             maxc = sp.argmax(exportData[i+1:,3].astype(float))
     
-                            if(gradient >= 0.7 and srgrad > 0.1):
+                            if(gradient >= 0.7 and srgrad > -0.01):
                                 if(code.decode('utf-8') in mesuDict):
                                     mesuDict[code.decode('utf-8')] = mesuDict[code.decode('utf-8')] + 1
                                 else:
