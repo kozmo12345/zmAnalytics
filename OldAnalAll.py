@@ -46,7 +46,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
                     str_oTime = "ttime.decode('utf-8')"
                     bool_oTime = True
     
-                    if(tmp_time + 8 > second_oTime):
+                    if(tmp_time + 9 > second_oTime):
                         continue;
     
                     tempData = data[data[:,0] == ttime]
