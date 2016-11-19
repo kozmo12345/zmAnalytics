@@ -31,7 +31,7 @@ allMedoTime = datetime.timedelta(hours=10,minutes=45,seconds=00).total_seconds()
 closeTime = datetime.timedelta(hours=15,minutes=15,seconds=00).total_seconds()
 
 comps = []
-    
+mesuLimit = 1
 realfilePath = os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + ".txt");
 dirn = os.path.dirname(realfilePath)
 try:
@@ -81,7 +81,6 @@ mdFile = open(mdFilePath, 'w')
 mdFile.close()
 
 mesuStart = dict()
-smm = dict()
 
 while(True):
     data = sp.genfromtxt(realfilePath, delimiter="\t", dtype='|S20')
@@ -165,16 +164,14 @@ while(True):
                     if(i == -1): continue
                     c = exportData[:i+1, 3].astype(float)
 
-                    if(code in comps and code.decode('utf-8') in mesuStart and mesuDict[code.decode('utf-8')] >= 1):
+                    if(code in comps and code.decode('utf-8') in mesuStart and mesuDict[code.decode('utf-8')] >= mesuLimit):
                         mmRate = (sp.sum(exportData[i-4:i+1,5].astype(float)))/(sp.sum(exportData[i-4:i+1,6].astype(float)))
                         print(code.decode('utf-8') + '    ' + str(mmRate))
-                        if(mmRate < 0.4 and smm[code.decode('utf-8')] == True):
+                        if(mmRate < 0.4):
                             mdFile = open(mdFilePath, 'a')
                             mdFile.write(str(code.decode('utf-8')) + ',' + str(float(exportData[i + 1, 3].decode('UTF-8'))) + ',' + str(exportData[i, 0].decode('UTF-8')) + ',' + str(datetime.datetime.now().strftime('%H:%M:%S')) + '\n')
                             mdFile.close()
                             comps.remove(code)
-                        else:
-                            smm[code.decode('utf-8')] = True
 
                     if(second_oTime > endTime):
                         continue;
@@ -210,13 +207,12 @@ while(True):
                             else:
                                 mesuDict[code.decode('utf-8')] = mesuDict.get(code.decode('utf-8'), 0)
                             
-                            if(mesuDict[code.decode('utf-8')] == 1 and ((code) not in comps)):
+                            if(mesuDict[code.decode('utf-8')] == mesuLimit and ((code) not in comps)):
                                 print(str(ttime) + " " + str(gradient) + " " + str(srgrad) + " " + str(grade))
                                 comps.append((code))
                                 mesuStart[code.decode('utf-8')] = i - 4
                                 wanna = '1.19'
                                 cost = exportData[i, 8].decode('UTF-8')
-                                smm[code.decode('utf-8')] = False
                                 setFile = open(setFilePath, 'a')
                                 setFile.write( str(code.decode('utf-8')) + ',' + str(float(rate)) + ',' + str(gradient) +  ',' + str_oTime + ',' + wanna + ',' + str(datetime.datetime.now().strftime('%H:%M:%S')) + ',' + str(cost) + '\n')
                                 setFile.close()
