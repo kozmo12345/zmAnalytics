@@ -31,7 +31,7 @@ allMedoTime = datetime.timedelta(hours=10,minutes=45,seconds=00).total_seconds()
 closeTime = datetime.timedelta(hours=15,minutes=15,seconds=00).total_seconds()
 
 comps = []
-mesuLimit = 1
+mesuLimit = 3
 realfilePath = os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + ".txt");
 dirn = os.path.dirname(realfilePath)
 try:
@@ -58,7 +58,7 @@ except:
         else:
             raise
 
-mdFilePath = os.path.join("C:\\", "Dropbox\\temp\\Data\\" + today + "\\" + today + "d.txt");
+mdFilePath = os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + "d.txt");
 dirn3 = os.path.dirname(setFilePath)
 try:
     os.stat(dirn3)

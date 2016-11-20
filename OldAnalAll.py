@@ -9,9 +9,6 @@ import time
 
 sp.random.seed(3)
 
-def mean(numbers):
-    return float(sum(numbers)) / max(len(numbers), 1)
-
 now = datetime.datetime.now()
 print(str(datetime.datetime.now()))
 
@@ -25,7 +22,10 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
         today = subdirname
         # if(today != '2016-09-21'):
         #     break;
-        # today = '2016-11-15'
+        # today = '2016-10-12'
+        if((today.split('-')[1] == '10' and today.split('-')[2] in ['05','06','07','10','11','12','13','14','17','18','19','20','21','24','25','26','27','28','31']) or (today.split('-')[1] == '11' and today.split('-')[2] in ['01','02','03','07','08','09','10'])):
+            continue
+
         print(today)
         setFile = open(os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + "moa3.txt"), 'w')
         edFile = open(os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + "ed.txt"), 'w')
@@ -68,13 +68,19 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
             data = termData;
             codes = sp.unique(data[data[:,7] != b''][:,7])
             times = sp.unique(data[data[:,0] != b''][:,0])
+  
+        # for x in data:
+        #     tempFile.writelines(str(x) + '\n');
+
+        # break
 
         tmp_time = 0
         mesuDict = dict()
         mesuStart = dict()
         msRate = dict()
         comps = []
-        mesuLimit = 2
+        mesuLimit = 3
+        mesuSTime = dict()
         # if((today.split('-')[1] == '10' and today.split('-')[2] in ['05','06','07','10','11','12','13','14','17','18','19','20','21','24','25','26','27','28','31']) or (today.split('-')[1] == '11' and today.split('-')[2] in ['01','02','03','07','08','09','10','11','14','15','16','17'])):
         #     mesuLimit = 1
 
@@ -96,12 +102,10 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
                 
                 if(second_oTime < startTime):
                     continue;
-                            
-                # if(tmp_time + 8 > second_oTime):
-                #     continue;
 
                 if(second_oTime > endTime and len(comps) == 0):
                     break;
+                            
                 if(second_oTime - 100 > allMedoTime):
                     for code in comps:
                         ms = float(msRate[code.decode('utf-8')])
@@ -111,10 +115,9 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
                         msTime = exportData[mesuStart[code.decode('utf-8')],0].decode('UTF-8')
                         allMax = max(exportData[:, 3].astype(float))
                         termMax = max(exportData[mesuStart[code.decode('utf-8')]+3:, 3].astype(float))
-                        meanC = mean(exportData[mesuStart[code.decode('utf-8')]+5:mesuStart[code.decode('utf-8')]+12, 3].astype(float))
-                        edFile.write(str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(ed) + ',' + str(msTime) + ',' + str(mdTime) + ',' + str(mesuDict[code.decode('utf-8')]) + ',' + str(meanC) + '\n')
+                        meanC = sp.average(exportData[mesuStart[code.decode('utf-8')]+5:mesuStart[code.decode('utf-8')]+24, 3].astype(float))
+                        edFile.write(str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(ed) + ',' + str(msTime) + ',' + str(mdTime) + ',' + str(mesuDict[code.decode('utf-8')]) + ',' + str(mesuSTime[code.decode('utf-8')]) + '\n')
                         comps.remove(code)
-                    break;
 
                 tmp_time = second_oTime
                 
@@ -164,19 +167,19 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
                             msTime = exportData[mesuStart[code.decode('utf-8')],0].decode('UTF-8')
                             allMax = max(exportData[:, 3].astype(float))
                             termMax = max(exportData[mesuStart[code.decode('utf-8')]+3:i+1, 3].astype(float))
-                            meanC = mean(exportData[mesuStart[code.decode('utf-8')]+5:mesuStart[code.decode('utf-8')]+12, 3].astype(float))
+                            meanC = sp.average(exportData[mesuStart[code.decode('utf-8')]+5:mesuStart[code.decode('utf-8')]+24, 3].astype(float))
                             
                             if(float(exportData[i, 3].decode('UTF-8')) > 28.9):
-                                edFile.write( str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(ed) + ',' + str(msTime) + ',' + str(mdTime) + ',' + str(mesuDict[code.decode('utf-8')]) + ',' + str(meanC) + '\n')
+                                edFile.write( str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(ed) + ',' + str(msTime) + ',' + str(mdTime) + ',' + str(mesuDict[code.decode('utf-8')]) + ',' + str(mesuSTime[code.decode('utf-8')]) + '\n')
                                 comps.remove(code)
                             elif(float(exportData[i, 3].decode('UTF-8')) > 19.5 and ed >= 2):
-                                edFile.write( str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(ed) + ',' + str(msTime) + ',' + str(mdTime) + ',' + str(mesuDict[code.decode('utf-8')]) + ',' + str(meanC) + '\n')
+                                edFile.write( str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(ed) + ',' + str(msTime) + ',' + str(mdTime) + ',' + str(mesuDict[code.decode('utf-8')]) + ',' + str(mesuSTime[code.decode('utf-8')]) + '\n')
                                 comps.remove(code)
                             elif((mmRate < 0.4 or fMedoTime < second_oTime) and ed >= 2):
-                                edFile.write( str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(ed) + ',' + str(msTime) + ',' + str(mdTime) + ',' + str(mesuDict[code.decode('utf-8')]) + ',' + str(meanC) + '\n')
+                                edFile.write( str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(ed) + ',' + str(msTime) + ',' + str(mdTime) + ',' + str(mesuDict[code.decode('utf-8')]) + ',' + str(mesuSTime[code.decode('utf-8')]) + '\n')
                                 comps.remove(code)
                             elif(allMedoTime < second_oTime):
-                                edFile.write( str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(ed) + ',' + str(msTime) + ',' + str(mdTime) + ',' + str(mesuDict[code.decode('utf-8')]) + ',' + str(meanC) + '\n')
+                                edFile.write( str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(ed) + ',' + str(msTime) + ',' + str(mdTime) + ',' + str(mesuDict[code.decode('utf-8')]) + ',' + str(mesuSTime[code.decode('utf-8')]) + '\n')
                                 comps.remove(code)
 
                         if(second_oTime > endTime):
@@ -212,6 +215,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
                                 if(code.decode('utf-8') in mesuDict):
                                     mesuDict[code.decode('utf-8')] = mesuDict[code.decode('utf-8')] + 1
                                 else:
+                                    mesuSTime[code.decode('utf-8')] = str_oTime
                                     mesuDict[code.decode('utf-8')] = mesuDict.get(code.decode('utf-8'), 0)
 
                                 if(mesuDict[code.decode('utf-8')] == mesuLimit and ((code) not in comps)):
@@ -237,6 +241,9 @@ edFile.write('day' +  ',' + 'code' +  ',' + 'max' +  ',' + 'termMax' +  ',' + 'm
 for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
     for subdirname in dirnames:
         today = subdirname
+
+        if((today.split('-')[1] == '10' and today.split('-')[2] in ['05','06','07','10','11','12','13','14','17','18','19','20','21','24','25','26','27','28','31']) or (today.split('-')[1] == '11' and today.split('-')[2] in ['01','02','03','07','08','09','10'])):
+            continue
 
         setFilePath = os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + "moa3.txt");
         setFile = open(setFilePath, 'r')
