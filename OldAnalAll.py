@@ -111,7 +111,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
                         msTime = exportData[mesuStart[code.decode('utf-8')],0].decode('UTF-8')
                         allMax = max(exportData[:, 3].astype(float))
                         termMax = max(exportData[mesuStart[code.decode('utf-8')]+3:, 3].astype(float))
-                        meanC = mean(exportData[mesuStart[code.decode('utf-8')]:mesuStart[code.decode('utf-8')]+8, 3].astype(float))
+                        meanC = mean(exportData[mesuStart[code.decode('utf-8')]+5:mesuStart[code.decode('utf-8')]+12, 3].astype(float))
                         edFile.write(str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(ed) + ',' + str(msTime) + ',' + str(mdTime) + ',' + str(mesuDict[code.decode('utf-8')]) + ',' + str(meanC) + '\n')
                         comps.remove(code)
                     break;
@@ -164,7 +164,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
                             msTime = exportData[mesuStart[code.decode('utf-8')],0].decode('UTF-8')
                             allMax = max(exportData[:, 3].astype(float))
                             termMax = max(exportData[mesuStart[code.decode('utf-8')]+3:i+1, 3].astype(float))
-                            meanC = mean(exportData[mesuStart[code.decode('utf-8')]:mesuStart[code.decode('utf-8')]+8, 3].astype(float))
+                            meanC = mean(exportData[mesuStart[code.decode('utf-8')]+5:mesuStart[code.decode('utf-8')]+12, 3].astype(float))
                             
                             if(float(exportData[i, 3].decode('UTF-8')) > 28.9):
                                 edFile.write( str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(ed) + ',' + str(msTime) + ',' + str(mdTime) + ',' + str(mesuDict[code.decode('utf-8')]) + ',' + str(meanC) + '\n')
