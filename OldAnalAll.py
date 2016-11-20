@@ -9,13 +9,16 @@ import time
 
 sp.random.seed(3)
 
+def mean(numbers):
+    return float(sum(numbers)) / max(len(numbers), 1)
+
 now = datetime.datetime.now()
 print(str(datetime.datetime.now()))
 
 startTime = datetime.timedelta(hours=9,minutes=00,seconds=00).total_seconds()
 endTime = datetime.timedelta(hours=9,minutes=13,seconds=00).total_seconds()
-fMedoTime = datetime.timedelta(hours=10,minutes=00,seconds=00).total_seconds()
-allMedoTime = datetime.timedelta(hours=10,minutes=10,seconds=00).total_seconds()
+fMedoTime = datetime.timedelta(hours=10,minutes=10,seconds=00).total_seconds()
+allMedoTime = datetime.timedelta(hours=10,minutes=45,seconds=00).total_seconds()
 
 for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
     for subdirname in dirnames:
@@ -71,7 +74,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
         mesuStart = dict()
         msRate = dict()
         comps = []
-        mesuLimit = 1
+        mesuLimit = 2
         # if((today.split('-')[1] == '10' and today.split('-')[2] in ['05','06','07','10','11','12','13','14','17','18','19','20','21','24','25','26','27','28','31']) or (today.split('-')[1] == '11' and today.split('-')[2] in ['01','02','03','07','08','09','10','11','14','15','16','17'])):
         #     mesuLimit = 1
 
@@ -108,7 +111,8 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
                         msTime = exportData[mesuStart[code.decode('utf-8')],0].decode('UTF-8')
                         allMax = max(exportData[:, 3].astype(float))
                         termMax = max(exportData[mesuStart[code.decode('utf-8')]+3:, 3].astype(float))
-                        edFile.write(str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(ed) + ',' + str(msTime) + ',' + str(mdTime) + ',' + str(mesuDict[code.decode('utf-8')]) + '\n')
+                        meanC = mean(exportData[mesuStart[code.decode('utf-8')]:mesuStart[code.decode('utf-8')]+8, 3].astype(float))
+                        edFile.write(str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(ed) + ',' + str(msTime) + ',' + str(mdTime) + ',' + str(mesuDict[code.decode('utf-8')]) + ',' + str(meanC) + '\n')
                         comps.remove(code)
                     break;
 
@@ -160,18 +164,19 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
                             msTime = exportData[mesuStart[code.decode('utf-8')],0].decode('UTF-8')
                             allMax = max(exportData[:, 3].astype(float))
                             termMax = max(exportData[mesuStart[code.decode('utf-8')]+3:i+1, 3].astype(float))
-
+                            meanC = mean(exportData[mesuStart[code.decode('utf-8')]:mesuStart[code.decode('utf-8')]+8, 3].astype(float))
+                            
                             if(float(exportData[i, 3].decode('UTF-8')) > 28.9):
-                                edFile.write( str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(ed) + ',' + str(msTime) + ',' + str(mdTime) + ',' + str(mesuDict[code.decode('utf-8')]) + '\n')
+                                edFile.write( str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(ed) + ',' + str(msTime) + ',' + str(mdTime) + ',' + str(mesuDict[code.decode('utf-8')]) + ',' + str(meanC) + '\n')
                                 comps.remove(code)
                             elif(float(exportData[i, 3].decode('UTF-8')) > 19.5 and ed >= 2):
-                                edFile.write( str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(ed) + ',' + str(msTime) + ',' + str(mdTime) + ',' + str(mesuDict[code.decode('utf-8')]) + '\n')
+                                edFile.write( str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(ed) + ',' + str(msTime) + ',' + str(mdTime) + ',' + str(mesuDict[code.decode('utf-8')]) + ',' + str(meanC) + '\n')
                                 comps.remove(code)
                             elif((mmRate < 0.4 or fMedoTime < second_oTime) and ed >= 2):
-                                edFile.write( str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(ed) + ',' + str(msTime) + ',' + str(mdTime) + ',' + str(mesuDict[code.decode('utf-8')]) + '\n')
+                                edFile.write( str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(ed) + ',' + str(msTime) + ',' + str(mdTime) + ',' + str(mesuDict[code.decode('utf-8')]) + ',' + str(meanC) + '\n')
                                 comps.remove(code)
                             elif(allMedoTime < second_oTime):
-                                edFile.write( str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(ed) + ',' + str(msTime) + ',' + str(mdTime) + ',' + str(mesuDict[code.decode('utf-8')]) + '\n')
+                                edFile.write( str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(ed) + ',' + str(msTime) + ',' + str(mdTime) + ',' + str(mesuDict[code.decode('utf-8')]) + ',' + str(meanC) + '\n')
                                 comps.remove(code)
 
                         if(second_oTime > endTime):
@@ -184,7 +189,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
                         gr = int(exportData[i, 4].decode('UTF-8'))
 
                         ms_md = (exportData[i,5].astype(float))/(exportData[i,6].astype(float))
-                        sms_md = sp.sum((sp.sum(exportData[:i+1,5].astype(float)))/(sp.sum(exportData[:i+1,6].astype(float))))
+                        sms_md = sp.sum(exportData[:i+1,5].astype(float))/sp.sum(exportData[:i+1,6].astype(float))
                         
                         if(ms_md > 1 and sms_md > 1 and grade < 20):
                             x = ti
