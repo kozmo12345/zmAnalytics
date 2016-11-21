@@ -97,11 +97,11 @@ while(True):
     now = datetime.datetime.now()
     nowTime = datetime.timedelta(hours=now.hour,minutes=now.minute,seconds=now.second).total_seconds()
 
-    # if(nowTime > endTime and len(comps) == 0):
-    #     break;
+    if(nowTime > endTime and len(comps) == 0):
+        break;
 
-    # if(nowTime - 100 > allMedoTime):
-    #     break;
+    if(nowTime - 100 > allMedoTime):
+        break;
 
     print(today + str(times[len(times)-1]))
     print(comps)
