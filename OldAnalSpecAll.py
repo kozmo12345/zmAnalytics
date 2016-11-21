@@ -23,6 +23,9 @@ allMedoTime = datetime.timedelta(hours=10,minutes=45,seconds=00).total_seconds()
 for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
     for subdirname in dirnames:
         today = subdirname
+        if(today != '2016-09-21'):
+            break;
+        today = '2016-10-05'        
         setFilePath = os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + "moa3.txt");
         setFile = open(setFilePath, 'r')
         
@@ -158,7 +161,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
                 continue
 
 
-analFilePath = os.path.join("C:\\", "Dropbox\\Data\\" + "anal.txt");
+analFilePath = os.path.join("C:\\", "Dropbox\\Data\\" + "analS.txt");
 analFile = open(analFilePath, 'w')
 
 analFile.write( 'day,code,nextRate,maxRate,mesuTime,gr,grade,gradient,srgrad,sms_md,err,serr,sserr\n')

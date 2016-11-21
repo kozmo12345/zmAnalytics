@@ -32,8 +32,7 @@ closeTime = datetime.timedelta(hours=15,minutes=15,seconds=00).total_seconds()
 
 comps = []
 mesuLimit = 3
-wanna = 2
-realfilePath = os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + ".txt");
+realfilePath = os.path.join("C:\\", "Dropbox\\temp\\Data\\" + today + "\\" + today + ".txt");
 dirn = os.path.dirname(realfilePath)
 try:
     os.stat(dirn)
@@ -46,7 +45,7 @@ except:
         else:
             raise
 
-setFilePath = os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + "m.txt");
+setFilePath = os.path.join("C:\\", "Dropbox\\temp\\Data\\" + today + "\\" + today + "m.txt");
 dirn2 = os.path.dirname(setFilePath)
 try:
     os.stat(dirn2)
@@ -59,7 +58,7 @@ except:
         else:
             raise
 
-mdFilePath = os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + "d.txt");
+mdFilePath = os.path.join("C:\\", "Dropbox\\temp\\Data\\" + today + "\\" + today + "d.txt");
 dirn3 = os.path.dirname(setFilePath)
 try:
     os.stat(dirn3)
@@ -97,11 +96,11 @@ while(True):
     now = datetime.datetime.now()
     nowTime = datetime.timedelta(hours=now.hour,minutes=now.minute,seconds=now.second).total_seconds()
 
-    if(nowTime > endTime and len(comps) == 0):
-        break;
+    # if(nowTime > endTime and len(comps) == 0):
+    #     break;
 
-    if(nowTime - 100 > allMedoTime):
-        break;
+    # if(nowTime - 100 > allMedoTime):
+    #     break;
 
     print(today + str(times[len(times)-1]))
     print(comps)
@@ -151,7 +150,6 @@ while(True):
                     firstSecond = datetime.timedelta(hours=xtime.tm_hour,minutes=xtime.tm_min,seconds=xtime.tm_sec).total_seconds()
                 
                     ti = sp.array([])
-
                     i = -1
                     for ei, et in enumerate(exportData[:, 0]):
                         tsi = time.strptime(et.decode('utf-8'), '%H:%M:%S')
@@ -161,11 +159,11 @@ while(True):
                         if(second_oTime == sect):
                             i = ei
                             break;
-                        
                     if(i == -1): continue
                     c = exportData[:i+1, 3].astype(float)
 
-                    if(code in comps and code.decode('utf-8') in mesuStart and mesuDict[code.decode('utf-8')] >= mesuLimit):
+                    if(code in comps and code.decode('utf-8') in mesuDict and mesuDict[code.decode('utf-8')] >= mesuLimit):
+                            
                         mmRate = (sp.sum(exportData[i-4:i+1,5].astype(float)))/(sp.sum(exportData[i-4:i+1,6].astype(float)))
                         print(code.decode('utf-8') + '    ' + str(mmRate))
                         if(mmRate < 0.4):
@@ -185,7 +183,6 @@ while(True):
     
                     ms_md = (exportData[i,5].astype(float))/(exportData[i,6].astype(float))
                     sms_md = sp.sum((sp.sum(exportData[:i+1,5].astype(float)))/(sp.sum(exportData[:i+1,6].astype(float))))
-
                     if(ms_md > 1 and sms_md > 1 and grade < 20):
                         x = ti
                         y = exportData[:i+1,3].astype(float)
@@ -202,7 +199,6 @@ while(True):
                         srgrad = sp.around(srfit[0]*10, decimals=2)
                         
                         if(gradient >= 0.7 and srgrad > -0.01):
-           
                             if(code.decode('utf-8') in mesuDict):
                                 mesuDict[code.decode('utf-8')] = mesuDict[code.decode('utf-8')] + 1
                             else:
@@ -211,7 +207,7 @@ while(True):
                             if(mesuDict[code.decode('utf-8')] == mesuLimit and ((code) not in comps)):
                                 print(str(ttime) + " " + str(gradient) + " " + str(srgrad) + " " + str(grade))
                                 comps.append((code))
-                                mesuStart[code.decode('utf-8')] = i - 4
+                                wanna = '1.19'
                                 cost = exportData[i, 8].decode('UTF-8')
                                 setFile = open(setFilePath, 'a')
                                 setFile.write( str(code.decode('utf-8')) + ',' + str(float(rate)) + ',' + str(gradient) +  ',' + str_oTime + ',' + wanna + ',' + str(datetime.datetime.now().strftime('%H:%M:%S')) + ',' + str(cost) + '\n')
