@@ -97,11 +97,11 @@ while(True):
     now = datetime.datetime.now()
     nowTime = datetime.timedelta(hours=now.hour,minutes=now.minute,seconds=now.second).total_seconds()
 
-    if(nowTime > endTime and len(comps) == 0):
-        break;
+    # if(nowTime > endTime and len(comps) == 0):
+    #     break;
 
-    if(nowTime - 100 > allMedoTime):
-        break;
+    # if(nowTime - 100 > allMedoTime):
+    #     break;
 
     print(today + str(times[len(times)-1]))
     print(comps)
@@ -214,7 +214,7 @@ while(True):
                                 mesuStart[code.decode('utf-8')] = i - 4
                                 cost = exportData[i, 8].decode('UTF-8')
                                 setFile = open(setFilePath, 'a')
-                                setFile.write( str(code.decode('utf-8')) + ',' + str(float(rate)) + ',' + str(gradient) +  ',' + str_oTime + ',' + wanna + ',' + str(datetime.datetime.now().strftime('%H:%M:%S')) + ',' + str(cost) + '\n')
+                                setFile.write( str(code.decode('utf-8')) + ',' + str(float(rate)) + ',' + str(gradient) +  ',' + str_oTime + ',' + str(wanna) + ',' + str(datetime.datetime.now().strftime('%H:%M:%S')) + ',' + str(cost) + '\n')
                                 setFile.close()
                              
         except Exception as e:
