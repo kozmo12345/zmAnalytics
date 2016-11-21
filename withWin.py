@@ -150,7 +150,6 @@ while(True):
                     firstSecond = datetime.timedelta(hours=xtime.tm_hour,minutes=xtime.tm_min,seconds=xtime.tm_sec).total_seconds()
                 
                     ti = sp.array([])
-    
                     i = -1
                     for ei, et in enumerate(exportData[:, 0]):
                         tsi = time.strptime(et.decode('utf-8'), '%H:%M:%S')
@@ -160,11 +159,11 @@ while(True):
                         if(second_oTime == sect):
                             i = ei
                             break;
-                        
                     if(i == -1): continue
                     c = exportData[:i+1, 3].astype(float)
 
-                    if(code in comps and code.decode('utf-8') in mesuStart and mesuDict[code.decode('utf-8')] >= mesuLimit):
+                    if(code in comps and code.decode('utf-8') in mesuDict and mesuDict[code.decode('utf-8')] >= mesuLimit):
+                            
                         mmRate = (sp.sum(exportData[i-4:i+1,5].astype(float)))/(sp.sum(exportData[i-4:i+1,6].astype(float)))
                         print(code.decode('utf-8') + '    ' + str(mmRate))
                         if(mmRate < 0.4):
@@ -184,7 +183,6 @@ while(True):
     
                     ms_md = (exportData[i,5].astype(float))/(exportData[i,6].astype(float))
                     sms_md = sp.sum((sp.sum(exportData[:i+1,5].astype(float)))/(sp.sum(exportData[:i+1,6].astype(float))))
-
                     if(ms_md > 1 and sms_md > 1 and grade < 20):
                         x = ti
                         y = exportData[:i+1,3].astype(float)
@@ -210,7 +208,6 @@ while(True):
                             if(mesuDict[code.decode('utf-8')] == mesuLimit and ((code) not in comps)):
                                 print(str(ttime) + " " + str(gradient) + " " + str(srgrad) + " " + str(grade))
                                 comps.append((code))
-                                mesuStart[code.decode('utf-8')] = i - 4
                                 wanna = '1.19'
                                 cost = exportData[i, 8].decode('UTF-8')
                                 setFile = open(setFilePath, 'a')
