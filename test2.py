@@ -102,7 +102,7 @@ for wanna in wannas:
                             if(second_oTime > endTime and len(comps) == 0):
                                 break;
             
-                            if(second_oTime + 20 > allMedoTime):
+                            if(second_oTime - 20 > allMedoTime):
                                 dcodes = comps
                                 for code in dcodes:
                                     ms = float(msRate[code.decode('utf-8')])
