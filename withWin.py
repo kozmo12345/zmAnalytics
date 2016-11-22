@@ -97,11 +97,11 @@ while(True):
     now = datetime.datetime.now()
     nowTime = datetime.timedelta(hours=now.hour,minutes=now.minute,seconds=now.second).total_seconds()
 
-    # if(nowTime > endTime and len(comps) == 0):
-    #     break;
+    if(nowTime > endTime and len(comps) == 0):
+        break;
 
-    # if(nowTime - 100 > allMedoTime):
-    #     break;
+    if(nowTime - 100 > allMedoTime):
+        break;
 
     for comp in comps:
         mesuDict[comp] = -1
