@@ -15,10 +15,10 @@ print(str(datetime.datetime.now()))
 startTime = datetime.timedelta(hours=9,minutes=00,seconds=00).total_seconds()
 endTime = datetime.timedelta(hours=9,minutes=13,seconds=00).total_seconds()
 fMedoTime = datetime.timedelta(hours=10,minutes=10,seconds=00).total_seconds()
-allMedoTime = datetime.timedelta(hours=15,minutes=19,seconds=30).total_seconds()
-wanna = 3
-mesuLimit = 3
-rateLimit = 0.4
+allMedoTime = datetime.timedelta(hours=15,minutes=19,seconds=00).total_seconds()
+wanna = 1.2
+mesuLimit = 1
+rateLimit = 0.44
 sumEd = 0
 for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
     for subdirname in dirnames:
@@ -62,7 +62,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
                     tmp_time = second_oTime
                     print(ttime)
                     termData = sp.append(termData,tempData, axis=0)
-                    if(second_oTime > allMedoTime + 200):
+                    if(second_oTime > allMedoTime + 15):
                         break
     
                 except Exception as e:

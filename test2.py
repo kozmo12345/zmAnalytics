@@ -17,9 +17,9 @@ endTime = datetime.timedelta(hours=9,minutes=13,seconds=00).total_seconds()
 fMedoTime = datetime.timedelta(hours=10,minutes=10,seconds=00).total_seconds()
 allMedoTime = datetime.timedelta(hours=15,minutes=19,seconds=30).total_seconds()
 
-wannas = [1,1.5,2,2.5,3]
-mesuLimits = [0,1,2,3]
-rateLimits = [0.4,0.45,0.5]
+wannas = [1.5,2,3]
+mesuLimits = [2,3]
+rateLimits = [0.45]
 
 for wanna in wannas:
     for mesuLimit in mesuLimits:
@@ -29,7 +29,10 @@ for wanna in wannas:
             for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
                 for subdirname in dirnames:
                     today = subdirname
-            
+
+                    if((today.split('-')[1] == '10' and today.split('-')[2] in ['05','06','07','10','11','12','13','14','17','18','19','20','21','24','25','26','27','28','31']) or (today.split('-')[1] == '11' and today.split('-')[2] in ['01','02','03','07','08','09','10'])):
+                        continue
+
                     print(today)
                     # setFile = open(os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + "moa3.txt"), 'w')
                     # edFile = open(os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + "ed.txt"), 'w')
@@ -182,7 +185,7 @@ for wanna in wannas:
             
                                     if(second_oTime > endTime):
                                         continue;
-            
+
                                     if(len(comps) > 0):
                                         continue;
                 
