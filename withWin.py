@@ -103,8 +103,8 @@ while(True):
     if(nowTime - 100 > allMedoTime):
         break;
 
-    for comp in comps:
-        mesuDict[comp] = -1
+    # for comp in comps:
+    #     mesuDict[comp] = -1
 
     print(today + str(times[len(times)-1]))
     print(comps)
@@ -170,7 +170,7 @@ while(True):
 
                     if(code in comps and code.decode('utf-8') in mesuStart and code.decode('utf-8') in mesuDict and mesuDict[code.decode('utf-8')] >= mesuLimit):
                         mmRate = (sp.sum(exportData[i-4:i+1,5].astype(float)))/(sp.sum(exportData[i-4:i+1,6].astype(float)))
-                        print(code.decode('utf-8') + '    ' + str(mmRate))
+                        print(code.decode('utf-8') + '    ' + str(mmRate) + '    ' + str(str_oTime))
                         if(mmRate < 0.4):
                             mdFile = open(mdFilePath, 'a')
                             mdFile.write(str(code.decode('utf-8')) + ',' + str(float(exportData[i + 1, 3].decode('UTF-8'))) + ',' + str(exportData[i, 0].decode('UTF-8')) + ',' + str(datetime.datetime.now().strftime('%H:%M:%S')) + '\n')
@@ -178,6 +178,9 @@ while(True):
                             comps.remove(code)
 
                     if(second_oTime > endTime):
+                        continue;
+
+                    if(nowTime > endTime):
                         continue;
     
                     if(True in (c > 21)):
