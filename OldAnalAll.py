@@ -109,7 +109,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
                 if(second_oTime > endTime and len(comps) == 0):
                     break;
 
-                if(second_oTime - 100 > allMedoTime):
+                if(second_oTime > allMedoTime):
                     dcodes = comps
                     for code in dcodes:
                         ms = float(msRate[code.decode('utf-8')])
@@ -248,7 +248,7 @@ analFile = open(analFilePath, 'w')
 edFilePath = os.path.join("C:\\", "Dropbox\\Data\\" + "ed.txt");
 edFile = open(edFilePath, 'w')
 
-edFile.write('day' +  ',' + 'code' +  ',' + 'max' +  ',' + 'termMax' +  ',' + 'md' +  ',' + 'ms' +  ',' + 'ed' +  ',' + 'msTime' +  ',' + 'mdTime' + '\n')
+edFile.write('day' +  ',' + 'sumEd' +    ',' + 'code' +  ',' + 'max' +  ',' + 'termMax' +  ',' + 'md' +  ',' + 'ms' +  ',' + 'ed' +  ',' + 'msTime' +  ',' + 'mdTime' + '\n')
 
 for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
     for subdirname in dirnames:
