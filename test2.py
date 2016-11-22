@@ -17,9 +17,9 @@ endTime = datetime.timedelta(hours=9,minutes=13,seconds=00).total_seconds()
 fMedoTime = datetime.timedelta(hours=10,minutes=10,seconds=00).total_seconds()
 allMedoTime = datetime.timedelta(hours=15,minutes=19,seconds=30).total_seconds()
 
-wannas = [1,1.2,1.3,1.5,1.7,2]
+wannas = [1,1.5,2,2.5,3]
 mesuLimits = [0,1,2,3]
-rateLimits = [0.39,0.4,0.41,0.42,0.43,0.44,0.45,0.46,0.5]
+rateLimits = [0.4,0.45,0.5]
 
 for wanna in wannas:
     for mesuLimit in mesuLimits:
