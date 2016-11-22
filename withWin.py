@@ -97,11 +97,14 @@ while(True):
     now = datetime.datetime.now()
     nowTime = datetime.timedelta(hours=now.hour,minutes=now.minute,seconds=now.second).total_seconds()
 
-    if(nowTime > endTime and len(comps) == 0):
-        break;
+    # if(nowTime > endTime and len(comps) == 0):
+    #     break;
 
-    if(nowTime - 100 > allMedoTime):
-        break;
+    # if(nowTime - 100 > allMedoTime):
+    #     break;
+
+    for comp in comps:
+        mesuDict[comp] = -1
 
     print(today + str(times[len(times)-1]))
     print(comps)
@@ -165,7 +168,7 @@ while(True):
                     if(i == -1): continue
                     c = exportData[:i+1, 3].astype(float)
 
-                    if(code in comps and code.decode('utf-8') in mesuStart and mesuDict[code.decode('utf-8')] >= mesuLimit):
+                    if(code in comps and code.decode('utf-8') in mesuStart and code.decode('utf-8') in mesuDict and mesuDict[code.decode('utf-8')] >= mesuLimit):
                         mmRate = (sp.sum(exportData[i-4:i+1,5].astype(float)))/(sp.sum(exportData[i-4:i+1,6].astype(float)))
                         print(code.decode('utf-8') + '    ' + str(mmRate))
                         if(mmRate < 0.4):
