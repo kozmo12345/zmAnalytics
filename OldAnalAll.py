@@ -14,12 +14,12 @@ print(str(datetime.datetime.now()))
 
 startTime = datetime.timedelta(hours=9,minutes=00,seconds=00).total_seconds()
 endTime = datetime.timedelta(hours=9,minutes=13,seconds=00).total_seconds()
-fMedoTime = datetime.timedelta(hours=9,minutes=15,seconds=00).total_seconds()
-allMedoTime = datetime.timedelta(hours=15,minutes=19,seconds=50).total_seconds()
-wanna = 2
+fMedoTime = datetime.timedelta(hours=10,minutes=10,seconds=00).total_seconds()
+allMedoTime = datetime.timedelta(hours=15,minutes=19,seconds=30).total_seconds()
+wanna = 3
 mesuLimit = 3
 rateLimit = 0.4
-
+sumEd = 0
 for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
     for subdirname in dirnames:
         today = subdirname
@@ -121,6 +121,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
                         termMax = max(exportData[mesuStart[code.decode('utf-8')]:, 3].astype(float))
                         edFile.write(str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(ed) + ',' + str(msTime) + ',' + str(mdTime) + ',' + str(mesuDict[code.decode('utf-8')]) + ',' + str(mesuSTime[code.decode('utf-8')]) + '\n')
                         comps.remove(code)
+                        sumEd = sumEd +ed
                     break;
                 tmp_time = second_oTime
                 
@@ -176,15 +177,19 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
                             if(float(exportData[i, 3].decode('UTF-8')) > 28.9):
                                 edFile.write( str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(ed) + ',' + str(msTime) + ',' + str(mdTime) + ',' + str(mesuDict[code.decode('utf-8')]) + ',' + str(mesuSTime[code.decode('utf-8')]) + '\n')
                                 comps.remove(code)
+                                sumEd = sumEd +ed
                             elif(float(exportData[i, 3].decode('UTF-8')) > 19.5 and ed >= wanna):
                                 edFile.write( str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(ed) + ',' + str(msTime) + ',' + str(mdTime) + ',' + str(mesuDict[code.decode('utf-8')]) + ',' + str(mesuSTime[code.decode('utf-8')]) + '\n')
                                 comps.remove(code)
+                                sumEd = sumEd +ed
                             elif((mmRate < rateLimit or fMedoTime < second_oTime) and ed >= wanna):
                                 edFile.write( str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(ed) + ',' + str(msTime) + ',' + str(mdTime) + ',' + str(mesuDict[code.decode('utf-8')]) + ',' + str(mesuSTime[code.decode('utf-8')]) + '\n')
                                 comps.remove(code)
+                                sumEd = sumEd +ed
                             elif(allMedoTime < second_oTime):
                                 edFile.write( str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(ed) + ',' + str(msTime) + ',' + str(mdTime) + ',' + str(mesuDict[code.decode('utf-8')]) + ',' + str(mesuSTime[code.decode('utf-8')]) + '\n')
                                 comps.remove(code)
+                                sumEd = sumEd +ed
 
                         if(second_oTime > endTime):
                             continue;
@@ -262,7 +267,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
         set2File = open(set2FilePath, 'r')
         
         for line in set2File:
-            edFile.write(today + ',' + line)
+            edFile.write(today + ',' + str(sumEd) + ',' + line)
 
 print("end")            
 
