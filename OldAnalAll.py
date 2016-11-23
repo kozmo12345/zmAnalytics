@@ -14,9 +14,9 @@ print(str(datetime.datetime.now()))
 
 startTime = datetime.timedelta(hours=9,minutes=00,seconds=00).total_seconds()
 endTime = datetime.timedelta(hours=9,minutes=13,seconds=00).total_seconds()
-fMedoTime = datetime.timedelta(hours=9,minutes=15,seconds=00).total_seconds()
+fMedoTime = datetime.timedelta(hours=9,minutes=18,seconds=00).total_seconds()
 allMedoTime = datetime.timedelta(hours=9,minutes=20,seconds=00).total_seconds()
-wanna = 1.2
+wanna = 1
 mesuLimit = 1
 rateLimit = 0.44
 sumEd = 0
@@ -99,7 +99,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
                         second_oTime = nt
                         bool_oTime = True
                         break;
-                
+
                 if(second_oTime < startTime):
                     continue;
 
@@ -161,9 +161,9 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
 
                             # print(str(code) + str(mmRate))
                             ms = float(msRate[code.decode('utf-8')])
-                            md = float(exportData[i + 1, 3].decode('UTF-8'))
+                            md = float(exportData[i, 3].decode('UTF-8'))
                             ed = round(md - ms, 2)
-                            mdTime = ttime.decode('UTF-8')
+                            mdTime = exportData[i, 0].decode('UTF-8')
                             msTime = exportData[mesuStart[code.decode('utf-8')],0].decode('UTF-8')
                             allMax = max(exportData[:, 3].astype(float))
                             termMax = max(exportData[mesuStart[code.decode('utf-8')]:i+1, 3].astype(float))
@@ -190,7 +190,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
                         if(second_oTime > endTime):
                             continue;
     
-                        if(True in (c > 21)):
+                        if(True in (c > 25)):
                             continue;
                         rate = exportData[i, 3].decode('UTF-8')
                         grade = int(exportData[i, 1].decode('UTF-8'))
@@ -199,7 +199,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
                         ms_md = (exportData[i,5].astype(float))/(exportData[i,6].astype(float))
                         sms_md = sp.sum(exportData[:i+1,5].astype(float))/sp.sum(exportData[:i+1,6].astype(float))
                         
-                        if(ms_md > 1 and sms_md > 1 and grade < 20):
+                        if(ms_md > 1 and sms_md > 1 and grade < 11):
                             x = ti
                             y = exportData[:i+1,3].astype(float)
                             if(len(y) <= 1):
@@ -216,7 +216,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
                             
                             maxc = sp.argmax(exportData[i+1:,3].astype(float))
     
-                            if(gradient >= 0.7 and srgrad > 0.01):
+                            if(gradient >= 0.4 and srgrad > 0.01):
                                 if(code.decode('utf-8') in mesuDict):
                                     mesuDict[code.decode('utf-8')] = mesuDict[code.decode('utf-8')] + 1
                                 else:
