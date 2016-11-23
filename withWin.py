@@ -84,8 +84,6 @@ setFile.close()
 mdFile = open(mdFilePath, 'w')
 mdFile.close()
 
-mesuStart = dict()
-
 while(True):
     data = sp.genfromtxt(realfilePath, delimiter="\t", dtype='|S20')
     
@@ -132,7 +130,7 @@ while(True):
             if(tmp_time + 8 > second_oTime):
                 continue;
 
-            if(second_oTime > endTime and len(mesuDict) == 0):
+            if(second_oTime > endTime and len(comps) == 0):
                 break;
 
             tmp_time = second_oTime
@@ -168,7 +166,7 @@ while(True):
                     if(i == -1): continue
                     c = exportData[:i+1, 3].astype(float)
 
-                    if(code in comps and code not in medos and code.decode('utf-8') in mesuStart and code.decode('utf-8') in mesuDict and mesuDict[code.decode('utf-8')] >= mesuLimit):
+                    if(code in comps and code not in medos):
                         mmRate = (sp.sum(exportData[i-4:i+1,5].astype(float)))/(sp.sum(exportData[i-4:i+1,6].astype(float)))
                         print(code.decode('utf-8') + '    ' + str(mmRate) + '    ' + str(str_oTime))
                         if(mmRate < rateLimit):
@@ -218,7 +216,6 @@ while(True):
                             if(mesuDict[code.decode('utf-8')] == mesuLimit and (code not in comps) and (code not in medos)):
                                 print(str(ttime) + " " + str(gradient) + " " + str(srgrad) + " " + str(grade))
                                 comps.append(code)
-                                mesuStart[code.decode('utf-8')] = i - 4
                                 cost = exportData[i, 8].decode('UTF-8')
                                 setFile = open(setFilePath, 'a')
                                 setFile.write( str(code.decode('utf-8')) + ',' + str(float(rate)) + ',' + str(gradient) +  ',' + str_oTime + ',' + str(wanna) + ',' + str(datetime.datetime.now().strftime('%H:%M:%S')) + ',' + str(cost) + '\n')
