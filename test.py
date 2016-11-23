@@ -214,7 +214,7 @@ for fMedoTime in fMedoTimes:
                                             
                                             maxc = sp.argmax(exportData[i+1:,3].astype(float))
                     
-                                            if(gradient >= 0.7 and srgrad > -0.01):
+                                            if(gradient >= 0.7 and srgrad > 0.01):
                                                 if(code.decode('utf-8') in mesuDict):
                                                     mesuDict[code.decode('utf-8')] = mesuDict[code.decode('utf-8')] + 1
                                                 else:

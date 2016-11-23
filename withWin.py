@@ -26,8 +26,8 @@ today = now.strftime('%Y-%m-%d')
 
 startTime = datetime.timedelta(hours=9,minutes=00,seconds=00).total_seconds()
 endTime = datetime.timedelta(hours=9,minutes=13,seconds=00).total_seconds()
-fMedoTime = datetime.timedelta(hours=9,minutes=40,seconds=00).total_seconds()
-allMedoTime = datetime.timedelta(hours=9,minutes=45,seconds=00).total_seconds()
+fMedoTime = datetime.timedelta(hours=9,minutes=15,seconds=00).total_seconds()
+allMedoTime = datetime.timedelta(hours=9,minutes=20,seconds=00).total_seconds()
 closeTime = datetime.timedelta(hours=15,minutes=19,seconds=00).total_seconds()
 
 comps = []
@@ -211,7 +211,7 @@ while(True):
                         srfit = sp.polyfit(x[:-1], srlist, level)
                         srgrad = sp.around(srfit[0]*10, decimals=2)
                         
-                        if(gradient >= 0.7 and srgrad > -0.01):
+                        if(gradient >= 0.7 and srgrad > 0.01):
            
                             if(code.decode('utf-8') in mesuDict):
                                 mesuDict[code.decode('utf-8')] = mesuDict[code.decode('utf-8')] + 1
