@@ -26,8 +26,8 @@ today = now.strftime('%Y-%m-%d')
 
 startTime = datetime.timedelta(hours=9,minutes=00,seconds=00).total_seconds()
 endTime = datetime.timedelta(hours=9,minutes=13,seconds=00).total_seconds()
-fMedoTime = datetime.timedelta(hours=10,minutes=10,seconds=00).total_seconds()
-allMedoTime = datetime.timedelta(hours=15,minutes=19,seconds=00).total_seconds()
+fMedoTime = datetime.timedelta(hours=9,minutes=40,seconds=00).total_seconds()
+allMedoTime = datetime.timedelta(hours=9,minutes=45,seconds=00).total_seconds()
 closeTime = datetime.timedelta(hours=15,minutes=19,seconds=00).total_seconds()
 
 comps = []
@@ -116,6 +116,9 @@ while(True):
             second_oTime = datetime.timedelta(hours=xstime.tm_hour,minutes=xstime.tm_min,seconds=xstime.tm_sec).total_seconds() #계산시간
             str_oTime = ""
             bool_oTime = False
+
+            if(second_oTime > endTime and second_oTime < nowTime - 120 ):
+                continue;            
             
             for t in times:
                 x = time.strptime(t.decode('utf-8'), '%H:%M:%S')
@@ -152,7 +155,7 @@ while(True):
                     
                     xtime = time.strptime(exportData[0,0].decode('utf-8'), '%H:%M:%S')
                     firstSecond = datetime.timedelta(hours=xtime.tm_hour,minutes=xtime.tm_min,seconds=xtime.tm_sec).total_seconds()
-                
+                    
                     ti = sp.array([])
 
                     i = -1

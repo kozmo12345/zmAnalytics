@@ -16,13 +16,13 @@ startTime = datetime.timedelta(hours=9,minutes=00,seconds=00).total_seconds()
 endTime = datetime.timedelta(hours=9,minutes=13,seconds=00).total_seconds()
 # fMedoTime = datetime.timedelta(hours=9,minutes=15,seconds=00).total_seconds()
 # allMedoTime = datetime.timedelta(hours=9,minutes=20,seconds=00).total_seconds()
-fMedoTimes = [datetime.timedelta(hours=9,minutes=15,seconds=00).total_seconds(),datetime.timedelta(hours=9,minutes=20,seconds=00).total_seconds(),datetime.timedelta(hours=9,minutes=25,seconds=00).total_seconds(),datetime.timedelta(hours=9,minutes=30,seconds=00).total_seconds(),datetime.timedelta(hours=9,minutes=40,seconds=00).total_seconds()]
-wannas = [1,1.2,1.3,1.5,1.7,2]
-mesuLimits = [0,1,2,3]
-rateLimits = [0.39,0.4,0.41,0.42,0.43,0.44,0.45,0.46,0.5]
+fMedoTimes = [datetime.timedelta(hours=9,minutes=40,seconds=00).total_seconds()]
+wannas = [1.2]
+mesuLimits = [2]
+rateLimits = [0.44]
 
 edFilePath = os.path.join("C:\\", "Dropbox\\Data\\" + "eda.txt");
-edFile = open(edFilePath, 'w')
+edFile = open(edFilePath, 'a')
 edFile.write('mesuLimit' +  ',' + 'rateLimit' +  ',' + 'wanna' +  ',' + 'fMedoTime' +  ',' + 'allMedoTime' + '\n')
 edFile.close()
 
@@ -38,7 +38,7 @@ for fMedoTime in fMedoTimes:
 
                         if((today.split('-')[1] == '10' and today.split('-')[2] in ['05','06','07','10','11','12','13','14','17','18','19','20','21','24','25','26','27','28','31']) or (today.split('-')[1] == '11' and today.split('-')[2] in ['01','02','03','07','08','09','10'])):
                             continue
-                
+    
                         print(today)
                         realfilePath = os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + ".txt");
                         
@@ -67,7 +67,7 @@ for fMedoTime in fMedoTimes:
                                     tmp_time = second_oTime
                                     print(ttime)
                                     termData = sp.append(termData,tempData, axis=0)
-                                    if(second_oTime > allMedoTime + 200):
+                                    if(second_oTime > allMedoTime + 300):
                                         break
                     
                                 except Exception as e:
@@ -107,7 +107,7 @@ for fMedoTime in fMedoTimes:
                                 if(second_oTime > endTime and len(comps) == 0):
                                     break;
                 
-                                if(second_oTime - 100 > allMedoTime):
+                                if(second_oTime > allMedoTime + 100):
                                     dcodes = comps
                                     for code in dcodes:
                                         ms = float(msRate[code.decode('utf-8')])
