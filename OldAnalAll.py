@@ -17,7 +17,7 @@ endTime = datetime.timedelta(hours=9,minutes=13,seconds=00).total_seconds()
 fMedoTime = datetime.timedelta(hours=9,minutes=18,seconds=00).total_seconds()
 allMedoTime = datetime.timedelta(hours=9,minutes=20,seconds=00).total_seconds()
 wanna = 1
-mesuLimit = 1
+mesuLimit = 1.2
 rateLimit = 0.44
 sumEd = 0
 for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
@@ -25,7 +25,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
         today = subdirname
         # if(today != '2016-09-21'):
         #     break;
-        # today = '2016-11-23'
+        # today = '2016-11-24'
         if((today.split('-')[1] == '10' and today.split('-')[2] in ['05','06','07','10','11','12','13','14','17','18','19','20','21','24','25','26','27','28','31']) or (today.split('-')[1] == '11' and today.split('-')[2] in ['01','02','03','07','08','09','10'])):
             continue
 
@@ -128,7 +128,8 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
                     ttimeData2 = ttimeData[ttimeData[:,1].astype(int) < 21]
                     ttimeData3 = ttimeData2[ttimeData2[:,4].astype(int) > 460000]
                     ttimeData4 = ttimeData3[ttimeData3[:,3].astype(float) < 25]
-                    codes = ttimeData4[:,7]
+                    ttimeData5 = ttimeData4[ttimeData4[:,8].astype(float) > 2000]
+                    codes = ttimeData5[:,7]
 
                     if(second_oTime > endTime):
                         codes = comps
@@ -231,7 +232,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
                                     msSmdms[code.decode('utf-8')] = sms_md 
                                     msGrade[code.decode('utf-8')] = grade
                                     msSrgrad[code.decode('utf-8')] = srgrad
-                                    msRate[code.decode('utf-8')] = float(exportData[i, 3].decode('UTF-8'))
+                                    msRate[code.decode('utf-8')] = float(exportData[i + 1, 3].decode('UTF-8'))
                                     setFile.write( str(code.decode('utf-8')) + ',' + str(float(rate)) +  ',' + str(float(exportData[i, 3].decode('UTF-8'))) + ',' + str(exportData[maxc + i + 1,3].decode('UTF-8')) + ',' + str_oTime + ',' + str(gr)  + ',' + str(i)  + ',' + str( min(exportData[i:i + maxc + 1, 3].astype(float)) )  + ',' + str( max(exportData[:i, 3].astype(float)) )  + ',' + str(exportData[i +maxc, 0].decode('UTF-8')) +  ',' + str( grade )  +  '\n')
 
             except Exception as e:

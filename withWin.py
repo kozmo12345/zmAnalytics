@@ -27,7 +27,7 @@ today = now.strftime('%Y-%m-%d')
 startTime = datetime.timedelta(hours=9,minutes=00,seconds=00).total_seconds()
 endTime = datetime.timedelta(hours=9,minutes=13,seconds=00).total_seconds()
 fMedoTime = datetime.timedelta(hours=9,minutes=18,seconds=00).total_seconds()
-allMedoTime = datetime.timedelta(hours=9,minutes=21,seconds=00).total_seconds()
+allMedoTime = datetime.timedelta(hours=9,minutes=20,seconds=00).total_seconds()
 closeTime = datetime.timedelta(hours=15,minutes=19,seconds=00).total_seconds()
 
 comps = []
