@@ -27,7 +27,7 @@ today = now.strftime('%Y-%m-%d')
 startTime = datetime.timedelta(hours=9,minutes=00,seconds=00).total_seconds()
 endTime = datetime.timedelta(hours=9,minutes=13,seconds=00).total_seconds()
 fMedoTime = datetime.timedelta(hours=9,minutes=18,seconds=00).total_seconds()
-allMedoTime = datetime.timedelta(hours=9,minutes=20,seconds=00).total_seconds()
+allMedoTime = datetime.timedelta(hours=9,minutes=19,seconds=00).total_seconds()
 closeTime = datetime.timedelta(hours=15,minutes=19,seconds=00).total_seconds()
 
 comps = []
@@ -133,9 +133,6 @@ while(True):
             if(second_oTime < startTime):
                 continue;
             
-            # if(tmp_time + 8 > second_oTime):
-            #     continue;
-
             if(second_oTime > endTime and len(comps) == 0):
                 break;
 
@@ -197,7 +194,7 @@ while(True):
                     rate = exportData[i, 3].decode('UTF-8')
                     grade = int(exportData[i, 1].decode('UTF-8'))
                     gr = int(exportData[i, 4].decode('UTF-8'))
-    
+
                     ms_md = (exportData[i,5].astype(float))/(exportData[i,6].astype(float))
                     sms_md = sp.sum((sp.sum(exportData[:i+1,5].astype(float)))/(sp.sum(exportData[:i+1,6].astype(float))))
 
