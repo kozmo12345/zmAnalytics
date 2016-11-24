@@ -17,7 +17,7 @@ endTime = datetime.timedelta(hours=9,minutes=13,seconds=00).total_seconds()
 fMedoTime = datetime.timedelta(hours=9,minutes=18,seconds=00).total_seconds()
 allMedoTime = datetime.timedelta(hours=9,minutes=20,seconds=00).total_seconds()
 wanna = 1
-mesuLimit = 1.2
+mesuLimit = 1
 rateLimit = 0.44
 sumEd = 0
 for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
