@@ -217,7 +217,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
                             
                             maxc = sp.argmax(exportData[i+1:,3].astype(float))
     
-                            if(gradient >= 0.4 and srgrad > 0.01):
+                            if(gradient >= 0.4 and srgrad > 0):
                                 if(code.decode('utf-8') in mesuDict):
                                     mesuDict[code.decode('utf-8')] = mesuDict[code.decode('utf-8')] + 1
                                 else:

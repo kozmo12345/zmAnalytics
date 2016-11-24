@@ -146,7 +146,8 @@ while(True):
                 ttimeData2 = ttimeData[ttimeData[:,1].astype(int) < 21]
                 ttimeData3 = ttimeData2[ttimeData2[:,4].astype(int) > 460000]
                 ttimeData4 = ttimeData3[ttimeData3[:,3].astype(float) < 25]
-                codes = ttimeData4[:,7]
+                ttimeData5 = ttimeData4[ttimeData4[:,8].astype(float) > 2000]
+                codes = ttimeData5[:,7]
                 if(second_oTime > endTime and len(comps) > 0):
                     codes = comps;
                 for code in (codes):
@@ -215,7 +216,7 @@ while(True):
                         srfit = sp.polyfit(x[:-1], srlist, level)
                         srgrad = sp.around(srfit[0]*10, decimals=2)
                         
-                        if(gradient >= 0.4 and srgrad > 0.01):
+                        if(gradient >= 0.4 and srgrad > 0):
            
                             if(code.decode('utf-8') in mesuDict):
                                 mesuDict[code.decode('utf-8')] = mesuDict[code.decode('utf-8')] + 1
