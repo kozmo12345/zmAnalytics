@@ -129,7 +129,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
                 if(bool_oTime == True):
                     ttimeData = data[data[:,0] == ttime]
                     ttimeData2 = ttimeData[ttimeData[:,1].astype(int) < 21]
-                    ttimeData3 = ttimeData2[ttimeData2[:,4].astype(int) > 460000]
+                    ttimeData3 = ttimeData2[ttimeData2[:,4].astype(int) > 455000]
                     ttimeData4 = ttimeData3[ttimeData3[:,3].astype(float) < 25]
                     ttimeData5 = ttimeData4[ttimeData4[:,8].astype(float) > 2000]
                     codes = ttimeData5[:,7]
