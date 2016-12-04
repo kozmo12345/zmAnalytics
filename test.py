@@ -77,13 +77,21 @@ for fMedoTime in fMedoTimes:
                             data = termData;
                             codes = sp.unique(data[data[:,7] != b''][:,7])
                             times = sp.unique(data[data[:,0] != b''][:,0])
-                  
+                
                         tmp_time = 0
                         mesuDict = dict()
                         mesuStart = dict()
                         msRate = dict()
+                        rmsRate = dict()
                         comps = []
                         mesuSTime = dict()
+                        msGradient = dict()
+                        msGr = dict()
+                        msSmdms = dict()
+                        msGrade = dict()
+                        msSrgrad = dict()
+                        # if((today.split('-')[1] == '10' and today.split('-')[2] in ['05','06','07','10','11','12','13','14','17','18','19','20','21','24','25','26','27','28','31']) or (today.split('-')[1] == '11' and today.split('-')[2] in ['01','02','03','07','08','09','10','11','14','15','16','17'])):
+                        #     mesuLimit = 1
                 
                         for ttime in times:
                             try:
@@ -100,7 +108,7 @@ for fMedoTime in fMedoTimes:
                                         second_oTime = nt
                                         bool_oTime = True
                                         break;
-                                
+                
                                 if(second_oTime < startTime):
                                     continue;
                 
@@ -111,15 +119,17 @@ for fMedoTime in fMedoTimes:
                                     dcodes = comps
                                     for code in dcodes:
                                         ms = float(msRate[code.decode('utf-8')])
+                                        rms = float(rmsRate[code.decode('utf-8')])
                                         md = 0
                                         ed = round(md - ms, 2)
+                                        red = round(md - rms, 2)
                                         mdTime = 'endTime'
                                         msTime = exportData[mesuStart[code.decode('utf-8')],0].decode('UTF-8')
                                         allMax = max(exportData[:, 3].astype(float))
                                         termMax = max(exportData[mesuStart[code.decode('utf-8')]:, 3].astype(float))
-                                        # edFile.write(str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(ed) + ',' + str(msTime) + ',' + str(mdTime) + ',' + str(mesuDict[code.decode('utf-8')]) + ',' + str(mesuSTime[code.decode('utf-8')]) + '\n')
+                                        # edFile.write(str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(red) + ',' + str(msTime) + ',' + str(mdTime) + ',' + str(mesuDict[code.decode('utf-8')]) + ',' + str(mesuDict[code.decode('utf-8')]) + ',' + str(msGradient[code.decode('utf-8')]) + ',' + str(msGr[code.decode('utf-8')]) + ',' + str(msSmdms[code.decode('utf-8')]) + ',' + str(msGrade[code.decode('utf-8')]) + ',' + str(msSrgrad[code.decode('utf-8')]) +'\n')
                                         comps.remove(code)
-                                        sumEd = sumEd +ed
+                                        sumEd = sumEd + red
                                     break;
                                 tmp_time = second_oTime
                                 
@@ -127,9 +137,10 @@ for fMedoTime in fMedoTimes:
                                 if(bool_oTime == True):
                                     ttimeData = data[data[:,0] == ttime]
                                     ttimeData2 = ttimeData[ttimeData[:,1].astype(int) < 21]
-                                    ttimeData3 = ttimeData2[ttimeData2[:,4].astype(int) > 460000]
+                                    ttimeData3 = ttimeData2[ttimeData2[:,4].astype(int) > 455000]
                                     ttimeData4 = ttimeData3[ttimeData3[:,3].astype(float) < 25]
-                                    codes = ttimeData4[:,7]
+                                    ttimeData5 = ttimeData4[ttimeData4[:,8].astype(float) > 2000]
+                                    codes = ttimeData5[:,7]
                 
                                     if(second_oTime > endTime):
                                         codes = comps
@@ -156,48 +167,53 @@ for fMedoTime in fMedoTimes:
                 
                                         if(i == -1): continue
                                         c = exportData[:i+1, 3].astype(float)
-                                        
+                
                                         if(code in comps):
-                                            mmRate = (sp.sum(exportData[i-mesuLimit:i+1,5].astype(float)))/(sp.sum(exportData[i-mesuLimit:i+1,6].astype(float)))
+                                            mmRate = (sp.sum(exportData[i-4:i+1,5].astype(float)))/(sp.sum(exportData[i-4:i+1,6].astype(float)))
+                
+                                            # print(str(code) + str(mmRate))
                                             ms = float(msRate[code.decode('utf-8')])
-                                            md = float(exportData[i + 1, 3].decode('UTF-8'))
+                                            rms = float(rmsRate[code.decode('utf-8')])
+                                            md = float(exportData[i, 3].decode('UTF-8'))
                                             ed = round(md - ms, 2)
-                                            mdTime = ttime.decode('UTF-8')
+                                            red = round(md - rms, 2)
+                                            mdTime = exportData[i, 0].decode('UTF-8')
                                             msTime = exportData[mesuStart[code.decode('utf-8')],0].decode('UTF-8')
                                             allMax = max(exportData[:, 3].astype(float))
                                             termMax = max(exportData[mesuStart[code.decode('utf-8')]:i+1, 3].astype(float))
-                                            
+                                            # if(ed >= 1):
+                                            #     edFile.write( str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(ed) + ',' + str(msTime) + ',' + str(mdTime) + ',' + str(mesuDict[code.decode('utf-8')]) + ',' + str(mesuSTime[code.decode('utf-8')]) + ',' + str(msGradient[code.decode('utf-8')]) + ',' + str(msGr[code.decode('utf-8')]) + ',' + str(msSmdms[code.decode('utf-8')]) + ',' + str(msGrade[code.decode('utf-8')]) + ',' + str(msSrgrad[code.decode('utf-8')]) +'\n')
+                                            #     comps.remove(code)
                                             if(float(exportData[i, 3].decode('UTF-8')) > 28.9):
-                                                # edFile.write( str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(ed) + ',' + str(msTime) + ',' + str(mdTime) + ',' + str(mesuDict[code.decode('utf-8')]) + ',' + str(mesuSTime[code.decode('utf-8')]) + '\n')
+                                                # edFile.write( str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(red) + ',' + str(msTime) + ',' + str(mdTime) + ',' + str(mesuDict[code.decode('utf-8')]) + ',' + str(mesuDict[code.decode('utf-8')]) + ',' + str(msGradient[code.decode('utf-8')]) + ',' + str(msGr[code.decode('utf-8')]) + ',' + str(msSmdms[code.decode('utf-8')]) + ',' + str(msGrade[code.decode('utf-8')]) + ',' + str(msSrgrad[code.decode('utf-8')]) +'\n')
                                                 comps.remove(code)
-                                                sumEd = sumEd +ed
+                                                sumEd = sumEd + red
                                             elif(float(exportData[i, 3].decode('UTF-8')) > 19.5 and ed >= wanna):
-                                                # edFile.write( str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(ed) + ',' + str(msTime) + ',' + str(mdTime) + ',' + str(mesuDict[code.decode('utf-8')]) + ',' + str(mesuSTime[code.decode('utf-8')]) + '\n')
+                                                # edFile.write( str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(red) + ',' + str(msTime) + ',' + str(mdTime) + ',' + str(mesuDict[code.decode('utf-8')]) + ',' + str(mesuDict[code.decode('utf-8')]) + ',' + str(msGradient[code.decode('utf-8')]) + ',' + str(msGr[code.decode('utf-8')]) + ',' + str(msSmdms[code.decode('utf-8')]) + ',' + str(msGrade[code.decode('utf-8')]) + ',' + str(msSrgrad[code.decode('utf-8')]) +'\n')
                                                 comps.remove(code)
-                                                sumEd = sumEd +ed
+                                                sumEd = sumEd + red
                                             elif((mmRate < rateLimit or fMedoTime < second_oTime) and ed >= wanna):
-                                                # edFile.write( str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(ed) + ',' + str(msTime) + ',' + str(mdTime) + ',' + str(mesuDict[code.decode('utf-8')]) + ',' + str(mesuSTime[code.decode('utf-8')]) + '\n')
+                                                # edFile.write( str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(red) + ',' + str(msTime) + ',' + str(mdTime) + ',' + str(mesuDict[code.decode('utf-8')]) + ',' + str(mesuDict[code.decode('utf-8')]) + ',' + str(msGradient[code.decode('utf-8')]) + ',' + str(msGr[code.decode('utf-8')]) + ',' + str(msSmdms[code.decode('utf-8')]) + ',' + str(msGrade[code.decode('utf-8')]) + ',' + str(msSrgrad[code.decode('utf-8')]) +'\n')
                                                 comps.remove(code)
-                                                sumEd = sumEd +ed
+                                                sumEd = sumEd + red
                                             elif(allMedoTime < second_oTime):
-                                                # edFile.write( str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(ed) + ',' + str(msTime) + ',' + str(mdTime) + ',' + str(mesuDict[code.decode('utf-8')]) + ',' + str(mesuSTime[code.decode('utf-8')]) + '\n')
+                                                # edFile.write( str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(red) + ',' + str(msTime) + ',' + str(mdTime) + ',' + str(mesuDict[code.decode('utf-8')]) + ',' + str(mesuDict[code.decode('utf-8')]) + ',' + str(msGradient[code.decode('utf-8')]) + ',' + str(msGr[code.decode('utf-8')]) + ',' + str(msSmdms[code.decode('utf-8')]) + ',' + str(msGrade[code.decode('utf-8')]) + ',' + str(msSrgrad[code.decode('utf-8')]) +'\n')
                                                 comps.remove(code)
-                                                sumEd = sumEd +ed
+                                                sumEd = sumEd + red
                 
                                         if(second_oTime > endTime):
                                             continue;
-                                        if(len(comps) > 0):
-                                            continue;
-
-                                        if(True in (c > 21)):
+                    
+                                        if(True in (c > 25)):
                                             continue;
                                         rate = exportData[i, 3].decode('UTF-8')
                                         grade = int(exportData[i, 1].decode('UTF-8'))
                                         gr = int(exportData[i, 4].decode('UTF-8'))
+                
                                         ms_md = (exportData[i,5].astype(float))/(exportData[i,6].astype(float))
                                         sms_md = sp.sum(exportData[:i+1,5].astype(float))/sp.sum(exportData[:i+1,6].astype(float))
                                         
-                                        if(ms_md > 1 and sms_md > 1 and grade < 20):
+                                        if(ms_md > 1 and sms_md > 1 and grade < 12):
                                             x = ti
                                             y = exportData[:i+1,3].astype(float)
                                             if(len(y) <= 1):
@@ -214,17 +230,23 @@ for fMedoTime in fMedoTimes:
                                             
                                             maxc = sp.argmax(exportData[i+1:,3].astype(float))
                     
-                                            if(gradient >= 0.7 and srgrad > 0.01):
+                                            if(gradient >= 0.4 and srgrad > 0):
                                                 if(code.decode('utf-8') in mesuDict):
                                                     mesuDict[code.decode('utf-8')] = mesuDict[code.decode('utf-8')] + 1
                                                 else:
                                                     mesuSTime[code.decode('utf-8')] = str_oTime
                                                     mesuDict[code.decode('utf-8')] = mesuDict.get(code.decode('utf-8'), 0)
                 
-                                                if(mesuDict[code.decode('utf-8')] == 1 and ((code) not in comps)):
+                                                if(mesuDict[code.decode('utf-8')] == mesuLimit and ((code) not in comps) and len(comps) == 0):
                                                     comps.append((code))
                                                     mesuStart[code.decode('utf-8')] = i
+                                                    msGradient[code.decode('utf-8')] = gradient
+                                                    msGr[code.decode('utf-8')] = gr
+                                                    msSmdms[code.decode('utf-8')] = sms_md 
+                                                    msGrade[code.decode('utf-8')] = grade
+                                                    msSrgrad[code.decode('utf-8')] = srgrad
                                                     msRate[code.decode('utf-8')] = float(exportData[i, 3].decode('UTF-8'))
+                                                    rmsRate[code.decode('utf-8')] = float(exportData[i + 1, 3].decode('UTF-8'))
                                                     # setFile.write( str(code.decode('utf-8')) + ',' + str(float(rate)) +  ',' + str(float(exportData[i, 3].decode('UTF-8'))) + ',' + str(exportData[maxc + i + 1,3].decode('UTF-8')) + ',' + str_oTime + ',' + str(gr)  + ',' + str(i)  + ',' + str( min(exportData[i:i + maxc + 1, 3].astype(float)) )  + ',' + str( max(exportData[:i, 3].astype(float)) )  + ',' + str(exportData[i +maxc, 0].decode('UTF-8')) +  ',' + str( grade )  +  '\n')
                 
                             except Exception as e:
