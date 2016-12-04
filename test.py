@@ -18,7 +18,7 @@ endTime = datetime.timedelta(hours=9,minutes=13,seconds=00).total_seconds()
 # allMedoTime = datetime.timedelta(hours=9,minutes=20,seconds=00).total_seconds()
 fMedoTimes = [datetime.timedelta(hours=9,minutes=18,seconds=00).total_seconds()]
 wannas = [1]
-mesuLimits = [2,3,4]
+mesuLimits = [3,4,2]
 rateLimits = [0.3,0.35,0.4,0.44]
 
 edFilePath = os.path.join("C:\\", "Dropbox\\Data\\" + "eda.txt");
@@ -169,7 +169,7 @@ for fMedoTime in fMedoTimes:
                                         c = exportData[:i+1, 3].astype(float)
                 
                                         if(code in comps):
-                                            mmRate = (sp.sum(exportData[i-4:i+1,5].astype(float)))/(sp.sum(exportData[i-4:i+1,6].astype(float)))
+                                            mmRate = (sp.sum(exportData[i-mesuLimit:i+1,5].astype(float)))/(sp.sum(exportData[i-mesuLimit:i+1,6].astype(float)))
                 
                                             # print(str(code) + str(mmRate))
                                             ms = float(msRate[code.decode('utf-8')])
@@ -237,7 +237,7 @@ for fMedoTime in fMedoTimes:
                                                     mesuSTime[code.decode('utf-8')] = str_oTime
                                                     mesuDict[code.decode('utf-8')] = mesuDict.get(code.decode('utf-8'), 0)
                 
-                                                if(mesuDict[code.decode('utf-8')] == mesuLimit and ((code) not in comps) and len(comps) == 0):
+                                                if(mesuDict[code.decode('utf-8')] == 1 and ((code) not in comps) and len(comps) == 0):
                                                     comps.append((code))
                                                     mesuStart[code.decode('utf-8')] = i
                                                     msGradient[code.decode('utf-8')] = gradient
