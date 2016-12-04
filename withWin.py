@@ -34,7 +34,7 @@ comps = []
 medos = []
 mesuLimit = 1
 wanna = 1
-rateLimit = 0.44
+rateLimit = 0.31
 
 realfilePath = os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + ".txt");
 dirn = os.path.dirname(realfilePath)
@@ -171,7 +171,7 @@ while(True):
                     c = exportData[:i+1, 3].astype(float)
 
                     if(code in comps and code not in medos and code.decode('utf-8') in mesuStart and second_oTime > mesuStart[code.decode('utf-8')]):
-                        mmRate = (sp.sum(exportData[i-4:i+1,5].astype(float)))/(sp.sum(exportData[i-4:i+1,6].astype(float)))
+                        mmRate = (sp.sum(exportData[i-2:i+1,5].astype(float)))/(sp.sum(exportData[i-2:i+1,6].astype(float)))
                         ms = float(msRate[code.decode('utf-8')])
                         md = float(exportData[i, 3].decode('UTF-8'))
                         ed = round(md - ms, 2)

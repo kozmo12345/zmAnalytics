@@ -18,7 +18,8 @@ fMedoTime = datetime.timedelta(hours=9,minutes=18,seconds=00).total_seconds()
 allMedoTime = datetime.timedelta(hours=9,minutes=19,seconds=00).total_seconds()
 wanna = 1
 mesuLimit = 1
-rateLimit = 0.44
+rateLimit = 0.31
+stdLimit = 2
 sumEd = 0
 for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
     for subdirname in dirnames:
@@ -114,7 +115,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
                         rms = float(rmsRate[code.decode('utf-8')])
                         md = 0
                         ed = round(md - ms, 2)
-                        red = round(md - rms, 2)
+                        red = round(md - ms, 2)
                         mdTime = 'endTime'
                         msTime = exportData[mesuStart[code.decode('utf-8')],0].decode('UTF-8')
                         allMax = max(exportData[:, 3].astype(float))
@@ -161,14 +162,14 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
                         c = exportData[:i+1, 3].astype(float)
 
                         if(code in comps):
-                            mmRate = (sp.sum(exportData[i-4:i+1,5].astype(float)))/(sp.sum(exportData[i-4:i+1,6].astype(float)))
+                            mmRate = (sp.sum(exportData[i-stdLimit:i+1,5].astype(float)))/(sp.sum(exportData[i-stdLimit:i+1,6].astype(float)))
 
                             # print(str(code) + str(mmRate))
                             ms = float(msRate[code.decode('utf-8')])
                             rms = float(rmsRate[code.decode('utf-8')])
                             md = float(exportData[i, 3].decode('UTF-8'))
                             ed = round(md - ms, 2)
-                            red = round(md - rms, 2)
+                            red = round(md - ms, 2)
                             mdTime = exportData[i, 0].decode('UTF-8')
                             msTime = exportData[mesuStart[code.decode('utf-8')],0].decode('UTF-8')
                             allMax = max(exportData[:, 3].astype(float))
