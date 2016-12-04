@@ -16,10 +16,10 @@ startTime = datetime.timedelta(hours=9,minutes=00,seconds=00).total_seconds()
 endTime = datetime.timedelta(hours=9,minutes=13,seconds=00).total_seconds()
 # fMedoTime = datetime.timedelta(hours=9,minutes=15,seconds=00).total_seconds()
 # allMedoTime = datetime.timedelta(hours=9,minutes=20,seconds=00).total_seconds()
-fMedoTimes = [datetime.timedelta(hours=9,minutes=40,seconds=00).total_seconds()]
-wannas = [1.2]
-mesuLimits = [2]
-rateLimits = [0.44]
+fMedoTimes = [datetime.timedelta(hours=9,minutes=18,seconds=00).total_seconds()]
+wannas = [1]
+mesuLimits = [2,3,4]
+rateLimits = [0.3,0.35,0.4,0.44]
 
 edFilePath = os.path.join("C:\\", "Dropbox\\Data\\" + "eda.txt");
 edFile = open(edFilePath, 'a')
@@ -27,7 +27,7 @@ edFile.write('mesuLimit' +  ',' + 'rateLimit' +  ',' + 'wanna' +  ',' + 'fMedoTi
 edFile.close()
 
 for fMedoTime in fMedoTimes:
-    allMedoTime = fMedoTime + 300
+    allMedoTime = fMedoTime + 60
     for wanna in wannas:
         for mesuLimit in mesuLimits:
             for rateLimit in rateLimits:
@@ -158,7 +158,7 @@ for fMedoTime in fMedoTimes:
                                         c = exportData[:i+1, 3].astype(float)
                                         
                                         if(code in comps):
-                                            mmRate = (sp.sum(exportData[i-4:i+1,5].astype(float)))/(sp.sum(exportData[i-4:i+1,6].astype(float)))
+                                            mmRate = (sp.sum(exportData[i-mesuLimit:i+1,5].astype(float)))/(sp.sum(exportData[i-mesuLimit:i+1,6].astype(float)))
                                             ms = float(msRate[code.decode('utf-8')])
                                             md = float(exportData[i + 1, 3].decode('UTF-8'))
                                             ed = round(md - ms, 2)
@@ -221,7 +221,7 @@ for fMedoTime in fMedoTimes:
                                                     mesuSTime[code.decode('utf-8')] = str_oTime
                                                     mesuDict[code.decode('utf-8')] = mesuDict.get(code.decode('utf-8'), 0)
                 
-                                                if(mesuDict[code.decode('utf-8')] == mesuLimit and ((code) not in comps)):
+                                                if(mesuDict[code.decode('utf-8')] == 1 and ((code) not in comps)):
                                                     comps.append((code))
                                                     mesuStart[code.decode('utf-8')] = i
                                                     msRate[code.decode('utf-8')] = float(exportData[i, 3].decode('UTF-8'))
