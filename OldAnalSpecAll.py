@@ -39,7 +39,6 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
         print("file open")
         for line in setFile:
             codes.append(line.split(',')[0])
-
             msTime = datetime.timedelta(hours=int(line.split(',')[4].split(':')[0]),minutes=int(line.split(',')[4].split(':')[1]),seconds=int(line.split(',')[4].split(':')[2])).total_seconds()
             msTimes.append(msTime) 
             mxTime = datetime.timedelta(hours=int(line.split(',')[9].split(':')[0]),minutes=int(line.split(',')[9].split(':')[1]),seconds=int(line.split(',')[9].split(':')[2])).total_seconds()
@@ -144,7 +143,6 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
                         
                         if(tmp_index[codi] != 0):
                             err = (sp.sum(exportData[i-14:i+1,5].astype(float)))/(sp.sum(exportData[i-14:i+1,6].astype(float)))
-                            # errDic[code].append((gr/100000))
                             errDic[code] = exportData[i-10:i+1, 4].astype(float)/100000
                             err2 = (sp.sum(exportData[i-4:i+1,5].astype(float)))/(sp.sum(exportData[i-4:i+1,6].astype(float)))
                             if(len(errDic[code]) > 1):
