@@ -18,13 +18,10 @@ fMedoTime = datetime.timedelta(hours=9,minutes=18,seconds=00).total_seconds()
 allMedoTime = datetime.timedelta(hours=9,minutes=19,seconds=00).total_seconds()
 wanna = 1
 mesuLimit = 1
-rateLimit = 0.44
+rateLimit = 0.31
 sumEd = 0
 
 today = now.strftime('%Y-%m-%d')
-
-if((today.split('-')[1] == '10' and today.split('-')[2] in ['05','06','07','10','11','12','13','14','17','18','19','20','21','24','25','26','27','28','31']) or (today.split('-')[1] == '11' and today.split('-')[2] in ['01','02','03','07','08','09','10'])):
-    continue
 
 print(today)
 setFile = open(os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + "moa3.txt"), 'w')
@@ -158,7 +155,7 @@ for ttime in times:
                 c = exportData[:i+1, 3].astype(float)
 
                 if(code in comps):
-                    mmRate = (sp.sum(exportData[i-4:i+1,5].astype(float)))/(sp.sum(exportData[i-4:i+1,6].astype(float)))
+                    mmRate = (sp.sum(exportData[i-3:i+1,5].astype(float)))/(sp.sum(exportData[i-3:i+1,6].astype(float)))
 
                     # print(str(code) + str(mmRate))
                     ms = float(msRate[code.decode('utf-8')])
@@ -202,7 +199,7 @@ for ttime in times:
                 ms_md = (exportData[i,5].astype(float))/(exportData[i,6].astype(float))
                 sms_md = sp.sum(exportData[:i+1,5].astype(float))/sp.sum(exportData[:i+1,6].astype(float))
                 
-                if(ms_md > 1 and sms_md > 1 and grade < 12):
+                if(ms_md > 1 and sms_md > 0.97 and grade < 13):
                     x = ti
                     y = exportData[:i+1,3].astype(float)
                     if(len(y) <= 1):

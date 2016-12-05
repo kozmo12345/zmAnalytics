@@ -18,8 +18,8 @@ endTime = datetime.timedelta(hours=9,minutes=13,seconds=00).total_seconds()
 # allMedoTime = datetime.timedelta(hours=9,minutes=20,seconds=00).total_seconds()
 fMedoTimes = [datetime.timedelta(hours=9,minutes=18,seconds=00).total_seconds()]
 wannas = [1]
-mesuLimits = [3,4,2]
-rateLimits = [0.3,0.35,0.4,0.44]
+mesuLimits = [0.97]
+rateLimits = [0.31]
 
 edFilePath = os.path.join("C:\\", "Dropbox\\Data\\" + "eda.txt");
 edFile = open(edFilePath, 'a')
@@ -169,7 +169,7 @@ for fMedoTime in fMedoTimes:
                                         c = exportData[:i+1, 3].astype(float)
                 
                                         if(code in comps):
-                                            mmRate = (sp.sum(exportData[i-mesuLimit:i+1,5].astype(float)))/(sp.sum(exportData[i-mesuLimit:i+1,6].astype(float)))
+                                            mmRate = (sp.sum(exportData[i-3:i+1,5].astype(float)))/(sp.sum(exportData[i-3:i+1,6].astype(float)))
                 
                                             # print(str(code) + str(mmRate))
                                             ms = float(msRate[code.decode('utf-8')])
@@ -213,7 +213,7 @@ for fMedoTime in fMedoTimes:
                                         ms_md = (exportData[i,5].astype(float))/(exportData[i,6].astype(float))
                                         sms_md = sp.sum(exportData[:i+1,5].astype(float))/sp.sum(exportData[:i+1,6].astype(float))
                                         
-                                        if(ms_md > 1 and sms_md > 1 and grade < 12):
+                                        if(ms_md > 1 and sms_md > mesuLimit and grade < 13):
                                             x = ti
                                             y = exportData[:i+1,3].astype(float)
                                             if(len(y) <= 1):
