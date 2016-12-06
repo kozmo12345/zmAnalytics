@@ -16,7 +16,7 @@ startTime = datetime.timedelta(hours=9,minutes=00,seconds=00).total_seconds()
 endTime = datetime.timedelta(hours=9,minutes=13,seconds=00).total_seconds()
 # fMedoTime = datetime.timedelta(hours=9,minutes=15,seconds=00).total_seconds()
 allMedoTime = datetime.timedelta(hours=9,minutes=19,seconds=00).total_seconds()
-fMedoTimes = [datetime.timedelta(hours=9,minutes=17,seconds=40).total_seconds()]
+fMedoTimes = [datetime.timedelta(hours=9,minutes=18,seconds=00).total_seconds()]
 wannas = [1]
 mesuLimits = [2]
 rateLimits = [0.31]
@@ -237,7 +237,7 @@ for fMedoTime in fMedoTimes:
                                                     msGrade[code.decode('utf-8')] = grade
                                                     msSrgrad[code.decode('utf-8')] = srgrad
                                                     msRate[code.decode('utf-8')] = float(exportData[i, 3].decode('UTF-8'))
-                                                    rmsRate[code.decode('utf-8')] = (float(exportData[i, 3].decode('UTF-8')) + float(exportData[i+1, 3].decode('UTF-8')) + float(exportData[i+2, 3].decode('UTF-8')) + float(exportData[i+3, 3].decode('UTF-8')))/float(4)
+                                                    rmsRate[code.decode('utf-8')] = float(exportData[i, 3].decode('UTF-8'))
                                                     # setFile.write( str(code.decode('utf-8')) + ',' + str(float(rate)) +  ',' + str(float(exportData[i, 3].decode('UTF-8'))) + ',' + str(exportData[maxc + i + 1,3].decode('UTF-8')) + ',' + str_oTime + ',' + str(gr)  + ',' + str(i)  + ',' + str( min(exportData[i:i + maxc + 1, 3].astype(float)) )  + ',' + str( max(exportData[:i, 3].astype(float)) )  + ',' + str(exportData[i +maxc, 0].decode('UTF-8')) +  ',' + str( grade )  +  '\n')
                 
                             except Exception as e:
