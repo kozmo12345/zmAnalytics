@@ -15,11 +15,11 @@ print(str(datetime.datetime.now()))
 startTime = datetime.timedelta(hours=9,minutes=00,seconds=00).total_seconds()
 endTime = datetime.timedelta(hours=9,minutes=13,seconds=00).total_seconds()
 # fMedoTime = datetime.timedelta(hours=9,minutes=15,seconds=00).total_seconds()
-# allMedoTime = datetime.timedelta(hours=9,minutes=20,seconds=00).total_seconds()
-fMedoTimes = [datetime.timedelta(hours=9,minutes=18,seconds=00).total_seconds()]
+allMedoTime = datetime.timedelta(hours=9,minutes=19,seconds=00).total_seconds()
+fMedoTimes = [datetime.timedelta(hours=9,minutes=17,seconds=40).total_seconds()]
 wannas = [1]
-mesuLimits = [3]
-rateLimits = [0.33,0.35,0.37]
+mesuLimits = [2]
+rateLimits = [0.31]
 
 edFilePath = os.path.join("C:\\", "Dropbox\\Data\\" + "eda.txt");
 edFile = open(edFilePath, 'a')
@@ -27,7 +27,6 @@ edFile.write('mesuLimit' +  ',' + 'rateLimit' +  ',' + 'wanna' +  ',' + 'fMedoTi
 edFile.close()
 
 for fMedoTime in fMedoTimes:
-    allMedoTime = fMedoTime + 60
     for wanna in wannas:
         for mesuLimit in mesuLimits:
             for rateLimit in rateLimits:
@@ -198,8 +197,6 @@ for fMedoTime in fMedoTimes:
                                         if(second_oTime > endTime):
                                             continue;
                     
-                                        if(True in (c > 25)):
-                                            continue;
                                         rate = exportData[i, 3].decode('UTF-8')
                                         grade = int(exportData[i, 1].decode('UTF-8'))
                                         gr = int(exportData[i, 4].decode('UTF-8'))
