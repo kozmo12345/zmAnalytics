@@ -9,10 +9,10 @@ import time
 
 sp.random.seed(3)
 
-origin = 1000
-msr = 0.95
-ed = 0.025
-m = 1
+origin = 280
+msr = 0.49
+ed = 0.024
+m = 12
 
 for i in range(1,(20*m)+1):
    origin = origin + (origin * msr * ed)

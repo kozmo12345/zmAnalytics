@@ -197,8 +197,6 @@ while(True):
                     if(nowTime > endTime):
                         continue;
     
-                    if(True in (c > 25)):
-                        continue;
                     rate = exportData[i, 3].decode('UTF-8')
                     grade = int(exportData[i, 1].decode('UTF-8'))
                     gr = int(exportData[i, 4].decode('UTF-8'))
