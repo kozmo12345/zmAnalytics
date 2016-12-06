@@ -199,7 +199,7 @@ for ttime in times:
                 ms_md = (exportData[i,5].astype(float))/(exportData[i,6].astype(float))
                 sms_md = sp.sum(exportData[:i+1,5].astype(float))/sp.sum(exportData[:i+1,6].astype(float))
                 
-                if(ms_md > 1 and sms_md > 0.97 and grade < 1):
+                if(ms_md > 0.96 and sms_md > 0.97 and grade < 1):
                     x = ti
                     y = exportData[:i+1,3].astype(float)
                     if(len(y) <= 1):

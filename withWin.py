@@ -32,7 +32,7 @@ def createFiles(realfilePath, setFilePath, mdFilePath):
         mdFile = open(mdFilePath, 'w')
         mdFile.close()
     except Exception as e:
-        createFiles()
+        createFiles(realfilePath, setFilePath, mdFilePath)
     else:
         pass
 
