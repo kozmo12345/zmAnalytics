@@ -51,7 +51,7 @@ mesuLimit = 1
 wanna = 1
 rateLimit = 0.31
 
-realfilePath = os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + ".txt");
+realfilePath = os.path.join("C:\\", "Dropbox\\temp\\Data\\" + today + "\\" + today + ".txt");
 dirn = os.path.dirname(realfilePath)
 try:
     os.stat(dirn)
@@ -64,7 +64,7 @@ except:
         else:
             raise
 
-setFilePath = os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + "m.txt");
+setFilePath = os.path.join("C:\\", "Dropbox\\temp\\Data\\" + today + "\\" + today + "m.txt");
 dirn2 = os.path.dirname(setFilePath)
 try:
     os.stat(dirn2)
@@ -77,7 +77,7 @@ except:
         else:
             raise
 
-mdFilePath = os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + "d.txt");
+mdFilePath = os.path.join("C:\\", "Dropbox\\temp\\Data\\" + today + "\\" + today + "d.txt");
 dirn3 = os.path.dirname(setFilePath)
 try:
     os.stat(dirn3)
@@ -109,12 +109,6 @@ while(True):
     now = datetime.datetime.now()
     nowTime = datetime.timedelta(hours=now.hour,minutes=now.minute,seconds=now.second).total_seconds()
 
-    if(nowTime > endTime and len(comps) == 0):
-        break;
-
-    if(nowTime > allMedoTime):
-        break;
-
     print(today + str(times[len(times)-1]))
     print(comps)
     print(mesuDict)
@@ -138,12 +132,6 @@ while(True):
                     bool_oTime = True
                     break;
             
-            if(second_oTime < startTime):
-                continue;
-            
-            if(second_oTime > endTime and len(comps) == 0):
-                break;
-
             tmp_time = second_oTime
             
             if(bool_oTime == True):
@@ -176,6 +164,7 @@ while(True):
                             break;
                         
                     if(i == -1): continue
+                    c = exportData[:i+1, 3].astype(float)
 
                     if(code in comps and code not in medos and code.decode('utf-8') in mesuStart and second_oTime > mesuStart[code.decode('utf-8')]):
                         mmRate = (sp.sum(exportData[i-2:i+1,5].astype(float)))/(sp.sum(exportData[i-2:i+1,6].astype(float)))
@@ -192,10 +181,9 @@ while(True):
 
                     if(second_oTime > endTime):
                         continue;
-
-                    if(nowTime > endTime):
+ 
+                    if(True in (c > 25)):
                         continue;
-    
                     rate = exportData[i, 3].decode('UTF-8')
                     grade = int(exportData[i, 1].decode('UTF-8'))
                     gr = int(exportData[i, 4].decode('UTF-8'))

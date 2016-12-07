@@ -26,7 +26,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
         today = subdirname
         # if(today != '2016-09-21'):
         #     break;
-        # today = '2016-11-24'
+        # today = '2016-12-07'
         if((today.split('-')[1] == '10' and today.split('-')[2] in ['05','06','07','10','11','12','13','14','17','18','19','20','21','24','25','26','27','28','31']) or (today.split('-')[1] == '11' and today.split('-')[2] in ['01','02','03','07','08','09','10'])):
             continue
 
@@ -83,8 +83,6 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
         msSmdms = dict()
         msGrade = dict()
         msSrgrad = dict()
-        # if((today.split('-')[1] == '10' and today.split('-')[2] in ['05','06','07','10','11','12','13','14','17','18','19','20','21','24','25','26','27','28','31']) or (today.split('-')[1] == '11' and today.split('-')[2] in ['01','02','03','07','08','09','10','11','14','15','16','17'])):
-        #     mesuLimit = 1
 
         for ttime in times:
             try:
@@ -115,7 +113,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
                         rms = float(rmsRate[code.decode('utf-8')])
                         md = 0
                         ed = round(md - ms, 2)
-                        red = round(md - ms, 2)
+                        red = round(md - ms - 1.16, 2)
                         mdTime = 'endTime'
                         msTime = exportData[mesuStart[code.decode('utf-8')],0].decode('UTF-8')
                         allMax = max(exportData[:, 3].astype(float))
@@ -159,17 +157,15 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
                                 break;
 
                         if(i == -1): continue
-                        c = exportData[:i+1, 3].astype(float)
 
                         if(code in comps):
                             mmRate = (sp.sum(exportData[i-stdLimit:i+1,5].astype(float)))/(sp.sum(exportData[i-stdLimit:i+1,6].astype(float)))
 
-                            # print(str(code) + str(mmRate))
                             ms = float(msRate[code.decode('utf-8')])
                             rms = float(rmsRate[code.decode('utf-8')])
                             md = float(exportData[i, 3].decode('UTF-8'))
                             ed = round(md - ms, 2)
-                            red = round(md - ms, 2)
+                            red = round(md - ms - 1.16, 2)
                             mdTime = exportData[i, 0].decode('UTF-8')
                             msTime = exportData[mesuStart[code.decode('utf-8')],0].decode('UTF-8')
                             allMax = max(exportData[:, 3].astype(float))
