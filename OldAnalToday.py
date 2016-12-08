@@ -17,16 +17,16 @@ endTime = datetime.timedelta(hours=9,minutes=13,seconds=00).total_seconds()
 fMedoTime = datetime.timedelta(hours=9,minutes=18,seconds=00).total_seconds()
 allMedoTime = datetime.timedelta(hours=9,minutes=19,seconds=00).total_seconds()
 wanna = 1
-mesuLimit = 1
+mesuLimit = 2
 rateLimit = 0.31
 sumEd = 0
 
 today = now.strftime('%Y-%m-%d')
 
 print(today)
-setFile = open(os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + "moa3.txt"), 'w')
-edFile = open(os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + "ed.txt"), 'w')
-realfilePath = os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + ".txt");
+setFile = open(os.path.join("C:\\", "Dropbox\\temp\\Data\\" + today + "\\" + today + "moa3.txt"), 'w')
+edFile = open(os.path.join("C:\\", "Dropbox\\temp\\Data\\" + today + "\\" + today + "ed.txt"), 'w')
+realfilePath = os.path.join("C:\\", "Dropbox\\temp\\Data\\" + today + "\\" + today + ".txt");
 
 data = sp.genfromtxt(realfilePath, delimiter="\t", dtype='|S20')
 codes = sp.unique(data[data[:,7] != b''][:,7])
@@ -76,8 +76,6 @@ msGr = dict()
 msSmdms = dict()
 msGrade = dict()
 msSrgrad = dict()
-# if((today.split('-')[1] == '10' and today.split('-')[2] in ['05','06','07','10','11','12','13','14','17','18','19','20','21','24','25','26','27','28','31']) or (today.split('-')[1] == '11' and today.split('-')[2] in ['01','02','03','07','08','09','10','11','14','15','16','17'])):
-#     mesuLimit = 1
 
 for ttime in times:
     try:
@@ -86,15 +84,6 @@ for ttime in times:
         str_oTime = "ttime.decode('utf-8')"
         bool_oTime = True
         
-        for i, t in enumerate(times):
-            x = time.strptime(t.decode('utf-8'), '%H:%M:%S')
-            nt = datetime.timedelta(hours=x.tm_hour,minutes=x.tm_min,seconds=x.tm_sec).total_seconds()
-            if(nt > second_oTime):
-                str_oTime = t.decode('utf-8')
-                second_oTime = nt
-                bool_oTime = True
-                break;
-
         if(second_oTime < startTime):
             continue;
 
@@ -209,8 +198,6 @@ for ttime in times:
                     srfit = sp.polyfit(x[:-1], srlist, level)
                     srgrad = sp.around(srfit[0]*10, decimals=2)
                     
-                    maxc = sp.argmax(exportData[i+1:,3].astype(float))
-
                     if(gradient >= 0.4 and srgrad > 0):
                         if(code.decode('utf-8') in mesuDict):
                             mesuDict[code.decode('utf-8')] = mesuDict[code.decode('utf-8')] + 1
@@ -227,8 +214,8 @@ for ttime in times:
                             msGrade[code.decode('utf-8')] = grade
                             msSrgrad[code.decode('utf-8')] = srgrad
                             msRate[code.decode('utf-8')] = float(exportData[i, 3].decode('UTF-8'))
-                            rmsRate[code.decode('utf-8')] = float(exportData[i + 1, 3].decode('UTF-8'))
-                            setFile.write( str(code.decode('utf-8')) + ',' + str(float(rate)) +  ',' + str(float(exportData[i, 3].decode('UTF-8'))) + ',' + str(exportData[maxc + i + 1,3].decode('UTF-8')) + ',' + str_oTime + ',' + str(gr)  + ',' + str(i)  + ',' + str( min(exportData[i:i + maxc + 1, 3].astype(float)) )  + ',' + str( max(exportData[:i, 3].astype(float)) )  + ',' + str(exportData[i +maxc, 0].decode('UTF-8')) +  ',' + str( grade )  +  '\n')
+                            rmsRate[code.decode('utf-8')] = float(exportData[i, 3].decode('UTF-8'))
+                            setFile.write( str(code.decode('utf-8')) + ',' + str(float(rate)) +  ',' + str(float(exportData[i, 3].decode('UTF-8'))) +  '\n')
 
     except Exception as e:
         print("---------------------------------------" + str(e))
