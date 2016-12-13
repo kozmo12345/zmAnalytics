@@ -219,7 +219,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
                         ms_md = (exportData[i,5].astype(float))/(exportData[i,6].astype(float))
                         sms_md = sp.sum(exportData[:i+1,5].astype(float))/sp.sum(exportData[:i+1,6].astype(float))
                         
-                        if(ms_md > 0.96 and sms_md > 0.97 and grade < 13):
+                        if(ms_md > 0.96 and sms_md > 1 and grade < 13):
                             x = ti
                             y = exportData[:i+1,3].astype(float)
                             if(len(y) <= 1):
