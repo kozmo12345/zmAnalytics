@@ -51,7 +51,7 @@ mesuLimit = 2
 wanna = 1
 rateLimit = 0.31
 
-realfilePath = os.path.join("C:\\", "Dropbox\\temp\\Data\\" + today + "\\" + today + ".txt");
+realfilePath = os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + ".txt");
 dirn = os.path.dirname(realfilePath)
 try:
     os.stat(dirn)
@@ -94,6 +94,7 @@ createFiles(realfilePath, setFilePath, mdFilePath)
 
 mesuStart = dict()
 msRate = dict()
+pick = dict()
 
 while(True):
     data = sp.genfromtxt(realfilePath, delimiter="\t", dtype='|S20')
@@ -110,11 +111,11 @@ while(True):
     now = datetime.datetime.now()
     nowTime = datetime.timedelta(hours=now.hour,minutes=now.minute,seconds=now.second).total_seconds()
 
-    if(nowTime > endTime and len(comps) == 0):
-        break;
+    # if(nowTime > endTime and len(comps) == 0):
+    #     break;
 
-    if(nowTime > allMedoTime):
-        break;
+    # if(nowTime > allMedoTime):
+    #     break;
 
     print(today + str(times[len(times)-1]))
     print(comps)
@@ -126,8 +127,8 @@ while(True):
             second_oTime = datetime.timedelta(hours=xstime.tm_hour,minutes=xstime.tm_min,seconds=xstime.tm_sec).total_seconds() #계산시간
             str_oTime = ttime.decode('utf-8')
 
-            if(second_oTime > endTime and second_oTime < nowTime - 120 ):
-                continue;            
+            # if(second_oTime > endTime and second_oTime < nowTime - 120 ):
+            #     continue;            
             
             if(second_oTime < startTime):
                 continue;
@@ -139,9 +140,9 @@ while(True):
             
             ttimeData = data[data[:,0] == ttime]
             ttimeData2 = ttimeData[ttimeData[:,1].astype(int) < 21]
-            ttimeData3 = ttimeData2[ttimeData2[:,4].astype(int) > 455000]
+            ttimeData3 = ttimeData2[ttimeData2[:,4].astype(int) > 400000]
             ttimeData4 = ttimeData3[ttimeData3[:,3].astype(float) < 25]
-            ttimeData5 = ttimeData4[ttimeData4[:,8].astype(float) > 2000]
+            ttimeData5 = ttimeData4[ttimeData4[:,8].astype(float) > 1900]
             codes = ttimeData5[:,7]
             if(second_oTime > endTime and len(comps) > 0):
                 codes = comps;
@@ -173,18 +174,22 @@ while(True):
                     md = float(exportData[i, 3].decode('UTF-8'))
                     ed = round(md - ms, 2)
                     print(code.decode('utf-8') + '    ' + str(mmRate) + '    ' + str(str_oTime))
-                    if(mmRate < rateLimit and ed >= wanna):
+                    if(exportData[i-5,5].astype(float) == 0 and exportData[i-4,5].astype(float) != 0):
+                        pick[code.decode('utf-8')] = True
+
+                    if((mmRate < rateLimit or pick[code.decode('utf-8')]) and ed >= wanna):
                         mdFile = open(mdFilePath, 'a')
                         mdFile.write(str(code.decode('utf-8')) + ',' + str(float(exportData[i + 1, 3].decode('UTF-8'))) + ',' + str(exportData[i, 0].decode('UTF-8')) + ',' + str(datetime.datetime.now().strftime('%H:%M:%S')) + '\n')
                         mdFile.close()
                         medos.append(code)
                         comps.remove(code)
+                        del pick[code.decode('utf-8')]
 
                 if(second_oTime > endTime):
                     continue;
 
-                if(nowTime > endTime):
-                    continue;
+                # if(nowTime > endTime):
+                #     continue;
     
                 rate = exportData[i, 3].decode('UTF-8')
                 grade = int(exportData[i, 1].decode('UTF-8'))
@@ -193,7 +198,7 @@ while(True):
                 ms_md = (exportData[i,5].astype(float))/(exportData[i,6].astype(float))
                 sms_md = sp.sum((sp.sum(exportData[:i+1,5].astype(float)))/(sp.sum(exportData[:i+1,6].astype(float))))
 
-                if(ms_md > 0.96 and sms_md > 0.97 and grade < 13):
+                if(ms_md > 0.96 and sms_md > 1 and grade < 13):
                     x = ti
                     y = exportData[:i+1,3].astype(float)
                     if(len(y) <= 1):
@@ -220,11 +225,12 @@ while(True):
                             comps.append(code)
                             mesuStart[code.decode('utf-8')] = second_oTime
                             msRate[code.decode('utf-8')] = float(rate)
+                            pick[code.decode('utf-8')] = False
                             cost = exportData[i, 8].decode('UTF-8')
                             setFile = open(setFilePath, 'a')
                             setFile.write( str(code.decode('utf-8')) + ',' + str(float(rate)) + ',' + str(gradient) +  ',' + str_oTime + ',' + str(wanna) + ',' + str(datetime.datetime.now().strftime('%H:%M:%S')) + ',' + str(cost) + '\n')
                             setFile.close()
-                         
+                             
         except Exception as e:
             print('--------------------' + str(e))
             continue
