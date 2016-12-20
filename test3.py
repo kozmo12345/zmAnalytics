@@ -87,7 +87,7 @@ for datei, da in enumerate(dates):
             mesuIndex = i
         if(nt == sec_medotime):
             medoIndex = i
-            break;          
+            break;
 
     c = exportData[mesuIndex:medoIndex, 3].astype(float)
 
