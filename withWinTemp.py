@@ -40,18 +40,18 @@ now = datetime.datetime.now()
 today = now.strftime('%Y-%m-%d')
 
 startTime = datetime.timedelta(hours=9,minutes=00,seconds=00).total_seconds()
-endTime = datetime.timedelta(hours=9,minutes=13,seconds=00).total_seconds()
+endTime = datetime.timedelta(hours=9,minutes=12,seconds=30).total_seconds()
 fMedoTime = datetime.timedelta(hours=9,minutes=18,seconds=00).total_seconds()
 allMedoTime = datetime.timedelta(hours=9,minutes=19,seconds=00).total_seconds()
 closeTime = datetime.timedelta(hours=15,minutes=19,seconds=00).total_seconds()
 
 comps = []
 medos = []
-mesuLimit = 2
+mesuLimit = [2]
 wanna = 1
 rateLimit = 0.31
 
-realfilePath = os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + ".txt");
+realfilePath = os.path.join("C:\\", "Dropbox\\temp\\Data\\" + today + "\\" + today + ".txt");
 dirn = os.path.dirname(realfilePath)
 try:
     os.stat(dirn)
@@ -64,7 +64,7 @@ except:
         else:
             raise
 
-setFilePath = os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + "m.txt");
+setFilePath = os.path.join("C:\\", "Dropbox\\temp\\Data\\" + today + "\\" + today + "m.txt");
 dirn2 = os.path.dirname(setFilePath)
 try:
     os.stat(dirn2)
@@ -77,7 +77,7 @@ except:
         else:
             raise
 
-mdFilePath = os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + "d.txt");
+mdFilePath = os.path.join("C:\\", "Dropbox\\temp\\Data\\" + today + "\\" + today + "d.txt");
 dirn3 = os.path.dirname(mdFilePath)
 try:
     os.stat(dirn3)
@@ -220,7 +220,12 @@ while(True):
                         else:
                             mesuDict[code.decode('utf-8')] = mesuDict.get(code.decode('utf-8'), 0)
                         
-                        if(mesuDict[code.decode('utf-8')] == mesuLimit and (code not in comps) and (code not in medos)):
+                        if(xstime.tm_min < 2):
+                            mesuLimit = [3]
+                        elif(xstime.tm_min >= 2):
+                            mesuLimit = [2,3]
+
+                        if(mesuDict[code.decode('utf-8')] in mesuLimit and (code not in comps) and (code not in medos)):
                             print(str(ttime) + " " + str(gradient) + " " + str(srgrad) + " " + str(grade))
                             comps.append(code)
                             mesuStart[code.decode('utf-8')] = second_oTime
