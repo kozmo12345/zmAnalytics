@@ -9,12 +9,13 @@ import time
 
 sp.random.seed(3)  # 이후에 같은 데이터를 생성하기 위해
 
-def plot_models(x, cs, gy, mstime, fname=None, mesuIndex=None, mesuValue=None, ymax=None, xmin=None):
+def plot_models(x, cs, gy, mstime, fname=None, mesuIndex=None, mesuValue=None, medoIndex=None, medoValue=None, ymax=None, xmin=None):
     colors = ['g', 'k', 'b', 'm', 'r']
     linestyles = ['-', '-.', '--', ':', '-']
 
     plt.clf()
     plt.plot(mesuIndex, mesuValue, "o", color='red')
+    plt.plot(medoIndex, medoValue, "o", color='red')
     plt.scatter(x, cs, s=20)
     # positions = range(1, len(gy) + 1)
     plt.bar(x[:-1], gy, align='center')
@@ -96,10 +97,10 @@ for datei, da in enumerate(dates):
             medoIndex = i
             break;
 
-    c = exportData[0:medoIndex, 3].astype(float)
-    g = exportData[0:medoIndex, 4].astype(float)
+    c = exportData[0:medoIndex + 5, 3].astype(float)
+    g = exportData[0:medoIndex + 5, 4].astype(float)
     gy = [(b - a) for a,b in zip(g,g[1:])]
     gy = [x/(max(gy))*10 for x in gy]
 
     img_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)), "grd_img")
-    plot_models([x for x in range(len(c))], c, gy, mstime = "" ,fname = os.path.join(img_dir, str(dates[datei])+ '_' +str(bcodes[datei]) + '_' +str(geteds[datei]) + ".png"), mesuIndex = [mesuIndex], mesuValue = [exportData[mesuIndex, 3].astype(float)])
+    plot_models([x for x in range(len(c + 5))], c, gy, mstime = "" ,fname = os.path.join(img_dir, str(dates[datei])+ '_' +str(bcodes[datei]) + '_' +str(geteds[datei]) + ".png"), mesuIndex = [mesuIndex], mesuValue = [exportData[mesuIndex, 3].astype(float)], medoIndex = [medoIndex], medoValue = [exportData[medoIndex, 3].astype(float)])

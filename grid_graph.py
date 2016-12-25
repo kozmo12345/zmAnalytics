@@ -151,5 +151,5 @@ for datei, da in enumerate(dates):
         # f10 = sp.poly1d(sp.polyfit(ti[:mesuIndex+1], y, 30))
         # f100 = sp.poly1d(sp.polyfit(ti[:mesuIndex+1], y, 40))
 
-        img_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)), "img")
-        plot_models(ti, c, msy, mdy, ry,[f1], mstime = ((sec_mesutime - firstSecond)/10) ,fname = os.path.join(img_dir, str(dates[datei])+ '_' +str(bcodes[datei]) + '_' + str(maxRate - mesuRate) + ".png")) 
+        img_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)), "grd_img")
+        plot_models(ti, c, msy, mdy, ry,[f1], mstime = ((sec_mesutime - firstSecond)/10) ,fname = os.path.join(img_dir, str(dates[datei])+ '_' +str(bcodes[datei].decode('utf-8')) + '_' + str(maxRate - mesuRate) + ".png")) 
