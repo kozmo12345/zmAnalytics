@@ -41,12 +41,13 @@ today = now.strftime('%Y-%m-%d')
 
 startTime = datetime.timedelta(hours=9,minutes=00,seconds=00).total_seconds()
 endTime = datetime.timedelta(hours=9,minutes=12,seconds=30).total_seconds()
-fMedoTime = datetime.timedelta(hours=9,minutes=18,seconds=00).total_seconds()
-allMedoTime = datetime.timedelta(hours=9,minutes=19,seconds=00).total_seconds()
+fMedoTime = datetime.timedelta(hours=9,minutes=19,seconds=00).total_seconds()
+allMedoTime = datetime.timedelta(hours=9,minutes=21,seconds=00).total_seconds()
 closeTime = datetime.timedelta(hours=15,minutes=19,seconds=00).total_seconds()
 
 comps = []
 medos = []
+nos = []
 mesuLimit = [2]
 wanna = 1
 rateLimit = 0.31
@@ -225,7 +226,19 @@ while(True):
                         elif(xstime.tm_min >= 2):
                             mesuLimit = [2,3]
 
-                        if(mesuDict[code.decode('utf-8')] in mesuLimit and (code not in comps) and (code not in medos)):
+                        if(mesuDict[code.decode('utf-8')] in mesuLimit and (code not in comps) and (code not in medos) and (code not in nos)):
+
+                            if(i < 4):
+                                s = 0
+                            else:
+                                s = i-4
+                            mmlist = sp.array(exportData[s:i,6].astype(float))/(sp.array(srlist[s:i])*100000)
+                            mmfit = sp.polyfit(x[:len(exportData[s:i,5])], mmlist, level)
+                            mmgrad = sp.around(mmfit[0]*10, decimals=3)
+                            if(mmgrad > 8):
+                                nos.append(code)
+                                continue;
+
                             print(str(ttime) + " " + str(gradient) + " " + str(srgrad) + " " + str(grade))
                             comps.append(code)
                             mesuStart[code.decode('utf-8')] = second_oTime
