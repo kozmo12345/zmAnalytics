@@ -239,7 +239,10 @@ while(True):
                                 nos.append(code)
                                 continue;
 
-                            print(str(ttime) + " " + str(gradient) + " " + str(srgrad) + " " + str(grade))
+                            if(True in (exportData[0:i,3].astype(float) > 23.5)):
+                                nos.append(code)
+                                continue;
+
                             comps.append(code)
                             mesuStart[code.decode('utf-8')] = second_oTime
                             msRate[code.decode('utf-8')] = float(rate)
