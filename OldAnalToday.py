@@ -51,7 +51,7 @@ if((today.split('-')[1] == '10' and today.split('-')[2] in ['05','06','07','10',
             tempData = data[data[:,0] == ttime]
             
             tmp_time = second_oTime
-            print(ttime)
+            # print(ttime)
             termData = sp.append(termData,tempData, axis=0)
             if(second_oTime > allMedoTime + 300):
                 break
@@ -207,6 +207,9 @@ for ttime in times:
                 ms_md = (exportData[i,5].astype(float))/(exportData[i,6].astype(float))
                 sms_md = sp.sum(exportData[:i+1,5].astype(float))/sp.sum(exportData[:i+1,6].astype(float))
                 
+                if(code.decode('utf-8') == '060570'):
+                    print(ms_md, sms_md, grade)
+
                 if(ms_md > 0.96 and sms_md > 1 and grade < 13):
                     x = ti
                     y = exportData[:i+1,3].astype(float)
@@ -222,7 +225,7 @@ for ttime in times:
                     srfit = sp.polyfit(x[:-1], srlist, level)
                     srgrad = sp.around(srfit[0]*10, decimals=2)
                     
-                    if(gradient >= 0.4 and srgrad > 0):
+                    if(gradient >= 0.7 and srgrad > 0):
                         if(code.decode('utf-8') in mesuDict):
                             mesuDict[code.decode('utf-8')] = mesuDict[code.decode('utf-8')] + 1
                         else:
@@ -249,7 +252,13 @@ for ttime in times:
                             if(True in (exportData[0:i,3].astype(float) > 23.5)):
                                 nos.append(code)
                                 continue;
-                                
+                            
+                            lfit = sp.polyfit(x[-3:], y[-3:], level)
+                            lg = sp.around(lfit[0]*10, decimals=2)
+                            if(lg > 2 and True in (exportData[0:i,5].astype(float) == 0)):
+                                nos.append(code)
+                                continue;   
+                            
                             comps.append((code))
                             mesuStart[code.decode('utf-8')] = i
                             msGradient[code.decode('utf-8')] = gradient

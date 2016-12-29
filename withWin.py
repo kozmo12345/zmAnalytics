@@ -243,6 +243,12 @@ while(True):
                                 nos.append(code)
                                 continue;
 
+                            lfit = sp.polyfit(x[-3:], y[-3:], level)
+                            lg = sp.around(lfit[0]*10, decimals=2)
+                            if(lg > 2 and True in (exportData[0:i,5].astype(float) == 0)):
+                                nos.append(code)
+                                continue;                                
+
                             comps.append(code)
                             mesuStart[code.decode('utf-8')] = second_oTime
                             msRate[code.decode('utf-8')] = float(rate)
