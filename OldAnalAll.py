@@ -46,8 +46,8 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
         # if(today != '2016-09-21'):
         #     break;
         # today = '2016-12-29'
-        if((today.split('-')[1] == '10' and today.split('-')[2] in ['05','06','07','10','11','12','13','14','17','18','19','20','21','24','25','26','27','28','31']) or (today.split('-')[1] == '11' and today.split('-')[2] in ['01','02','03','07','08','09','10'])):
-            continue
+        # if((today.split('-')[1] == '10' and today.split('-')[2] in ['05','06','07','10','11','12','13','14','17','18','19','20','21','24','25','26','27','28','31']) or (today.split('-')[1] == '11' and today.split('-')[2] in ['01','02','03','07','08','09','10'])):
+        #     continue
 
         print(today)
         setFile = open(os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + "moa3.txt"), 'w')
@@ -58,37 +58,37 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
         codes = sp.unique(data[data[:,7] != b''][:,7])
         times = sp.unique(data[data[:,0] != b''][:,0])
 
-        if((today.split('-')[1] == '10' and today.split('-')[2] in ['05','06','07','10','11','12','13','14','17','18','19','20','21','24','25','26','27','28','31']) or (today.split('-')[1] == '11' and today.split('-')[2] in ['01','02','03','07','08','09','10','11','14','15','16','17'])):
-            termData = data[data[:,0] == times[0]]
-            fTime = time.strptime(times[0].decode('utf-8'), '%H:%M:%S')
-            f_oTime = datetime.timedelta(hours=fTime.tm_hour,minutes=fTime.tm_min,seconds=fTime.tm_sec).total_seconds() #계산시간
-            tmp_time = f_oTime
+        # if((today.split('-')[1] == '10' and today.split('-')[2] in ['05','06','07','10','11','12','13','14','17','18','19','20','21','24','25','26','27','28','31']) or (today.split('-')[1] == '11' and today.split('-')[2] in ['01','02','03','07','08','09','10','11','14','15','16','17'])):
+        #     termData = data[data[:,0] == times[0]]
+        #     fTime = time.strptime(times[0].decode('utf-8'), '%H:%M:%S')
+        #     f_oTime = datetime.timedelta(hours=fTime.tm_hour,minutes=fTime.tm_min,seconds=fTime.tm_sec).total_seconds() #계산시간
+        #     tmp_time = f_oTime
     
-            for ttime in times[1:]:
-                try:
-                    xstime = time.strptime(ttime.decode('utf-8'), '%H:%M:%S')
-                    second_oTime = datetime.timedelta(hours=xstime.tm_hour,minutes=xstime.tm_min,seconds=xstime.tm_sec).total_seconds() #계산시간
-                    str_oTime = "ttime.decode('utf-8')"
-                    bool_oTime = True
+        #     for ttime in times[1:]:
+        #         try:
+        #             xstime = time.strptime(ttime.decode('utf-8'), '%H:%M:%S')
+        #             second_oTime = datetime.timedelta(hours=xstime.tm_hour,minutes=xstime.tm_min,seconds=xstime.tm_sec).total_seconds() #계산시간
+        #             str_oTime = "ttime.decode('utf-8')"
+        #             bool_oTime = True
 
-                    if(tmp_time + 9 > second_oTime):
-                        continue;
+        #             if(tmp_time + 9 > second_oTime):
+        #                 continue;
     
-                    tempData = data[data[:,0] == ttime]
+        #             tempData = data[data[:,0] == ttime]
                     
-                    tmp_time = second_oTime
-                    print(ttime)
-                    termData = sp.append(termData,tempData, axis=0)
-                    if(second_oTime > allMedoTime + 300):
-                        break
+        #             tmp_time = second_oTime
+        #             print(ttime)
+        #             termData = sp.append(termData,tempData, axis=0)
+        #             if(second_oTime > allMedoTime + 300):
+        #                 break
     
-                except Exception as e:
-                    print('*************' + str())
-                    raise
+        #         except Exception as e:
+        #             print('*************' + str())
+        #             raise
     
-            data = termData;
-            codes = sp.unique(data[data[:,7] != b''][:,7])
-            times = sp.unique(data[data[:,0] != b''][:,0])
+        #     data = termData;
+        #     codes = sp.unique(data[data[:,7] != b''][:,7])
+        #     times = sp.unique(data[data[:,0] != b''][:,0])
 
         tmp_time = 0
         mesuDict = dict()
