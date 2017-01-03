@@ -163,8 +163,8 @@ for ttime in times:
                     msCost = (exportData[mesuStart[code.decode('utf-8')] + 1,4].astype(float) - exportData[mesuStart[code.decode('utf-8')],4].astype(float)) * exportData[mesuStart[code.decode('utf-8')],8].astype(float)
                     mdCost = (exportData[i + 1,4].astype(float) - exportData[i,4].astype(float)) * exportData[i,8].astype(float)
 
-                    if(exportData[i-5,5].astype(float) == 0 and exportData[i-4,5].astype(float) != 0):
-                        pick[code.decode('utf-8')] = True
+                    # if(exportData[i-5,5].astype(float) == 0 and exportData[i-4,5].astype(float) != 0):
+                    #     pick[code.decode('utf-8')] = True
 
                     if(pick[code.decode('utf-8')] and ed >= wanna):
                         print(1111111111)

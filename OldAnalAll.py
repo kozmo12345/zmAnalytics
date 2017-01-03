@@ -192,8 +192,8 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
                             msCost = (exportData[mesuStart[code.decode('utf-8')] + 1,4].astype(float) - exportData[mesuStart[code.decode('utf-8')],4].astype(float)) * exportData[mesuStart[code.decode('utf-8')],8].astype(float)
                             mdCost = (exportData[i + 1,4].astype(float) - exportData[i,4].astype(float)) * exportData[i,8].astype(float)
                             
-                            if(exportData[i-5,5].astype(float) == 0 and exportData[i-4,5].astype(float) != 0):
-                                pick[code.decode('utf-8')] = True
+                            # if(exportData[i-5,5].astype(float) == 0 and exportData[i-4,5].astype(float) != 0):
+                            #     pick[code.decode('utf-8')] = True
 
                             if(pick[code.decode('utf-8')] and ed >= wanna):
                                 edFile.write( str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMin) + ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(red) + ',' + str(msTime) + ',' + str(mdTime) + ',' + str(msCost) + ',' + str(mdCost) + ',' + str(msGradient[code.decode('utf-8')]) + ',' + str(msGr[code.decode('utf-8')]) + ',' + str(msSmdms[code.decode('utf-8')]) + ',' + str(msGrade[code.decode('utf-8')]) + ',' + str(msSrgrad[code.decode('utf-8')]) + ',' + str(mesuIndex[code.decode('utf-8')]) + '\n')
@@ -279,7 +279,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
                                     if(mmgrad > 8):
                                         nos.append(code)
                                         continue;
-
+                                    
                                     if(True in (exportData[0:i,3].astype(float) > 22.5)):
                                         nos.append(code)
                                         continue;
@@ -289,6 +289,10 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
                                     if(lg > 2 and True in (exportData[0:i,5].astype(float) == 0)):
                                         nos.append(code)
                                         continue;
+
+                                    mmlist = sp.array(exportData[s:i,5].astype(float))/(sp.array(srlist[s:i])*100000)
+                                    mmfit = sp.polyfit(x[:len(exportData[s:i,5])], mmlist, level)
+                                    mmgrad = sp.around(mmfit[0]*10, decimals=3)
 
                                     comps.append((code))
                                     mesuStart[code.decode('utf-8')] = i

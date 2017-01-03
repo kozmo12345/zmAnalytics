@@ -175,8 +175,8 @@ while(True):
                     md = float(exportData[i, 3].decode('UTF-8'))
                     ed = round(md - ms, 2)
                     print(code.decode('utf-8') + '    ' + str(mmRate) + '    ' + str(str_oTime))
-                    if(exportData[i-5,5].astype(float) == 0 and exportData[i-4,5].astype(float) != 0):
-                        pick[code.decode('utf-8')] = True
+                    # if(exportData[i-5,5].astype(float) == 0 and exportData[i-4,5].astype(float) != 0):
+                    #     pick[code.decode('utf-8')] = True
 
                     if((mmRate < rateLimit or pick[code.decode('utf-8')]) and ed >= wanna):
                         mdFile = open(mdFilePath, 'a')
