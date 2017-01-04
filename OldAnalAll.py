@@ -273,6 +273,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
                                         s = 0
                                     else:
                                         s = i-4
+
                                     mmlist = sp.array(exportData[s:i,6].astype(float))/(sp.array(srlist[s:i])*100000)
                                     mmfit = sp.polyfit(x[:len(exportData[s:i,5])], mmlist, level)
                                     mmgrad = sp.around(mmfit[0]*10, decimals=3)
@@ -289,10 +290,17 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
                                     if(lg > 2 and True in (exportData[0:i,5].astype(float) == 0)):
                                         nos.append(code)
                                         continue;
+                                        
+                                    tpg = 0
+                                    for ii in range(1,i):
+                                        pi = ii * 3
+                                        if(pi >= i):
+                                            break
 
-                                    mmlist = sp.array(exportData[s:i,5].astype(float))/(sp.array(srlist[s:i])*100000)
-                                    mmfit = sp.polyfit(x[:len(exportData[s:i,5])], mmlist, level)
-                                    mmgrad = sp.around(mmfit[0]*10, decimals=3)
+                                        pfit = sp.polyfit(x[:pi], y[-pi:], level)
+                                        pgradient = sp.around(pfit[0]*10, decimals=2)
+                                        if(tpg < pgradient and not sp.isinf(pgradient)):
+                                            tpg = pgradient
 
                                     comps.append((code))
                                     mesuStart[code.decode('utf-8')] = i
@@ -304,7 +312,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
                                     msRate[code.decode('utf-8')] = float(exportData[i, 3].decode('UTF-8'))
                                     rmsRate[code.decode('utf-8')] = float(exportData[i+1, 3].decode('UTF-8'))
                                     pick[code.decode('utf-8')] = False
-                                    mesuIndex[code.decode('utf-8')] = mmgrad
+                                    mesuIndex[code.decode('utf-8')] = tpg * sp.sqrt(ii * 0.77)
                                     setFile.write( str(code.decode('utf-8')) + ',' + str(float(rate)) +  ',' + str(float(exportData[i, 3].decode('UTF-8'))) +  '\n')
 
             except Exception as e:

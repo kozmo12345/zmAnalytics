@@ -249,13 +249,26 @@ while(True):
                                 nos.append(code)
                                 continue;                                
 
+                            tpg = 0
+                            for ii in range(1,i):
+                                pi = ii * 3
+                                if(pi >= i):
+                                    break
+
+                                pfit = sp.polyfit(x[:pi], y[-pi:], level)
+                                pgradient = sp.around(pfit[0]*10, decimals=2)
+                                if(tpg < pgradient and not sp.isinf(pgradient)):
+                                    tpg = pgradient
+                            
+                            tpg = tpg * sp.sqrt(ii * 0.77)
+
                             comps.append(code)
                             mesuStart[code.decode('utf-8')] = second_oTime
                             msRate[code.decode('utf-8')] = float(rate)
                             pick[code.decode('utf-8')] = False
                             cost = exportData[i, 8].decode('UTF-8')
                             setFile = open(setFilePath, 'a')
-                            setFile.write( str(code.decode('utf-8')) + ',' + str(float(rate)) + ',' + str(gradient) +  ',' + str_oTime + ',' + str(wanna) + ',' + str(datetime.datetime.now().strftime('%H:%M:%S')) + ',' + str(cost) + '\n')
+                            setFile.write( str(code.decode('utf-8')) + ',' + str(float(rate)) + ',' + str(tpg) +  ',' + str_oTime + ',' + str(wanna) + ',' + str(datetime.datetime.now().strftime('%H:%M:%S')) + ',' + str(cost) + '\n')
                             setFile.close()
                              
         except Exception as e:
