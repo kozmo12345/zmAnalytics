@@ -95,7 +95,6 @@ createFiles(realfilePath, setFilePath, mdFilePath)
 
 mesuStart = dict()
 msRate = dict()
-pick = dict()
 
 while(True):
     data = sp.genfromtxt(realfilePath, delimiter="\t", dtype='|S20')
@@ -128,6 +127,8 @@ while(True):
             second_oTime = datetime.timedelta(hours=xstime.tm_hour,minutes=xstime.tm_min,seconds=xstime.tm_sec).total_seconds() #계산시간
             str_oTime = ttime.decode('utf-8')
 
+
+
             if(second_oTime > endTime and second_oTime < nowTime - 120 ):
                 continue;            
             
@@ -138,13 +139,15 @@ while(True):
                 break;
 
             tmp_time = second_oTime
-            
-            ttimeData = data[data[:,0] == ttime]
+
+            nzData = data[data[:,2] != b'']            
+            ttimeData = nzData[nzData[:,0] == ttime]            
             ttimeData2 = ttimeData[ttimeData[:,1].astype(int) < 21]
             ttimeData3 = ttimeData2[ttimeData2[:,4].astype(int) > 400000]
             ttimeData4 = ttimeData3[ttimeData3[:,3].astype(float) < 25]
             ttimeData5 = ttimeData4[ttimeData4[:,8].astype(float) > 1900]
             codes = ttimeData5[:,7]
+
             if(second_oTime > endTime and len(comps) > 0):
                 codes = comps;
             for code in (codes):
@@ -175,16 +178,13 @@ while(True):
                     md = float(exportData[i, 3].decode('UTF-8'))
                     ed = round(md - ms, 2)
                     print(code.decode('utf-8') + '    ' + str(mmRate) + '    ' + str(str_oTime))
-                    # if(exportData[i-5,5].astype(float) == 0 and exportData[i-4,5].astype(float) != 0):
-                    #     pick[code.decode('utf-8')] = True
 
-                    if((mmRate < rateLimit or pick[code.decode('utf-8')]) and ed >= wanna):
+                    if(mmRate < rateLimit and ed >= wanna):
                         mdFile = open(mdFilePath, 'a')
                         mdFile.write(str(code.decode('utf-8')) + ',' + str(float(exportData[i, 3].decode('UTF-8'))) + ',' + str(exportData[i, 0].decode('UTF-8')) + ',' + str(datetime.datetime.now().strftime('%H:%M:%S')) + ',' + str(exportData[i, 8].decode('UTF-8')) + '\n')
                         mdFile.close()
                         medos.append(code)
                         comps.remove(code)
-                        del pick[code.decode('utf-8')]
 
                 if(second_oTime > endTime):
                     continue;
@@ -265,7 +265,6 @@ while(True):
                             comps.append(code)
                             mesuStart[code.decode('utf-8')] = second_oTime
                             msRate[code.decode('utf-8')] = float(rate)
-                            pick[code.decode('utf-8')] = False
                             cost = exportData[i, 8].decode('UTF-8')
                             setFile = open(setFilePath, 'a')
                             setFile.write( str(code.decode('utf-8')) + ',' + str(float(rate)) + ',' + str(tpg) +  ',' + str_oTime + ',' + str(wanna) + ',' + str(datetime.datetime.now().strftime('%H:%M:%S')) + ',' + str(cost) + '\n')

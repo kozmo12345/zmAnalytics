@@ -114,7 +114,8 @@ for ttime in times:
         
         print(today + str(ttime))
         if(bool_oTime == True):
-            ttimeData = data[data[:,0] == ttime]
+            nzData = data[data[:,2] != b'']
+            ttimeData = nzData[nzData[:,0] == ttime]
             ttimeData2 = ttimeData[ttimeData[:,1].astype(int) < 21]
             ttimeData3 = ttimeData2[ttimeData2[:,4].astype(int) > 400000]
             ttimeData4 = ttimeData3[ttimeData3[:,3].astype(float) < 25]
@@ -259,13 +260,25 @@ for ttime in times:
                                 nos.append(code)
                                 continue;   
                             
+                            tpg = 0
+                            for ii in range(1,i):
+                                pi = ii * 3
+                                if(pi >= i):
+                                    break
+
+                                pfit = sp.polyfit(x[:pi], y[-pi:], level)
+                                pgradient = sp.around(pfit[0]*10, decimals=2)
+                                if(tpg < pgradient and not sp.isinf(pgradient)):
+                                    tpg = pgradient
+                            tpg = tpg * sp.sqrt(ii * 0.77)
+
                             comps.append((code))
                             mesuStart[code.decode('utf-8')] = i
                             msGradient[code.decode('utf-8')] = gradient
                             msGr[code.decode('utf-8')] = gr
                             msSmdms[code.decode('utf-8')] = sms_md 
                             msGrade[code.decode('utf-8')] = grade
-                            msSrgrad[code.decode('utf-8')] = srgrad
+                            msSrgrad[code.decode('utf-8')] = tpg
                             msRate[code.decode('utf-8')] = float(exportData[i, 3].decode('UTF-8'))
                             rmsRate[code.decode('utf-8')] = float(exportData[i, 3].decode('UTF-8'))
                             pick[code.decode('utf-8')] = False

@@ -144,7 +144,8 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
                 
                 print(today + str(ttime))
                 if(bool_oTime == True):
-                    ttimeData = data[data[:,0] == ttime]
+                    nzData = data[data[:,2] != b'']
+                    ttimeData = nzData[nzData[:,0] == ttime]                    
                     ttimeData2 = ttimeData[ttimeData[:,1].astype(int) < 21]
                     ttimeData3 = ttimeData2[ttimeData2[:,4].astype(int) > 400000]
                     ttimeData4 = ttimeData3[ttimeData3[:,3].astype(float) < 25]
