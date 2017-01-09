@@ -262,6 +262,12 @@ while(True):
                             
                             tpg = tpg * sp.sqrt(ii * 0.77)
 
+                            with open('setFilePath', 'r') as f:
+                                for line in f:
+                                    if(line.split(",")[0] == code.decode('utf-8') and code not in comps):
+                                        nos.append(code)
+                                        break
+
                             comps.append(code)
                             mesuStart[code.decode('utf-8')] = second_oTime
                             msRate[code.decode('utf-8')] = float(rate)
