@@ -24,15 +24,16 @@ sumEd = 0
 today = now.strftime('%Y-%m-%d')
 # today = '2016-12-14'
 print(today)
-setFile = open(os.path.join("C:\\", "Dropbox\\temp\\Data\\" + today + "\\" + today + "moa3.txt"), 'w')
-edFile = open(os.path.join("C:\\", "Dropbox\\temp\\Data\\" + today + "\\" + today + "ed.txt"), 'w')
-realfilePath = os.path.join("C:\\", "Dropbox\\temp\\Data\\" + today + "\\" + today + ".txt");
+setFile = open(os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + "moa3.txt"), 'w')
+edFile = open(os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + "ed.txt"), 'w')
+realfilePath = os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + ".txt");
 
 data = sp.genfromtxt(realfilePath, delimiter="\t", dtype='|S20')
 codes = sp.unique(data[data[:,7] != b''][:,7])
 times = sp.unique(data[data[:,0] != b''][:,0])
 
-if((today.split('-')[1] == '10' and today.split('-')[2] in ['05','06','07','10','11','12','13','14','17','18','19','20','21','24','25','26','27','28','31']) or (today.split('-')[1] == '11' and today.split('-')[2] in ['01','02','03','07','08','09','10','11','14','15','16','17'])):
+# if((today.split('-')[1] == '10' and today.split('-')[2] in ['05','06','07','10','11','12','13','14','17','18','19','20','21','24','25','26','27','28','31']) or (today.split('-')[1] == '11' and today.split('-')[2] in ['01','02','03','07','08','09','10','11','14','15','16','17'])):
+if(False):
     termData = data[data[:,0] == times[0]]
     fTime = time.strptime(times[0].decode('utf-8'), '%H:%M:%S')
     f_oTime = datetime.timedelta(hours=fTime.tm_hour,minutes=fTime.tm_min,seconds=fTime.tm_sec).total_seconds() #계산시간
@@ -44,8 +45,8 @@ if((today.split('-')[1] == '10' and today.split('-')[2] in ['05','06','07','10',
             second_oTime = datetime.timedelta(hours=xstime.tm_hour,minutes=xstime.tm_min,seconds=xstime.tm_sec).total_seconds() #계산시간
             str_oTime = "ttime.decode('utf-8')"
             bool_oTime = True
-
-            if(tmp_time + 9 > second_oTime):
+            
+            if(str(xstime.tm_sec)[-1] == '8'):
                 continue;
 
             tempData = data[data[:,0] == ttime]
@@ -207,9 +208,6 @@ for ttime in times:
 
                 ms_md = (exportData[i,5].astype(float))/(exportData[i,6].astype(float))
                 sms_md = sp.sum(exportData[:i+1,5].astype(float))/sp.sum(exportData[:i+1,6].astype(float))
-                
-                if(code.decode('utf-8') == '060570'):
-                    print(ms_md, sms_md, grade)
 
                 if(ms_md > 0.96 and sms_md > 1 and grade < 13):
                     x = ti
@@ -238,7 +236,7 @@ for ttime in times:
                         elif(xstime.tm_min >= 2):
                             mesuLimit = [2,3]
 
-                        if(mesuDict[code.decode('utf-8')] in mesuLimit and ((code) not in comps)):
+                        if(mesuDict[code.decode('utf-8')] in mesuLimit and ((code) not in comps) and (code not in nos)):
                             if(i < 4):
                                 s = 0
                             else:
@@ -247,6 +245,8 @@ for ttime in times:
                             mmfit = sp.polyfit(x[:len(exportData[s:i,5])], mmlist, level)
                             mmgrad = sp.around(mmfit[0]*10, decimals=3)
                             if(mmgrad > 8):
+                                # if(code.decode('utf-8') == '068330'):
+                                #     time.sleep(10000)                                
                                 nos.append(code)
                                 continue;
 
