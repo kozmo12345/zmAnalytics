@@ -120,7 +120,7 @@ for ttime in times:
             ttimeData2 = ttimeData[ttimeData[:,1].astype(int) < 21]
             ttimeData3 = ttimeData2[ttimeData2[:,4].astype(int) > 400000]
             ttimeData4 = ttimeData3[ttimeData3[:,3].astype(float) < 25]
-            ttimeData5 = ttimeData4[ttimeData4[:,8].astype(float) > 1900]
+            ttimeData5 = ttimeData4[ttimeData4[:,8].astype(float) > 2100]
             codes = ttimeData5[:,7]
 
             if(second_oTime > endTime):

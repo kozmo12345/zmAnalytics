@@ -145,7 +145,7 @@ while(True):
             ttimeData2 = ttimeData[ttimeData[:,1].astype(int) < 21]
             ttimeData3 = ttimeData2[ttimeData2[:,4].astype(int) > 400000]
             ttimeData4 = ttimeData3[ttimeData3[:,3].astype(float) < 25]
-            ttimeData5 = ttimeData4[ttimeData4[:,8].astype(float) > 1900]
+            ttimeData5 = ttimeData4[ttimeData4[:,8].astype(float) > 2100]
             codes = ttimeData5[:,7]
 
             if(second_oTime > endTime and len(comps) > 0):
@@ -262,7 +262,7 @@ while(True):
                             
                             tpg = tpg * sp.sqrt(ii * 0.77)
                             
-                            with open('setFilePath', 'r') as f:
+                            with open(setFilePath, 'r') as f:
                                 for line in f:
                                     if(line.split(",")[0] == code.decode('utf-8') and code not in comps):
                                         nos.append(code)

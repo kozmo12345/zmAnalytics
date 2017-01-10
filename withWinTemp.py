@@ -65,7 +65,7 @@ except:
         else:
             raise
 
-setFilePath = os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + "m.txt");
+setFilePath = os.path.join("C:\\", "Dropbox\\temp\\Data\\" + today + "\\" + today + "m.txt");
 dirn2 = os.path.dirname(setFilePath)
 try:
     os.stat(dirn2)
@@ -78,7 +78,7 @@ except:
         else:
             raise
 
-mdFilePath = os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + "d.txt");
+mdFilePath = os.path.join("C:\\", "Dropbox\\temp\\Data\\" + today + "\\" + today + "d.txt");
 dirn3 = os.path.dirname(mdFilePath)
 try:
     os.stat(dirn3)
@@ -111,11 +111,11 @@ while(True):
     now = datetime.datetime.now()
     nowTime = datetime.timedelta(hours=now.hour,minutes=now.minute,seconds=now.second).total_seconds()
 
-    if(nowTime > endTime and len(comps) == 0):
-        break;
+    # if(nowTime > endTime and len(comps) == 0):
+    #     break;
 
-    if(nowTime > allMedoTime):
-        break;
+    # if(nowTime > allMedoTime):
+    #     break;
 
     print(today + str(times[len(times)-1]))
     print(comps)
@@ -129,8 +129,8 @@ while(True):
 
 
 
-            if(second_oTime > endTime and second_oTime < nowTime - 120 ):
-                continue;            
+            # if(second_oTime > endTime and second_oTime < nowTime - 120 ):
+            #     continue;            
             
             if(second_oTime < startTime):
                 continue;
@@ -145,7 +145,7 @@ while(True):
             ttimeData2 = ttimeData[ttimeData[:,1].astype(int) < 21]
             ttimeData3 = ttimeData2[ttimeData2[:,4].astype(int) > 400000]
             ttimeData4 = ttimeData3[ttimeData3[:,3].astype(float) < 25]
-            ttimeData5 = ttimeData4[ttimeData4[:,8].astype(float) > 1900]
+            ttimeData5 = ttimeData4[ttimeData4[:,8].astype(float) > 2100]
             codes = ttimeData5[:,7]
 
             if(second_oTime > endTime and len(comps) > 0):
@@ -189,8 +189,8 @@ while(True):
                 if(second_oTime > endTime):
                     continue;
 
-                if(nowTime > endTime):
-                    continue;
+                # if(nowTime > endTime):
+                #     continue;
     
                 rate = exportData[i, 3].decode('UTF-8')
                 grade = int(exportData[i, 1].decode('UTF-8'))
@@ -261,6 +261,12 @@ while(True):
                                     tpg = pgradient
                             
                             tpg = tpg * sp.sqrt(ii * 0.77)
+
+                            with open(setFilePath, 'r') as f:
+                                for line in f:
+                                    if(line.split(",")[0] == code.decode('utf-8') and code not in comps):
+                                        nos.append(code)
+                                        break
 
                             comps.append(code)
                             mesuStart[code.decode('utf-8')] = second_oTime
