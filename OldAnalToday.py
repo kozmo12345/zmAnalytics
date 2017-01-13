@@ -14,15 +14,15 @@ print(str(datetime.datetime.now()))
 
 startTime = datetime.timedelta(hours=9,minutes=00,seconds=00).total_seconds()
 endTime = datetime.timedelta(hours=9,minutes=12,seconds=30).total_seconds()
-fMedoTime = datetime.timedelta(hours=9,minutes=19,seconds=00).total_seconds()
-allMedoTime = datetime.timedelta(hours=9,minutes=21,seconds=00).total_seconds()
+fMedoTime = datetime.timedelta(hours=9,minutes=18,seconds=00).total_seconds()
+allMedoTime = datetime.timedelta(hours=9,minutes=25,seconds=20).total_seconds()
 wanna = 1
 mesuLimit = [3]
 rateLimit = 0.31
 sumEd = 0
 
 today = now.strftime('%Y-%m-%d')
-# today = '2016-12-14'
+today = '2017-01-10'
 print(today)
 setFile = open(os.path.join("C:\\", "Dropbox\\temp\\Data\\" + today + "\\" + today + "moa3.txt"), 'w')
 edFile = open(os.path.join("C:\\", "Dropbox\\temp\\Data\\" + today + "\\" + today + "ed.txt"), 'w')
@@ -94,23 +94,6 @@ for ttime in times:
         if(second_oTime > endTime and len(comps) == 0):
             break;
 
-        if(second_oTime > allMedoTime + 100):
-            dcodes = comps
-            for code in dcodes:
-                ms = float(msRate[code.decode('utf-8')])
-                rms = float(rmsRate[code.decode('utf-8')])
-                md = 0
-                ed = round(md - ms, 2)
-                red = round(md - rms, 2)
-                mdTime = 'endTime'
-                msTime = exportData[mesuStart[code.decode('utf-8')],0].decode('UTF-8')
-                allMax = max(exportData[:, 3].astype(float))
-                termMax = max(exportData[mesuStart[code.decode('utf-8')]:, 3].astype(float))
-                edFile.write( str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMin) + ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(red) + ',' + str(msTime) + ',' + str(mdTime) + ',' + str(msCost) + ',' + str(mdCost) + ',' + str(msGradient[code.decode('utf-8')]) + ',' + str(msGr[code.decode('utf-8')]) + ',' + str(msSmdms[code.decode('utf-8')]) + ',' + str(msGrade[code.decode('utf-8')]) + ',' + str(msSrgrad[code.decode('utf-8')]) +'\n')
-                comps.remove(code)
-                medos.append(code)
-                sumEd = sumEd + red
-            break;
         tmp_time = second_oTime
         
         print(today + str(ttime))

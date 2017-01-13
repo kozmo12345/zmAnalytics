@@ -41,8 +41,8 @@ today = now.strftime('%Y-%m-%d')
 
 startTime = datetime.timedelta(hours=9,minutes=00,seconds=00).total_seconds()
 endTime = datetime.timedelta(hours=9,minutes=12,seconds=30).total_seconds()
-fMedoTime = datetime.timedelta(hours=9,minutes=19,seconds=00).total_seconds()
-allMedoTime = datetime.timedelta(hours=9,minutes=21,seconds=00).total_seconds()
+fMedoTime = datetime.timedelta(hours=9,minutes=18,seconds=00).total_seconds()
+allMedoTime = datetime.timedelta(hours=9,minutes=25,seconds=30).total_seconds()
 closeTime = datetime.timedelta(hours=15,minutes=19,seconds=00).total_seconds()
 
 comps = []
@@ -91,10 +91,23 @@ except:
         else:
             raise
 
-createFiles(realfilePath, setFilePath, mdFilePath)
-
 mesuStart = dict()
 msRate = dict()
+isRe = False
+with open(setFilePath, 'r') as f:
+    for line in f:
+        imCode = line.split(",")[0].strip()
+        if(imCode != ''):
+            isRe = True
+        if(imCode != '' and int(line.split(",")[8].strip()) == 1):
+            comps.append(str.encode(imCode))
+            mesuStart[imCode] = int(line.split(",")[7].strip())
+            msRate[imCode] = float(line.split(",")[1].strip())
+        else:
+            continue;
+
+if(not isRe):
+    createFiles(realfilePath, setFilePath, mdFilePath)
 
 while(True):
     data = sp.genfromtxt(realfilePath, delimiter="\t", dtype='|S20')
@@ -273,7 +286,7 @@ while(True):
                             msRate[code.decode('utf-8')] = float(rate)
                             cost = exportData[i, 8].decode('UTF-8')
                             setFile = open(setFilePath, 'a')
-                            setFile.write( str(code.decode('utf-8')) + ',' + str(float(rate)) + ',' + str(tpg) +  ',' + str_oTime + ',' + str(wanna) + ',' + str(datetime.datetime.now().strftime('%H:%M:%S')) + ',' + str(cost) + '\n')
+                            setFile.write( str(code.decode('utf-8')) + ',' + str(float(rate)) + ',' + str(tpg) +  ',' + str_oTime + ',' + str(wanna) + ',' + str(datetime.datetime.now().strftime('%H:%M:%S')) + ',' + str(cost) + ',' + str(second_oTime) + ',' + str(1) + '\n')
                             setFile.close()
                              
         except Exception as e:
