@@ -140,8 +140,6 @@ while(True):
             second_oTime = datetime.timedelta(hours=xstime.tm_hour,minutes=xstime.tm_min,seconds=xstime.tm_sec).total_seconds() #계산시간
             str_oTime = ttime.decode('utf-8')
 
-
-
             if(second_oTime > endTime and second_oTime < nowTime - 120 ):
                 continue;            
             
