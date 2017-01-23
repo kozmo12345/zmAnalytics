@@ -287,7 +287,7 @@ while(True):
                             msRate[code.decode('utf-8')] = float(rate)
                             cost = exportData[i, 8].decode('UTF-8')
                             setFile = open(setFilePath, 'a')
-                            setFile.write( str(code.decode('utf-8')) + ',' + str(float(rate)) + ',' + str(tpg) +  ',' + str_oTime + ',' + str(wanna) + ',' + str(datetime.datetime.now().strftime('%H:%M:%S')) + ',' + str(cost) + ',' + str(second_oTime) + ',' + str(1) + '\n')
+                            setFile.write( str(code.decode('utf-8')) + ',' + str(float(rate)) + ',' + str(tpg) +  ',' + str_oTime + ',' + str(wanna) + ',' + str(datetime.datetime.now().strftime('%H:%M:%S')) + ',' + str(cost) + ',' + str(second_oTime) + ',' + str(2) + '\n')
                             setFile.close()
                              
         except Exception as e:

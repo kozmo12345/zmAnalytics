@@ -38,11 +38,11 @@ def createFiles(realfilePath, setFilePath, mdFilePath):
 
 now = datetime.datetime.now()
 today = now.strftime('%Y-%m-%d')
-
+today = '2016-12-20'
 startTime = datetime.timedelta(hours=9,minutes=00,seconds=00).total_seconds()
 endTime = datetime.timedelta(hours=9,minutes=12,seconds=30).total_seconds()
-fMedoTime = datetime.timedelta(hours=9,minutes=19,seconds=00).total_seconds()
-allMedoTime = datetime.timedelta(hours=9,minutes=21,seconds=00).total_seconds()
+fMedoTime = datetime.timedelta(hours=9,minutes=18,seconds=00).total_seconds()
+allMedoTime = datetime.timedelta(hours=9,minutes=25,seconds=30).total_seconds()
 closeTime = datetime.timedelta(hours=15,minutes=19,seconds=00).total_seconds()
 
 comps = []
@@ -52,7 +52,7 @@ mesuLimit = [2]
 wanna = 1
 rateLimit = 0.31
 
-realfilePath = os.path.join("C:\\", "Dropbox\\Temp\\data\\" + today + "\\" + today + ".txt");
+realfilePath = os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + ".txt");
 dirn = os.path.dirname(realfilePath)
 try:
     os.stat(dirn)
@@ -65,7 +65,7 @@ except:
         else:
             raise
 
-setFilePath = os.path.join("C:\\", "Dropbox\\temp\\Data\\" + today + "\\" + today + "m.txt");
+setFilePath = os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + "m.txt");
 dirn2 = os.path.dirname(setFilePath)
 try:
     os.stat(dirn2)
@@ -78,7 +78,7 @@ except:
         else:
             raise
 
-mdFilePath = os.path.join("C:\\", "Dropbox\\temp\\Data\\" + today + "\\" + today + "d.txt");
+mdFilePath = os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + "d.txt");
 dirn3 = os.path.dirname(mdFilePath)
 try:
     os.stat(dirn3)
@@ -91,10 +91,23 @@ except:
         else:
             raise
 
-createFiles(realfilePath, setFilePath, mdFilePath)
-
 mesuStart = dict()
 msRate = dict()
+isRe = False
+with open(setFilePath, 'r') as f:
+    for line in f:
+        imCode = line.split(",")[0].strip()
+        if(imCode != ''):
+            isRe = True
+        if(imCode != '' and int(line.split(",")[8].strip()) == 1):
+            comps.append(str.encode(imCode))
+            mesuStart[imCode] = int(line.split(",")[7].strip())
+            msRate[imCode] = float(line.split(",")[1].strip())
+        else:
+            continue;
+
+if(not isRe):
+    createFiles(realfilePath, setFilePath, mdFilePath)
 
 while(True):
     data = sp.genfromtxt(realfilePath, delimiter="\t", dtype='|S20')
@@ -120,14 +133,13 @@ while(True):
     print(today + str(times[len(times)-1]))
     print(comps)
     print(mesuDict)
+    print(nos)
     for ttime in (times):
         
         try:
             xstime = time.strptime(ttime.decode('utf-8'), '%H:%M:%S')
             second_oTime = datetime.timedelta(hours=xstime.tm_hour,minutes=xstime.tm_min,seconds=xstime.tm_sec).total_seconds() #계산시간
             str_oTime = ttime.decode('utf-8')
-
-
 
             # if(second_oTime > endTime and second_oTime < nowTime - 120 ):
             #     continue;            
@@ -145,7 +157,7 @@ while(True):
             ttimeData2 = ttimeData[ttimeData[:,1].astype(int) < 21]
             ttimeData3 = ttimeData2[ttimeData2[:,4].astype(int) > 400000]
             ttimeData4 = ttimeData3[ttimeData3[:,3].astype(float) < 25]
-            ttimeData5 = ttimeData4[ttimeData4[:,8].astype(float) > 2100]
+            ttimeData5 = ttimeData4[ttimeData4[:,8].astype(float) > 2200]
             codes = ttimeData5[:,7]
 
             if(second_oTime > endTime and len(comps) > 0):
@@ -239,7 +251,7 @@ while(True):
                                 nos.append(code)
                                 continue;
 
-                            if(True in (exportData[0:i,3].astype(float) > 23.5)):
+                            if(True in (exportData[0:i,3].astype(float) > 22.5)):
                                 nos.append(code)
                                 continue;
 
@@ -273,7 +285,7 @@ while(True):
                             msRate[code.decode('utf-8')] = float(rate)
                             cost = exportData[i, 8].decode('UTF-8')
                             setFile = open(setFilePath, 'a')
-                            setFile.write( str(code.decode('utf-8')) + ',' + str(float(rate)) + ',' + str(tpg) +  ',' + str_oTime + ',' + str(wanna) + ',' + str(datetime.datetime.now().strftime('%H:%M:%S')) + ',' + str(cost) + '\n')
+                            setFile.write( str(code.decode('utf-8')) + ',' + str(float(rate)) + ',' + str(tpg) +  ',' + str_oTime + ',' + str(wanna) + ',' + str(datetime.datetime.now().strftime('%H:%M:%S')) + ',' + str(cost) + ',' + str(second_oTime) + ',' + str(1) + '\n')
                             setFile.close()
                              
         except Exception as e:
