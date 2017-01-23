@@ -291,7 +291,28 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
                                     if(lg > 2 and True in (exportData[0:i,5].astype(float) == 0)):
                                         nos.append(code)
                                         continue;
-                                        
+
+                                    sdr = 0
+                                    sgr = 0
+                                    for en in range(i, 1, -1):
+                                        for sn in range(en, 0, -1):
+                                            dy = exportData[sn:en+1,3].astype(float)
+                                            
+                                            if(len(dy) <= 1 or exportData[en - 1, 5].astype(float) == 0):
+                                                continue
+        
+                                            tdr = dy[len(dy) - 1] - dy[0]
+
+                                            if(tdr > sdr):
+                                                sdr = tdr
+                                                ssn = sn
+                                                sen = en
+                                                sgr = exportData[en, 4].astype(float) - exportData[sn, 4].astype(float)
+
+                                    if((sdr / ((sgr * exportData[i, 8].astype(float))/100000000)) > 1.05):
+                                        nos.append(code)
+                                        continue;
+
                                     tpg = 0
                                     for ii in range(1,i):
                                         pi = ii * 3

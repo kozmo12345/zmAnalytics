@@ -101,8 +101,10 @@ with open(setFilePath, 'r') as f:
             isRe = True
         if(imCode != '' and int(line.split(",")[8].strip()) == 1):
             comps.append(str.encode(imCode))
-            mesuStart[imCode] = int(line.split(",")[7].strip())
+            mesuStart[imCode] = float(line.split(",")[7].strip())
             msRate[imCode] = float(line.split(",")[1].strip())
+        elif(imCode != '' and int(line.split(",")[8].strip()) == 2):
+            nos.append(str.encode(imCode))
         else:
             continue;
 
@@ -133,6 +135,7 @@ while(True):
     print(today + str(times[len(times)-1]))
     print(comps)
     print(mesuDict)
+    print(nos)
     for ttime in (times):
         
         try:
@@ -273,11 +276,33 @@ while(True):
                             
                             tpg = tpg * sp.sqrt(ii * 0.77)
 
+                            sdr = 0
+                            sgr = 0
+                            for en in range(i, 1, -1):
+                                for sn in range(en, 0, -1):
+                                    dy = exportData[sn:en+1,3].astype(float)
+                                    
+                                    if(len(dy) <= 1 or exportData[en - 1, 5].astype(float) == 0):
+                                        continue
+        
+                                    tdr = dy[len(dy) - 1] - dy[0]
+
+                                    if(tdr > sdr):
+                                        sdr = tdr
+                                        sgr = exportData[en, 4].astype(float) - exportData[sn, 4].astype(float)
+
+                            if((sdr / ((sgr * exportData[i, 8].astype(float))/100000000)) > 1.05):
+                                nos.append(code)
+                                continue;
+
                             with open(setFilePath, 'r') as f:
                                 for line in f:
                                     if(line.split(",")[0] == code.decode('utf-8') and code not in comps):
                                         nos.append(code)
                                         break
+
+                            if(code in nos):
+                                continue;
 
                             comps.append(code)
                             mesuStart[code.decode('utf-8')] = second_oTime

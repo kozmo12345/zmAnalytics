@@ -96,7 +96,7 @@ for ttime in times:
 
         tmp_time = second_oTime
         
-        print(today + str(ttime))
+        # print(today + str(ttime))
         if(bool_oTime == True):
             nzData = data[data[:,2] != b'']
             ttimeData = nzData[nzData[:,0] == ttime]
@@ -254,6 +254,27 @@ for ttime in times:
                                 if(tpg < pgradient and not sp.isinf(pgradient)):
                                     tpg = pgradient
                             tpg = tpg * sp.sqrt(ii * 0.77)
+                            
+                            sdr = 0
+                            sgr = 0
+                            for en in range(i, 1, -1):
+                                for sn in range(en, 0, -1):
+                                    dy = exportData[sn:en+1,3].astype(float)
+                                    
+                                    if(len(dy) <= 1 or exportData[en - 1, 5].astype(float) == 0):
+                                        continue
+        
+                                    tdr = dy[len(dy) - 1] - dy[0]
+
+                                    if(tdr > sdr):
+                                        sdr = tdr
+                                        ssn = sn
+                                        sen = en
+                                        sgr = exportData[en, 4].astype(float) - exportData[sn, 4].astype(float)
+
+                            if((sdr / ((sgr * exportData[i, 8].astype(float))/100000000)) > 1.05):
+                                nos.append(code)
+                                continue;
 
                             comps.append((code))
                             mesuStart[code.decode('utf-8')] = i
