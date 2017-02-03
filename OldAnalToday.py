@@ -22,7 +22,7 @@ rateLimit = 0.31
 sumEd = 0
 
 today = now.strftime('%Y-%m-%d')
-# today = '2017-01-10'
+# today = '2017-02-01'
 print(today)
 setFile = open(os.path.join("C:\\", "Dropbox\\temp\\Data\\" + today + "\\" + today + "moa3.txt"), 'w')
 edFile = open(os.path.join("C:\\", "Dropbox\\temp\\Data\\" + today + "\\" + today + "ed.txt"), 'w')
@@ -101,7 +101,7 @@ for ttime in times:
             nzData = data[data[:,2] != b'']
             ttimeData = nzData[nzData[:,0] == ttime]
             ttimeData2 = ttimeData[ttimeData[:,1].astype(int) < 21]
-            ttimeData3 = ttimeData2[ttimeData2[:,4].astype(int) > 400000]
+            ttimeData3 = ttimeData2[ttimeData2[:,4].astype(int) > 420000]
             ttimeData4 = ttimeData3[ttimeData3[:,3].astype(float) < 25]
             ttimeData5 = ttimeData4[ttimeData4[:,8].astype(float) > 2200]
             codes = ttimeData5[:,7]
@@ -133,7 +133,6 @@ for ttime in times:
                 c = exportData[:i+1, 3].astype(float)
 
                 if(code in comps):
-                    mmRate = (sp.sum(exportData[i-2:i+1,5].astype(float)))/(sp.sum(exportData[i-2:i+1,6].astype(float)))
 
                     ms = float(msRate[code.decode('utf-8')])
                     rms = float(rmsRate[code.decode('utf-8')])
@@ -148,6 +147,7 @@ for ttime in times:
                     msCost = (exportData[mesuStart[code.decode('utf-8')] + 1,4].astype(float) - exportData[mesuStart[code.decode('utf-8')],4].astype(float)) * exportData[mesuStart[code.decode('utf-8')],8].astype(float)
                     mdCost = (exportData[i + 1,4].astype(float) - exportData[i,4].astype(float)) * exportData[i,8].astype(float)
 
+                    mmRate = (sp.sum(exportData[i-2:i+1,5].astype(float)))/(sp.sum(exportData[i-2:i+1,6].astype(float))) - (ed/25)
                     # if(exportData[i-5,5].astype(float) == 0 and exportData[i-4,5].astype(float) != 0):
                     #     pick[code.decode('utf-8')] = True
 
@@ -224,12 +224,17 @@ for ttime in times:
                                 s = 0
                             else:
                                 s = i-4
+                            
                             mmlist = sp.array(exportData[s:i,6].astype(float))/(sp.array(srlist[s:i])*100000)
                             mmfit = sp.polyfit(x[:len(exportData[s:i,5])], mmlist, level)
                             mmgrad = sp.around(mmfit[0]*10, decimals=3)
-                            if(mmgrad > 8):
-                                # if(code.decode('utf-8') == '068330'):
-                                #     time.sleep(10000)                                
+
+                            ammlist = sp.array(exportData[s:i,5].astype(float))/(sp.array(srlist[s:i])*100000)
+                            ammfit = sp.polyfit(x[:len(exportData[s:i,5])], ammlist, level)
+                            ammgrad = sp.around(ammfit[0]*10, decimals=3)                                    
+                            
+                            print(code, mmgrad, ammgrad, ammgrad/mmgrad)
+                            if(mmgrad > 6 and ammgrad/mmgrad < 0.65):
                                 nos.append(code)
                                 continue;
 
