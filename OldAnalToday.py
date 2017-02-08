@@ -234,11 +234,11 @@ for ttime in times:
                             ammgrad = sp.around(ammfit[0]*10, decimals=3)                                    
                             
                             print(code, mmgrad, ammgrad, ammgrad/mmgrad)
-                            if(mmgrad > 6 and ammgrad/mmgrad < 0.65):
+                            if(mmgrad > 6 and ammgrad/mmgrad < 0.78):
                                 nos.append(code)
                                 continue;
 
-                            if(True in (exportData[0:i,3].astype(float) > 23.5)):
+                            if(True in (exportData[0:i,3].astype(float) > 22.5)):
                                 nos.append(code)
                                 continue;
                             
