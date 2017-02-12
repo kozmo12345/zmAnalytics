@@ -37,7 +37,7 @@ allMedoTime = datetime.timedelta(hours=9,minutes=25,seconds=20).total_seconds()
 wanna = 1
 mesuLimit = 2
 rateLimit = 0.31
-rateMLimit = 3.1
+rateMLimit = 3.8
 stdLimit = 2
 sumEd = 0
 originM = 2000000
@@ -107,6 +107,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
         msGrade = dict()
         msSrgrad = dict()
         pick = dict()
+        isd = dict()
         mesuIndex = dict()
 
         for ttime in times:
@@ -191,7 +192,11 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
                             termMax = max(exportData[mesuStart[code.decode('utf-8')]:i+1, 3].astype(float))
                             msCost = (exportData[mesuStart[code.decode('utf-8')] + 1,4].astype(float) - exportData[mesuStart[code.decode('utf-8')],4].astype(float)) * exportData[mesuStart[code.decode('utf-8')],8].astype(float)
                             mdCost = (exportData[i + 1,4].astype(float) - exportData[i,4].astype(float)) * exportData[i,8].astype(float)
-                            
+                            tempWan = wanna
+                            if((ms - md) > 1):
+                                isd[code.decode('utf-8')] = True
+                            if(isd[code.decode('utf-8')]):
+                                tempWan = 0.4
                             mmRate = (sp.sum(exportData[i-stdLimit:i+1,5].astype(float)))/(sp.sum(exportData[i-stdLimit:i+1,6].astype(float))) - (ed/25)
 
                             if(exportData[i, 3].astype('float') > 19.5):
@@ -221,7 +226,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
                             #     medos.append(code)
                             #     originM = originM * (1 + (red/100))
                                 del pick[code.decode('utf-8')]
-                            elif((mmRate < rateLimit or mmRate > rateMLimit or fMedoTime < second_oTime) and ed >= wanna):
+                            elif((mmRate < rateLimit or mmRate > rateMLimit or fMedoTime < second_oTime) and ed >= tempWan):
                                 edFile.write( str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMin) + ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(red) + ',' + str(msTime) + ',' + str(mdTime) + ',' + str(msCost) + ',' + str(mdCost) + ',' + str(msGradient[code.decode('utf-8')]) + ',' + str(msGr[code.decode('utf-8')]) + ',' + str(msSmdms[code.decode('utf-8')]) + ',' + str(msGrade[code.decode('utf-8')]) + ',' + str(msSrgrad[code.decode('utf-8')]) + ',' + str(mesuIndex[code.decode('utf-8')]) + '\n')
                                 comps.remove(code)
                                 sumEd = sumEd + red
@@ -347,6 +352,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
                                     rmsRate[code.decode('utf-8')] = float(exportData[i+1, 3].decode('UTF-8'))
                                     pick[code.decode('utf-8')] = False
                                     mesuIndex[code.decode('utf-8')] = mmgrad
+                                    isd[code.decode('utf-8')] = False
                                     setFile.write( str(code.decode('utf-8')) + ',' + str(float(rate)) +  ',' + str(float(exportData[i, 3].decode('UTF-8'))) +  '\n')
 
             except Exception as e:

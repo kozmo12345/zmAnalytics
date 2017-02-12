@@ -51,7 +51,7 @@ nos = []
 mesuLimit = [2]
 wanna = 1
 rateLimit = 0.31
-rateMLimit = 3.1
+rateMLimit = 3.8
 
 realfilePath = os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + ".txt");
 dirn = os.path.dirname(realfilePath)
@@ -94,6 +94,7 @@ except:
 
 mesuStart = dict()
 msRate = dict()
+isd = dict()
 isRe = False
 with open(setFilePath, 'r') as f:
     for line in f:
@@ -104,6 +105,7 @@ with open(setFilePath, 'r') as f:
             comps.append(str.encode(imCode))
             mesuStart[imCode] = float(line.split(",")[7].strip())
             msRate[imCode] = float(line.split(",")[1].strip())
+            isd[imCode] = False
         elif(imCode != '' and int(line.split(",")[8].strip()) == 2):
             nos.append(str.encode(imCode))
         else:
@@ -199,9 +201,14 @@ while(True):
                     md = float(exportData[i, 3].decode('UTF-8'))
                     ed = round(md - ms, 2)
                     mmRate = (sp.sum(exportData[i-2:i+1,5].astype(float)))/(sp.sum(exportData[i-2:i+1,6].astype(float))) - (ed/25)
+                    tempWan = wanna
+                    if((ms - md) > 1):
+                        isd[code.decode('utf-8')] = True
+                    if(isd[code.decode('utf-8')]):
+                        tempWan = 0.4
                     print(code.decode('utf-8') + '    ' + str(mmRate) + '    ' + str(str_oTime))
 
-                    if((mmRate < rateLimit or mmRate > rateMLimit) and ed >= wanna):
+                    if((mmRate < rateLimit or mmRate > rateMLimit) and ed >= tempWan):
                         mdFile = open(mdFilePath, 'a')
                         mdFile.write(str(code.decode('utf-8')) + ',' + str(float(exportData[i, 3].decode('UTF-8'))) + ',' + str(exportData[i, 0].decode('UTF-8')) + ',' + str(datetime.datetime.now().strftime('%H:%M:%S')) + ',' + str(exportData[i, 8].decode('UTF-8')) + '\n')
                         mdFile.close()
@@ -322,6 +329,7 @@ while(True):
                             comps.append(code)
                             mesuStart[code.decode('utf-8')] = second_oTime
                             msRate[code.decode('utf-8')] = float(rate)
+                            isd[code.decode('utf-8')] = False
                             cost = exportData[i, 8].decode('UTF-8')
                             setFile = open(setFilePath, 'a')
                             setFile.write( str(code.decode('utf-8')) + ',' + str(float(rate)) + ',' + str(tpg) +  ',' + str_oTime + ',' + str(wanna) + ',' + str(datetime.datetime.now().strftime('%H:%M:%S')) + ',' + str(cost) + ',' + str(second_oTime) + ',' + str(1) + '\n')
