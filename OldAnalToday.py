@@ -19,6 +19,7 @@ allMedoTime = datetime.timedelta(hours=9,minutes=25,seconds=20).total_seconds()
 wanna = 1
 mesuLimit = [3]
 rateLimit = 0.31
+rateMLimit = 3.1
 sumEd = 0
 
 today = now.strftime('%Y-%m-%d')
@@ -116,7 +117,7 @@ for ttime in times:
                 
                 xtime = time.strptime(exportData[0,0].decode('utf-8'), '%H:%M:%S')
                 firstSecond = datetime.timedelta(hours=xtime.tm_hour,minutes=xtime.tm_min,seconds=xtime.tm_sec).total_seconds()
-            
+
                 ti = sp.array([])
 
                 i = -1
@@ -150,8 +151,11 @@ for ttime in times:
                     mmRate = (sp.sum(exportData[i-2:i+1,5].astype(float)))/(sp.sum(exportData[i-2:i+1,6].astype(float))) - (ed/25)
                     # if(exportData[i-5,5].astype(float) == 0 and exportData[i-4,5].astype(float) != 0):
                     #     pick[code.decode('utf-8')] = True
+                    print(code, ttime, mmRate)
+                    if(exportData[i, 3].astype('float') > 19.5):
+                        pick[code.decode('utf-8')] = True
 
-                    if(pick[code.decode('utf-8')] and ed >= wanna):
+                    if(pick[code.decode('utf-8')] and exportData[i, 3].astype('float') < 19):
                         print(1111111111)
                         edFile.write( str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMin) + ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(red) + ',' + str(msTime) + ',' + str(mdTime) + ',' + str(msCost) + ',' + str(mdCost) + ',' + str(msGradient[code.decode('utf-8')]) + ',' + str(msGr[code.decode('utf-8')]) + ',' + str(msSmdms[code.decode('utf-8')]) + ',' + str(msGrade[code.decode('utf-8')]) + ',' + str(msSrgrad[code.decode('utf-8')]) +'\n')
                         comps.remove(code)
@@ -163,13 +167,13 @@ for ttime in times:
                         comps.remove(code)
                         medos.append(code)
                         sumEd = sumEd + red
-                    elif(float(exportData[i, 3].decode('UTF-8')) > 19.5 and ed >= wanna):
-                        print(3333333333)
-                        edFile.write( str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMin) + ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(red) + ',' + str(msTime) + ',' + str(mdTime) + ',' + str(msCost) + ',' + str(mdCost) + ',' + str(msGradient[code.decode('utf-8')]) + ',' + str(msGr[code.decode('utf-8')]) + ',' + str(msSmdms[code.decode('utf-8')]) + ',' + str(msGrade[code.decode('utf-8')]) + ',' + str(msSrgrad[code.decode('utf-8')]) +'\n')
-                        comps.remove(code)
-                        medos.append(code)
-                        sumEd = sumEd + red
-                    elif((mmRate < rateLimit or fMedoTime < second_oTime) and ed >= wanna):
+                    # elif(float(exportData[i, 3].decode('UTF-8')) > 19.5 and ed >= wanna):
+                    #     print(3333333333)
+                    #     edFile.write( str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMin) + ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(red) + ',' + str(msTime) + ',' + str(mdTime) + ',' + str(msCost) + ',' + str(mdCost) + ',' + str(msGradient[code.decode('utf-8')]) + ',' + str(msGr[code.decode('utf-8')]) + ',' + str(msSmdms[code.decode('utf-8')]) + ',' + str(msGrade[code.decode('utf-8')]) + ',' + str(msSrgrad[code.decode('utf-8')]) +'\n')
+                    #     comps.remove(code)
+                    #     medos.append(code)
+                    #     sumEd = sumEd + red
+                    elif((mmRate < rateLimit or mmRate > rateMLimit or fMedoTime < second_oTime) and ed >= wanna):
                         print(4444444444)
                         edFile.write( str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMin) + ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(red) + ',' + str(msTime) + ',' + str(mdTime) + ',' + str(msCost) + ',' + str(mdCost) + ',' + str(msGradient[code.decode('utf-8')]) + ',' + str(msGr[code.decode('utf-8')]) + ',' + str(msSmdms[code.decode('utf-8')]) + ',' + str(msGrade[code.decode('utf-8')]) + ',' + str(msSrgrad[code.decode('utf-8')]) +'\n')
                         comps.remove(code)
