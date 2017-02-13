@@ -38,7 +38,6 @@ def createFiles(realfilePath, setFilePath, mdFilePath):
 
 now = datetime.datetime.now()
 today = now.strftime('%Y-%m-%d')
-today = '2017-02-10'
 
 startTime = datetime.timedelta(hours=9,minutes=00,seconds=00).total_seconds()
 endTime = datetime.timedelta(hours=9,minutes=12,seconds=30).total_seconds()
@@ -96,6 +95,7 @@ except:
 mesuStart = dict()
 msRate = dict()
 isd = dict()
+isd2 = dict()
 isRe = False
 with open(setFilePath, 'r') as f:
     for line in f:
@@ -107,6 +107,7 @@ with open(setFilePath, 'r') as f:
             mesuStart[imCode] = float(line.split(",")[7].strip())
             msRate[imCode] = float(line.split(",")[1].strip())
             isd[imCode] = False
+            isd2[imCode] = False
         elif(imCode != '' and int(line.split(",")[8].strip()) == 2):
             nos.append(str.encode(imCode))
         else:
@@ -129,7 +130,7 @@ while(True):
         tmp_time = 0
         mesuDict = dict()
         now = datetime.datetime.now()
-        # nowTime = datetime.timedelta(hours=now.hour,minutes=now.minute,seconds=now.second).total_seconds()
+        nowTime = datetime.timedelta(hours=now.hour,minutes=now.minute,seconds=now.second).total_seconds()
 
         wchkfilePath = os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + "w1.pchk");
         if not os.path.exists(wchkfilePath):
@@ -201,12 +202,18 @@ while(True):
                     ms = float(msRate[code.decode('utf-8')])
                     md = float(exportData[i, 3].decode('UTF-8'))
                     ed = round(md - ms, 2)
-                    mmRate = (sp.sum(exportData[i-2:i+1,5].astype(float)))/(sp.sum(exportData[i-2:i+1,6].astype(float))) - (ed/25)
+                    med = ed
                     tempWan = wanna
                     if((ms - md) > 1):
                         isd[code.decode('utf-8')] = True
                     if(isd[code.decode('utf-8')]):
                         tempWan = 0.4
+                    if((ms - md) > 2):
+                        isd2[code.decode('utf-8')] = True
+                    if(isd2[code.decode('utf-8')]):
+                        med = ed * 1.8
+
+                    mmRate = (sp.sum(exportData[i-2:i+1,5].astype(float)))/(sp.sum(exportData[i-2:i+1,6].astype(float))) - (med/25)
                     print(code.decode('utf-8') + '    ' + str(mmRate) + '    ' + str(str_oTime))
 
                     if((mmRate < rateLimit or mmRate > rateMLimit) and ed >= tempWan):
@@ -331,6 +338,7 @@ while(True):
                             mesuStart[code.decode('utf-8')] = second_oTime
                             msRate[code.decode('utf-8')] = float(rate)
                             isd[code.decode('utf-8')] = False
+                            isd2[code.decode('utf-8')] = False
                             cost = exportData[i, 8].decode('UTF-8')
                             setFile = open(setFilePath, 'a')
                             setFile.write( str(code.decode('utf-8')) + ',' + str(float(rate)) + ',' + str(tpg) +  ',' + str_oTime + ',' + str(wanna) + ',' + str(datetime.datetime.now().strftime('%H:%M:%S')) + ',' + str(cost) + ',' + str(second_oTime) + ',' + str(1) + '\n')

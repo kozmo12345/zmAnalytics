@@ -108,6 +108,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
         msSrgrad = dict()
         pick = dict()
         isd = dict()
+        isd2 = dict()
         mesuIndex = dict()
 
         for ttime in times:
@@ -180,6 +181,9 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
                         if(i == -1 or i < 2): continue
 
                         if(code in comps):
+                            if(i + 3 < mesuStart[code.decode('utf-8')]):
+                                continue;
+
                             ms = float(msRate[code.decode('utf-8')])
                             rms = float(rmsRate[code.decode('utf-8')])
                             md = float(exportData[i, 3].decode('UTF-8'))
@@ -192,12 +196,18 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
                             termMax = max(exportData[mesuStart[code.decode('utf-8')]:i+1, 3].astype(float))
                             msCost = (exportData[mesuStart[code.decode('utf-8')] + 1,4].astype(float) - exportData[mesuStart[code.decode('utf-8')],4].astype(float)) * exportData[mesuStart[code.decode('utf-8')],8].astype(float)
                             mdCost = (exportData[i + 1,4].astype(float) - exportData[i,4].astype(float)) * exportData[i,8].astype(float)
+
                             tempWan = wanna
+                            med = ed                                
                             if((ms - md) > 1):
                                 isd[code.decode('utf-8')] = True
                             if(isd[code.decode('utf-8')]):
                                 tempWan = 0.4
-                            mmRate = (sp.sum(exportData[i-stdLimit:i+1,5].astype(float)))/(sp.sum(exportData[i-stdLimit:i+1,6].astype(float))) - (ed/25)
+                            if((ms - md) > 2):
+                                isd2[code.decode('utf-8')] = True
+                            if(isd2[code.decode('utf-8')]):
+                                med = ed * 1.8
+                            mmRate = (sp.sum(exportData[i-stdLimit:i+1,5].astype(float)))/(sp.sum(exportData[i-stdLimit:i+1,6].astype(float))) - ((med)/25)
 
                             if(exportData[i, 3].astype('float') > 19.5):
                                 pick[code.decode('utf-8')] = True
@@ -353,6 +363,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
                                     pick[code.decode('utf-8')] = False
                                     mesuIndex[code.decode('utf-8')] = mmgrad
                                     isd[code.decode('utf-8')] = False
+                                    isd2[code.decode('utf-8')] = False
                                     setFile.write( str(code.decode('utf-8')) + ',' + str(float(rate)) +  ',' + str(float(exportData[i, 3].decode('UTF-8'))) +  '\n')
 
             except Exception as e:
