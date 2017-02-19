@@ -20,10 +20,11 @@ wanna = 1
 mesuLimit = [3]
 rateLimit = 0.31
 rateMLimit = 3.1
+stdLimit = 2
 sumEd = 0
 
 today = now.strftime('%Y-%m-%d')
-# today = '2017-02-01'
+# today = '2016-11-28'
 print(today)
 setFile = open(os.path.join("C:\\", "Dropbox\\temp\\Data\\" + today + "\\" + today + "moa3.txt"), 'w')
 edFile = open(os.path.join("C:\\", "Dropbox\\temp\\Data\\" + today + "\\" + today + "ed.txt"), 'w')
@@ -81,6 +82,8 @@ msSmdms = dict()
 msGrade = dict()
 msSrgrad = dict()
 pick = dict()
+isd = dict()
+isd2 = dict()
 
 for ttime in times:
     try:
@@ -101,7 +104,7 @@ for ttime in times:
         if(bool_oTime == True):
             nzData = data[data[:,2] != b'']
             ttimeData = nzData[nzData[:,0] == ttime]
-            ttimeData2 = ttimeData[ttimeData[:,1].astype(int) < 21]
+            ttimeData2 = ttimeData[ttimeData[:,1].astype(int) < 99]
             ttimeData3 = ttimeData2[ttimeData2[:,4].astype(int) > 420000]
             ttimeData4 = ttimeData3[ttimeData3[:,3].astype(float) < 25]
             ttimeData5 = ttimeData4[ttimeData4[:,8].astype(float) > 2200]
@@ -114,7 +117,7 @@ for ttime in times:
                 if(code == b''):
                     continue;
                 exportData = data[data[:,7] == code]
-                
+
                 xtime = time.strptime(exportData[0,0].decode('utf-8'), '%H:%M:%S')
                 firstSecond = datetime.timedelta(hours=xtime.tm_hour,minutes=xtime.tm_min,seconds=xtime.tm_sec).total_seconds()
 
@@ -133,7 +136,15 @@ for ttime in times:
                 if(i == -1): continue
                 c = exportData[:i+1, 3].astype(float)
 
+                if(code.decode('utf-8') == '011810'):
+                    print(ttime, code, int(exportData[i, 4].decode('UTF-8')) - int(exportData[i-1, 4].decode('UTF-8')))
+                    # print(ttime, code, (exportData[i,4].astype(float) - exportData[i-1,4].astype(float)) * exportData[i-1,8].astype(float))
+
+
                 if(code in comps):
+
+                    mdpCost = (exportData[i,4].astype(float) - exportData[i-1,4].astype(float)) * exportData[i-1,8].astype(float)
+                    # print(ttime, code, mdpCost)
 
                     ms = float(msRate[code.decode('utf-8')])
                     rms = float(rmsRate[code.decode('utf-8')])
@@ -148,10 +159,18 @@ for ttime in times:
                     msCost = (exportData[mesuStart[code.decode('utf-8')] + 1,4].astype(float) - exportData[mesuStart[code.decode('utf-8')],4].astype(float)) * exportData[mesuStart[code.decode('utf-8')],8].astype(float)
                     mdCost = (exportData[i + 1,4].astype(float) - exportData[i,4].astype(float)) * exportData[i,8].astype(float)
 
-                    mmRate = (sp.sum(exportData[i-2:i+1,5].astype(float)))/(sp.sum(exportData[i-2:i+1,6].astype(float))) - (ed/25)
-                    # if(exportData[i-5,5].astype(float) == 0 and exportData[i-4,5].astype(float) != 0):
-                    #     pick[code.decode('utf-8')] = True
-                    print(code, ttime, mmRate)
+                    tempWan = wanna
+                    med = ed                               
+                    if((ms - md) > 1):
+                        isd[code.decode('utf-8')] = True
+                    if(isd[code.decode('utf-8')]):
+                        tempWan = 0.4
+                    if((ms - md) > 2):
+                        isd2[code.decode('utf-8')] = True
+                    if(isd2[code.decode('utf-8')]):
+                        med = ed * 1.8
+                    mmRate = (sp.sum(exportData[i-stdLimit:i+1,5].astype(float)))/(sp.sum(exportData[i-stdLimit:i+1,6].astype(float))) - ((med)/25)
+
                     if(exportData[i, 3].astype('float') > 19.5):
                         pick[code.decode('utf-8')] = True
 
@@ -167,13 +186,7 @@ for ttime in times:
                         comps.remove(code)
                         medos.append(code)
                         sumEd = sumEd + red
-                    # elif(float(exportData[i, 3].decode('UTF-8')) > 19.5 and ed >= wanna):
-                    #     print(3333333333)
-                    #     edFile.write( str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMin) + ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(red) + ',' + str(msTime) + ',' + str(mdTime) + ',' + str(msCost) + ',' + str(mdCost) + ',' + str(msGradient[code.decode('utf-8')]) + ',' + str(msGr[code.decode('utf-8')]) + ',' + str(msSmdms[code.decode('utf-8')]) + ',' + str(msGrade[code.decode('utf-8')]) + ',' + str(msSrgrad[code.decode('utf-8')]) +'\n')
-                    #     comps.remove(code)
-                    #     medos.append(code)
-                    #     sumEd = sumEd + red
-                    elif((mmRate < rateLimit or mmRate > rateMLimit or fMedoTime < second_oTime) and ed >= wanna):
+                    elif((mmRate < rateLimit or mmRate > rateMLimit or fMedoTime < second_oTime) and ed >= tempWan):
                         print(4444444444)
                         edFile.write( str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMin) + ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(red) + ',' + str(msTime) + ',' + str(mdTime) + ',' + str(msCost) + ',' + str(mdCost) + ',' + str(msGradient[code.decode('utf-8')]) + ',' + str(msGr[code.decode('utf-8')]) + ',' + str(msSmdms[code.decode('utf-8')]) + ',' + str(msGrade[code.decode('utf-8')]) + ',' + str(msSrgrad[code.decode('utf-8')]) +'\n')
                         comps.remove(code)
@@ -210,6 +223,7 @@ for ttime in times:
                     srlist = [b - a for a,b in zip(ry,ry[1:])]
                     srfit = sp.polyfit(x[:-1], srlist, level)
                     srgrad = sp.around(srfit[0]*10, decimals=2)
+                    # print(ttime, code, srgrad)
                     
                     if(gradient >= 0.7 and srgrad > 0):
                         if(code.decode('utf-8') in mesuDict):
@@ -218,12 +232,21 @@ for ttime in times:
                             mesuSTime[code.decode('utf-8')] = str_oTime
                             mesuDict[code.decode('utf-8')] = mesuDict.get(code.decode('utf-8'), 0)
 
+                        # print(ttime, code, mesuDict[code.decode('utf-8')])
+
                         if(xstime.tm_min < 2):
                             mesuLimit = [3]
                         elif(xstime.tm_min >= 2):
                             mesuLimit = [2,3]
 
                         if(mesuDict[code.decode('utf-8')] in mesuLimit and ((code) not in comps) and (code not in nos)):
+                            if(exportData[i, 3].astype(float) < 4):
+                                continue;
+
+                            if(xstime.tm_min < 2):
+                                nos.append(code)
+                                continue;
+
                             if(i < 4):
                                 s = 0
                             else:
@@ -248,7 +271,7 @@ for ttime in times:
                             
                             lfit = sp.polyfit(x[-3:], y[-3:], level)
                             lg = sp.around(lfit[0]*10, decimals=2)
-                            if(lg > 2 and True in (exportData[0:i,5].astype(float) == 0)):
+                            if((lg > 2 and True in (exportData[0:i,5].astype(float) == 0)) or lg > 13.8):
                                 nos.append(code)
                                 continue;   
                             
@@ -285,6 +308,9 @@ for ttime in times:
                                 nos.append(code)
                                 continue;
 
+                            # print(ttime, code, exportData[i, 3].astype(float))
+                            # time.sleep(3)
+
                             comps.append((code))
                             mesuStart[code.decode('utf-8')] = i
                             msGradient[code.decode('utf-8')] = gradient
@@ -295,6 +321,8 @@ for ttime in times:
                             msRate[code.decode('utf-8')] = float(exportData[i, 3].decode('UTF-8'))
                             rmsRate[code.decode('utf-8')] = float(exportData[i, 3].decode('UTF-8'))
                             pick[code.decode('utf-8')] = False
+                            isd[code.decode('utf-8')] = False
+                            isd2[code.decode('utf-8')] = False                            
                             setFile.write( str(code.decode('utf-8')) + ',' + str(float(rate)) +  ',' + str(float(exportData[i, 3].decode('UTF-8'))) + '\n')
 
     except Exception as e:

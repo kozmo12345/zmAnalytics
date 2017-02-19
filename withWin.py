@@ -176,6 +176,11 @@ while(True):
 
             if(second_oTime > endTime and len(comps) > 0):
                 codes = comps;
+
+            for ccode in comps:
+                if(ccode not in codes):
+                    codes = sp.append(codes, ccode)
+
             for code in (codes):
                 if(code == b''):
                     continue;
@@ -198,10 +203,12 @@ while(True):
                     
                 if(i == -1): continue
 
-                if(code in comps and code not in medos and code.decode('utf-8') in mesuStart and second_oTime > mesuStart[code.decode('utf-8')]):
+                if(code in comps and code not in medos and code.decode('utf-8') in mesuStart and second_oTime > mesuStart[code.decode('utf-8')] + 40):
                     ms = float(msRate[code.decode('utf-8')])
                     md = float(exportData[i, 3].decode('UTF-8'))
                     ed = round(md - ms, 2)
+                    mdpCost = (exportData[i,4].astype(float) - exportData[i-1,4].astype(float)) * exportData[i-1,8].astype(float)
+
                     med = ed
                     tempWan = wanna
                     if((ms - md) > 1):
@@ -222,6 +229,12 @@ while(True):
                         mdFile.close()
                         medos.append(code)
                         comps.remove(code)
+                    elif(mdpCost < 5500000 and mdpCost != 0 and md < 3):
+                        mdFile = open(mdFilePath, 'a')
+                        mdFile.write(str(code.decode('utf-8')) + ',' + str(float(exportData[i, 3].decode('UTF-8'))) + ',' + str(exportData[i, 0].decode('UTF-8')) + ',' + str(datetime.datetime.now().strftime('%H:%M:%S')) + ',' + str(exportData[i, 8].decode('UTF-8')) + '\n')
+                        mdFile.close()
+                        medos.append(code)
+                        comps.remove(code)                        
 
                 if(second_oTime > endTime):
                     continue;
@@ -257,14 +270,13 @@ while(True):
                             mesuDict[code.decode('utf-8')] = mesuDict[code.decode('utf-8')] + 1
                         else:
                             mesuDict[code.decode('utf-8')] = mesuDict.get(code.decode('utf-8'), 0)
-                        
-                        if(xstime.tm_min < 2):
-                            mesuLimit = [3]
-                        elif(xstime.tm_min >= 2):
-                            mesuLimit = [2,3]
 
                         if(mesuDict[code.decode('utf-8')] in mesuLimit and (code not in comps) and (code not in medos) and (code not in nos)):
                             if(exportData[i, 3].astype(float) < 4):
+                                continue;
+                        
+                            if(xstime.tm_min < 2):
+                                nos.append(code)
                                 continue;
 
                             if(i < 4):
@@ -289,7 +301,7 @@ while(True):
 
                             lfit = sp.polyfit(x[-3:], y[-3:], level)
                             lg = sp.around(lfit[0]*10, decimals=2)
-                            if(lg > 2 and True in (exportData[0:i,5].astype(float) == 0)):
+                            if((lg > 2 and True in (exportData[0:i,5].astype(float) == 0)) or lg > 13.8):
                                 nos.append(code)
                                 continue;                                
 
