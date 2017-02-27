@@ -17,14 +17,14 @@ endTime = datetime.timedelta(hours=9,minutes=12,seconds=30).total_seconds()
 fMedoTime = datetime.timedelta(hours=9,minutes=18,seconds=00).total_seconds()
 allMedoTime = datetime.timedelta(hours=9,minutes=25,seconds=20).total_seconds()
 wanna = 1
-mesuLimit = [3]
+mesuLimit = [2]
 rateLimit = 0.31
 rateMLimit = 3.1
 stdLimit = 2
 sumEd = 0
 
 today = now.strftime('%Y-%m-%d')
-# today = '2016-11-28'
+# today = '2017-02-23'
 print(today)
 setFile = open(os.path.join("C:\\", "Dropbox\\temp\\Data\\" + today + "\\" + today + "moa3.txt"), 'w')
 edFile = open(os.path.join("C:\\", "Dropbox\\temp\\Data\\" + today + "\\" + today + "ed.txt"), 'w')
@@ -209,7 +209,7 @@ for ttime in times:
                 ms_md = (exportData[i,5].astype(float))/(exportData[i,6].astype(float))
                 sms_md = sp.sum(exportData[:i+1,5].astype(float))/sp.sum(exportData[:i+1,6].astype(float))
 
-                if(ms_md > 0.96 and sms_md > 1 and grade < 13):
+                if(ms_md > 0.96 and sms_md > 1 and grade < 20):
                     x = ti
                     y = exportData[:i+1,3].astype(float)
                     if(len(y) <= 1):
