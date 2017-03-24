@@ -41,17 +41,17 @@ rateMLimit = 3.8
 stdLimit = 2
 sumEd = 0
 originM = 2000000
-for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
+for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\tmpl\\"):
     for subdirname in dirnames:
         today = subdirname
-        # if(today != '2017-02-28'):
+        # if(today != '2016-09-21'):
         #     break;
-        # today = '2017-03-22'
+        # today = '2017-02-16'
 
         print(today)
-        setFile = open(os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + "moa3.txt"), 'w')
-        edFile = open(os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + "ed.txt"), 'w')
-        realfilePath = os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + ".txt");
+        setFile = open(os.path.join("C:\\", "Dropbox\\tmpl\\" + today + "\\" + today + "moa3.txt"), 'w')
+        edFile = open(os.path.join("C:\\", "Dropbox\\tmpl\\" + today + "\\" + today + "ed.txt"), 'w')
+        realfilePath = os.path.join("C:\\", "Dropbox\\tmpl\\" + today + "\\" + today + ".txt");
         
         data = sp.genfromtxt(realfilePath, delimiter="\t", dtype='|S20')
         codes = sp.unique(data[data[:,7] != b''][:,7])
@@ -181,8 +181,8 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
                             if(exportData[i, 3].astype('float') > 19.5):
                                 pick[code.decode('utf-8')] = True
 
-                            cgfit = sp.polyfit(ti[:5], exportData[i-4:i+1,9].astype(float), 1)
-                            cggrad = sp.around(cgfit[0], decimals=2)
+                            # cgfit = sp.polyfit(ti[:5], exportData[i-4:i+1,9].astype(float), 1)
+                            # cggrad = sp.around(cgfit[0], decimals=2)
 
                             if(pick[code.decode('utf-8')] and exportData[i, 3].astype('float') < 19):
                                 edFile.write( str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMin) + ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(red) + ',' + str(msTime) + ',' + str(mdTime) + ',' + str(msCost) + ',' + str(mdCost) + ',' + str(msGradient[code.decode('utf-8')]) + ',' + str(msGr[code.decode('utf-8')]) + ',' + str(msSmdms[code.decode('utf-8')]) + ',' + str(msGrade[code.decode('utf-8')]) + ',' + str(msSrgrad[code.decode('utf-8')]) + ',' + str(mesuIndex[code.decode('utf-8')]) + '\n')
@@ -219,14 +219,14 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
                                 medos.append(code)
                                 originM = originM * (1 + (red/100))
                                 del pick[code.decode('utf-8')]
-                            elif((cggrad < -3) and ed >= tempWan):
-                                print(6666666666)
-                                edFile.write( str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMin) + ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(red) + ',' + str(msTime) + ',' + str(mdTime) + ',' + str(msCost) + ',' + str(mdCost) + ',' + str(msGradient[code.decode('utf-8')]) + ',' + str(msGr[code.decode('utf-8')]) + ',' + str(msSmdms[code.decode('utf-8')]) + ',' + str(msGrade[code.decode('utf-8')]) + ',' + str(msSrgrad[code.decode('utf-8')]) + ',' + str(mesuIndex[code.decode('utf-8')]) + '\n')
-                                comps.remove(code)
-                                sumEd = sumEd + red
-                                medos.append(code)
-                                originM = originM * (1 + (red/100))
-                                del pick[code.decode('utf-8')]
+                            # elif((cggrad < -3) and ed >= tempWan):
+                            #     print(6666666666)
+                            #     edFile.write( str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMin) + ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(red) + ',' + str(msTime) + ',' + str(mdTime) + ',' + str(msCost) + ',' + str(mdCost) + ',' + str(msGradient[code.decode('utf-8')]) + ',' + str(msGr[code.decode('utf-8')]) + ',' + str(msSmdms[code.decode('utf-8')]) + ',' + str(msGrade[code.decode('utf-8')]) + ',' + str(msSrgrad[code.decode('utf-8')]) + ',' + str(mesuIndex[code.decode('utf-8')]) + '\n')
+                            #     comps.remove(code)
+                            #     sumEd = sumEd + red
+                            #     medos.append(code)
+                            #     originM = originM * (1 + (red/100))
+                            #     del pick[code.decode('utf-8')]
                             elif(md < 2.5):
                                 print(7777777777)
                                 edFile.write( str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMin) + ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(red) + ',' + str(msTime) + ',' + str(mdTime) + ',' + str(msCost) + ',' + str(mdCost) + ',' + str(msGradient[code.decode('utf-8')]) + ',' + str(msGr[code.decode('utf-8')]) + ',' + str(msSmdms[code.decode('utf-8')]) + ',' + str(msGrade[code.decode('utf-8')]) + ',' + str(msSrgrad[code.decode('utf-8')]) + ',' + str(mesuIndex[code.decode('utf-8')]) + '\n')
@@ -245,9 +245,9 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
                         ms_md = (exportData[i,5].astype(float))/(exportData[i,6].astype(float))
                         sms_md = sp.sum(exportData[:i+1,5].astype(float))/sp.sum(exportData[:i+1,6].astype(float))
 
-                        cgfit = sp.polyfit(ti, exportData[:i+1,9].astype(float), 1)
-                        cggrad = sp.around(cgfit[0], decimals=2)
-                        chegang = exportData[i,9].astype(float)
+                        # cgfit = sp.polyfit(ti, exportData[:i+1,9].astype(float), 1)
+                        # cggrad = sp.around(cgfit[0], decimals=2)
+                        # chegang = exportData[i,9].astype(float)
                         
                         # if(((ms_md > 0.96 and sms_md > 1) or (cggrad > 2 and chegang > 150)) and grade < 20):                        
                         if((ms_md > 0.96 and sms_md > 1) and grade < 20):
@@ -276,9 +276,9 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
                                     if(exportData[i, 3].astype(float) < 4 or exportData[i, 3].astype(float) > 19.6):
                                         continue;
 
-                                    # if(xstime.tm_min < 2):
-                                    #     nos.append(code)
-                                    #     continue;
+                                    if(xstime.tm_min < 2):
+                                        nos.append(code)
+                                        continue;
 
                                     if(i < 4):
                                         s = 0
@@ -338,12 +338,12 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
                                         nos.append(code)
                                         continue;
 
-                                    fcgfit = sp.polyfit(ti[:5], exportData[i-4:i+1,9].astype(float), 1)
-                                    fcggrad = sp.around(fcgfit[0], decimals=2)
+                                    # fcgfit = sp.polyfit(ti[:5], exportData[i-4:i+1,9].astype(float), 1)
+                                    # fcggrad = sp.around(fcgfit[0], decimals=2)
 
-                                    if(fcggrad < -10.04):
-                                        nos.append(code)
-                                        continue;
+                                    # if(fcggrad < -10.04):
+                                    #     nos.append(code)
+                                    #     continue;
 
                                     tpg = 0
                                     msi = 0
@@ -362,7 +362,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
                                     mesuStart[code.decode('utf-8')] = i
                                     msGradient[code.decode('utf-8')] = gradient
                                     msGr[code.decode('utf-8')] = gr
-                                    msSmdms[code.decode('utf-8')] = ammgrad 
+                                    msSmdms[code.decode('utf-8')] = ammgrad
                                     msGrade[code.decode('utf-8')] = grade
                                     msSrgrad[code.decode('utf-8')] = (exportData[i,4].astype(float) - exportData[msi,4].astype(float)) * sp.mean(exportData[msi:i+1, 8].astype(float))
                                     msRate[code.decode('utf-8')] = float(exportData[i, 3].decode('UTF-8'))
@@ -381,28 +381,28 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
 
         print(today)
 
-analFilePath = os.path.join("C:\\", "Dropbox\\Data\\" + "anal.txt");
+analFilePath = os.path.join("C:\\", "Dropbox\\tmpl\\" + "anal.txt");
 analFile = open(analFilePath, 'w')
 
-edFilePath = os.path.join("C:\\", "Dropbox\\Data\\" + "ed.txt");
+edFilePath = os.path.join("C:\\", "Dropbox\\tmpl\\" + "ed.txt");
 edFile = open(edFilePath, 'w')
 
 edFile.write('day' +  ',' + 'originM' +  ',' + 'sumEd' +  ',' + 'code' +  ',' + 'max' ',' + 'termMin' +  ',' + 'termMax' +  ',' + 'md' +  ',' + 'ms' +  ',' + 'ed' +  ',' + 'msTime' +  ',' + 'mdTime' + '\n')
 
-for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
+for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\tmpl\\"):
     for subdirname in dirnames:
         today = subdirname
 
         if((today.split('-')[1] == '10' and today.split('-')[2] in ['05','06','07','10','11','12','13','14','17','18','19','20','21','24','25','26','27','28','31']) or (today.split('-')[1] == '11' and today.split('-')[2] in ['01','02','03','07','08','09','10'])):
             continue
 
-        setFilePath = os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + "moa3.txt");
+        setFilePath = os.path.join("C:\\", "Dropbox\\tmpl\\" + today + "\\" + today + "moa3.txt");
         setFile = open(setFilePath, 'r')
         
         for line in setFile:
             analFile.write(today + ',' + line)
 
-        set2FilePath = os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + "ed.txt");
+        set2FilePath = os.path.join("C:\\", "Dropbox\\tmpl\\" + today + "\\" + today + "ed.txt");
         set2File = open(set2FilePath, 'r')
         
         for line in set2File:

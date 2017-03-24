@@ -221,9 +221,12 @@ while(True):
                         med = ed * 1.8
 
                     mmRate = (sp.sum(exportData[i-2:i+1,5].astype(float)))/(sp.sum(exportData[i-2:i+1,6].astype(float))) - (med/25)
+                    cgfit = sp.polyfit(ti[:5], exportData[i-4:i+1,9].astype(float), 1)
+                    cggrad = sp.around(cgfit[0], decimals=2)
+
                     print(code.decode('utf-8') + '    ' + str(mmRate) + '    ' + str(str_oTime))
 
-                    if((mmRate < rateLimit or mmRate > rateMLimit) and ed >= tempWan):
+                    if((mmRate < rateLimit or mmRate > rateMLimit or cggrad < -3) and ed >= tempWan):
                         mdFile = open(mdFilePath, 'a')
                         mdFile.write(str(code.decode('utf-8')) + ',' + str(float(exportData[i, 3].decode('UTF-8'))) + ',' + str(exportData[i, 0].decode('UTF-8')) + ',' + str(datetime.datetime.now().strftime('%H:%M:%S')) + ',' + str(exportData[i, 8].decode('UTF-8')) + '\n')
                         mdFile.close()
@@ -249,7 +252,10 @@ while(True):
                 ms_md = (exportData[i,5].astype(float))/(exportData[i,6].astype(float))
                 sms_md = sp.sum((sp.sum(exportData[:i+1,5].astype(float)))/(sp.sum(exportData[:i+1,6].astype(float))))
 
-                if(ms_md > 0.96 and sms_md > 1 and grade < 20):
+                cgfit = sp.polyfit(ti, exportData[:i+1,9].astype(float), 1)
+                cggrad = sp.around(cgfit[0], decimals=2)
+
+                if((ms_md > 0.96 and sms_md > 1) and grade < 20):
                     x = ti
                     y = exportData[:i+1,3].astype(float)
                     if(len(y) <= 1):
@@ -272,7 +278,7 @@ while(True):
                             mesuDict[code.decode('utf-8')] = mesuDict.get(code.decode('utf-8'), 0)
 
                         if(mesuDict[code.decode('utf-8')] in mesuLimit and (code not in comps) and (code not in medos) and (code not in nos)):
-                            if(exportData[i, 3].astype(float) < 4):
+                            if(exportData[i, 3].astype(float) < 4 or exportData[i, 3].astype(float) > 19.6):
                                 continue;
 
                             if(xstime.tm_min < 2):
@@ -291,7 +297,7 @@ while(True):
                             ammfit = sp.polyfit(x[:len(exportData[s:i,5])], ammlist, level)
                             ammgrad = sp.around(ammfit[0]*10, decimals=3)      
 
-                            if(mmgrad > 6 and ammgrad/mmgrad < 0.78):
+                            if((mmgrad > 5 and ammgrad < 7) or (mmgrad < -8 and ammgrad < -9.5)):
                                 nos.append(code)
                                 continue;
 
@@ -304,6 +310,23 @@ while(True):
                             if((lg > 2 and True in (exportData[0:i,5].astype(float) == 0)) or lg > 13.8):
                                 nos.append(code)
                                 continue;                                
+
+                            maxr = 100000
+                            sry = (exportData[i-4:i+1,4].astype(float))/maxr
+                            ssrlist = [b - a for a,b in zip(sry,sry[1:])]
+                            ssrfit = sp.polyfit(x[:4], ssrlist, level)
+                            ssrgrad = sp.around(ssrfit[0]*10, decimals=2)
+
+                            if(gradient < 1.1 and ssrgrad < -1):
+                                nos.append(code)
+                                continue;
+
+                            fcgfit = sp.polyfit(ti[:5], exportData[i-4:i+1,9].astype(float), 1)
+                            fcggrad = sp.around(fcgfit[0], decimals=2)
+
+                            if(fcggrad < -10.04):
+                                nos.append(code)
+                                continue;
 
                             tpg = 0
                             for ii in range(1,i):
@@ -318,24 +341,24 @@ while(True):
                             
                             tpg = tpg * sp.sqrt(ii * 0.77)
 
-                            sdr = 0
-                            sgr = 0
-                            for en in range(i, 1, -1):
-                                for sn in range(en, 0, -1):
-                                    dy = exportData[sn:en+1,3].astype(float)
+                            # sdr = 0
+                            # sgr = 0
+                            # for en in range(i, 1, -1):
+                            #     for sn in range(en, 0, -1):
+                            #         dy = exportData[sn:en+1,3].astype(float)
                                     
-                                    if(len(dy) <= 1 or exportData[en - 1, 5].astype(float) == 0):
-                                        continue
+                            #         if(len(dy) <= 1 or exportData[en - 1, 5].astype(float) == 0):
+                            #             continue
         
-                                    tdr = dy[len(dy) - 1] - dy[0]
+                            #         tdr = dy[len(dy) - 1] - dy[0]
 
-                                    if(tdr > sdr):
-                                        sdr = tdr
-                                        sgr = exportData[en, 4].astype(float) - exportData[sn, 4].astype(float)
+                            #         if(tdr > sdr):
+                            #             sdr = tdr
+                            #             sgr = exportData[en, 4].astype(float) - exportData[sn, 4].astype(float)
 
-                            if((sdr / ((sgr * exportData[i, 8].astype(float))/100000000)) > 1.05):
-                                nos.append(code)
-                                continue;
+                            # if((sdr / ((sgr * exportData[i, 8].astype(float))/100000000)) > 1.05):
+                            #     nos.append(code)
+                            #     continue;
 
                             with open(setFilePath, 'r') as f:
                                 for line in f:
