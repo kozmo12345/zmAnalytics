@@ -22,9 +22,9 @@ rateLimit = 0.31
 rateMLimit = 3.1
 stdLimit = 2
 sumEd = 0
-
+gradient = 0
 today = now.strftime('%Y-%m-%d')
-# today = '2017-03-03'
+today = '2017-03-30'
 print(today)
 setFile = open(os.path.join("C:\\", "Dropbox\\temp\\Data\\" + today + "\\" + today + "moa3.txt"), 'w')
 edFile = open(os.path.join("C:\\", "Dropbox\\temp\\Data\\" + today + "\\" + today + "ed.txt"), 'w')
