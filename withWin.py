@@ -286,6 +286,11 @@ while(True):
                                 nos.append(code)
                                 continue;
 
+                            cost = int(exportData[i, 8].decode('UTF-8'))
+                            if(cost > 7089):
+                                nos.append(code)
+                                continue;                                
+
                             if(i < 4):
                                 s = 0
                             else:

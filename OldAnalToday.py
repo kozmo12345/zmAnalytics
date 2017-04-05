@@ -249,12 +249,7 @@ for ttime in times:
                             mesuDict[code.decode('utf-8')] = mesuDict[code.decode('utf-8')] + 1
                         else:
                             mesuSTime[code.decode('utf-8')] = str_oTime
-                            mesuDict[code.decode('utf-8')] = mesuDict.get(code.decode('utf-8'), 0)
-
-                        if(xstime.tm_min < 2):
-                            mesuLimit = [3]
-                        elif(xstime.tm_min >= 2):
-                            mesuLimit = [2,3]
+                            mesuDict[code.decode('utf-8')] = mesuDict.get(code.decode('utf-8'), 0)               
 
                         if(mesuDict[code.decode('utf-8')] in mesuLimit and ((code) not in comps) and (code not in nos)):
                             if(exportData[i, 3].astype(float) < 4 or exportData[i, 3].astype(float) > 19.6):
@@ -264,6 +259,11 @@ for ttime in times:
                                 print(ttime, code, 'nos00000')
                                 nos.append(ttime)
                                 continue;
+
+                            cost = int(exportData[i, 8].decode('UTF-8'))
+                            if(cost > 7089):
+                                nos.append(code)
+                                continue;                                             
 
                             if(i < 4):
                                 s = 0

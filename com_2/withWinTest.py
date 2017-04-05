@@ -38,7 +38,7 @@ def createFiles(realfilePath, setFilePath, mdFilePath):
 
 now = datetime.datetime.now()
 today = now.strftime('%Y-%m-%d')
-today = '2017-03-16'
+
 startTime = datetime.timedelta(hours=9,minutes=00,seconds=00).total_seconds()
 endTime = datetime.timedelta(hours=9,minutes=12,seconds=30).total_seconds()
 fMedoTime = datetime.timedelta(hours=9,minutes=18,seconds=00).total_seconds()
@@ -244,7 +244,7 @@ while(True):
 
                 # if(nowTime > endTime):
                 #     continue;
-    
+
                 rate = exportData[i, 3].decode('UTF-8')
                 grade = int(exportData[i, 1].decode('UTF-8'))
                 gr = int(exportData[i, 4].decode('UTF-8'))
@@ -255,6 +255,7 @@ while(True):
                 cgfit = sp.polyfit(ti, exportData[:i+1,9].astype(float), 1)
                 cggrad = sp.around(cgfit[0], decimals=2)
                 chegang = exportData[i,9].astype(float)
+
                 # if((ms_md > 0.96 and sms_md > 1) and grade < 20):
                 if(((ms_md > 0.96 and sms_md > 1 and gr > 420000) or (cggrad > 1.5 and chegang > 150 and gradient > 1 and exportData[i, 3].astype(float) > 5)) and grade < 20):
                     x = ti
@@ -283,6 +284,11 @@ while(True):
                                 continue;
                         
                             if(xstime.tm_min < 2):
+                                nos.append(code)
+                                continue;
+
+                            cost = int(exportData[i, 8].decode('UTF-8'))
+                            if(cost > 7089):
                                 nos.append(code)
                                 continue;
 

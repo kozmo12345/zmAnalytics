@@ -281,6 +281,11 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
                                         nos.append(code)
                                         continue;
 
+                                    cost = int(exportData[i, 8].decode('UTF-8'))
+                                    if(cost > 7089):
+                                        nos.append(code)
+                                        continue;                                        
+
                                     if(i < 4):
                                         s = 0
                                     else:
@@ -300,7 +305,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
                                     ammfit = sp.polyfit(x[:len(exportData[s:i,5])], ammlist, level)
                                     ammgrad = sp.around(ammfit[0]*10, decimals=3)                                    
                                     
-                                    if((mmgrad > 5 and ammgrad < 7) or (mmgrad < -8 and ammgrad < -9.5)):
+                                    if((mmgrad > 5 and ammgrad < 7  and cggrad > 1.5) or (mmgrad < -4.5 and ammgrad < -3.9)):
                                         nos.append(code)
                                         continue;
                                     
@@ -314,27 +319,6 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
                                         nos.append(code)
                                         continue;
 
-                                    # sdr = 0
-                                    # sgr = 0
-                                    # for en in range(i, 1, -1):
-                                    #     for sn in range(en, 0, -1):
-                                    #         dy = exportData[sn:en+1,3].astype(float)
-                                            
-                                    #         if(len(dy) <= 1 or exportData[en - 1, 5].astype(float) == 0):
-                                    #             continue
-        
-                                    #         tdr = dy[len(dy) - 1] - dy[0]
-
-                                    #         if(tdr > sdr):
-                                    #             sdr = tdr
-                                    #             ssn = sn
-                                    #             sen = en
-                                    #             sgr = exportData[en, 4].astype(float) - exportData[sn, 4].astype(float)
-
-                                    # if((sdr / ((sgr * exportData[i, 8].astype(float))/100000000)) > 1.05):
-                                    #     nos.append(code)
-                                    #     continue;
-                                    
                                     if(gradient < 1.1 and ssrgrad < -1):
                                         nos.append(code)
                                         continue;
@@ -369,7 +353,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
                                     msRate[code.decode('utf-8')] = float(exportData[i, 3].decode('UTF-8'))
                                     rmsRate[code.decode('utf-8')] = float(exportData[i+1, 3].decode('UTF-8'))
                                     pick[code.decode('utf-8')] = False
-                                    mesuIndex[code.decode('utf-8')] = mmgrad
+                                    mesuIndex[code.decode('utf-8')] = fcggrad
                                     isd[code.decode('utf-8')] = False
                                     isd2[code.decode('utf-8')] = False
                                     setFile.write( str(code.decode('utf-8')) + ',' + str(float(rate)) +  ',' + str(float(exportData[i, 3].decode('UTF-8'))) +  '\n')

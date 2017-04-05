@@ -276,9 +276,14 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
                                     if(exportData[i, 3].astype(float) < 4 or exportData[i, 3].astype(float) > 19.6):
                                         continue;
 
-                                    # if(xstime.tm_min < 2):
-                                    #     nos.append(code)
-                                    #     continue;
+                                    if(xstime.tm_min < 2):
+                                        nos.append(code)
+                                        continue;
+
+                                    cost = int(exportData[i, 8].decode('UTF-8'))
+                                    if(cost > 7089):
+                                        nos.append(code)
+                                        continue;                                        
 
                                     if(i < 4):
                                         s = 0
@@ -299,7 +304,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
                                     ammfit = sp.polyfit(x[:len(exportData[s:i,5])], ammlist, level)
                                     ammgrad = sp.around(ammfit[0]*10, decimals=3)                                    
                                     
-                                    if((mmgrad > 5 and ammgrad < 7) or (mmgrad < -8 and ammgrad < -9.5)):
+                                    if((mmgrad > 5 and ammgrad < 7) or (mmgrad < -4.5 and ammgrad < -3.9)):
                                         nos.append(code)
                                         continue;
                                     
