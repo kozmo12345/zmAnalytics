@@ -229,7 +229,7 @@ for ttime in times:
                 chegang = exportData[i,9].astype(float)
 
                 # if(((ms_md > 0.96 and sms_md > 1) or (cggrad > 1.5 and chegang > 150)) and grade < 20):
-                if(((ms_md > 0.96 and sms_md > 1 and gr > 420000 ) or (False)) and grade < 20):
+                if(((ms_md > 0.96 and sms_md > 1 and gr > 420000 ) or (cggrad > 1.5 and chegang > 150 and gradient > 1.5 and exportData[i, 3].astype(float) > 5)) and grade < 20):
                 # if((ms_md > 0.96 and sms_md > 1) and grade < 20):
                     x = ti
                     y = exportData[:i+1,3].astype(float)
@@ -246,6 +246,14 @@ for ttime in times:
                     srgrad = sp.around(srfit[0]*10, decimals=2)
                     
                     if(gradient >= 0.7 and srgrad > 0):
+
+                        # if(code.decode('utf-8') == '001420'):
+                        #     print(ttime, code)
+                        #     time.sleep(3)
+                        # if(code.decode('utf-8') == '118000'):
+                        #     print(ttime, code)
+                        #     time.sleep(3)                        
+
                         if(code.decode('utf-8') in mesuDict):
                             mesuDict[code.decode('utf-8')] = mesuDict[code.decode('utf-8')] + 1
                         else:
@@ -258,6 +266,11 @@ for ttime in times:
                         #     mesuLimit = [2,3]
 
                         if(mesuDict[code.decode('utf-8')] in mesuLimit and ((code) not in comps) and (code not in nos)):
+
+                            # if(code.decode('utf-8') == '001420'):
+                            #     print(ttime, code, mesuDict[code.decode('utf-8')])
+                            #     time.sleep(3)
+
                             if(exportData[i, 3].astype(float) < 4 or exportData[i, 3].astype(float) > 19.6):
                                 continue;
 
@@ -267,9 +280,13 @@ for ttime in times:
                                 continue;
 
                             cost = int(exportData[i, 8].decode('UTF-8'))
-                            if(cost > 7089):
-                                nos.append(code)
-                                continue;
+                            # if(cost > 7500):
+                            #     nos.append(code)
+                            #     continue;
+
+                            # if(code.decode('utf-8') == '001420'):
+                            #     print(code, cost)
+                            #     time.sleep(3)
 
                             if(i < 4):
                                 s = 0

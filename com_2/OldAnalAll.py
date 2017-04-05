@@ -45,9 +45,9 @@ originM = 2000000
 for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
     for subdirname in dirnames:
         today = subdirname
-        # if(today != '2017-02-28'):
+        # if(today != '2017-03-01'):
         #     break;
-        # today = '2017-03-22'
+        # today = '2017-04-05'
 
         print(today)
         setFile = open(os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + "moa3.txt"), 'w')
@@ -60,6 +60,8 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
 
         tmp_time = 0
         mesuDict = dict()
+        mesuArr = dict()
+        mesuAver = dict()
         mesuStart = dict()
         msRate = dict()
         rmsRate = dict()
@@ -269,9 +271,23 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
                             if(gradient >= 0.7 and srgrad > 0):
                                 if(code.decode('utf-8') in mesuDict):
                                     mesuDict[code.decode('utf-8')] = mesuDict[code.decode('utf-8')] + 1
+
+                                    if(mesuDict[code.decode('utf-8')] == 1):
+                                        mesuAver[code.decode('utf-8')] = second_oTime - mesuArr[code.decode('utf-8')]
+                                        mesuArr[code.decode('utf-8')] = second_oTime                                 
+                                    if(mesuDict[code.decode('utf-8')] == 2):
+                                        mesuAver[code.decode('utf-8')] = mesuAver[code.decode('utf-8')] + second_oTime - mesuArr[code.decode('utf-8')]
+                                        if(code.decode('utf-8') == '001420'):
+                                            print(i)
+                                            time.sleep(3)
+
                                 else:
                                     mesuSTime[code.decode('utf-8')] = str_oTime
                                     mesuDict[code.decode('utf-8')] = mesuDict.get(code.decode('utf-8'), 0)
+                                    mesuArr[code.decode('utf-8')] = second_oTime
+                                    # if(code.decode('utf-8') == '001420'):
+                                    #     print(i)
+                                    #     time.sleep(3)
 
                                 if(mesuDict[code.decode('utf-8')] in mesuLimit and ((code) not in comps) and (code not in medos) and (code not in nos)):
                                     if(exportData[i, 3].astype(float) < 4 or exportData[i, 3].astype(float) > 19.6):
@@ -281,10 +297,10 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
                                         nos.append(code)
                                         continue;
 
-                                    cost = int(exportData[i, 8].decode('UTF-8'))
-                                    if(cost > 7089):
-                                        nos.append(code)
-                                        continue;                                        
+                                    # cost = int(exportData[i, 8].decode('UTF-8'))
+                                    # if(cost > 7500):
+                                    #     nos.append(code)
+                                    #     continue;
 
                                     if(i < 4):
                                         s = 0
@@ -305,7 +321,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
                                     ammfit = sp.polyfit(x[:len(exportData[s:i,5])], ammlist, level)
                                     ammgrad = sp.around(ammfit[0]*10, decimals=3)                                    
                                     
-                                    if((mmgrad > 5 and ammgrad < 7  and cggrad > 1.5) or (mmgrad < -4.5 and ammgrad < -3.9)):
+                                    if((mmgrad > 5 and ammgrad < 7  and cggrad > 1.5) or (mmgrad < -8 and ammgrad < -9.5)):
                                         nos.append(code)
                                         continue;
                                     
@@ -353,7 +369,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
                                     msRate[code.decode('utf-8')] = float(exportData[i, 3].decode('UTF-8'))
                                     rmsRate[code.decode('utf-8')] = float(exportData[i+1, 3].decode('UTF-8'))
                                     pick[code.decode('utf-8')] = False
-                                    mesuIndex[code.decode('utf-8')] = fcggrad
+                                    mesuIndex[code.decode('utf-8')] = mesuAver[code.decode('utf-8')]
                                     isd[code.decode('utf-8')] = False
                                     isd2[code.decode('utf-8')] = False
                                     setFile.write( str(code.decode('utf-8')) + ',' + str(float(rate)) +  ',' + str(float(exportData[i, 3].decode('UTF-8'))) +  '\n')
