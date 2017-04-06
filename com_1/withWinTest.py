@@ -53,7 +53,7 @@ wanna = 1
 rateLimit = 0.31
 rateMLimit = 3.8
 gradient = 0
-realfilePath = os.path.join("C:\\", "Dropbox\\com_2\\Data\\" + today + "\\" + today + ".txt");
+realfilePath = os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + ".txt");
 dirn = os.path.dirname(realfilePath)
 try:
     os.stat(dirn)
@@ -66,7 +66,7 @@ except:
         else:
             raise
 
-setFilePath = os.path.join("C:\\", "Dropbox\\com_2\\Data\\" + today + "\\" + today + "m.txt");
+setFilePath = os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + "m.txt");
 dirn2 = os.path.dirname(setFilePath)
 try:
     os.stat(dirn2)
@@ -79,7 +79,7 @@ except:
         else:
             raise
 
-mdFilePath = os.path.join("C:\\", "Dropbox\\com_2\\Data\\" + today + "\\" + today + "d.txt");
+mdFilePath = os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + "d.txt");
 dirn3 = os.path.dirname(mdFilePath)
 try:
     os.stat(dirn3)
@@ -132,7 +132,7 @@ while(True):
         now = datetime.datetime.now()
         nowTime = datetime.timedelta(hours=now.hour,minutes=now.minute,seconds=now.second).total_seconds()
 
-        wchkfilePath = os.path.join("C:\\", "Dropbox\\com_2\\Data\\" + today + "\\" + "w1.pchk");
+        wchkfilePath = os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + "w1.pchk");
         if not os.path.exists(wchkfilePath):
             wchkfile = open(wchkfilePath, 'a')
             wchkfile.close()

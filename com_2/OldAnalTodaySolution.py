@@ -86,13 +86,15 @@ pick = dict()
 isd = dict()
 isd2 = dict()
 
+
 for ttime in times:
     try:
         xstime = time.strptime(ttime.decode('utf-8'), '%H:%M:%S')
         second_oTime = datetime.timedelta(hours=xstime.tm_hour,minutes=xstime.tm_min,seconds=xstime.tm_sec).total_seconds() #계산시간
         str_oTime = "ttime.decode('utf-8')"
         bool_oTime = True
-        
+        isOk = False
+        ran = 0;
         if(second_oTime < startTime):
             continue;
 
@@ -229,9 +231,14 @@ for ttime in times:
                 cggrad = sp.around(cgfit[0], decimals=2)
                 chegang = exportData[i,9].astype(float)
 
-                # if(((ms_md > 0.96 and sms_md > 1) or (cggrad > 1.5 and chegang > 150)) and grade < 20):
-                if(((ms_md > 0.96 and sms_md > 1 and gr > 420000 ) or (cggrad > 1.5 and chegang > 150 and gradient > 1.5 and exportData[i, 3].astype(float) > 5)) and grade < 20):
-                # if((ms_md > 0.96 and sms_md > 1) and grade < 20):
+                if(((ms_md > 0.96 and sms_md > 1 and gr > 420000 )) and grade < 20):
+                    isOk = True
+                    ran = 1
+                elif((cggrad > 1.5 and chegang > 150 and gradient > 1.5 and exportData[i, 3].astype(float) > 5) and grade < 20):
+                    isOk = True
+                    ran = 2
+
+                if(isOk):
                     x = ti
                     y = exportData[:i+1,3].astype(float)
                     if(len(y) <= 1):
@@ -248,9 +255,9 @@ for ttime in times:
                     
                     if(gradient >= 0.7 and srgrad > 0):
 
-                        if(code.decode('utf-8') == '001420'):
-                            print(ttime, code)
-                            time.sleep(2)
+                        # if(code.decode('utf-8') == '001420'):
+                        #     print(ttime, code, ran)
+                        #     time.sleep(2)
                         # if(code.decode('utf-8') == '118000'):
                         #     print(ttime, code)
                         #     time.sleep(3)                        
@@ -269,7 +276,7 @@ for ttime in times:
                         if(mesuDict[code.decode('utf-8')] in mesuLimit and ((code) not in comps) and (code not in nos)):
 
                             # if(code.decode('utf-8') == '001420'):
-                            #     print(ttime, code, mesuDict[code.decode('utf-8')])
+                            #     print(ttime, code, 'ms',mesuDict[code.decode('utf-8')])
                             #     time.sleep(3)
 
                             if(exportData[i, 3].astype(float) < 4 or exportData[i, 3].astype(float) > 19.6):

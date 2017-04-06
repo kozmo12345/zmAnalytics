@@ -41,7 +41,7 @@ today = now.strftime('%Y-%m-%d')
 
 startTime = datetime.timedelta(hours=9,minutes=00,seconds=00).total_seconds()
 endTime = datetime.timedelta(hours=9,minutes=12,seconds=30).total_seconds()
-fMedoTime = datetime.timedelta(hours=9,minutes=18,seconds=00).total_seconds()
+fMedoTime = datetime.timedelta(hours=9,minutes=20,seconds=00).total_seconds()
 allMedoTime = datetime.timedelta(hours=9,minutes=25,seconds=30).total_seconds()
 closeTime = datetime.timedelta(hours=15,minutes=19,seconds=00).total_seconds()
 
@@ -66,7 +66,7 @@ except:
         else:
             raise
 
-setFilePath = os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + "m.txt");
+setFilePath = os.path.join("C:\\", "Dropbox\\com_2\\diff\\" + today + "\\" + today + "m.txt");
 dirn2 = os.path.dirname(setFilePath)
 try:
     os.stat(dirn2)
@@ -79,7 +79,7 @@ except:
         else:
             raise
 
-mdFilePath = os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + "d.txt");
+mdFilePath = os.path.join("C:\\", "Dropbox\\com_2\\diff\\" + today + "\\" + today + "d.txt");
 dirn3 = os.path.dirname(mdFilePath)
 try:
     os.stat(dirn3)
@@ -132,7 +132,7 @@ while(True):
         now = datetime.datetime.now()
         nowTime = datetime.timedelta(hours=now.hour,minutes=now.minute,seconds=now.second).total_seconds()
 
-        wchkfilePath = os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + "w2.pchk");
+        wchkfilePath = os.path.join("C:\\", "Dropbox\\com_2\\diff\\" + today + "\\" + "w2.pchk");
         if not os.path.exists(wchkfilePath):
             wchkfile = open(wchkfilePath, 'a')
             wchkfile.close()
@@ -226,7 +226,7 @@ while(True):
 
                     print(code.decode('utf-8') + '    ' + str(mmRate) + '    ' + str(str_oTime))
 
-                    if((mmRate < rateLimit or mmRate > rateMLimit or cggrad < -3) and ed >= tempWan):
+                    if((mmRate < rateLimit or mmRate > rateMLimit or cggrad < -3 or fMedoTime < second_oTime) and ed >= tempWan):
                         mdFile = open(mdFilePath, 'a')
                         mdFile.write(str(code.decode('utf-8')) + ',' + str(float(exportData[i, 3].decode('UTF-8'))) + ',' + str(exportData[i, 0].decode('UTF-8')) + ',' + str(datetime.datetime.now().strftime('%H:%M:%S')) + ',' + str(exportData[i, 8].decode('UTF-8')) + '\n')
                         mdFile.close()
@@ -288,7 +288,7 @@ while(True):
                                 continue;
 
                             cost = int(exportData[i, 8].decode('UTF-8'))
-                            if(cost > 7089):
+                            if(cost > 7500):
                                 nos.append(code)
                                 continue;
 

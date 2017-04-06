@@ -32,7 +32,7 @@ print(str(datetime.datetime.now()))
 
 startTime = datetime.timedelta(hours=9,minutes=00,seconds=00).total_seconds()
 endTime = datetime.timedelta(hours=9,minutes=12,seconds=30).total_seconds()
-fMedoTime = datetime.timedelta(hours=9,minutes=18,seconds=00).total_seconds()
+fMedoTime = datetime.timedelta(hours=9,minutes=20,seconds=00).total_seconds()
 allMedoTime = datetime.timedelta(hours=9,minutes=25,seconds=20).total_seconds()
 wanna = 1
 mesuLimit = [2]
@@ -299,7 +299,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\tmpl\\"):
                                     ammfit = sp.polyfit(x[:len(exportData[s:i,5])], ammlist, level)
                                     ammgrad = sp.around(ammfit[0]*10, decimals=3)                                    
                                     
-                                    if((mmgrad > 5 and ammgrad < 7) or (mmgrad < -4.5 and ammgrad < -3.9)):
+                                    if((mmgrad > 5 and ammgrad < 7) or (mmgrad < -8 and ammgrad < -9.5)):
                                         nos.append(code)
                                         continue;
                                     
@@ -359,7 +359,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\tmpl\\"):
                                             msi = pi
 
                                     cost = int(exportData[i, 8].decode('UTF-8'))
-                                    if(cost > 7089):
+                                    if(cost > 7500):
                                         nos.append(code)
                                         continue;
 

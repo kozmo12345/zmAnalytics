@@ -14,7 +14,7 @@ print(str(datetime.datetime.now()))
 
 startTime = datetime.timedelta(hours=9,minutes=00,seconds=00).total_seconds()
 endTime = datetime.timedelta(hours=9,minutes=12,seconds=30).total_seconds()
-fMedoTime = datetime.timedelta(hours=9,minutes=18,seconds=00).total_seconds()
+fMedoTime = datetime.timedelta(hours=9,minutes=20,seconds=00).total_seconds()
 allMedoTime = datetime.timedelta(hours=9,minutes=25,seconds=20).total_seconds()
 wanna = 1
 mesuLimit = [2]
@@ -22,7 +22,7 @@ rateLimit = 0.31
 rateMLimit = 3.1
 stdLimit = 2
 sumEd = 0
-
+gradient = 0
 today = now.strftime('%Y-%m-%d')
 # today = '2017-03-03'
 print(today)
@@ -105,7 +105,7 @@ for ttime in times:
             nzData = data[data[:,2] != b'']
             ttimeData = nzData[nzData[:,0] == ttime]
             ttimeData2 = ttimeData[ttimeData[:,1].astype(int) < 99]
-            ttimeData3 = ttimeData2[ttimeData2[:,4].astype(int) > 420000]
+            ttimeData3 = ttimeData2[ttimeData2[:,4].astype(int) > 100000]
             ttimeData4 = ttimeData3[ttimeData3[:,3].astype(float) < 25]
             ttimeData5 = ttimeData4[ttimeData4[:,8].astype(float) > 2200]
             codes = ttimeData5[:,7]
@@ -228,8 +228,7 @@ for ttime in times:
                 cggrad = sp.around(cgfit[0], decimals=2)
                 chegang = exportData[i,9].astype(float)
 
-                # if(((ms_md > 0.96 and sms_md > 1) or (cggrad > 1.5 and chegang > 150)) and grade < 20):
-                if((ms_md > 0.96 and sms_md > 1) and grade < 20):
+                if(((ms_md > 0.96 and sms_md > 1 and gr > 420000) or (cggrad > 1.5 and chegang > 150 and gradient > 1.5 and exportData[i, 3].astype(float) > 5)) and grade < 20):
                     x = ti
                     y = exportData[:i+1,3].astype(float)
                     if(len(y) <= 1):
@@ -261,7 +260,7 @@ for ttime in times:
                                 continue;
 
                             cost = int(exportData[i, 8].decode('UTF-8'))
-                            if(cost > 7089):
+                            if(cost > 7500):
                                 nos.append(code)
                                 continue;                                             
 

@@ -14,7 +14,7 @@ print(str(datetime.datetime.now()))
 
 startTime = datetime.timedelta(hours=9,minutes=00,seconds=00).total_seconds()
 endTime = datetime.timedelta(hours=9,minutes=12,seconds=30).total_seconds()
-fMedoTime = datetime.timedelta(hours=9,minutes=18,seconds=00).total_seconds()
+fMedoTime = datetime.timedelta(hours=9,minutes=20,seconds=00).total_seconds()
 allMedoTime = datetime.timedelta(hours=9,minutes=25,seconds=20).total_seconds()
 wanna = 1
 mesuLimit = [2]
@@ -23,13 +23,13 @@ rateMLimit = 3.1
 stdLimit = 2
 sumEd = 0
 gradient = 0
-today = now.strftime('%Y-%m-%d')
-today = '2017-04-05'
+# today = now.strftime('%Y-%m-%d')
+today = '2017-03-15'
 
 print(today)
-setFile = open(os.path.join("C:\\", "Dropbox\\com_2\\" + today + "\\" + today + "moa3.txt"), 'w')
-edFile = open(os.path.join("C:\\", "Dropbox\\com_2\\" + today + "\\" + today + "ed.txt"), 'w')
-realfilePath = os.path.join("C:\\", "Dropbox\\com_2\\" + today + "\\" + today + ".txt");
+setFile = open(os.path.join("C:\\", "Dropbox\\com_1\\" + today + "\\" + today + "moa3.txt"), 'w')
+edFile = open(os.path.join("C:\\", "Dropbox\\com_1\\" + today + "\\" + today + "ed.txt"), 'w')
+realfilePath = os.path.join("C:\\", "Dropbox\\com_1\\" + today + "\\" + today + ".txt");
 
 data = sp.genfromtxt(realfilePath, delimiter="\t", dtype='|S20')
 codes = sp.unique(data[data[:,7] != b''][:,7])
@@ -214,6 +214,12 @@ for ttime in times:
                         comps.remove(code)
                         medos.append(code)
                         sumEd = sumEd + red
+                    elif(md < 2.5):
+                        print(8888888888) 
+                        edFile.write( str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMin) + ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(red) + ',' + str(msTime) + ',' + str(mdTime) + ',' + str(msCost) + ',' + str(mdCost) + ',' + str(msGradient[code.decode('utf-8')]) + ',' + str(msGr[code.decode('utf-8')]) + ',' + str(msSmdms[code.decode('utf-8')]) + ',' + str(msGrade[code.decode('utf-8')]) + ',' + str(msSrgrad[code.decode('utf-8')]) +'\n')
+                        comps.remove(code)
+                        medos.append(code)
+                        sumEd = sumEd + red                        
 
                 if(second_oTime > endTime):
                     continue;
@@ -229,9 +235,7 @@ for ttime in times:
                 cggrad = sp.around(cgfit[0], decimals=2)
                 chegang = exportData[i,9].astype(float)
 
-                # if(((ms_md > 0.96 and sms_md > 1) or (cggrad > 1.5 and chegang > 150)) and grade < 20):
                 if(((ms_md > 0.96 and sms_md > 1 and gr > 420000 ) or (cggrad > 1.5 and chegang > 150 and gradient > 1.5 and exportData[i, 3].astype(float) > 5)) and grade < 20):
-                # if((ms_md > 0.96 and sms_md > 1) and grade < 20):
                     x = ti
                     y = exportData[:i+1,3].astype(float)
                     if(len(y) <= 1):
@@ -248,9 +252,9 @@ for ttime in times:
                     
                     if(gradient >= 0.7 and srgrad > 0):
 
-                        if(code.decode('utf-8') == '001420'):
-                            print(ttime, code)
-                            time.sleep(2)
+                        # if(code.decode('utf-8') == '001420'):
+                        #     print(ttime, code)
+                        #     time.sleep(3)
                         # if(code.decode('utf-8') == '118000'):
                         #     print(ttime, code)
                         #     time.sleep(3)                        
@@ -260,11 +264,6 @@ for ttime in times:
                         else:
                             mesuSTime[code.decode('utf-8')] = str_oTime
                             mesuDict[code.decode('utf-8')] = mesuDict.get(code.decode('utf-8'), 0)
-
-                        # if(xstime.tm_min < 2):
-                        #     mesuLimit = [3]
-                        # elif(xstime.tm_min >= 2):
-                        #     mesuLimit = [2,3]
 
                         if(mesuDict[code.decode('utf-8')] in mesuLimit and ((code) not in comps) and (code not in nos)):
 
@@ -358,6 +357,23 @@ for ttime in times:
                             # if(code.decode('utf-8') == '002140'):
                             #     print(ttime, code, mmgrad, ammgrad, cggrad)
                             #     time.sleep(5)
+
+                            tpg = 0
+                            msi = 0
+                            for ii in range(1,i):
+                                pi = ii * 3
+                                if(pi >= i):
+                                    break
+
+                                pfit = sp.polyfit(x[:pi], y[-pi:], level)
+                                pgradient = sp.around(pfit[0]*10, decimals=2)
+                                if(tpg < pgradient and not sp.isinf(pgradient)):
+                                    tpg = pgradient
+                                    msi = pi
+
+                            # print(code, tpg)
+                            # time.sleep(3)                            
+
 
                             comps.append((code))
                             mesuStart[code.decode('utf-8')] = i

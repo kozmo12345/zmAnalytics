@@ -42,17 +42,17 @@ stdLimit = 2
 sumEd = 0
 gradient = 0
 originM = 2000000
-for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
+for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_1\\data\\"):
     for subdirname in dirnames:
         today = subdirname
-        # if(today != '2017-02-28'):
+        # if(today != '2017-03-01'):
         #     break;
-        # today = '2017-03-22'
+        # today = '2017-04-05'
 
         print(today)
-        setFile = open(os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + "moa3.txt"), 'w')
-        edFile = open(os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + "ed.txt"), 'w')
-        realfilePath = os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + ".txt");
+        setFile = open(os.path.join("C:\\", "Dropbox\\com_1\\data\\" + today + "\\" + today + "moa3.txt"), 'w')
+        edFile = open(os.path.join("C:\\", "Dropbox\\com_1\\data\\" + today + "\\" + today + "ed.txt"), 'w')
+        realfilePath = os.path.join("C:\\", "Dropbox\\com_1\\data\\" + today + "\\" + today + ".txt");
         
         data = sp.genfromtxt(realfilePath, delimiter="\t", dtype='|S20')
         codes = sp.unique(data[data[:,7] != b''][:,7])
@@ -60,6 +60,8 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
 
         tmp_time = 0
         mesuDict = dict()
+        mesuArr = dict()
+        mesuAver = dict()
         mesuStart = dict()
         msRate = dict()
         rmsRate = dict()
@@ -249,7 +251,8 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
                         cgfit = sp.polyfit(ti, exportData[:i+1,9].astype(float), 1)
                         cggrad = sp.around(cgfit[0], decimals=2)
                         chegang = exportData[i,9].astype(float)
-                        
+
+                        # if(((ms_md > 0.96 and sms_md > 1) or (cggrad > 2 and chegang > 150)) and grade < 20):
                         if(((ms_md > 0.96 and sms_md > 1 and gr > 420000) or (cggrad > 1.5 and chegang > 150 and gradient > 1.5 and exportData[i, 3].astype(float) > 5)) and grade < 20):
                             x = ti
                             y = exportData[:i+1,3].astype(float)
@@ -268,9 +271,23 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
                             if(gradient >= 0.7 and srgrad > 0):
                                 if(code.decode('utf-8') in mesuDict):
                                     mesuDict[code.decode('utf-8')] = mesuDict[code.decode('utf-8')] + 1
+
+                                    if(mesuDict[code.decode('utf-8')] == 1):
+                                        mesuAver[code.decode('utf-8')] = second_oTime - mesuArr[code.decode('utf-8')]
+                                        mesuArr[code.decode('utf-8')] = second_oTime                                 
+                                    if(mesuDict[code.decode('utf-8')] == 2):
+                                        mesuAver[code.decode('utf-8')] = mesuAver[code.decode('utf-8')] + second_oTime - mesuArr[code.decode('utf-8')]
+                                        if(code.decode('utf-8') == '001420'):
+                                            print(i)
+                                            time.sleep(3)
+
                                 else:
                                     mesuSTime[code.decode('utf-8')] = str_oTime
                                     mesuDict[code.decode('utf-8')] = mesuDict.get(code.decode('utf-8'), 0)
+                                    mesuArr[code.decode('utf-8')] = second_oTime
+                                    # if(code.decode('utf-8') == '001420'):
+                                    #     print(i)
+                                    #     time.sleep(3)
 
                                 if(mesuDict[code.decode('utf-8')] in mesuLimit and ((code) not in comps) and (code not in medos) and (code not in nos)):
                                     if(exportData[i, 3].astype(float) < 4 or exportData[i, 3].astype(float) > 19.6):
@@ -283,7 +300,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
                                     cost = int(exportData[i, 8].decode('UTF-8'))
                                     if(cost > 7500):
                                         nos.append(code)
-                                        continue;                                        
+                                        continue;
 
                                     if(i < 4):
                                         s = 0
@@ -304,7 +321,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
                                     ammfit = sp.polyfit(x[:len(exportData[s:i,5])], ammlist, level)
                                     ammgrad = sp.around(ammfit[0]*10, decimals=3)                                    
                                     
-                                    if((mmgrad > 5 and ammgrad < 7) or (mmgrad < -8 and ammgrad < -9.5)): # mmgrad < -4.5 and ammgrad < -3.9
+                                    if((mmgrad > 5 and ammgrad < 7  and cggrad > 1.5) or (mmgrad < -8 and ammgrad < -9.5)):
                                         nos.append(code)
                                         continue;
                                     
@@ -318,27 +335,6 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
                                         nos.append(code)
                                         continue;
 
-                                    # sdr = 0
-                                    # sgr = 0
-                                    # for en in range(i, 1, -1):
-                                    #     for sn in range(en, 0, -1):
-                                    #         dy = exportData[sn:en+1,3].astype(float)
-                                            
-                                    #         if(len(dy) <= 1 or exportData[en - 1, 5].astype(float) == 0):
-                                    #             continue
-        
-                                    #         tdr = dy[len(dy) - 1] - dy[0]
-
-                                    #         if(tdr > sdr):
-                                    #             sdr = tdr
-                                    #             ssn = sn
-                                    #             sen = en
-                                    #             sgr = exportData[en, 4].astype(float) - exportData[sn, 4].astype(float)
-
-                                    # if((sdr / ((sgr * exportData[i, 8].astype(float))/100000000)) > 1.05):
-                                    #     nos.append(code)
-                                    #     continue;
-                                    
                                     if(gradient < 1.1 and ssrgrad < -1):
                                         nos.append(code)
                                         continue;
@@ -373,41 +369,41 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
                                     msRate[code.decode('utf-8')] = float(exportData[i, 3].decode('UTF-8'))
                                     rmsRate[code.decode('utf-8')] = float(exportData[i+1, 3].decode('UTF-8'))
                                     pick[code.decode('utf-8')] = False
-                                    mesuIndex[code.decode('utf-8')] = mmgrad
+                                    mesuIndex[code.decode('utf-8')] = mesuAver[code.decode('utf-8')]
                                     isd[code.decode('utf-8')] = False
                                     isd2[code.decode('utf-8')] = False
                                     setFile.write( str(code.decode('utf-8')) + ',' + str(float(rate)) +  ',' + str(float(exportData[i, 3].decode('UTF-8'))) +  '\n')
 
             except Exception as e:
-                errFilePath = os.path.join("C:\\", "Dropbox\\Data\\" + "err.txt");
+                errFilePath = os.path.join("C:\\", "Dropbox\\com_1\\data\\" + "err.txt");
                 errFile = open(errFilePath, 'a')
                 errFile.write(today + '\t' + str(e) + '\n')
                 continue
 
         print(today)
 
-analFilePath = os.path.join("C:\\", "Dropbox\\Data\\" + "anal.txt");
+analFilePath = os.path.join("C:\\", "Dropbox\\com_1\\data\\" + "anal.txt");
 analFile = open(analFilePath, 'w')
 
-edFilePath = os.path.join("C:\\", "Dropbox\\Data\\" + "ed.txt");
+edFilePath = os.path.join("C:\\", "Dropbox\\com_1\\data\\" + "ed.txt");
 edFile = open(edFilePath, 'w')
 
 edFile.write('day' +  ',' + 'originM' +  ',' + 'sumEd' +  ',' + 'code' +  ',' + 'max' ',' + 'termMin' +  ',' + 'termMax' +  ',' + 'md' +  ',' + 'ms' +  ',' + 'ed' +  ',' + 'msTime' +  ',' + 'mdTime' + '\n')
 
-for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\Data\\"):
+for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_1\\data\\"):
     for subdirname in dirnames:
         today = subdirname
 
         if((today.split('-')[1] == '10' and today.split('-')[2] in ['05','06','07','10','11','12','13','14','17','18','19','20','21','24','25','26','27','28','31']) or (today.split('-')[1] == '11' and today.split('-')[2] in ['01','02','03','07','08','09','10'])):
             continue
 
-        setFilePath = os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + "moa3.txt");
+        setFilePath = os.path.join("C:\\", "Dropbox\\com_1\\data\\" + today + "\\" + today + "moa3.txt");
         setFile = open(setFilePath, 'r')
         
         for line in setFile:
             analFile.write(today + ',' + line)
 
-        set2FilePath = os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + "ed.txt");
+        set2FilePath = os.path.join("C:\\", "Dropbox\\com_1\\data\\" + today + "\\" + today + "ed.txt");
         set2File = open(set2FilePath, 'r')
         
         for line in set2File:

@@ -41,7 +41,7 @@ today = now.strftime('%Y-%m-%d')
 
 startTime = datetime.timedelta(hours=9,minutes=00,seconds=00).total_seconds()
 endTime = datetime.timedelta(hours=9,minutes=12,seconds=30).total_seconds()
-fMedoTime = datetime.timedelta(hours=9,minutes=18,seconds=00).total_seconds()
+fMedoTime = datetime.timedelta(hours=9,minutes=20,seconds=00).total_seconds()
 allMedoTime = datetime.timedelta(hours=9,minutes=25,seconds=30).total_seconds()
 closeTime = datetime.timedelta(hours=15,minutes=19,seconds=00).total_seconds()
 
@@ -53,7 +53,7 @@ wanna = 1
 rateLimit = 0.31
 rateMLimit = 3.8
 gradient = 0
-realfilePath = os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + ".txt");
+realfilePath = os.path.join("C:\\", "Dropbox\\com_2\\Data\\" + today + "\\" + today + ".txt");
 dirn = os.path.dirname(realfilePath)
 try:
     os.stat(dirn)
@@ -66,7 +66,7 @@ except:
         else:
             raise
 
-setFilePath = os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + "m.txt");
+setFilePath = os.path.join("C:\\", "Dropbox\\com_2\\Data\\" + today + "\\" + today + "m.txt");
 dirn2 = os.path.dirname(setFilePath)
 try:
     os.stat(dirn2)
@@ -79,7 +79,7 @@ except:
         else:
             raise
 
-mdFilePath = os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + "d.txt");
+mdFilePath = os.path.join("C:\\", "Dropbox\\com_2\\Data\\" + today + "\\" + today + "d.txt");
 dirn3 = os.path.dirname(mdFilePath)
 try:
     os.stat(dirn3)
@@ -132,18 +132,18 @@ while(True):
         now = datetime.datetime.now()
         nowTime = datetime.timedelta(hours=now.hour,minutes=now.minute,seconds=now.second).total_seconds()
 
-        wchkfilePath = os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + "w1.pchk");
+        wchkfilePath = os.path.join("C:\\", "Dropbox\\com_2\\Data\\" + today + "\\" + "w1.pchk");
         if not os.path.exists(wchkfilePath):
             wchkfile = open(wchkfilePath, 'a')
             wchkfile.close()
     
-        # if(nowTime > endTime and len(comps) == 0):
-        #     time.sleep( 4 )
-        #     continue;
+        if(nowTime > endTime and len(comps) == 0):
+            time.sleep( 4 )
+            continue;
     
-        # if(nowTime > allMedoTime):
-        #     time.sleep( 4 )
-        #     continue;
+        if(nowTime > allMedoTime):
+            time.sleep( 4 )
+            continue;
     
         print(today + str(times[len(times)-1]))
         print(comps)
@@ -155,8 +155,8 @@ while(True):
             second_oTime = datetime.timedelta(hours=xstime.tm_hour,minutes=xstime.tm_min,seconds=xstime.tm_sec).total_seconds() #계산시간
             str_oTime = ttime.decode('utf-8')
 
-            # if(second_oTime > endTime and second_oTime < nowTime - 120 ):
-            #     continue;            
+            if(second_oTime > endTime and second_oTime < nowTime - 120 ):
+                continue;            
             
             if(second_oTime < startTime):
                 continue;
@@ -226,7 +226,7 @@ while(True):
 
                     print(code.decode('utf-8') + '    ' + str(mmRate) + '    ' + str(str_oTime))
 
-                    if((mmRate < rateLimit or mmRate > rateMLimit or cggrad < -3) and ed >= tempWan):
+                    if((mmRate < rateLimit or mmRate > rateMLimit or cggrad < -3 or fMedoTime < second_oTime) and ed >= tempWan):
                         mdFile = open(mdFilePath, 'a')
                         mdFile.write(str(code.decode('utf-8')) + ',' + str(float(exportData[i, 3].decode('UTF-8'))) + ',' + str(exportData[i, 0].decode('UTF-8')) + ',' + str(datetime.datetime.now().strftime('%H:%M:%S')) + ',' + str(exportData[i, 8].decode('UTF-8')) + '\n')
                         mdFile.close()
@@ -242,9 +242,9 @@ while(True):
                 if(second_oTime > endTime):
                     continue;
 
-                # if(nowTime > endTime):
-                #     continue;
-
+                if(nowTime > endTime):
+                    continue;
+    
                 rate = exportData[i, 3].decode('UTF-8')
                 grade = int(exportData[i, 1].decode('UTF-8'))
                 gr = int(exportData[i, 4].decode('UTF-8'))
@@ -256,7 +256,6 @@ while(True):
                 cggrad = sp.around(cgfit[0], decimals=2)
                 chegang = exportData[i,9].astype(float)
 
-                # if((ms_md > 0.96 and sms_md > 1) and grade < 20):
                 if(((ms_md > 0.96 and sms_md > 1 and gr > 420000) or (cggrad > 1.5 and chegang > 150 and gradient > 1 and exportData[i, 3].astype(float) > 5)) and grade < 20):
                     x = ti
                     y = exportData[:i+1,3].astype(float)
@@ -288,7 +287,7 @@ while(True):
                                 continue;
 
                             cost = int(exportData[i, 8].decode('UTF-8'))
-                            if(cost > 7089):
+                            if(cost > 7500):
                                 nos.append(code)
                                 continue;
 

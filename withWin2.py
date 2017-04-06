@@ -41,7 +41,7 @@ today = now.strftime('%Y-%m-%d')
 
 startTime = datetime.timedelta(hours=9,minutes=00,seconds=00).total_seconds()
 endTime = datetime.timedelta(hours=9,minutes=12,seconds=30).total_seconds()
-fMedoTime = datetime.timedelta(hours=9,minutes=18,seconds=00).total_seconds()
+fMedoTime = datetime.timedelta(hours=9,minutes=18,seconds=30).total_seconds()
 allMedoTime = datetime.timedelta(hours=9,minutes=25,seconds=30).total_seconds()
 closeTime = datetime.timedelta(hours=15,minutes=19,seconds=00).total_seconds()
 
@@ -52,7 +52,7 @@ mesuLimit = [2]
 wanna = 1
 rateLimit = 0.31
 rateMLimit = 3.8
-
+gradient = 0
 realfilePath = os.path.join("C:\\", "Dropbox\\Diff\\" + today + "\\" + today + ".txt");
 dirn = os.path.dirname(realfilePath)
 try:
@@ -169,7 +169,7 @@ while(True):
             nzData = data[data[:,2] != b'']            
             ttimeData = nzData[nzData[:,0] == ttime]            
             ttimeData2 = ttimeData[ttimeData[:,1].astype(int) < 21]
-            ttimeData3 = ttimeData2[ttimeData2[:,4].astype(int) > 420000]
+            ttimeData3 = ttimeData2[ttimeData2[:,4].astype(int) > 100000]
             ttimeData4 = ttimeData3[ttimeData3[:,3].astype(float) < 25]
             ttimeData5 = ttimeData4[ttimeData4[:,8].astype(float) > 2200]
             codes = ttimeData5[:,7]
@@ -226,7 +226,7 @@ while(True):
 
                     print(code.decode('utf-8') + '    ' + str(mmRate) + '    ' + str(str_oTime))
 
-                    if((mmRate < rateLimit or mmRate > rateMLimit or cggrad < -3) and ed >= tempWan):
+                    if((mmRate < rateLimit or mmRate > rateMLimit or cggrad < -3 or fMedoTime < second_oTime) and ed >= tempWan):
                         mdFile = open(mdFilePath, 'a')
                         mdFile.write(str(code.decode('utf-8')) + ',' + str(float(exportData[i, 3].decode('UTF-8'))) + ',' + str(exportData[i, 0].decode('UTF-8')) + ',' + str(datetime.datetime.now().strftime('%H:%M:%S')) + ',' + str(exportData[i, 8].decode('UTF-8')) + '\n')
                         mdFile.close()
@@ -255,7 +255,7 @@ while(True):
                 cgfit = sp.polyfit(ti, exportData[:i+1,9].astype(float), 1)
                 cggrad = sp.around(cgfit[0], decimals=2)
 
-                if((ms_md > 0.96 and sms_md > 1) and grade < 20):
+                if(((ms_md > 0.96 and sms_md > 1 and gr > 420000) or (cggrad > 1.5 and chegang > 150 and gradient > 1 and exportData[i, 3].astype(float) > 5)) and grade < 20):
                     x = ti
                     y = exportData[:i+1,3].astype(float)
                     if(len(y) <= 1):
@@ -286,7 +286,7 @@ while(True):
                                 continue;
 
                             cost = int(exportData[i, 8].decode('UTF-8'))
-                            if(cost > 7089):
+                            if(cost > 7500):
                                 nos.append(code)
                                 continue;                                
 
@@ -345,25 +345,6 @@ while(True):
                                     tpg = pgradient
                             
                             tpg = tpg * sp.sqrt(ii * 0.77)
-
-                            # sdr = 0
-                            # sgr = 0
-                            # for en in range(i, 1, -1):
-                            #     for sn in range(en, 0, -1):
-                            #         dy = exportData[sn:en+1,3].astype(float)
-                                    
-                            #         if(len(dy) <= 1 or exportData[en - 1, 5].astype(float) == 0):
-                            #             continue
-        
-                            #         tdr = dy[len(dy) - 1] - dy[0]
-
-                            #         if(tdr > sdr):
-                            #             sdr = tdr
-                            #             sgr = exportData[en, 4].astype(float) - exportData[sn, 4].astype(float)
-
-                            # if((sdr / ((sgr * exportData[i, 8].astype(float))/100000000)) > 1.05):
-                            #     nos.append(code)
-                            #     continue;
 
                             with open(setFilePath, 'r') as f:
                                 for line in f:
