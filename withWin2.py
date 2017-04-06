@@ -168,7 +168,7 @@ while(True):
 
             nzData = data[data[:,2] != b'']            
             ttimeData = nzData[nzData[:,0] == ttime]            
-            ttimeData2 = ttimeData[ttimeData[:,1].astype(int) < 21]
+            ttimeData2 = ttimeData[ttimeData[:,1].astype(int) < 31]
             ttimeData3 = ttimeData2[ttimeData2[:,4].astype(int) > 100000]
             ttimeData4 = ttimeData3[ttimeData3[:,3].astype(float) < 25]
             ttimeData5 = ttimeData4[ttimeData4[:,8].astype(float) > 2200]
@@ -226,7 +226,7 @@ while(True):
 
                     print(code.decode('utf-8') + '    ' + str(mmRate) + '    ' + str(str_oTime))
 
-                    if((mmRate < rateLimit or mmRate > rateMLimit or cggrad < -3 or fMedoTime < second_oTime) and ed >= tempWan):
+                    if((mmRate < rateLimit or mmRate > rateMLimit or cggrad < -3) and ed >= tempWan):
                         mdFile = open(mdFilePath, 'a')
                         mdFile.write(str(code.decode('utf-8')) + ',' + str(float(exportData[i, 3].decode('UTF-8'))) + ',' + str(exportData[i, 0].decode('UTF-8')) + ',' + str(datetime.datetime.now().strftime('%H:%M:%S')) + ',' + str(exportData[i, 8].decode('UTF-8')) + '\n')
                         mdFile.close()
@@ -254,8 +254,9 @@ while(True):
 
                 cgfit = sp.polyfit(ti, exportData[:i+1,9].astype(float), 1)
                 cggrad = sp.around(cgfit[0], decimals=2)
+                chegang = exportData[i,9].astype(float)
 
-                if(((ms_md > 0.96 and sms_md > 1 and gr > 420000) or (cggrad > 1.5 and chegang > 150 and gradient > 1 and exportData[i, 3].astype(float) > 5)) and grade < 20):
+                if(((ms_md > 0.96 and sms_md > 1 and gr > 420000) or (cggrad > 2.3 and chegang > 163 and gradient > 1.5 and exportData[i, 3].astype(float) > 5)) and grade < 20):
                     x = ti
                     y = exportData[:i+1,3].astype(float)
                     if(len(y) <= 1):

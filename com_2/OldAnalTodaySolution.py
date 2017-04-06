@@ -24,7 +24,7 @@ stdLimit = 2
 sumEd = 0
 gradient = 0
 today = now.strftime('%Y-%m-%d')
-today = '2017-04-05'
+today = '2017-04-04'
 
 print(today)
 setFile = open(os.path.join("C:\\", "Dropbox\\com_2\\" + today + "\\" + today + "moa3.txt"), 'w')
@@ -239,6 +239,7 @@ for ttime in times:
                     ran = 2
 
                 if(isOk):
+                    isOk = False
                     x = ti
                     y = exportData[:i+1,3].astype(float)
                     if(len(y) <= 1):
@@ -255,12 +256,12 @@ for ttime in times:
                     
                     if(gradient >= 0.7 and srgrad > 0):
 
-                        # if(code.decode('utf-8') == '001420'):
+                        if(code.decode('utf-8') == '079190'):
+                            print(ttime, code, ran)
+                            time.sleep(2)
+                        # if(code.decode('utf-8') == '079190'):
                         #     print(ttime, code, ran)
-                        #     time.sleep(2)
-                        # if(code.decode('utf-8') == '118000'):
-                        #     print(ttime, code)
-                        #     time.sleep(3)                        
+                        #     time.sleep(2)                        
 
                         if(code.decode('utf-8') in mesuDict):
                             mesuDict[code.decode('utf-8')] = mesuDict[code.decode('utf-8')] + 1
