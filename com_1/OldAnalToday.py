@@ -23,8 +23,8 @@ rateMLimit = 3.1
 stdLimit = 2
 sumEd = 0
 gradient = 0
-# today = now.strftime('%Y-%m-%d')
-today = '2017-03-15'
+today = now.strftime('%Y-%m-%d')
+# today = '2017-03-15'
 
 print(today)
 setFile = open(os.path.join("C:\\", "Dropbox\\com_1\\" + today + "\\" + today + "moa3.txt"), 'w')
@@ -252,9 +252,9 @@ for ttime in times:
                     
                     if(gradient >= 0.7 and srgrad > 0):
 
-                        if(code.decode('utf-8') == '246690'):
-                            print(ttime, code, gradient, chegang, '----------------------')
-                            time.sleep(3)
+                        # if(code.decode('utf-8') == '246690'):
+                        #     print(ttime, code, gradient, chegang, '----------------------')
+                        #     time.sleep(3)
                         # if(code.decode('utf-8') == '118000'):
                         #     print(ttime, code)
                         #     time.sleep(3)                        
