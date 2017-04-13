@@ -228,7 +228,7 @@ for ttime in times:
                 cggrad = sp.around(cgfit[0], decimals=2)
                 chegang = exportData[i,9].astype(float)
 
-                if(((ms_md > 0.96 and sms_md > 1 and gr > 420000) or (cggrad > 2.3 and chegang > 163 and gradient > 1.5 and exportData[i, 3].astype(float) > 5)) and grade < 20):
+                if(((ms_md > 0.96 and sms_md > 1 and gr > 420000) or (cggrad > 2.3 and chegang > 163 and gradient > 1.5)) and grade < 20 and exportData[i, 3].astype(float) > 5):
                     x = ti
                     y = exportData[:i+1,3].astype(float)
                     if(len(y) <= 1):

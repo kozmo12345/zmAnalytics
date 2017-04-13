@@ -250,7 +250,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\tmpl\\"):
                         # chegang = exportData[i,9].astype(float)
                         
                         # if(((ms_md > 0.96 and sms_md > 1) or (cggrad > 2 and chegang > 150)) and grade < 20):                        
-                        if((ms_md > 0.96 and sms_md > 1) and grade < 20):
+                        if((ms_md > 0.96 and sms_md > 1) and grade < 20 and exportData[i, 3].astype(float) > 5):
                             x = ti
                             y = exportData[:i+1,3].astype(float)
                             if(len(y) <= 1):

@@ -257,7 +257,7 @@ while(True):
                 chegang = exportData[i,9].astype(float)
 
                 # if((ms_md > 0.96 and sms_md > 1) and grade < 20):
-                if(((ms_md > 0.96 and sms_md > 1 and gr > 420000) or (cggrad > 1.5 and chegang > 150 and gradient > 1 and exportData[i, 3].astype(float) > 5)) and grade < 20):
+                if(((ms_md > 0.96 and sms_md > 1 and gr > 420000) or (cggrad > 1.5 and chegang > 150 and gradient > 1)) and grade < 20 and exportData[i, 3].astype(float) > 5):
                     x = ti
                     y = exportData[:i+1,3].astype(float)
                     if(len(y) <= 1):

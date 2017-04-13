@@ -40,7 +40,6 @@ rateLimit = 0.31
 rateMLimit = 3.8
 stdLimit = 2
 sumEd = 0
-gradient = 0
 originM = 2000000
 for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_2\\Data\\"):
     for subdirname in dirnames:
@@ -58,6 +57,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_2\\Data\\"):
         codes = sp.unique(data[data[:,7] != b''][:,7])
         times = sp.unique(data[data[:,0] != b''][:,0])
 
+        gradient = 0
         tmp_time = 0
         mesuDict = dict()
         mesuArr = dict()
@@ -148,7 +148,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_2\\Data\\"):
                                 i = ei
                                 break;
 
-                        if(i == -1 or i < 2): continue
+                        # if(i == -1 or i < 2): continue
 
                         if(code in comps):
                             if(i < mesuStart[code.decode('utf-8')] + 3):
@@ -252,7 +252,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_2\\Data\\"):
                         cggrad = sp.around(cgfit[0], decimals=2)
                         chegang = exportData[i,9].astype(float)
 
-                        if(((ms_md > 0.96 and sms_md > 1 and gr > 420000) or (cggrad > 2.3 and chegang > 163 and gradient > 1.1 and exportData[i, 3].astype(float) > 5)) and grade < 20):
+                        if(((ms_md > 0.96 and sms_md > 1 and gr > 420000) or (cggrad > 2.3 and chegang > 163)) and grade < 20 and exportData[i, 3].astype(float) > 5):
                             x = ti
                             y = exportData[:i+1,3].astype(float)
                             if(len(y) <= 1):
@@ -320,7 +320,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_2\\Data\\"):
                                     ammfit = sp.polyfit(x[:len(exportData[s:i,5])], ammlist, level)
                                     ammgrad = sp.around(ammfit[0]*10, decimals=3)                                    
                                     
-                                    if((mmgrad > 5 and ammgrad < 7  and cggrad > 1.5) or (mmgrad < -8 and ammgrad < -9.5)):
+                                    if((mmgrad > 5 and ammgrad < 7  and cggrad > 1.5) or (mmgrad < -8 and ammgrad < -9)):
                                         nos.append(code)
                                         continue;
                                     
@@ -395,8 +395,6 @@ mesuLimit = [2]
 rateLimit = 0.31
 rateMLimit = 3.8
 stdLimit = 2
-sumEd = 0
-gradient = 0
 originM = 2000000
 for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_2\\diff\\"):
     for subdirname in dirnames:
@@ -414,6 +412,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_2\\diff\\"):
         codes = sp.unique(data[data[:,7] != b''][:,7])
         times = sp.unique(data[data[:,0] != b''][:,0])
 
+        gradient = 0
         tmp_time = 0
         mesuDict = dict()
         mesuArr = dict()
@@ -504,7 +503,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_2\\diff\\"):
                                 i = ei
                                 break;
 
-                        if(i == -1 or i < 2): continue
+                        # if(i == -1 or i < 2): continue
 
                         if(code in comps):
                             if(i < mesuStart[code.decode('utf-8')] + 3):
@@ -608,7 +607,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_2\\diff\\"):
                         cggrad = sp.around(cgfit[0], decimals=2)
                         chegang = exportData[i,9].astype(float)
 
-                        if(((ms_md > 0.96 and sms_md > 1 and gr > 420000) or (cggrad > 2.3 and chegang > 163 and gradient > 1.1 and exportData[i, 3].astype(float) > 5)) and grade < 20):
+                        if(((ms_md > 0.96 and sms_md > 1 and gr > 420000) or (cggrad > 2.3 and chegang > 163)) and grade < 20 and exportData[i, 3].astype(float) > 5):
                             x = ti
                             y = exportData[:i+1,3].astype(float)
                             if(len(y) <= 1):
@@ -676,7 +675,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_2\\diff\\"):
                                     ammfit = sp.polyfit(x[:len(exportData[s:i,5])], ammlist, level)
                                     ammgrad = sp.around(ammfit[0]*10, decimals=3)                                    
                                     
-                                    if((mmgrad > 5 and ammgrad < 7  and cggrad > 1.5) or (mmgrad < -8 and ammgrad < -9.5)):
+                                    if((mmgrad > 5 and ammgrad < 7  and cggrad > 1.5) or (mmgrad < -8 and ammgrad < -9)):
                                         nos.append(code)
                                         continue;
                                     

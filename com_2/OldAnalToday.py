@@ -24,7 +24,7 @@ stdLimit = 2
 sumEd = 0
 gradient = 0
 today = now.strftime('%Y-%m-%d')
-# today = '2017-04-05'
+today = '2017-04-10'
 
 print(today)
 setFile = open(os.path.join("C:\\", "Dropbox\\com_2\\" + today + "\\" + today + "moa3.txt"), 'w')
@@ -228,10 +228,14 @@ for ttime in times:
                 cgfit = sp.polyfit(ti, exportData[:i+1,9].astype(float), 1)
                 cggrad = sp.around(cgfit[0], decimals=2)
                 chegang = exportData[i,9].astype(float)
+                print(ttime,code, ' 222222222222')
+                time.sleep(2)
 
-                # if(((ms_md > 0.96 and sms_md > 1) or (cggrad > 1.5 and chegang > 150)) and grade < 20):
-                if(((ms_md > 0.96 and sms_md > 1 and gr > 420000 ) or (cggrad > 1.5 and chegang > 150 and gradient > 1.5 and exportData[i, 3].astype(float) > 5)) and grade < 20):
-                # if((ms_md > 0.96 and sms_md > 1) and grade < 20):
+                if(((ms_md > 0.96 and sms_md > 1 and gr > 420000 ) or (cggrad > 2.3 and chegang > 163)) and grade < 20 and exportData[i, 3].astype(float) > 5):
+                    if(code.decode('utf-8') == '065950'):
+                        print(ttime,code, ' 000000000000000000')     
+                    print(ttime,code, ' 1111111111111')
+                    time.sleep(2)
                     x = ti
                     y = exportData[:i+1,3].astype(float)
                     if(len(y) <= 1):
@@ -251,9 +255,6 @@ for ttime in times:
                         if(code.decode('utf-8') == '001420'):
                             print(ttime, code)
                             time.sleep(2)
-                        # if(code.decode('utf-8') == '118000'):
-                        #     print(ttime, code)
-                        #     time.sleep(3)                        
 
                         if(code.decode('utf-8') in mesuDict):
                             mesuDict[code.decode('utf-8')] = mesuDict[code.decode('utf-8')] + 1
@@ -261,16 +262,7 @@ for ttime in times:
                             mesuSTime[code.decode('utf-8')] = str_oTime
                             mesuDict[code.decode('utf-8')] = mesuDict.get(code.decode('utf-8'), 0)
 
-                        # if(xstime.tm_min < 2):
-                        #     mesuLimit = [3]
-                        # elif(xstime.tm_min >= 2):
-                        #     mesuLimit = [2,3]
-
                         if(mesuDict[code.decode('utf-8')] in mesuLimit and ((code) not in comps) and (code not in nos)):
-
-                            # if(code.decode('utf-8') == '001420'):
-                            #     print(ttime, code, mesuDict[code.decode('utf-8')])
-                            #     time.sleep(3)
 
                             if(exportData[i, 3].astype(float) < 4 or exportData[i, 3].astype(float) > 19.6):
                                 continue;

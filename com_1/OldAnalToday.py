@@ -24,7 +24,7 @@ stdLimit = 2
 sumEd = 0
 gradient = 0
 today = now.strftime('%Y-%m-%d')
-# today = '2017-03-15'
+today = '2017-04-10'
 
 print(today)
 setFile = open(os.path.join("C:\\", "Dropbox\\com_1\\" + today + "\\" + today + "moa3.txt"), 'w')
@@ -158,7 +158,7 @@ for ttime in times:
 
                     tempWan = wanna
                     med = ed                               
-                    if((ms - md) > 1):
+                    if((ms - md) > 1 or ed > 1):
                         isd[code.decode('utf-8')] = True
                     if(isd[code.decode('utf-8')]):
                         tempWan = 0.4
@@ -168,7 +168,7 @@ for ttime in times:
                         med = ed * 1.8
                     mmRate = (sp.sum(exportData[i-stdLimit:i+1,5].astype(float)))/(sp.sum(exportData[i-stdLimit:i+1,6].astype(float))) - ((med)/25)
 
-                    # if(code.decode('utf-8') == '001420'):
+                    # if(code.decode('utf-8') == '043910'):
                     #     cgfit = sp.polyfit(ti[:5], exportData[i-4:i+1,9].astype(float), 1)
                     #     cggrad = sp.around(cgfit[0], decimals=2)
                     #     print(code, ttime, cggrad)
@@ -214,7 +214,7 @@ for ttime in times:
                         comps.remove(code)
                         medos.append(code)
                         sumEd = sumEd + red
-                    elif(md < 2.5):
+                    elif(mdpCost < 5500000 and mdpCost != 0 and md < 3):
                         print(8888888888) 
                         edFile.write( str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMin) + ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(red) + ',' + str(msTime) + ',' + str(mdTime) + ',' + str(msCost) + ',' + str(mdCost) + ',' + str(msGradient[code.decode('utf-8')]) + ',' + str(msGr[code.decode('utf-8')]) + ',' + str(msSmdms[code.decode('utf-8')]) + ',' + str(msGrade[code.decode('utf-8')]) + ',' + str(msSrgrad[code.decode('utf-8')]) +'\n')
                         comps.remove(code)
@@ -235,7 +235,7 @@ for ttime in times:
                 cggrad = sp.around(cgfit[0], decimals=2)
                 chegang = exportData[i,9].astype(float)
 
-                if(((ms_md > 0.96 and sms_md > 1 and gr > 420000 ) or (cggrad > 1.5 and chegang > 150 and gradient > 1.5 and exportData[i, 3].astype(float) > 5)) and grade < 20):
+                if(((ms_md > 0.96 and sms_md > 1 and gr > 420000 ) or (cggrad > 2.3 and chegang > 163)) and grade < 20 and exportData[i, 3].astype(float) > 5):
                     x = ti
                     y = exportData[:i+1,3].astype(float)
                     if(len(y) <= 1):
@@ -251,7 +251,9 @@ for ttime in times:
                     srgrad = sp.around(srfit[0]*10, decimals=2)
                     
                     if(gradient >= 0.7 and srgrad > 0):
-
+                        # if(code.decode('utf-8') == '043910'):
+                        #     print(ttime, code, gr, cggrad, chegang, grade, exportData[i, 3].astype(float), ' 000000000000000000000000000000')
+                        #     time.sleep(3)
                         # if(code.decode('utf-8') == '246690'):
                         #     print(ttime, code, gradient, chegang, '----------------------')
                         #     time.sleep(3)
