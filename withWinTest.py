@@ -53,7 +53,7 @@ wanna = 1
 rateLimit = 0.31
 rateMLimit = 3.8
 gradient = 0
-realfilePath = os.path.join("C:\\", "Dropbox\\Diff\\" + today + "\\" + today + ".txt");
+realfilePath = os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + ".txt");
 dirn = os.path.dirname(realfilePath)
 try:
     os.stat(dirn)
@@ -102,13 +102,13 @@ with open(setFilePath, 'r') as f:
         imCode = line.split(",")[0].strip()
         if(imCode != ''):
             isRe = True
-        if(imCode != '' and int(line.split(",")[8].strip()) == 2):
+        if(imCode != '' and int(line.split(",")[8].strip()) == 1):
             comps.append(str.encode(imCode))
             mesuStart[imCode] = float(line.split(",")[7].strip())
             msRate[imCode] = float(line.split(",")[1].strip())
             isd[imCode] = False
             isd2[imCode] = False
-        elif(imCode != '' and int(line.split(",")[8].strip()) == 1):
+        elif(imCode != '' and int(line.split(",")[8].strip()) == 2):
             nos.append(str.encode(imCode))
         else:
             continue;
@@ -132,7 +132,7 @@ while(True):
         now = datetime.datetime.now()
         nowTime = datetime.timedelta(hours=now.hour,minutes=now.minute,seconds=now.second).total_seconds()
 
-        wchkfilePath = os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + "w2.pchk");
+        wchkfilePath = os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + "w1.pchk");
         if not os.path.exists(wchkfilePath):
             wchkfile = open(wchkfilePath, 'a')
             wchkfile.close()
@@ -144,7 +144,7 @@ while(True):
         # if(nowTime > allMedoTime):
         #     time.sleep( 4 )
         #     continue;
-
+    
         print(today + str(times[len(times)-1]))
         print(comps)
         print(mesuDict)
@@ -180,7 +180,7 @@ while(True):
             for ccode in comps:
                 if(ccode not in codes):
                     codes = sp.append(codes, ccode)
-                
+
             for code in (codes):
                 if(code == b''):
                     continue;
@@ -220,13 +220,13 @@ while(True):
                     if(isd2[code.decode('utf-8')]):
                         med = ed * 1.8
 
-                    mmRate = (sp.sum(exportData[i-2:i+1,5].astype(float)))/(sp.sum(exportData[i-2:i+1,6].astype(float))) - (med/25)
+                    mmRate = (sp.sum(exportData[i-2:i+1,5].astype(float)))/(sp.sum(exportData[i-2:i+1,6].astype(float))) - (med/22)
                     cgfit = sp.polyfit(ti[:5], exportData[i-4:i+1,9].astype(float), 1)
                     cggrad = sp.around(cgfit[0], decimals=2)
 
                     print(code.decode('utf-8') + '    ' + str(mmRate) + '    ' + str(str_oTime))
 
-                    if((mmRate < rateLimit or mmRate > rateMLimit or cggrad < -3) and ed >= tempWan):
+                    if((mmRate < rateLimit or mmRate > rateMLimit) and ed >= tempWan):
                         mdFile = open(mdFilePath, 'a')
                         mdFile.write(str(code.decode('utf-8')) + ',' + str(float(exportData[i, 3].decode('UTF-8'))) + ',' + str(exportData[i, 0].decode('UTF-8')) + ',' + str(datetime.datetime.now().strftime('%H:%M:%S')) + ',' + str(exportData[i, 8].decode('UTF-8')) + '\n')
                         mdFile.close()
@@ -237,7 +237,7 @@ while(True):
                         mdFile.write(str(code.decode('utf-8')) + ',' + str(float(exportData[i, 3].decode('UTF-8'))) + ',' + str(exportData[i, 0].decode('UTF-8')) + ',' + str(datetime.datetime.now().strftime('%H:%M:%S')) + ',' + str(exportData[i, 8].decode('UTF-8')) + '\n')
                         mdFile.close()
                         medos.append(code)
-                        comps.remove(code)
+                        comps.remove(code)                        
 
                 if(second_oTime > endTime):
                     continue;
@@ -256,7 +256,7 @@ while(True):
                 cggrad = sp.around(cgfit[0], decimals=2)
                 chegang = exportData[i,9].astype(float)
 
-                if(((ms_md > 0.96 and sms_md > 1 and gr > 420000) or (cggrad > 2.3 and chegang > 163 and gradient > 1.5)) and grade < 20 and exportData[i, 3].astype(float) > 5):
+                if(((ms_md > 0.96 and sms_md > 1 and gr > 420000) or (cggrad > 2.3 and chegang > 163)) and grade < 16 and exportData[i, 3].astype(float) > 5):
                     x = ti
                     y = exportData[:i+1,3].astype(float)
                     if(len(y) <= 1):
@@ -271,7 +271,7 @@ while(True):
                     srfit = sp.polyfit(x[:-1], srlist, level)
                     srgrad = sp.around(srfit[0]*10, decimals=2)
                     
-                    if(gradient >= 0.7 and srgrad > 0):
+                    if(gradient >= 0.8 and srgrad > 0):
            
                         if(code.decode('utf-8') in mesuDict):
                             mesuDict[code.decode('utf-8')] = mesuDict[code.decode('utf-8')] + 1
@@ -281,7 +281,7 @@ while(True):
                         if(mesuDict[code.decode('utf-8')] in mesuLimit and (code not in comps) and (code not in medos) and (code not in nos)):
                             if(exportData[i, 3].astype(float) < 4 or exportData[i, 3].astype(float) > 19.6):
                                 continue;
-
+                        
                             if(xstime.tm_min < 2):
                                 nos.append(code)
                                 continue;
@@ -303,7 +303,7 @@ while(True):
                             ammfit = sp.polyfit(x[:len(exportData[s:i,5])], ammlist, level)
                             ammgrad = sp.around(ammfit[0]*10, decimals=3)      
 
-                            if((mmgrad > 5 and ammgrad < 7) or (mmgrad < -8 and ammgrad < -9.5)):
+                            if((mmgrad > 5 and ammgrad < 7) or (ammgrad < -9)):
                                 nos.append(code)
                                 continue;
 
@@ -363,11 +363,13 @@ while(True):
                             isd2[code.decode('utf-8')] = False
                             cost = exportData[i, 8].decode('UTF-8')
                             setFile = open(setFilePath, 'a')
-                            setFile.write( str(code.decode('utf-8')) + ',' + str(float(rate)) + ',' + str(tpg) +  ',' + str_oTime + ',' + str(wanna) + ',' + str(datetime.datetime.now().strftime('%H:%M:%S')) + ',' + str(cost) + ',' + str(second_oTime) + ',' + str(2) + '\n')
+                            setFile.write( str(code.decode('utf-8')) + ',' + str(float(rate)) + ',' + str(tpg) +  ',' + str_oTime + ',' + str(wanna) + ',' + str(datetime.datetime.now().strftime('%H:%M:%S')) + ',' + str(cost) + ',' + str(second_oTime) + ',' + str(1) + '\n')
                             setFile.close()
 
     except Exception as e:
         print('--------------------' + str(e))
         continue
+
+
 
 print(today)

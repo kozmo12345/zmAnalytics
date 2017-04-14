@@ -265,7 +265,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\tmpl\\"):
                             srfit = sp.polyfit(x[:-1], srlist, level)
                             srgrad = sp.around(srfit[0]*10, decimals=2)
                             
-                            if(gradient >= 0.7 and srgrad > 0):
+                            if(gradient >= 0.8 and srgrad > 0):
                                 if(code.decode('utf-8') in mesuDict):
                                     mesuDict[code.decode('utf-8')] = mesuDict[code.decode('utf-8')] + 1
                                 else:

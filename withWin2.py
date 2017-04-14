@@ -180,7 +180,7 @@ while(True):
             for ccode in comps:
                 if(ccode not in codes):
                     codes = sp.append(codes, ccode)
-                
+
             for code in (codes):
                 if(code == b''):
                     continue;
@@ -220,13 +220,13 @@ while(True):
                     if(isd2[code.decode('utf-8')]):
                         med = ed * 1.8
 
-                    mmRate = (sp.sum(exportData[i-2:i+1,5].astype(float)))/(sp.sum(exportData[i-2:i+1,6].astype(float))) - (med/25)
+                    mmRate = (sp.sum(exportData[i-2:i+1,5].astype(float)))/(sp.sum(exportData[i-2:i+1,6].astype(float))) - (med/22)
                     cgfit = sp.polyfit(ti[:5], exportData[i-4:i+1,9].astype(float), 1)
                     cggrad = sp.around(cgfit[0], decimals=2)
 
                     print(code.decode('utf-8') + '    ' + str(mmRate) + '    ' + str(str_oTime))
 
-                    if((mmRate < rateLimit or mmRate > rateMLimit or cggrad < -3) and ed >= tempWan):
+                    if((mmRate < rateLimit or mmRate > rateMLimit) and ed >= tempWan):
                         mdFile = open(mdFilePath, 'a')
                         mdFile.write(str(code.decode('utf-8')) + ',' + str(float(exportData[i, 3].decode('UTF-8'))) + ',' + str(exportData[i, 0].decode('UTF-8')) + ',' + str(datetime.datetime.now().strftime('%H:%M:%S')) + ',' + str(exportData[i, 8].decode('UTF-8')) + '\n')
                         mdFile.close()
@@ -256,7 +256,7 @@ while(True):
                 cggrad = sp.around(cgfit[0], decimals=2)
                 chegang = exportData[i,9].astype(float)
 
-                if(((ms_md > 0.96 and sms_md > 1 and gr > 420000) or (cggrad > 2.3 and chegang > 163 and gradient > 1.5)) and grade < 20 and exportData[i, 3].astype(float) > 5):
+                if(((ms_md > 0.96 and sms_md > 1 and gr > 420000) or (cggrad > 2.3 and chegang > 163)) and grade < 16 and exportData[i, 3].astype(float) > 5):
                     x = ti
                     y = exportData[:i+1,3].astype(float)
                     if(len(y) <= 1):
@@ -271,7 +271,7 @@ while(True):
                     srfit = sp.polyfit(x[:-1], srlist, level)
                     srgrad = sp.around(srfit[0]*10, decimals=2)
                     
-                    if(gradient >= 0.7 and srgrad > 0):
+                    if(gradient >= 0.8 and srgrad > 0):
            
                         if(code.decode('utf-8') in mesuDict):
                             mesuDict[code.decode('utf-8')] = mesuDict[code.decode('utf-8')] + 1
@@ -303,7 +303,7 @@ while(True):
                             ammfit = sp.polyfit(x[:len(exportData[s:i,5])], ammlist, level)
                             ammgrad = sp.around(ammfit[0]*10, decimals=3)      
 
-                            if((mmgrad > 5 and ammgrad < 7) or (mmgrad < -8 and ammgrad < -9.5)):
+                            if((mmgrad > 5 and ammgrad < 7) or (ammgrad < -9)):
                                 nos.append(code)
                                 continue;
 

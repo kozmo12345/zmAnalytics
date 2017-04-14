@@ -24,7 +24,7 @@ stdLimit = 2
 sumEd = 0
 gradient = 0
 today = now.strftime('%Y-%m-%d')
-today = '2017-04-10'
+today = '2017-03-15'
 
 print(today)
 setFile = open(os.path.join("C:\\", "Dropbox\\com_1\\" + today + "\\" + today + "moa3.txt"), 'w')
@@ -166,7 +166,7 @@ for ttime in times:
                         isd2[code.decode('utf-8')] = True
                     if(isd2[code.decode('utf-8')]):
                         med = ed * 1.8
-                    mmRate = (sp.sum(exportData[i-stdLimit:i+1,5].astype(float)))/(sp.sum(exportData[i-stdLimit:i+1,6].astype(float))) - ((med)/25)
+                    mmRate = (sp.sum(exportData[i-stdLimit:i+1,5].astype(float)))/(sp.sum(exportData[i-stdLimit:i+1,6].astype(float))) - ((med)/20)
 
                     # if(code.decode('utf-8') == '043910'):
                     #     cgfit = sp.polyfit(ti[:5], exportData[i-4:i+1,9].astype(float), 1)
@@ -179,43 +179,43 @@ for ttime in times:
                     cggrad = sp.around(cgfit[0], decimals=2)
 
                     if(pick[code.decode('utf-8')] and exportData[i, 3].astype('float') < 19):
-                        print(1111111111)
+                        print(ttime, code, 1111111111)
                         edFile.write( str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMin) + ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(red) + ',' + str(msTime) + ',' + str(mdTime) + ',' + str(msCost) + ',' + str(mdCost) + ',' + str(msGradient[code.decode('utf-8')]) + ',' + str(msGr[code.decode('utf-8')]) + ',' + str(msSmdms[code.decode('utf-8')]) + ',' + str(msGrade[code.decode('utf-8')]) + ',' + str(msSrgrad[code.decode('utf-8')]) +'\n')
                         comps.remove(code)
                         medos.append(code)
                         sumEd = sumEd + red
                     elif(float(exportData[i, 3].decode('UTF-8')) > 28.9):
-                        print(2222222222)
+                        print(ttime, code, 2222222222)
                         edFile.write( str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMin) + ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(red) + ',' + str(msTime) + ',' + str(mdTime) + ',' + str(msCost) + ',' + str(mdCost) + ',' + str(msGradient[code.decode('utf-8')]) + ',' + str(msGr[code.decode('utf-8')]) + ',' + str(msSmdms[code.decode('utf-8')]) + ',' + str(msGrade[code.decode('utf-8')]) + ',' + str(msSrgrad[code.decode('utf-8')]) +'\n')
                         comps.remove(code)
                         medos.append(code)
                         sumEd = sumEd + red
                     elif((mmRate < rateLimit or mmRate > rateMLimit or fMedoTime < second_oTime) and ed >= tempWan):
-                        print(4444444444)
+                        print(ttime, code, 4444444444)
                         edFile.write( str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMin) + ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(red) + ',' + str(msTime) + ',' + str(mdTime) + ',' + str(msCost) + ',' + str(mdCost) + ',' + str(msGradient[code.decode('utf-8')]) + ',' + str(msGr[code.decode('utf-8')]) + ',' + str(msSmdms[code.decode('utf-8')]) + ',' + str(msGrade[code.decode('utf-8')]) + ',' + str(msSrgrad[code.decode('utf-8')]) +'\n')
                         comps.remove(code)
                         medos.append(code)
                         sumEd = sumEd + red
                     elif(allMedoTime < second_oTime):
-                        print(5555555555)
+                        print(ttime, code, 5555555555)
                         edFile.write( str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMin) + ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(red) + ',' + str(msTime) + ',' + str(mdTime) + ',' + str(msCost) + ',' + str(mdCost) + ',' + str(msGradient[code.decode('utf-8')]) + ',' + str(msGr[code.decode('utf-8')]) + ',' + str(msSmdms[code.decode('utf-8')]) + ',' + str(msGrade[code.decode('utf-8')]) + ',' + str(msSrgrad[code.decode('utf-8')]) +'\n')
                         comps.remove(code)
                         medos.append(code)
                         sumEd = sumEd + red
-                    elif((cggrad < -3) and ed >= tempWan):
-                        print(6666666666) 
-                        edFile.write( str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMin) + ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(red) + ',' + str(msTime) + ',' + str(mdTime) + ',' + str(msCost) + ',' + str(mdCost) + ',' + str(msGradient[code.decode('utf-8')]) + ',' + str(msGr[code.decode('utf-8')]) + ',' + str(msSmdms[code.decode('utf-8')]) + ',' + str(msGrade[code.decode('utf-8')]) + ',' + str(msSrgrad[code.decode('utf-8')]) +'\n')
-                        comps.remove(code)
-                        medos.append(code)
-                        sumEd = sumEd + red
+                    # elif((cggrad < -3) and ed >= tempWan):
+                    #     print(6666666666) 
+                    #     edFile.write( str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMin) + ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(red) + ',' + str(msTime) + ',' + str(mdTime) + ',' + str(msCost) + ',' + str(mdCost) + ',' + str(msGradient[code.decode('utf-8')]) + ',' + str(msGr[code.decode('utf-8')]) + ',' + str(msSmdms[code.decode('utf-8')]) + ',' + str(msGrade[code.decode('utf-8')]) + ',' + str(msSrgrad[code.decode('utf-8')]) +'\n')
+                    #     comps.remove(code)
+                    #     medos.append(code)
+                    #     sumEd = sumEd + red
                     elif(i+2 >= len(exportData[:,4])):
-                        print(7777777777) 
+                        print(ttime, code, 7777777777) 
                         edFile.write( str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMin) + ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(red) + ',' + str(msTime) + ',' + str(mdTime) + ',' + str(msCost) + ',' + str(mdCost) + ',' + str(msGradient[code.decode('utf-8')]) + ',' + str(msGr[code.decode('utf-8')]) + ',' + str(msSmdms[code.decode('utf-8')]) + ',' + str(msGrade[code.decode('utf-8')]) + ',' + str(msSrgrad[code.decode('utf-8')]) +'\n')
                         comps.remove(code)
                         medos.append(code)
                         sumEd = sumEd + red
                     elif(mdpCost < 5500000 and mdpCost != 0 and md < 3):
-                        print(8888888888) 
+                        print(ttime, code, 8888888888) 
                         edFile.write( str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMin) + ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(red) + ',' + str(msTime) + ',' + str(mdTime) + ',' + str(msCost) + ',' + str(mdCost) + ',' + str(msGradient[code.decode('utf-8')]) + ',' + str(msGr[code.decode('utf-8')]) + ',' + str(msSmdms[code.decode('utf-8')]) + ',' + str(msGrade[code.decode('utf-8')]) + ',' + str(msSrgrad[code.decode('utf-8')]) +'\n')
                         comps.remove(code)
                         medos.append(code)
@@ -250,7 +250,7 @@ for ttime in times:
                     srfit = sp.polyfit(x[:-1], srlist, level)
                     srgrad = sp.around(srfit[0]*10, decimals=2)
                     
-                    if(gradient >= 0.7 and srgrad > 0):
+                    if(gradient >= 0.8 and srgrad > 0):
                         # if(code.decode('utf-8') == '043910'):
                         #     print(ttime, code, gr, cggrad, chegang, grade, exportData[i, 3].astype(float), ' 000000000000000000000000000000')
                         #     time.sleep(3)
@@ -303,6 +303,10 @@ for ttime in times:
                             ammfit = sp.polyfit(x[:len(exportData[s:i,5])], ammlist, level)
                             ammgrad = sp.around(ammfit[0]*10, decimals=3)                                    
                             
+                            if(code.decode('utf-8') == '043910'):
+                                print(ttime, code, gradient, srgrad, ms_md, sms_md, cggrad, mmgrad, ammgrad)
+
+
                             if((mmgrad > 5 and ammgrad < 7) or (mmgrad < -8 and ammgrad < -9.5)):
                                 print(ttime, code, 'nos111111')
                                 nos.append(code)
