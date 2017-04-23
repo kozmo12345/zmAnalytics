@@ -79,7 +79,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_1\\Data\\"):
         isd = dict()
         isd2 = dict()
         mesuIndex = dict()
-
+        cggradDic = dict()
 
         for ttime in times:
             try:
@@ -253,6 +253,11 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_1\\Data\\"):
                         cggrad = sp.around(cgfit[0], decimals=2)
                         chegang = exportData[i,9].astype(float)
 
+                        if(code.decode('utf-8') not in cggradDic):
+                            cggradDic[code.decode('utf-8')] = []
+                        else:
+                            cggradDic[code.decode('utf-8')].append(cggrad)                        
+
                         if(((ms_md > 0.96 and sms_md > 1 and gr > 420000) or (cggrad > 2.3 and chegang > 163)) and grade < 16 and exportData[i, 3].astype(float) > 5):
                             x = ti
                             y = exportData[:i+1,3].astype(float)
@@ -356,6 +361,14 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_1\\Data\\"):
                                             tpg = pgradient
                                             msi = pi
 
+                                    tlen = len(cggradDic[code.decode('utf-8')])
+                                    tfit = sp.polyfit(ti[:tlen], cggradDic[code.decode('utf-8')], 1)
+                                    tgrad = sp.around(tfit[0], decimals=2)                                            
+
+                                    if(tgrad < -6):
+                                        nos.append(code)
+                                        continue;
+
                                     comps.append((code))
                                     mesuStart[code.decode('utf-8')] = i
                                     msGradient[code.decode('utf-8')] = gradient
@@ -366,7 +379,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_1\\Data\\"):
                                     msRate[code.decode('utf-8')] = float(exportData[i, 3].decode('UTF-8'))
                                     rmsRate[code.decode('utf-8')] = float(exportData[i+1, 3].decode('UTF-8'))
                                     pick[code.decode('utf-8')] = False
-                                    mesuIndex[code.decode('utf-8')] = gr/(xstime.tm_min + (xstime.tm_sec/60))
+                                    mesuIndex[code.decode('utf-8')] = tgrad
                                     isd[code.decode('utf-8')] = False
                                     isd2[code.decode('utf-8')] = False
                                     setFile.write( str(code.decode('utf-8')) + ',' + str(float(rate)) +  ',' + str(float(exportData[i, 3].decode('UTF-8'))) +  '\n')
@@ -432,6 +445,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_1\\diff\\"):
         isd = dict()
         isd2 = dict()
         mesuIndex = dict()
+        cggradDic = dict()
 
         for ttime in times:
             try:
@@ -605,6 +619,11 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_1\\diff\\"):
                         cggrad = sp.around(cgfit[0], decimals=2)
                         chegang = exportData[i,9].astype(float)
 
+                        if(code.decode('utf-8') not in cggradDic):
+                            cggradDic[code.decode('utf-8')] = []
+                        else:
+                            cggradDic[code.decode('utf-8')].append(cggrad)
+
                         if(((ms_md > 0.96 and sms_md > 1 and gr > 420000) or (cggrad > 2.3 and chegang > 163)) and grade < 16 and exportData[i, 3].astype(float) > 5):
                             x = ti
                             y = exportData[:i+1,3].astype(float)
@@ -708,6 +727,14 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_1\\diff\\"):
                                             tpg = pgradient
                                             msi = pi
 
+                                    tlen = len(cggradDic[code.decode('utf-8')])
+                                    tfit = sp.polyfit(ti[:tlen], cggradDic[code.decode('utf-8')], 1)
+                                    tgrad = sp.around(tfit[0], decimals=2)
+
+                                    if(tgrad < -6):
+                                        nos.append(code)
+                                        continue;
+
                                     comps.append((code))
                                     mesuStart[code.decode('utf-8')] = i
                                     msGradient[code.decode('utf-8')] = gradient
@@ -718,7 +745,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_1\\diff\\"):
                                     msRate[code.decode('utf-8')] = float(exportData[i, 3].decode('UTF-8'))
                                     rmsRate[code.decode('utf-8')] = float(exportData[i+1, 3].decode('UTF-8'))
                                     pick[code.decode('utf-8')] = False
-                                    mesuIndex[code.decode('utf-8')] = fcggrad
+                                    mesuIndex[code.decode('utf-8')] = tgrad
                                     isd[code.decode('utf-8')] = False
                                     isd2[code.decode('utf-8')] = False
                                     setFile.write( str(code.decode('utf-8')) + ',' + str(float(rate)) +  ',' + str(float(exportData[i, 3].decode('UTF-8'))) +  '\n')

@@ -24,7 +24,7 @@ stdLimit = 2
 sumEd = 0
 gradient = 0
 today = now.strftime('%Y-%m-%d')
-today = '2017-03-15'
+today = '2017-04-20'
 
 print(today)
 setFile = open(os.path.join("C:\\", "Dropbox\\com_1\\" + today + "\\" + today + "moa3.txt"), 'w')
@@ -85,6 +85,7 @@ msSrgrad = dict()
 pick = dict()
 isd = dict()
 isd2 = dict()
+cggradDic = dict()
 
 for ttime in times:
     try:
@@ -235,6 +236,15 @@ for ttime in times:
                 cggrad = sp.around(cgfit[0], decimals=2)
                 chegang = exportData[i,9].astype(float)
 
+                # if(code.decode('utf-8') == '014200'):
+                #     print(ttime, code, cggrad, chegang, ' 999999999999999999999999999999')
+                #     time.sleep(3)
+
+                if(code.decode('utf-8') not in cggradDic):
+                    cggradDic[code.decode('utf-8')] = []
+                else:
+                    cggradDic[code.decode('utf-8')].append(cggrad)
+
                 if(((ms_md > 0.96 and sms_md > 1 and gr > 420000 ) or (cggrad > 2.3 and chegang > 163)) and grade < 20 and exportData[i, 3].astype(float) > 5):
                     x = ti
                     y = exportData[:i+1,3].astype(float)
@@ -249,9 +259,9 @@ for ttime in times:
                     srlist = [b - a for a,b in zip(ry,ry[1:])]
                     srfit = sp.polyfit(x[:-1], srlist, level)
                     srgrad = sp.around(srfit[0]*10, decimals=2)
-                    
+
                     if(gradient >= 0.8 and srgrad > 0):
-                        # if(code.decode('utf-8') == '043910'):
+                        # if(code.decode('utf-8') == '014200'):
                         #     print(ttime, code, gr, cggrad, chegang, grade, exportData[i, 3].astype(float), ' 000000000000000000000000000000')
                         #     time.sleep(3)
                         # if(code.decode('utf-8') == '246690'):
@@ -307,7 +317,7 @@ for ttime in times:
                                 print(ttime, code, gradient, srgrad, ms_md, sms_md, cggrad, mmgrad, ammgrad)
 
 
-                            if((mmgrad > 5 and ammgrad < 7) or (mmgrad < -8 and ammgrad < -9.5)):
+                            if((mmgrad > 5 and ammgrad < 7) or (ammgrad < -9)):
                                 print(ttime, code, 'nos111111')
                                 nos.append(code)
                                 continue;
@@ -378,8 +388,14 @@ for ttime in times:
                                     msi = pi
 
                             # print(code, tpg)
-                            # time.sleep(3)                            
+                            # time.sleep(3)
+                            tlen = len(cggradDic[code.decode('utf-8')])
+                            tfit = sp.polyfit(ti[:tlen], cggradDic[code.decode('utf-8')], 1)
+                            tgrad = sp.around(tfit[0], decimals=2)
 
+                            if(tgrad < -6):
+                                nos.append(code)
+                                continue;                            
 
                             comps.append((code))
                             mesuStart[code.decode('utf-8')] = i

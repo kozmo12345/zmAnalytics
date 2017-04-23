@@ -38,6 +38,7 @@ def createFiles(realfilePath, setFilePath, mdFilePath):
 
 now = datetime.datetime.now()
 today = now.strftime('%Y-%m-%d')
+today = '2017-04-20'
 
 startTime = datetime.timedelta(hours=9,minutes=00,seconds=00).total_seconds()
 endTime = datetime.timedelta(hours=9,minutes=12,seconds=30).total_seconds()
@@ -129,6 +130,8 @@ while(True):
     try:
         tmp_time = 0
         mesuDict = dict()
+        cggradDic = dict()
+
         now = datetime.datetime.now()
         nowTime = datetime.timedelta(hours=now.hour,minutes=now.minute,seconds=now.second).total_seconds()
 
@@ -256,6 +259,11 @@ while(True):
                 cggrad = sp.around(cgfit[0], decimals=2)
                 chegang = exportData[i,9].astype(float)
 
+                if(code.decode('utf-8') not in cggradDic):
+                    cggradDic[code.decode('utf-8')] = []
+                else:
+                    cggradDic[code.decode('utf-8')].append(cggrad)
+
                 if(((ms_md > 0.96 and sms_md > 1 and gr > 420000) or (cggrad > 2.3 and chegang > 163)) and grade < 16 and exportData[i, 3].astype(float) > 5):
                     x = ti
                     y = exportData[:i+1,3].astype(float)
@@ -331,6 +339,14 @@ while(True):
                             fcggrad = sp.around(fcgfit[0], decimals=2)
 
                             if(fcggrad < -10.04):
+                                nos.append(code)
+                                continue;
+
+                            tlen = len(cggradDic[code.decode('utf-8')])
+                            tfit = sp.polyfit(ti[:tlen], cggradDic[code.decode('utf-8')], 1)
+                            tgrad = sp.around(tfit[0], decimals=2)
+
+                            if(tgrad < -6):
                                 nos.append(code)
                                 continue;
 
