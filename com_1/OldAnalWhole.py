@@ -32,7 +32,7 @@ print(str(datetime.datetime.now()))
 
 startTime = datetime.timedelta(hours=9,minutes=00,seconds=00).total_seconds()
 endTime = datetime.timedelta(hours=9,minutes=12,seconds=30).total_seconds()
-fMedoTime = datetime.timedelta(hours=9,minutes=20,seconds=00).total_seconds()
+fMedoTime = datetime.timedelta(hours=9,minutes=20,seconds=50).total_seconds()
 allMedoTime = datetime.timedelta(hours=9,minutes=25,seconds=20).total_seconds()
 
 mesuLimit = [2]
@@ -231,7 +231,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_1\\Data\\"):
                             #     medos.append(code)
                             #     originM = originM * (1 + (red/100))
                             #     del pick[code.decode('utf-8')]
-                            elif(md < 2.5):
+                            elif(fMedoTime < second_oTime and ed > 0.4):
                                 print(7777777777)
                                 edFile.write( str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMin) + ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(red) + ',' + str(msTime) + ',' + str(mdTime) + ',' + str(msCost) + ',' + str(mdCost) + ',' + str(msGradient[code.decode('utf-8')]) + ',' + str(msGr[code.decode('utf-8')]) + ',' + str(msSmdms[code.decode('utf-8')]) + ',' + str(msGrade[code.decode('utf-8')]) + ',' + str(msSrgrad[code.decode('utf-8')]) + ',' + str(mesuIndex[code.decode('utf-8')]) + '\n')
                                 comps.remove(code)
@@ -272,8 +272,9 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_1\\Data\\"):
                             srlist = [b - a for a,b in zip(ry,ry[1:])]
                             srfit = sp.polyfit(x[:-1], srlist, level)
                             srgrad = sp.around(srfit[0]*10, decimals=2)
+                            ltdc = exportData[i,4].astype(float) - exportData[i-1,4].astype(float)
                             
-                            if(gradient >= 0.8 and srgrad > 0):
+                            if(gradient >= 0.8 and srgrad > 0 and ltdc != 0):
                                 if(code.decode('utf-8') in mesuDict):
                                     mesuDict[code.decode('utf-8')] = mesuDict[code.decode('utf-8')] + 1
 
@@ -399,7 +400,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_1\\Data\\"):
 
 startTime = datetime.timedelta(hours=9,minutes=00,seconds=00).total_seconds()
 endTime = datetime.timedelta(hours=9,minutes=12,seconds=30).total_seconds()
-fMedoTime = datetime.timedelta(hours=9,minutes=20,seconds=00).total_seconds()
+fMedoTime = datetime.timedelta(hours=9,minutes=20,seconds=50).total_seconds()
 allMedoTime = datetime.timedelta(hours=9,minutes=25,seconds=20).total_seconds()
 mesuLimit = [2]
 rateLimit = 0.31
@@ -597,7 +598,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_1\\diff\\"):
                             #     medos.append(code)
                             #     originM = originM * (1 + (red/100))
                             #     del pick[code.decode('utf-8')]
-                            elif(md < 2.5):
+                            elif(fMedoTime < second_oTime and ed > 0.4):
                                 print(7777777777)
                                 edFile.write( str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMin) + ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(red) + ',' + str(msTime) + ',' + str(mdTime) + ',' + str(msCost) + ',' + str(mdCost) + ',' + str(msGradient[code.decode('utf-8')]) + ',' + str(msGr[code.decode('utf-8')]) + ',' + str(msSmdms[code.decode('utf-8')]) + ',' + str(msGrade[code.decode('utf-8')]) + ',' + str(msSrgrad[code.decode('utf-8')]) + ',' + str(mesuIndex[code.decode('utf-8')]) + '\n')
                                 comps.remove(code)
@@ -638,8 +639,9 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_1\\diff\\"):
                             srlist = [b - a for a,b in zip(ry,ry[1:])]
                             srfit = sp.polyfit(x[:-1], srlist, level)
                             srgrad = sp.around(srfit[0]*10, decimals=2)
+                            ltdc = exportData[i,4].astype(float) - exportData[i-1,4].astype(float)
                             
-                            if(gradient >= 0.8 and srgrad > 0):
+                            if(gradient >= 0.8 and srgrad > 0 and ltdc != 0):
                                 if(code.decode('utf-8') in mesuDict):
                                     mesuDict[code.decode('utf-8')] = mesuDict[code.decode('utf-8')] + 1
 

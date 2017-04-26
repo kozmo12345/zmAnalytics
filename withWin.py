@@ -222,25 +222,26 @@ while(True):
                     if(isd2[code.decode('utf-8')]):
                         med = ed * 1.8
 
-                    mmRate = (sp.sum(exportData[i-2:i+1,5].astype(float)))/(sp.sum(exportData[i-2:i+1,6].astype(float))) - (med/22)
-                    cgfit = sp.polyfit(ti[:5], exportData[i-4:i+1,9].astype(float), 1)
-                    cggrad = sp.around(cgfit[0], decimals=2)
-
-                    print(code.decode('utf-8') + '    ' + str(mmRate) + '    ' + str(str_oTime))
-
-                    if((mmRate < rateLimit or mmRate > rateMLimit) and ed >= tempWan):
-                        mdFile = open(mdFilePath, 'a')
-                        mdFile.write(str(code.decode('utf-8')) + ',' + str(float(exportData[i, 3].decode('UTF-8'))) + ',' + str(exportData[i, 0].decode('UTF-8')) + ',' + str(datetime.datetime.now().strftime('%H:%M:%S')) + ',' + str(exportData[i, 8].decode('UTF-8')) + '\n')
-                        mdFile.close()
-                        medos.append(code)
-                        comps.remove(code)
-                    elif(mdpCost < 5500000 and mdpCost != 0 and md < 3):
-                        mdFile = open(mdFilePath, 'a')
-                        mdFile.write(str(code.decode('utf-8')) + ',' + str(float(exportData[i, 3].decode('UTF-8'))) + ',' + str(exportData[i, 0].decode('UTF-8')) + ',' + str(datetime.datetime.now().strftime('%H:%M:%S')) + ',' + str(exportData[i, 8].decode('UTF-8')) + '\n')
-                        mdFile.close()
-                        medos.append(code)
-                        comps.remove(code)                        
-
+                    if(nowTime - 20 < second_oTime):
+                        mmRate = (sp.sum(exportData[i-2:i+1,5].astype(float)))/(sp.sum(exportData[i-2:i+1,6].astype(float))) - (med/22)
+                        cgfit = sp.polyfit(ti[:5], exportData[i-4:i+1,9].astype(float), 1)
+                        cggrad = sp.around(cgfit[0], decimals=2)
+    
+                        print(code.decode('utf-8') + '    ' + str(mmRate) + '    ' + str(str_oTime))
+    
+                        if((mmRate < rateLimit or mmRate > rateMLimit) and ed >= tempWan):
+                            mdFile = open(mdFilePath, 'a')
+                            mdFile.write(str(code.decode('utf-8')) + ',' + str(float(exportData[i, 3].decode('UTF-8'))) + ',' + str(exportData[i, 0].decode('UTF-8')) + ',' + str(datetime.datetime.now().strftime('%H:%M:%S')) + ',' + str(exportData[i, 8].decode('UTF-8')) + '\n')
+                            mdFile.close()
+                            medos.append(code)
+                            comps.remove(code)
+                        elif(mdpCost < 5500000 and mdpCost != 0 and md < 3):
+                            mdFile = open(mdFilePath, 'a')
+                            mdFile.write(str(code.decode('utf-8')) + ',' + str(float(exportData[i, 3].decode('UTF-8'))) + ',' + str(exportData[i, 0].decode('UTF-8')) + ',' + str(datetime.datetime.now().strftime('%H:%M:%S')) + ',' + str(exportData[i, 8].decode('UTF-8')) + '\n')
+                            mdFile.close()
+                            medos.append(code)
+                            comps.remove(code)                        
+    
                 if(second_oTime > endTime):
                     continue;
 
@@ -277,8 +278,9 @@ while(True):
                     srlist = [b - a for a,b in zip(ry,ry[1:])]
                     srfit = sp.polyfit(x[:-1], srlist, level)
                     srgrad = sp.around(srfit[0]*10, decimals=2)
+                    ltdc = exportData[i,4].astype(float) - exportData[i-1,4].astype(float)
                     
-                    if(gradient >= 0.8 and srgrad > 0):
+                    if(gradient >= 0.8 and srgrad > 0 and ltdc != 0):
            
                         if(code.decode('utf-8') in mesuDict):
                             mesuDict[code.decode('utf-8')] = mesuDict[code.decode('utf-8')] + 1

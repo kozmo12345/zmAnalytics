@@ -24,7 +24,7 @@ stdLimit = 2
 sumEd = 0
 gradient = 0
 today = now.strftime('%Y-%m-%d')
-today = '2017-04-20'
+# today = '2017-03-22'
 
 print(today)
 setFile = open(os.path.join("C:\\", "Dropbox\\com_1\\" + today + "\\" + today + "moa3.txt"), 'w')
@@ -209,12 +209,12 @@ for ttime in times:
                     #     comps.remove(code)
                     #     medos.append(code)
                     #     sumEd = sumEd + red
-                    elif(i+2 >= len(exportData[:,4])):
-                        print(ttime, code, 7777777777) 
-                        edFile.write( str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMin) + ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(red) + ',' + str(msTime) + ',' + str(mdTime) + ',' + str(msCost) + ',' + str(mdCost) + ',' + str(msGradient[code.decode('utf-8')]) + ',' + str(msGr[code.decode('utf-8')]) + ',' + str(msSmdms[code.decode('utf-8')]) + ',' + str(msGrade[code.decode('utf-8')]) + ',' + str(msSrgrad[code.decode('utf-8')]) +'\n')
-                        comps.remove(code)
-                        medos.append(code)
-                        sumEd = sumEd + red
+                    # elif(i+2 >= len(exportData[:,4])):
+                    #     print(ttime, code, 7777777777) 
+                    #     edFile.write( str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMin) + ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(red) + ',' + str(msTime) + ',' + str(mdTime) + ',' + str(msCost) + ',' + str(mdCost) + ',' + str(msGradient[code.decode('utf-8')]) + ',' + str(msGr[code.decode('utf-8')]) + ',' + str(msSmdms[code.decode('utf-8')]) + ',' + str(msGrade[code.decode('utf-8')]) + ',' + str(msSrgrad[code.decode('utf-8')]) +'\n')
+                    #     comps.remove(code)
+                    #     medos.append(code)
+                    #     sumEd = sumEd + red
                     elif(mdpCost < 5500000 and mdpCost != 0 and md < 3):
                         print(ttime, code, 8888888888) 
                         edFile.write( str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMin) + ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(red) + ',' + str(msTime) + ',' + str(mdTime) + ',' + str(msCost) + ',' + str(mdCost) + ',' + str(msGradient[code.decode('utf-8')]) + ',' + str(msGr[code.decode('utf-8')]) + ',' + str(msSmdms[code.decode('utf-8')]) + ',' + str(msGrade[code.decode('utf-8')]) + ',' + str(msSrgrad[code.decode('utf-8')]) +'\n')
@@ -259,8 +259,9 @@ for ttime in times:
                     srlist = [b - a for a,b in zip(ry,ry[1:])]
                     srfit = sp.polyfit(x[:-1], srlist, level)
                     srgrad = sp.around(srfit[0]*10, decimals=2)
+                    ltdc = exportData[i,4].astype(float) - exportData[i-1,4].astype(float)
 
-                    if(gradient >= 0.8 and srgrad > 0):
+                    if(gradient >= 0.8 and srgrad > 0 and ltdc != 0):
                         # if(code.decode('utf-8') == '014200'):
                         #     print(ttime, code, gr, cggrad, chegang, grade, exportData[i, 3].astype(float), ' 000000000000000000000000000000')
                         #     time.sleep(3)
