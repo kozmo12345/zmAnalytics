@@ -106,7 +106,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_1\\Data\\"):
                         medos.append(code)
                         mdTime = 'endTime'
                         msTime = exportData[mesuStart[code.decode('utf-8')],0].decode('UTF-8')
-                        allMax = max(exportData[:, 3].astype(float))
+                        allMax = max(exportData[mesuStart[code.decode('utf-8')]:, 3].astype(float))
                         termMin = min(exportData[mesuStart[code.decode('utf-8')]:i+1, 3].astype(float))
                         termMax = min(exportData[mesuStart[code.decode('utf-8')]:, 3].astype(float))
                         edFile.write( str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMin) + ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(red) + ',' + str(msTime) + ',' + str(mdTime) + ',' + str(msCost) + ',' + str(mdCost) + ',' + str(msGradient[code.decode('utf-8')]) + ',' + str(msGr[code.decode('utf-8')]) + ',' + str(msSmdms[code.decode('utf-8')]) + ',' + str(msGrade[code.decode('utf-8')]) + ',' + str(msSrgrad[code.decode('utf-8')]) +'\n')
@@ -273,8 +273,9 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_1\\Data\\"):
                             srfit = sp.polyfit(x[:-1], srlist, level)
                             srgrad = sp.around(srfit[0]*10, decimals=2)
                             ltdc = exportData[i,4].astype(float) - exportData[i-1,4].astype(float)
+                            ltdc2 = exportData[i+1,4].astype(float) - exportData[i,4].astype(float)
                             
-                            if(gradient >= 0.8 and srgrad > 0 and ltdc != 0):
+                            if(gradient >= 0.8 and srgrad > 0 and ltdc > 0):
                                 if(code.decode('utf-8') in mesuDict):
                                     mesuDict[code.decode('utf-8')] = mesuDict[code.decode('utf-8')] + 1
 
@@ -297,6 +298,10 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_1\\Data\\"):
                                         continue;
 
                                     if(xstime.tm_min < 2):
+                                        nos.append(code)
+                                        continue;
+
+                                    if(exportData[i, 3].astype(float) < 5.3):
                                         nos.append(code)
                                         continue;
 
@@ -342,10 +347,10 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_1\\Data\\"):
                                         nos.append(code)
                                         continue;
 
-                                    fcgfit = sp.polyfit(ti[:5], exportData[i-4:i+1,9].astype(float), 1)
+                                    fcgfit = sp.polyfit(ti[:4], exportData[i-3:i+1,9].astype(float), 1)
                                     fcggrad = sp.around(fcgfit[0], decimals=2)
 
-                                    if(fcggrad < -10.04):
+                                    if(fcggrad < -12.8):
                                         nos.append(code)
                                         continue;
 
@@ -529,7 +534,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_1\\diff\\"):
                             red = round(md - ms - 1, 3)
                             mdTime = exportData[i, 0].decode('UTF-8')
                             msTime = exportData[mesuStart[code.decode('utf-8')],0].decode('UTF-8')
-                            allMax = max(exportData[:, 3].astype(float))
+                            allMax = max(exportData[mesuStart[code.decode('utf-8')]:, 3].astype(float))
                             termMin = min(exportData[mesuStart[code.decode('utf-8')]:i+1, 3].astype(float))
                             termMax = max(exportData[mesuStart[code.decode('utf-8')]:i+1, 3].astype(float))
                             msCost = (exportData[mesuStart[code.decode('utf-8')] + 1,4].astype(float) - exportData[mesuStart[code.decode('utf-8')],4].astype(float)) * exportData[mesuStart[code.decode('utf-8')],8].astype(float)
@@ -640,8 +645,9 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_1\\diff\\"):
                             srfit = sp.polyfit(x[:-1], srlist, level)
                             srgrad = sp.around(srfit[0]*10, decimals=2)
                             ltdc = exportData[i,4].astype(float) - exportData[i-1,4].astype(float)
+                            ltdc2 = exportData[i+1,4].astype(float) - exportData[i,4].astype(float)
                             
-                            if(gradient >= 0.8 and srgrad > 0 and ltdc != 0):
+                            if(gradient >= 0.8 and srgrad > 0 and ltdc > 0):
                                 if(code.decode('utf-8') in mesuDict):
                                     mesuDict[code.decode('utf-8')] = mesuDict[code.decode('utf-8')] + 1
 
@@ -667,6 +673,10 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_1\\diff\\"):
                                         nos.append(code)
                                         continue;
 
+                                    if(exportData[i, 3].astype(float) < 5.3):
+                                        nos.append(code)
+                                        continue;
+                                        
                                     cost = int(exportData[i, 8].decode('UTF-8'))
                                     if(cost > 7500):
                                         nos.append(code)
@@ -709,10 +719,10 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_1\\diff\\"):
                                         nos.append(code)
                                         continue;
 
-                                    fcgfit = sp.polyfit(ti[:5], exportData[i-4:i+1,9].astype(float), 1)
+                                    fcgfit = sp.polyfit(ti[:4], exportData[i-3:i+1,9].astype(float), 1)
                                     fcggrad = sp.around(fcgfit[0], decimals=2)
 
-                                    if(fcggrad < -10.04):
+                                    if(fcggrad < -12.8):
                                         nos.append(code)
                                         continue;
 

@@ -295,6 +295,10 @@ while(True):
                                 nos.append(code)
                                 continue;
 
+                            if(exportData[i, 3].astype(float) < 5.3):
+                                nos.append(code)
+                                continue;
+
                             cost = int(exportData[i, 8].decode('UTF-8'))
                             if(cost > 7500):
                                 nos.append(code)
@@ -336,10 +340,10 @@ while(True):
                                 nos.append(code)
                                 continue;
 
-                            fcgfit = sp.polyfit(ti[:5], exportData[i-4:i+1,9].astype(float), 1)
+                            fcgfit = sp.polyfit(ti[:4], exportData[i-3:i+1,9].astype(float), 1)
                             fcggrad = sp.around(fcgfit[0], decimals=2)
 
-                            if(fcggrad < -10.04):
+                            if(fcggrad < -12.8):
                                 nos.append(code)
                                 continue;
 

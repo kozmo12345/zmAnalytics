@@ -38,7 +38,7 @@ def createFiles(realfilePath, setFilePath, mdFilePath):
 
 now = datetime.datetime.now()
 today = now.strftime('%Y-%m-%d')
-
+today = '2017-04-28'
 startTime = datetime.timedelta(hours=9,minutes=00,seconds=00).total_seconds()
 endTime = datetime.timedelta(hours=9,minutes=12,seconds=30).total_seconds()
 fMedoTime = datetime.timedelta(hours=9,minutes=18,seconds=30).total_seconds()
@@ -222,7 +222,7 @@ while(True):
                     if(isd2[code.decode('utf-8')]):
                         med = ed * 1.8
 
-                    if(nowTime - 20 < second_oTime):
+                    if(0 < second_oTime):
                         mmRate = (sp.sum(exportData[i-2:i+1,5].astype(float)))/(sp.sum(exportData[i-2:i+1,6].astype(float))) - (med/22)
                         cgfit = sp.polyfit(ti[:5], exportData[i-4:i+1,9].astype(float), 1)
                         cggrad = sp.around(cgfit[0], decimals=2)
@@ -295,6 +295,10 @@ while(True):
                                 nos.append(code)
                                 continue;
 
+                            if(exportData[i, 3].astype(float) < 5.3):
+                                nos.append(code)
+                                continue;
+
                             cost = int(exportData[i, 8].decode('UTF-8'))
                             if(cost > 7500):
                                 nos.append(code)
@@ -336,10 +340,10 @@ while(True):
                                 nos.append(code)
                                 continue;
 
-                            fcgfit = sp.polyfit(ti[:5], exportData[i-4:i+1,9].astype(float), 1)
+                            fcgfit = sp.polyfit(ti[:4], exportData[i-3:i+1,9].astype(float), 1)
                             fcggrad = sp.around(fcgfit[0], decimals=2)
 
-                            if(fcggrad < -10.04):
+                            if(fcggrad < -12.8):
                                 nos.append(code)
                                 continue;
 
