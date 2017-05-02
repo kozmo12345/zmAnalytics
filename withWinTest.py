@@ -38,7 +38,7 @@ def createFiles(realfilePath, setFilePath, mdFilePath):
 
 now = datetime.datetime.now()
 today = now.strftime('%Y-%m-%d')
-today = '2017-04-28'
+
 startTime = datetime.timedelta(hours=9,minutes=00,seconds=00).total_seconds()
 endTime = datetime.timedelta(hours=9,minutes=12,seconds=30).total_seconds()
 fMedoTime = datetime.timedelta(hours=9,minutes=18,seconds=30).total_seconds()
@@ -344,6 +344,13 @@ while(True):
                             fcggrad = sp.around(fcgfit[0], decimals=2)
 
                             if(fcggrad < -12.8):
+                                nos.append(code)
+                                continue;
+
+                            lcgfit = sp.polyfit(ti[:6], exportData[i-5:i+1,9].astype(float), 1)
+                            lcggrad = sp.around(lcgfit[0], decimals=2)
+
+                            if(chegang < 129 and lcggrad < -2):
                                 nos.append(code)
                                 continue;
 

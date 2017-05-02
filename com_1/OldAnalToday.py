@@ -15,7 +15,7 @@ print(str(datetime.datetime.now()))
 startTime = datetime.timedelta(hours=9,minutes=00,seconds=00).total_seconds()
 endTime = datetime.timedelta(hours=9,minutes=12,seconds=30).total_seconds()
 fMedoTime = datetime.timedelta(hours=9,minutes=20,seconds=00).total_seconds()
-allMedoTime = datetime.timedelta(hours=9,minutes=25,seconds=20).total_seconds()
+allMedoTime = datetime.timedelta(hours=9,minutes=24,seconds=20).total_seconds()
 wanna = 1
 mesuLimit = [2]
 rateLimit = 0.31
@@ -365,6 +365,14 @@ for ttime in times:
                             #     print(ttime, code, mmgrad, ammgrad, cggrad, fcggrad)
                             #     time.sleep(5)                                            
 
+                            lcgfit = sp.polyfit(ti[:6], exportData[i-5:i+1,9].astype(float), 1)
+                            lcggrad = sp.around(lcgfit[0], decimals=2)
+
+                            # print(ttime,code, lcggrad)
+                            # time.sleep(3)
+                            if(chegang < 129 and lcggrad < -1.8):
+                                nos.append(code)
+                                continue;
 
                             # print(code, fcggrad)
                             if(fcggrad < -12.8):

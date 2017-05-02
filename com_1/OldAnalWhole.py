@@ -33,7 +33,7 @@ print(str(datetime.datetime.now()))
 startTime = datetime.timedelta(hours=9,minutes=00,seconds=00).total_seconds()
 endTime = datetime.timedelta(hours=9,minutes=12,seconds=30).total_seconds()
 fMedoTime = datetime.timedelta(hours=9,minutes=20,seconds=50).total_seconds()
-allMedoTime = datetime.timedelta(hours=9,minutes=25,seconds=20).total_seconds()
+allMedoTime = datetime.timedelta(hours=9,minutes=24,seconds=20).total_seconds()
 
 mesuLimit = [2]
 rateLimit = 0.31
@@ -347,8 +347,16 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_1\\Data\\"):
                                         nos.append(code)
                                         continue;
 
+
                                     fcgfit = sp.polyfit(ti[:4], exportData[i-3:i+1,9].astype(float), 1)
                                     fcggrad = sp.around(fcgfit[0], decimals=2)
+
+                                    lcgfit = sp.polyfit(ti[:6], exportData[i-5:i+1,9].astype(float), 1)
+                                    lcggrad = sp.around(lcgfit[0], decimals=2)
+
+                                    if(chegang < 129 and lcggrad < -1.8):
+                                        nos.append(code)
+                                        continue;
 
                                     if(fcggrad < -12.8):
                                         nos.append(code)
@@ -406,7 +414,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_1\\Data\\"):
 startTime = datetime.timedelta(hours=9,minutes=00,seconds=00).total_seconds()
 endTime = datetime.timedelta(hours=9,minutes=12,seconds=30).total_seconds()
 fMedoTime = datetime.timedelta(hours=9,minutes=20,seconds=50).total_seconds()
-allMedoTime = datetime.timedelta(hours=9,minutes=25,seconds=20).total_seconds()
+allMedoTime = datetime.timedelta(hours=9,minutes=24,seconds=20).total_seconds()
 mesuLimit = [2]
 rateLimit = 0.31
 rateMLimit = 3.8
@@ -721,6 +729,14 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_1\\diff\\"):
 
                                     fcgfit = sp.polyfit(ti[:4], exportData[i-3:i+1,9].astype(float), 1)
                                     fcggrad = sp.around(fcgfit[0], decimals=2)
+
+                                    lcgfit = sp.polyfit(ti[:6], exportData[i-5:i+1,9].astype(float), 1)
+                                    lcggrad = sp.around(lcgfit[0], decimals=2)
+
+                                    if(chegang < 129 and lcggrad < -1.8):
+                                        nos.append(code)
+                                        continue;
+
 
                                     if(fcggrad < -12.8):
                                         nos.append(code)

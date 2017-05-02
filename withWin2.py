@@ -347,6 +347,13 @@ while(True):
                                 nos.append(code)
                                 continue;
 
+                            lcgfit = sp.polyfit(ti[:6], exportData[i-5:i+1,9].astype(float), 1)
+                            lcggrad = sp.around(lcgfit[0], decimals=2)
+
+                            if(chegang < 129 and lcggrad < -1.8):
+                                nos.append(code)
+                                continue;
+
                             tlen = len(cggradDic[code.decode('utf-8')])
                             tfit = sp.polyfit(ti[:tlen], cggradDic[code.decode('utf-8')], 1)
                             tgrad = sp.around(tfit[0], decimals=2)
