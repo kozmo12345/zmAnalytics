@@ -24,7 +24,7 @@ stdLimit = 2
 sumEd = 0
 gradient = 0
 today = now.strftime('%Y-%m-%d')
-# today = '2017-03-20'
+today = '2017-03-22'
 
 print(today)
 setFile = open(os.path.join("C:\\", "Dropbox\\com_1\\" + today + "\\" + today + "moa3.txt"), 'w')
@@ -167,7 +167,7 @@ for ttime in times:
                         isd2[code.decode('utf-8')] = True
                     if(isd2[code.decode('utf-8')]):
                         med = ed * 1.8
-                    mmRate = (sp.sum(exportData[i-stdLimit:i+1,5].astype(float)))/(sp.sum(exportData[i-stdLimit:i+1,6].astype(float))) - ((med)/20)
+                    mmRate = (sp.sum(exportData[i-stdLimit:i+1,5].astype(float)))/(sp.sum(exportData[i-stdLimit:i+1,6].astype(float))) - ((med)/22)
 
                     # if(code.decode('utf-8') == '043910'):
                     #     cgfit = sp.polyfit(ti[:5], exportData[i-4:i+1,9].astype(float), 1)
@@ -176,9 +176,22 @@ for ttime in times:
                     if(exportData[i, 3].astype('float') > 19.5):
                         pick[code.decode('utf-8')] = True
 
-                    cgfit = sp.polyfit(ti[:5], exportData[i-4:i+1,9].astype(float), 1)
-                    cggrad = sp.around(cgfit[0], decimals=2)
+                    cgfit1 = sp.polyfit(ti[:5], exportData[i-4:i+1,9].astype(float), 1)
+                    cggrad1 = sp.around(cgfit1[0], decimals=2)
 
+                    cgfit2 = sp.polyfit(ti[:6], exportData[i-5:i+1,9].astype(float), 1)
+                    cggrad2 = sp.around(cgfit2[0], decimals=2)
+
+                    cgfit3 = sp.polyfit(ti[:7], exportData[i-6:i+1,9].astype(float), 1)
+                    cggrad3 = sp.around(cgfit3[0], decimals=2)
+                    
+                    gcggrad = min([cggrad1, cggrad2, cggrad3])
+                    chegang = exportData[i,9].astype(float)
+                    if(chegang < 120):
+                        gcggrad = -10
+                    
+                    # if(code.decode('utf-8') == '208870'):
+                    #     print(ttime,code,mmRate,gcggrad)
                     if(pick[code.decode('utf-8')] and exportData[i, 3].astype('float') < 19):
                         print(ttime, code, 1111111111)
                         edFile.write( str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMin) + ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(red) + ',' + str(msTime) + ',' + str(mdTime) + ',' + str(msCost) + ',' + str(mdCost) + ',' + str(msGradient[code.decode('utf-8')]) + ',' + str(msGr[code.decode('utf-8')]) + ',' + str(msSmdms[code.decode('utf-8')]) + ',' + str(msGrade[code.decode('utf-8')]) + ',' + str(msSrgrad[code.decode('utf-8')]) +'\n')
@@ -191,7 +204,8 @@ for ttime in times:
                         comps.remove(code)
                         medos.append(code)
                         sumEd = sumEd + red
-                    elif((mmRate < rateLimit or mmRate > rateMLimit or fMedoTime < second_oTime) and ed >= tempWan):
+                    elif((mmRate < rateLimit or mmRate > rateMLimit or fMedoTime < second_oTime) and gcggrad < -1.7 and ed >= tempWan):
+                        print(cggrad1,cggrad2,cggrad3, gcggrad)
                         print(ttime, code, 4444444444)
                         edFile.write( str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMin) + ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(red) + ',' + str(msTime) + ',' + str(mdTime) + ',' + str(msCost) + ',' + str(mdCost) + ',' + str(msGradient[code.decode('utf-8')]) + ',' + str(msGr[code.decode('utf-8')]) + ',' + str(msSmdms[code.decode('utf-8')]) + ',' + str(msGrade[code.decode('utf-8')]) + ',' + str(msSrgrad[code.decode('utf-8')]) +'\n')
                         comps.remove(code)
@@ -360,7 +374,6 @@ for ttime in times:
                             fcgfit = sp.polyfit(ti[:4], exportData[i-3:i+1,9].astype(float), 1)
                             fcggrad = sp.around(fcgfit[0], decimals=2)
 
-
                             # if(code.decode('utf-8') == '043580'):
                             #     print(ttime, code, mmgrad, ammgrad, cggrad, fcggrad)
                             #     time.sleep(5)                                            
@@ -368,9 +381,7 @@ for ttime in times:
                             lcgfit = sp.polyfit(ti[:6], exportData[i-5:i+1,9].astype(float), 1)
                             lcggrad = sp.around(lcgfit[0], decimals=2)
 
-                            # print(ttime,code, lcggrad)
-                            # time.sleep(3)
-                            if(chegang < 129 and lcggrad < -1.8):
+                            if(chegang < 129 and lcggrad < -1.8 or lcggrad > 60):
                                 nos.append(code)
                                 continue;
 
@@ -381,9 +392,6 @@ for ttime in times:
 
                             # print(ttime, code, ssrgrad, mmgrad, ammgrad/mmgrad)
                             # time.sleep(3)
-
-                            # cgfit = sp.polyfit(ti[:5], exportData[i-4:i+1,9].astype(float), 1)
-                            # cggrad = sp.around(cgfit[0], decimals=2)
 
                             tpg = 0
                             msi = 0
@@ -398,8 +406,6 @@ for ttime in times:
                                     tpg = pgradient
                                     msi = pi
 
-                            # print(code, tpg)
-                            # time.sleep(3)
                             tlen = len(cggradDic[code.decode('utf-8')])
                             tfit = sp.polyfit(ti[:tlen], cggradDic[code.decode('utf-8')], 1)
                             tgrad = sp.around(tfit[0], decimals=2)

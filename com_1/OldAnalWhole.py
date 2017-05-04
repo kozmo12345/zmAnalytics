@@ -94,25 +94,25 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_1\\Data\\"):
                 if(second_oTime > endTime and len(comps) == 0):
                     break;
 
-                if(second_oTime > allMedoTime + 100):
-                    dcodes = comps
-                    for code in dcodes:
-                        ms = float(msRate[code.decode('utf-8')])
-                        rms = float(rmsRate[code.decode('utf-8')])
-                        md = 0
-                        ed = round(md - ms, 2)
-                        red = round(md - ms - 1, 2)
-                        originM = originM * (1 + (red/100))
-                        medos.append(code)
-                        mdTime = 'endTime'
-                        msTime = exportData[mesuStart[code.decode('utf-8')],0].decode('UTF-8')
-                        allMax = max(exportData[mesuStart[code.decode('utf-8')]:, 3].astype(float))
-                        termMin = min(exportData[mesuStart[code.decode('utf-8')]:i+1, 3].astype(float))
-                        termMax = min(exportData[mesuStart[code.decode('utf-8')]:, 3].astype(float))
-                        edFile.write( str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMin) + ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(red) + ',' + str(msTime) + ',' + str(mdTime) + ',' + str(msCost) + ',' + str(mdCost) + ',' + str(msGradient[code.decode('utf-8')]) + ',' + str(msGr[code.decode('utf-8')]) + ',' + str(msSmdms[code.decode('utf-8')]) + ',' + str(msGrade[code.decode('utf-8')]) + ',' + str(msSrgrad[code.decode('utf-8')]) +'\n')
-                        comps.remove(code)
-                        sumEd = sumEd + red
-                    break;
+                # if(second_oTime > allMedoTime + 100):
+                #     dcodes = comps
+                #     for code in dcodes:
+                #         ms = float(msRate[code.decode('utf-8')])
+                #         rms = float(rmsRate[code.decode('utf-8')])
+                #         md = 0
+                #         ed = round(md - ms, 2)
+                #         red = round(md - ms - 1, 2)
+                #         originM = originM * (1 + (red/100))
+                #         medos.append(code)
+                #         mdTime = 'endTime'
+                #         msTime = exportData[mesuStart[code.decode('utf-8')],0].decode('UTF-8')
+                #         allMax = max(exportData[mesuStart[code.decode('utf-8')]:, 3].astype(float))
+                #         termMin = min(exportData[mesuStart[code.decode('utf-8')]:i+1, 3].astype(float))
+                #         termMax = min(exportData[mesuStart[code.decode('utf-8')]:, 3].astype(float))
+                #         edFile.write( str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMin) + ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(red) + ',' + str(msTime) + ',' + str(mdTime) + ',' + str(msCost) + ',' + str(mdCost) + ',' + str(msGradient[code.decode('utf-8')]) + ',' + str(msGr[code.decode('utf-8')]) + ',' + str(msSmdms[code.decode('utf-8')]) + ',' + str(msGrade[code.decode('utf-8')]) + ',' + str(msSrgrad[code.decode('utf-8')]) +'\n')
+                #         comps.remove(code)
+                #         sumEd = sumEd + red
+                #     break;
                 tmp_time = second_oTime
                 
                 print(today + ' ' + str(ttime.decode('utf-8')) + ' data')
@@ -185,8 +185,19 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_1\\Data\\"):
                             if(exportData[i, 3].astype('float') > 19.5):
                                 pick[code.decode('utf-8')] = True
 
-                            gcgfit = sp.polyfit(ti[:5], exportData[i-4:i+1,9].astype(float), 1)
-                            gcggrad = sp.around(gcgfit[0], decimals=2)
+                            cgfit1 = sp.polyfit(ti[:5], exportData[i-4:i+1,9].astype(float), 1)
+                            cggrad1 = sp.around(cgfit1[0], decimals=2)
+        
+                            cgfit2 = sp.polyfit(ti[:6], exportData[i-5:i+1,9].astype(float), 1)
+                            cggrad2 = sp.around(cgfit2[0], decimals=2)
+        
+                            cgfit3 = sp.polyfit(ti[:7], exportData[i-6:i+1,9].astype(float), 1)
+                            cggrad3 = sp.around(cgfit3[0], decimals=2)
+                            
+                            gcggrad = min([cggrad1, cggrad2, cggrad3])
+                            chegang = exportData[i,9].astype(float)
+                            if(chegang < 120):
+                                gcggrad = -10             
 
                             if(pick[code.decode('utf-8')] and exportData[i, 3].astype('float') < 19):
                                 edFile.write( str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMin) + ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(red) + ',' + str(msTime) + ',' + str(mdTime) + ',' + str(msCost) + ',' + str(mdCost) + ',' + str(msGradient[code.decode('utf-8')]) + ',' + str(msGr[code.decode('utf-8')]) + ',' + str(msSmdms[code.decode('utf-8')]) + ',' + str(msGrade[code.decode('utf-8')]) + ',' + str(msSrgrad[code.decode('utf-8')]) + ',' + str(mesuIndex[code.decode('utf-8')]) + '\n')
@@ -202,7 +213,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_1\\Data\\"):
                                 medos.append(code)
                                 originM = originM * (1 + (red/100))
                                 del pick[code.decode('utf-8')]
-                            elif((mmRate < rateLimit or mmRate > rateMLimit or fMedoTime < second_oTime) and ed >= tempWan):
+                            elif((mmRate < rateLimit or mmRate > rateMLimit or fMedoTime < second_oTime) and gcggrad < -1.7 and ed >= tempWan):
                                 edFile.write( str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMin) + ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(red) + ',' + str(msTime) + ',' + str(mdTime) + ',' + str(msCost) + ',' + str(mdCost) + ',' + str(msGradient[code.decode('utf-8')]) + ',' + str(msGr[code.decode('utf-8')]) + ',' + str(msSmdms[code.decode('utf-8')]) + ',' + str(msGrade[code.decode('utf-8')]) + ',' + str(msSrgrad[code.decode('utf-8')]) + ',' + str(mesuIndex[code.decode('utf-8')]) + '\n')
                                 comps.remove(code)
                                 sumEd = sumEd + red
@@ -354,7 +365,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_1\\Data\\"):
                                     lcgfit = sp.polyfit(ti[:6], exportData[i-5:i+1,9].astype(float), 1)
                                     lcggrad = sp.around(lcgfit[0], decimals=2)
 
-                                    if(chegang < 129 and lcggrad < -1.8):
+                                    if((chegang < 129 and lcggrad < -1.8) or lcggrad > 60):
                                         nos.append(code)
                                         continue;
 
@@ -474,25 +485,25 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_1\\diff\\"):
                 if(second_oTime > endTime and len(comps) == 0):
                     break;
 
-                if(second_oTime > allMedoTime + 100):
-                    dcodes = comps
-                    for code in dcodes:
-                        ms = float(msRate[code.decode('utf-8')])
-                        rms = float(rmsRate[code.decode('utf-8')])
-                        md = 0
-                        ed = round(md - ms, 2)
-                        red = round(md - ms - 1, 2)
-                        originM = originM * (1 + (red/100))
-                        medos.append(code)
-                        mdTime = 'endTime'
-                        msTime = exportData[mesuStart[code.decode('utf-8')],0].decode('UTF-8')
-                        allMax = max(exportData[:, 3].astype(float))
-                        termMin = min(exportData[mesuStart[code.decode('utf-8')]:i+1, 3].astype(float))
-                        termMax = min(exportData[mesuStart[code.decode('utf-8')]:, 3].astype(float))
-                        edFile.write( str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMin) + ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(red) + ',' + str(msTime) + ',' + str(mdTime) + ',' + str(msCost) + ',' + str(mdCost) + ',' + str(msGradient[code.decode('utf-8')]) + ',' + str(msGr[code.decode('utf-8')]) + ',' + str(msSmdms[code.decode('utf-8')]) + ',' + str(msGrade[code.decode('utf-8')]) + ',' + str(msSrgrad[code.decode('utf-8')]) +'\n')
-                        comps.remove(code)
-                        sumEd = sumEd + red
-                    break;
+                # if(second_oTime > allMedoTime + 100):
+                #     dcodes = comps
+                #     for code in dcodes:
+                #         ms = float(msRate[code.decode('utf-8')])
+                #         rms = float(rmsRate[code.decode('utf-8')])
+                #         md = 0
+                #         ed = round(md - ms, 2)
+                #         red = round(md - ms - 1, 2)
+                #         originM = originM * (1 + (red/100))
+                #         medos.append(code)
+                #         mdTime = 'endTime'
+                #         msTime = exportData[mesuStart[code.decode('utf-8')],0].decode('UTF-8')
+                #         allMax = max(exportData[:, 3].astype(float))
+                #         termMin = min(exportData[mesuStart[code.decode('utf-8')]:i+1, 3].astype(float))
+                #         termMax = min(exportData[mesuStart[code.decode('utf-8')]:, 3].astype(float))
+                #         edFile.write( str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMin) + ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(red) + ',' + str(msTime) + ',' + str(mdTime) + ',' + str(msCost) + ',' + str(mdCost) + ',' + str(msGradient[code.decode('utf-8')]) + ',' + str(msGr[code.decode('utf-8')]) + ',' + str(msSmdms[code.decode('utf-8')]) + ',' + str(msGrade[code.decode('utf-8')]) + ',' + str(msSrgrad[code.decode('utf-8')]) +'\n')
+                #         comps.remove(code)
+                #         sumEd = sumEd + red
+                #     break;
                 tmp_time = second_oTime
                 
                 print(today + ' ' + str(ttime.decode('utf-8')) + ' diff')
@@ -565,8 +576,19 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_1\\diff\\"):
                             if(exportData[i, 3].astype('float') > 19.5):
                                 pick[code.decode('utf-8')] = True
 
-                            gcgfit = sp.polyfit(ti[:5], exportData[i-4:i+1,9].astype(float), 1)
-                            gcggrad = sp.around(gcgfit[0], decimals=2)
+                            cgfit1 = sp.polyfit(ti[:5], exportData[i-4:i+1,9].astype(float), 1)
+                            cggrad1 = sp.around(cgfit1[0], decimals=2)
+        
+                            cgfit2 = sp.polyfit(ti[:6], exportData[i-5:i+1,9].astype(float), 1)
+                            cggrad2 = sp.around(cgfit2[0], decimals=2)
+        
+                            cgfit3 = sp.polyfit(ti[:7], exportData[i-6:i+1,9].astype(float), 1)
+                            cggrad3 = sp.around(cgfit3[0], decimals=2)
+                            
+                            gcggrad = min([cggrad1, cggrad2, cggrad3])
+                            chegang = exportData[i,9].astype(float)
+                            if(chegang < 120):
+                                gcggrad = -10           
 
                             if(pick[code.decode('utf-8')] and exportData[i, 3].astype('float') < 19):
                                 edFile.write( str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMin) + ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(red) + ',' + str(msTime) + ',' + str(mdTime) + ',' + str(msCost) + ',' + str(mdCost) + ',' + str(msGradient[code.decode('utf-8')]) + ',' + str(msGr[code.decode('utf-8')]) + ',' + str(msSmdms[code.decode('utf-8')]) + ',' + str(msGrade[code.decode('utf-8')]) + ',' + str(msSrgrad[code.decode('utf-8')]) + ',' + str(mesuIndex[code.decode('utf-8')]) + '\n')
@@ -582,7 +604,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_1\\diff\\"):
                                 medos.append(code)
                                 originM = originM * (1 + (red/100))
                                 del pick[code.decode('utf-8')]
-                            elif((mmRate < rateLimit or mmRate > rateMLimit or fMedoTime < second_oTime) and ed >= tempWan):
+                            elif((mmRate < rateLimit or mmRate > rateMLimit or fMedoTime < second_oTime) and gcggrad < -1.7 and ed >= tempWan):
                                 edFile.write( str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMin) + ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(red) + ',' + str(msTime) + ',' + str(mdTime) + ',' + str(msCost) + ',' + str(mdCost) + ',' + str(msGradient[code.decode('utf-8')]) + ',' + str(msGr[code.decode('utf-8')]) + ',' + str(msSmdms[code.decode('utf-8')]) + ',' + str(msGrade[code.decode('utf-8')]) + ',' + str(msSrgrad[code.decode('utf-8')]) + ',' + str(mesuIndex[code.decode('utf-8')]) + '\n')
                                 comps.remove(code)
                                 sumEd = sumEd + red
@@ -733,7 +755,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_1\\diff\\"):
                                     lcgfit = sp.polyfit(ti[:6], exportData[i-5:i+1,9].astype(float), 1)
                                     lcggrad = sp.around(lcgfit[0], decimals=2)
 
-                                    if(chegang < 129 and lcggrad < -1.8):
+                                    if((chegang < 129 and lcggrad < -1.8) or lcggrad > 60):
                                         nos.append(code)
                                         continue;
 

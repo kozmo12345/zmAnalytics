@@ -139,13 +139,13 @@ while(True):
             wchkfile = open(wchkfilePath, 'a')
             wchkfile.close()
     
-        # if(nowTime > endTime and len(comps) == 0):
-        #     time.sleep( 4 )
-        #     continue;
+        if(nowTime > endTime and len(comps) == 0):
+            time.sleep( 4 )
+            continue;
     
-        # if(nowTime > allMedoTime):
-        #     time.sleep( 4 )
-        #     continue;
+        if(nowTime > allMedoTime):
+            time.sleep( 4 )
+            continue;
     
         print(today + str(times[len(times)-1]))
         print(comps)
@@ -157,8 +157,8 @@ while(True):
             second_oTime = datetime.timedelta(hours=xstime.tm_hour,minutes=xstime.tm_min,seconds=xstime.tm_sec).total_seconds() #계산시간
             str_oTime = ttime.decode('utf-8')
 
-            # if(second_oTime > endTime and second_oTime < nowTime - 120 ):
-            #     continue;            
+            if(second_oTime > endTime and second_oTime < nowTime - 120 ):
+                continue;            
             
             if(second_oTime < startTime):
                 continue;
@@ -222,14 +222,26 @@ while(True):
                     if(isd2[code.decode('utf-8')]):
                         med = ed * 1.8
 
-                    if(0 < second_oTime):
+                    if(nowTime - 20 < second_oTime):
                         mmRate = (sp.sum(exportData[i-2:i+1,5].astype(float)))/(sp.sum(exportData[i-2:i+1,6].astype(float))) - (med/22)
-                        cgfit = sp.polyfit(ti[:5], exportData[i-4:i+1,9].astype(float), 1)
-                        cggrad = sp.around(cgfit[0], decimals=2)
+
+                        cgfit1 = sp.polyfit(ti[:5], exportData[i-4:i+1,9].astype(float), 1)
+                        cggrad1 = sp.around(cgfit1[0], decimals=2)
     
+                        cgfit2 = sp.polyfit(ti[:6], exportData[i-5:i+1,9].astype(float), 1)
+                        cggrad2 = sp.around(cgfit2[0], decimals=2)
+    
+                        cgfit3 = sp.polyfit(ti[:7], exportData[i-6:i+1,9].astype(float), 1)
+                        cggrad3 = sp.around(cgfit3[0], decimals=2)
+                        
+                        gcggrad = min([cggrad1, cggrad2, cggrad3])
+                        chegang = exportData[i,9].astype(float)
+                        if(chegang < 120):
+                            gcggrad = -10
+
                         print(code.decode('utf-8') + '    ' + str(mmRate) + '    ' + str(str_oTime))
     
-                        if((mmRate < rateLimit or mmRate > rateMLimit) and ed >= tempWan):
+                        if((mmRate < rateLimit or mmRate > rateMLimit) and gcggrad < -1.5 and ed >= tempWan):
                             mdFile = open(mdFilePath, 'a')
                             mdFile.write(str(code.decode('utf-8')) + ',' + str(float(exportData[i, 3].decode('UTF-8'))) + ',' + str(exportData[i, 0].decode('UTF-8')) + ',' + str(datetime.datetime.now().strftime('%H:%M:%S')) + ',' + str(exportData[i, 8].decode('UTF-8')) + '\n')
                             mdFile.close()
@@ -245,8 +257,8 @@ while(True):
                 if(second_oTime > endTime):
                     continue;
 
-                # if(nowTime > endTime):
-                #     continue;
+                if(nowTime > endTime):
+                    continue;
     
                 rate = exportData[i, 3].decode('UTF-8')
                 grade = int(exportData[i, 1].decode('UTF-8'))
@@ -350,7 +362,7 @@ while(True):
                             lcgfit = sp.polyfit(ti[:6], exportData[i-5:i+1,9].astype(float), 1)
                             lcggrad = sp.around(lcgfit[0], decimals=2)
 
-                            if(chegang < 129 and lcggrad < -2):
+                            if(chegang < 129 and lcggrad < -1.8):
                                 nos.append(code)
                                 continue;
 
