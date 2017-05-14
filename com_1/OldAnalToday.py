@@ -24,7 +24,7 @@ stdLimit = 2
 sumEd = 0
 gradient = 0
 today = now.strftime('%Y-%m-%d')
-today = '2017-03-22'
+today = '2017-03-24'
 
 print(today)
 setFile = open(os.path.join("C:\\", "Dropbox\\com_1\\" + today + "\\" + today + "moa3.txt"), 'w')
@@ -190,7 +190,7 @@ for ttime in times:
                     if(chegang < 120):
                         gcggrad = -10
                     
-                    # if(code.decode('utf-8') == '208870'):
+                    # if(code.decode('utf-8') == '900270'):
                     #     print(ttime,code,mmRate,gcggrad)
                     if(pick[code.decode('utf-8')] and exportData[i, 3].astype('float') < 19):
                         print(ttime, code, 1111111111)
@@ -211,6 +211,13 @@ for ttime in times:
                         comps.remove(code)
                         medos.append(code)
                         sumEd = sumEd + red
+                    elif(float(msRate[code.decode('utf-8')]) < 6.1 and chegang < 140 and ed >= 0):
+                        print(cggrad1,cggrad2,cggrad3, gcggrad)
+                        print(ttime, code, 4444444444)
+                        edFile.write( str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMin) + ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(red) + ',' + str(msTime) + ',' + str(mdTime) + ',' + str(msCost) + ',' + str(mdCost) + ',' + str(msGradient[code.decode('utf-8')]) + ',' + str(msGr[code.decode('utf-8')]) + ',' + str(msSmdms[code.decode('utf-8')]) + ',' + str(msGrade[code.decode('utf-8')]) + ',' + str(msSrgrad[code.decode('utf-8')]) +'\n')
+                        comps.remove(code)
+                        medos.append(code)
+                        sumEd = sumEd + red    
                     elif(allMedoTime < second_oTime):
                         print(ttime, code, 5555555555)
                         edFile.write( str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMin) + ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(red) + ',' + str(msTime) + ',' + str(mdTime) + ',' + str(msCost) + ',' + str(mdCost) + ',' + str(msGradient[code.decode('utf-8')]) + ',' + str(msGr[code.decode('utf-8')]) + ',' + str(msSmdms[code.decode('utf-8')]) + ',' + str(msGrade[code.decode('utf-8')]) + ',' + str(msSrgrad[code.decode('utf-8')]) +'\n')
@@ -275,7 +282,11 @@ for ttime in times:
                     srgrad = sp.around(srfit[0]*10, decimals=2)
                     ltdc = exportData[i,4].astype(float) - exportData[i-1,4].astype(float)
 
-                    if(gradient >= 0.8 and srgrad > 0 and ltdc != 0):
+                    wlevel = 1
+                    if(code.decode('utf-8') in mesuDict):
+                        wlevel = mesuDict[code.decode('utf-8')] + 2
+
+                    if(gradient >= (0.73 + 0.03 * wlevel) and srgrad > 0 and ltdc != 0):
                         # if(code.decode('utf-8') == '014200'):
                         #     print(ttime, code, gr, cggrad, chegang, grade, exportData[i, 3].astype(float), ' 000000000000000000000000000000')
                         #     time.sleep(3)
