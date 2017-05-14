@@ -241,7 +241,7 @@ while(True):
 
                         print(code.decode('utf-8') + '    ' + str(mmRate) + '    ' + str(str_oTime))
     
-                        if((mmRate < rateLimit or mmRate > rateMLimit) and gcggrad < -1.5 and ed >= tempWan):
+                        if((mmRate < rateLimit or mmRate > rateMLimit) and gcggrad < -1.7 and ed >= tempWan):
                             mdFile = open(mdFilePath, 'a')
                             mdFile.write(str(code.decode('utf-8')) + ',' + str(float(exportData[i, 3].decode('UTF-8'))) + ',' + str(exportData[i, 0].decode('UTF-8')) + ',' + str(datetime.datetime.now().strftime('%H:%M:%S')) + ',' + str(exportData[i, 8].decode('UTF-8')) + '\n')
                             mdFile.close()
@@ -362,7 +362,7 @@ while(True):
                             lcgfit = sp.polyfit(ti[:6], exportData[i-5:i+1,9].astype(float), 1)
                             lcggrad = sp.around(lcgfit[0], decimals=2)
 
-                            if(chegang < 129 and lcggrad < -1.8):
+                            if((chegang < 129 and lcggrad < -1.8) or lcggrad > 60):
                                 nos.append(code)
                                 continue;
 
@@ -373,6 +373,11 @@ while(True):
                             if(tgrad < -6):
                                 nos.append(code)
                                 continue;
+
+                            tmesu = ((exportData[i,4].astype(float) - exportData[i-1,4].astype(float)) * exportData[i,8].astype(float)) + ((exportData[i - 1,4].astype(float) - exportData[i - 2,4].astype(float)) * exportData[i-1,8].astype(float))
+                            if(tmesu > 250000000 and xstime.tm_min >= 6 and exportData[i, 3].astype(float) < 6.1):
+                                nos.append(code)
+                                continue;                                        
 
                             tpg = 0
                             for ii in range(1,i):

@@ -24,7 +24,7 @@ stdLimit = 2
 sumEd = 0
 gradient = 0
 today = now.strftime('%Y-%m-%d')
-today = '2017-05-12'
+today = '2017-03-24'
 
 print(today)
 setFile = open(os.path.join("C:\\", "Dropbox\\com_1\\" + today + "\\" + today + "moa3.txt"), 'w')
@@ -189,21 +189,37 @@ for ttime in times:
                     chegang = exportData[i,9].astype(float)
                     if(chegang < 120):
                         gcggrad = -10
+
+                    s3 = (exportData[i-4,4].astype(float) - exportData[i-5,4].astype(float)) * exportData[i-4,8].astype(float)
+                    s2 = (exportData[i-3,4].astype(float) - exportData[i-4,4].astype(float)) * exportData[i-3,8].astype(float)
+                    s1 = (exportData[i-2,4].astype(float) - exportData[i-3,4].astype(float)) * exportData[i-2,8].astype(float)
+                    s0 = (exportData[i-1,4].astype(float) - exportData[i-2,4].astype(float)) * exportData[i-1,8].astype(float)
                     
-                    # if(code.decode('utf-8') == '900270'):
-                    #     print(ttime,code,mmRate,gcggrad)
+                    s4 = ( s0 + s1 + s2 + s3 )/4
+                    ssss = (exportData[i,4].astype(float) - exportData[i-1,4].astype(float)) * exportData[i,8].astype(float)
+                    srate = round(ssss/s4, 2)
+
+                    # if(code.decode('utf-8') == '054630'):
+                    # #     # ssss = (exportData[i,4].astype(float) - exportData[i-1,4].astype(float)) * exportData[i,8].astype(float)
+                    #     print(ttime,code, srate, ed)
                     if(pick[code.decode('utf-8')] and exportData[i, 3].astype('float') < 19):
                         print(ttime, code, 1111111111)
                         edFile.write( str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMin) + ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(red) + ',' + str(msTime) + ',' + str(mdTime) + ',' + str(msCost) + ',' + str(mdCost) + ',' + str(msGradient[code.decode('utf-8')]) + ',' + str(msGr[code.decode('utf-8')]) + ',' + str(msSmdms[code.decode('utf-8')]) + ',' + str(msGrade[code.decode('utf-8')]) + ',' + str(msSrgrad[code.decode('utf-8')]) +'\n')
                         comps.remove(code)
                         medos.append(code)
                         sumEd = sumEd + red
+                    # elif(srate > 3 and ed >= tempWan):
+                    #     print(ttime, code, 2222222222)
+                    #     edFile.write( str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMin) + ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(red) + ',' + str(msTime) + ',' + str(mdTime) + ',' + str(msCost) + ',' + str(mdCost) + ',' + str(msGradient[code.decode('utf-8')]) + ',' + str(msGr[code.decode('utf-8')]) + ',' + str(msSmdms[code.decode('utf-8')]) + ',' + str(msGrade[code.decode('utf-8')]) + ',' + str(msSrgrad[code.decode('utf-8')]) +'\n')
+                    #     comps.remove(code)
+                    #     medos.append(code)
+                    #     sumEd = sumEd + red
                     elif(float(exportData[i, 3].decode('UTF-8')) > 28.9):
                         print(ttime, code, 2222222222)
                         edFile.write( str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMin) + ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(red) + ',' + str(msTime) + ',' + str(mdTime) + ',' + str(msCost) + ',' + str(mdCost) + ',' + str(msGradient[code.decode('utf-8')]) + ',' + str(msGr[code.decode('utf-8')]) + ',' + str(msSmdms[code.decode('utf-8')]) + ',' + str(msGrade[code.decode('utf-8')]) + ',' + str(msSrgrad[code.decode('utf-8')]) +'\n')
                         comps.remove(code)
                         medos.append(code)
-                        sumEd = sumEd + red
+                        sumEd = sumEd + red                        
                     elif((mmRate < rateLimit or mmRate > rateMLimit or fMedoTime < second_oTime) and gcggrad < -1.7 and ed >= tempWan):
                         print(cggrad1,cggrad2,cggrad3, gcggrad)
                         print(ttime, code, 4444444444)
@@ -265,6 +281,17 @@ for ttime in times:
                     cggradDic[code.decode('utf-8')] = []
                 else:
                     cggradDic[code.decode('utf-8')].append(cggrad)
+
+                if(code.decode('utf-8') == '042500'):
+                    s3 = (exportData[i-4,4].astype(float) - exportData[i-5,4].astype(float)) * exportData[i-4,8].astype(float)
+                    s2 = (exportData[i-3,4].astype(float) - exportData[i-4,4].astype(float)) * exportData[i-3,8].astype(float)
+                    s1 = (exportData[i-2,4].astype(float) - exportData[i-3,4].astype(float)) * exportData[i-2,8].astype(float)
+                    s0 = (exportData[i-1,4].astype(float) - exportData[i-2,4].astype(float)) * exportData[i-1,8].astype(float)
+                    
+                    s4 = ( s0 + s1 + s2 + s3 )/4
+                    ssss = (exportData[i,4].astype(float) - exportData[i-1,4].astype(float)) * exportData[i,8].astype(float)
+                    srate = round(ssss/s4, 2)
+                    print(ttime,code, srate)
 
                 if(((ms_md > 0.96 and sms_md > 1 and gr > 420000 ) or (cggrad > 2.3 and chegang > 163)) and grade < 16 and exportData[i, 3].astype(float) > 5):
                     x = ti
@@ -427,10 +454,10 @@ for ttime in times:
 
                             tmesu = ((exportData[i,4].astype(float) - exportData[i-1,4].astype(float)) * exportData[i,8].astype(float)) + ((exportData[i - 1,4].astype(float) - exportData[i - 2,4].astype(float)) * exportData[i-1,8].astype(float))
 
-                            if(code.decode('utf-8') == '900270'):
-                                print(ttime, code, tmesu, xstime.tm_min, exportData[i, 3].astype(float))
-                                time.sleep(5)
-                            if(tmesu > 300000000 and xstime.tm_min > 6 and exportData[i, 3].astype(float) < 6.1):
+                            # if(code.decode('utf-8') == '069730'):
+                            #     print(ttime, code, tmesu, xstime.tm_min, exportData[i, 3].astype(float))
+                            #     time.sleep(5)
+                            if(tmesu > 250000000 and xstime.tm_min >= 6 and exportData[i, 3].astype(float) < 6.1):
                                 nos.append(code)
                                 continue;                                         
 

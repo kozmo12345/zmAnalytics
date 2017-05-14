@@ -374,6 +374,11 @@ while(True):
                                 nos.append(code)
                                 continue;
 
+                            tmesu = ((exportData[i,4].astype(float) - exportData[i-1,4].astype(float)) * exportData[i,8].astype(float)) + ((exportData[i - 1,4].astype(float) - exportData[i - 2,4].astype(float)) * exportData[i-1,8].astype(float))
+                            if(tmesu > 250000000 and xstime.tm_min >= 6 and exportData[i, 3].astype(float) < 6.1):
+                                nos.append(code)
+                                continue;                                        
+
                             tpg = 0
                             for ii in range(1,i):
                                 pi = ii * 3
