@@ -24,7 +24,7 @@ stdLimit = 2
 sumEd = 0
 gradient = 0
 today = now.strftime('%Y-%m-%d')
-today = '2017-03-24'
+today = '2017-05-12'
 
 print(today)
 setFile = open(os.path.join("C:\\", "Dropbox\\com_1\\" + today + "\\" + today + "moa3.txt"), 'w')
@@ -211,13 +211,13 @@ for ttime in times:
                         comps.remove(code)
                         medos.append(code)
                         sumEd = sumEd + red
-                    elif(float(msRate[code.decode('utf-8')]) < 6.1 and chegang < 140 and ed >= 0):
-                        print(cggrad1,cggrad2,cggrad3, gcggrad)
-                        print(ttime, code, 4444444444)
-                        edFile.write( str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMin) + ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(red) + ',' + str(msTime) + ',' + str(mdTime) + ',' + str(msCost) + ',' + str(mdCost) + ',' + str(msGradient[code.decode('utf-8')]) + ',' + str(msGr[code.decode('utf-8')]) + ',' + str(msSmdms[code.decode('utf-8')]) + ',' + str(msGrade[code.decode('utf-8')]) + ',' + str(msSrgrad[code.decode('utf-8')]) +'\n')
-                        comps.remove(code)
-                        medos.append(code)
-                        sumEd = sumEd + red    
+                    # elif(float(msRate[code.decode('utf-8')]) < 6.1 and chegang < 140 and ed >= 0):
+                    #     print(cggrad1,cggrad2,cggrad3, gcggrad)
+                    #     print(ttime, code, 4444444444)
+                    #     edFile.write( str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMin) + ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(red) + ',' + str(msTime) + ',' + str(mdTime) + ',' + str(msCost) + ',' + str(mdCost) + ',' + str(msGradient[code.decode('utf-8')]) + ',' + str(msGr[code.decode('utf-8')]) + ',' + str(msSmdms[code.decode('utf-8')]) + ',' + str(msGrade[code.decode('utf-8')]) + ',' + str(msSrgrad[code.decode('utf-8')]) +'\n')
+                    #     comps.remove(code)
+                    #     medos.append(code)
+                    #     sumEd = sumEd + red    
                     elif(allMedoTime < second_oTime):
                         print(ttime, code, 5555555555)
                         edFile.write( str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMin) + ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(red) + ',' + str(msTime) + ',' + str(mdTime) + ',' + str(msCost) + ',' + str(mdCost) + ',' + str(msGradient[code.decode('utf-8')]) + ',' + str(msGr[code.decode('utf-8')]) + ',' + str(msSmdms[code.decode('utf-8')]) + ',' + str(msGrade[code.decode('utf-8')]) + ',' + str(msSrgrad[code.decode('utf-8')]) +'\n')
@@ -423,7 +423,16 @@ for ttime in times:
 
                             if(tgrad < -6):
                                 nos.append(code)
-                                continue;                            
+                                continue;
+
+                            tmesu = ((exportData[i,4].astype(float) - exportData[i-1,4].astype(float)) * exportData[i,8].astype(float)) + ((exportData[i - 1,4].astype(float) - exportData[i - 2,4].astype(float)) * exportData[i-1,8].astype(float))
+
+                            if(code.decode('utf-8') == '900270'):
+                                print(ttime, code, tmesu, xstime.tm_min, exportData[i, 3].astype(float))
+                                time.sleep(5)
+                            if(tmesu > 300000000 and xstime.tm_min > 6 and exportData[i, 3].astype(float) < 6.1):
+                                nos.append(code)
+                                continue;                                         
 
                             comps.append((code))
                             mesuStart[code.decode('utf-8')] = i
@@ -431,7 +440,7 @@ for ttime in times:
                             msGr[code.decode('utf-8')] = gr
                             msSmdms[code.decode('utf-8')] = sms_md 
                             msGrade[code.decode('utf-8')] = grade
-                            msSrgrad[code.decode('utf-8')] = cggrad
+                            msSrgrad[code.decode('utf-8')] = tmesu
                             msRate[code.decode('utf-8')] = float(exportData[i, 3].decode('UTF-8'))
                             rmsRate[code.decode('utf-8')] = float(exportData[i, 3].decode('UTF-8'))
                             pick[code.decode('utf-8')] = False
