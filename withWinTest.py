@@ -139,13 +139,13 @@ while(True):
             wchkfile = open(wchkfilePath, 'a')
             wchkfile.close()
     
-        if(nowTime > endTime and len(comps) == 0):
-            time.sleep( 4 )
-            continue;
+        # if(nowTime > endTime and len(comps) == 0):
+        #     time.sleep( 4 )
+        #     continue;
     
-        if(nowTime > allMedoTime):
-            time.sleep( 4 )
-            continue;
+        # if(nowTime > allMedoTime):
+        #     time.sleep( 4 )
+        #     continue;
     
         print(today + str(times[len(times)-1]))
         print(comps)
@@ -157,8 +157,8 @@ while(True):
             second_oTime = datetime.timedelta(hours=xstime.tm_hour,minutes=xstime.tm_min,seconds=xstime.tm_sec).total_seconds() #계산시간
             str_oTime = ttime.decode('utf-8')
 
-            if(second_oTime > endTime and second_oTime < nowTime - 120 ):
-                continue;            
+            # if(second_oTime > endTime and second_oTime < nowTime - 120 ):
+            #     continue;            
             
             if(second_oTime < startTime):
                 continue;
@@ -222,7 +222,7 @@ while(True):
                     if(isd2[code.decode('utf-8')]):
                         med = ed * 1.8
 
-                    if(nowTime - 20 < second_oTime):
+                    if(0 < second_oTime):
                         mmRate = (sp.sum(exportData[i-2:i+1,5].astype(float)))/(sp.sum(exportData[i-2:i+1,6].astype(float))) - (med/22)
 
                         cgfit1 = sp.polyfit(ti[:5], exportData[i-4:i+1,9].astype(float), 1)
@@ -257,8 +257,8 @@ while(True):
                 if(second_oTime > endTime):
                     continue;
 
-                if(nowTime > endTime):
-                    continue;
+                # if(nowTime > endTime):
+                #     continue;
     
                 rate = exportData[i, 3].decode('UTF-8')
                 grade = int(exportData[i, 1].decode('UTF-8'))
@@ -307,9 +307,9 @@ while(True):
                                 nos.append(code)
                                 continue;
 
-                            if(exportData[i, 3].astype(float) < 5.3):
-                                nos.append(code)
-                                continue;
+                            # if(exportData[i, 3].astype(float) < 5.3):
+                            #     nos.append(code)
+                            #     continue;
 
                             cost = int(exportData[i, 8].decode('UTF-8'))
                             if(cost > 7500):
@@ -328,7 +328,10 @@ while(True):
                             ammfit = sp.polyfit(x[:len(exportData[s:i,5])], ammlist, level)
                             ammgrad = sp.around(ammfit[0]*10, decimals=3)      
 
-                            if((mmgrad > 5 and ammgrad < 7) or (ammgrad < -9)):
+                            if((mmgrad > 8.1 and ammgrad < 7.2)):
+                                nos.append(code)
+                                continue;
+                            if((ammgrad < -9)):
                                 nos.append(code)
                                 continue;
 
@@ -352,10 +355,15 @@ while(True):
                                 nos.append(code)
                                 continue;
 
-                            fcgfit = sp.polyfit(ti[:4], exportData[i-3:i+1,9].astype(float), 1)
-                            fcggrad = sp.around(fcgfit[0], decimals=2)
+                            fcgfit1 = sp.polyfit(ti[:4], exportData[i-3:i+1,9].astype(float), 1)
+                            fcggrad1 = sp.around(fcgfit1[0], decimals=2)
+        
+                            fcgfit2 = sp.polyfit(ti[:5], exportData[i-4:i+1,9].astype(float), 1)
+                            fcggrad2 = sp.around(fcgfit2[0], decimals=2)                            
+         
+                            fcggrad = min([fcggrad1, fcggrad2])
 
-                            if(fcggrad < -12.8):
+                            if(fcggrad < -14.01):
                                 nos.append(code)
                                 continue;
 
@@ -375,7 +383,7 @@ while(True):
                                 continue;
 
                             tmesu = ((exportData[i,4].astype(float) - exportData[i-1,4].astype(float)) * exportData[i,8].astype(float)) + ((exportData[i - 1,4].astype(float) - exportData[i - 2,4].astype(float)) * exportData[i-1,8].astype(float))
-                            if(tmesu > 250000000 and xstime.tm_min >= 6 and exportData[i, 3].astype(float) < 6.1):
+                            if(tmesu > 250000000 and xstime.tm_min >= 6 and exportData[i, 3].astype(float) < 6.6):
                                 nos.append(code)
                                 continue;                                        
 

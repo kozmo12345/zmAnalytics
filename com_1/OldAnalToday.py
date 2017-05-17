@@ -24,7 +24,7 @@ stdLimit = 2
 sumEd = 0
 gradient = 0
 today = now.strftime('%Y-%m-%d')
-today = '2017-03-24'
+# today = '2017-05-16'
 
 print(today)
 setFile = open(os.path.join("C:\\", "Dropbox\\com_1\\" + today + "\\" + today + "moa3.txt"), 'w')
@@ -314,18 +314,6 @@ for ttime in times:
                         wlevel = mesuDict[code.decode('utf-8')] + 2
 
                     if(gradient >= (0.73 + 0.03 * wlevel) and srgrad > 0 and ltdc != 0):
-                        # if(code.decode('utf-8') == '014200'):
-                        #     print(ttime, code, gr, cggrad, chegang, grade, exportData[i, 3].astype(float), ' 000000000000000000000000000000')
-                        #     time.sleep(3)
-                        # if(code.decode('utf-8') == '246690'):
-                        #     print(ttime, code, gradient, chegang, '----------------------')
-                        #     time.sleep(3)
-                        # if(code.decode('utf-8') == '118000'):
-                        #     print(ttime, code)
-                        #     time.sleep(3)                        
-                        # if(code.decode('utf-8') == '043580'):
-                        #     print(ttime, code, gradient, srgrad, ms_md, sms_md, ltdc, cggradDic)
-                        #     time.sleep(5)
 
                         if(code.decode('utf-8') in mesuDict):
                             mesuDict[code.decode('utf-8')] = mesuDict[code.decode('utf-8')] + 1
@@ -335,10 +323,6 @@ for ttime in times:
 
                         if(mesuDict[code.decode('utf-8')] in mesuLimit and ((code) not in comps) and (code not in nos)):
 
-                            # if(code.decode('utf-8') == '001420'):
-                            #     print(ttime, code, mesuDict[code.decode('utf-8')])
-                            #     time.sleep(3)
-
                             if(exportData[i, 3].astype(float) < 4 or exportData[i, 3].astype(float) > 19.6):
                                 continue;
 
@@ -346,10 +330,6 @@ for ttime in times:
                                 print(ttime, code, 'nos00000')
                                 nos.append(ttime)
                                 continue;
-
-                            if(exportData[i, 3].astype(float) < 5.3):
-                                nos.append(code)
-                                continue;                                
 
                             cost = int(exportData[i, 8].decode('UTF-8'))
                             if(cost > 7500):
@@ -369,7 +349,7 @@ for ttime in times:
                             ammfit = sp.polyfit(x[:len(exportData[s:i,5])], ammlist, level)
                             ammgrad = sp.around(ammfit[0]*10, decimals=3)                                    
 
-                            if((mmgrad > 5 and ammgrad < 7) or (ammgrad < -9)):
+                            if((mmgrad > 8.1 and ammgrad < 7.2) or (ammgrad < -9)):
                                 print(ttime, code, 'nos111111')
                                 nos.append(code)
                                 continue;
@@ -409,12 +389,13 @@ for ttime in times:
                                 nos.append(code)
                                 continue;                                
 
-                            fcgfit = sp.polyfit(ti[:4], exportData[i-3:i+1,9].astype(float), 1)
-                            fcggrad = sp.around(fcgfit[0], decimals=2)
+                            fcgfit1 = sp.polyfit(ti[:4], exportData[i-3:i+1,9].astype(float), 1)
+                            fcggrad1 = sp.around(fcgfit1[0], decimals=2)
 
-                            # if(code.decode('utf-8') == '043580'):
-                            #     print(ttime, code, mmgrad, ammgrad, cggrad, fcggrad)
-                            #     time.sleep(5)                                            
+                            fcgfit2 = sp.polyfit(ti[:5], exportData[i-4:i+1,9].astype(float), 1)
+                            fcggrad2 = sp.around(fcgfit2[0], decimals=2)                            
+ 
+                            fcggrad = min([fcggrad1, fcggrad2])
 
                             lcgfit = sp.polyfit(ti[:6], exportData[i-5:i+1,9].astype(float), 1)
                             lcggrad = sp.around(lcgfit[0], decimals=2)
@@ -423,13 +404,12 @@ for ttime in times:
                                 nos.append(code)
                                 continue;
 
-                            # print(code, fcggrad)
-                            if(fcggrad < -12.8):
+                            # print(ttime, code, fcggrad)
+                            # time.sleep(3)
+
+                            if(fcggrad < -14.01):
                                 nos.append(code)
                                 continue;
-
-                            # print(ttime, code, ssrgrad, mmgrad, ammgrad/mmgrad)
-                            # time.sleep(3)
 
                             tpg = 0
                             msi = 0
@@ -454,10 +434,7 @@ for ttime in times:
 
                             tmesu = ((exportData[i,4].astype(float) - exportData[i-1,4].astype(float)) * exportData[i,8].astype(float)) + ((exportData[i - 1,4].astype(float) - exportData[i - 2,4].astype(float)) * exportData[i-1,8].astype(float))
 
-                            # if(code.decode('utf-8') == '069730'):
-                            #     print(ttime, code, tmesu, xstime.tm_min, exportData[i, 3].astype(float))
-                            #     time.sleep(5)
-                            if(tmesu > 250000000 and xstime.tm_min >= 6 and exportData[i, 3].astype(float) < 6.1):
+                            if(tmesu > 250000000 and xstime.tm_min >= 6 and exportData[i, 3].astype(float) < 6.6):
                                 nos.append(code)
                                 continue;                                         
 
