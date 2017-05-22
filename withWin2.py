@@ -6,6 +6,7 @@ import scipy as sp
 import matplotlib.pyplot as plt
 import datetime
 import time
+import re
 
 sp.random.seed(3)
 
@@ -205,7 +206,7 @@ while(True):
                     
                 if(i == -1): continue
 
-                if(code in comps and code not in medos and code.decode('utf-8') in mesuStart and second_oTime > mesuStart[code.decode('utf-8')] + 40):
+                if(code in comps and code not in medos and code.decode('utf-8') in mesuStart and second_oTime > mesuStart[code.decode('utf-8')] + 10):
                     ms = float(msRate[code.decode('utf-8')])
                     md = float(exportData[i, 3].decode('UTF-8'))
                     ed = round(md - ms, 2)
@@ -240,7 +241,61 @@ while(True):
                             gcggrad = -10
 
                         print(code.decode('utf-8') + '    ' + str(mmRate) + '    ' + str(str_oTime))
+
+                        nf = 0
+                        fl = 0
+                        nfaver = 0
+                        flaver = 0
+                        gap = 0
+                        levelUpDic[code.decode('utf-8')] = []
+                        levelUpDic[code.decode('utf-8')].append(0)
+                        for x in range(0,xstime.tm_min + 1):
+                            r = re.compile('09:' + str(x).rjust(2, '0') + ':..')
+                            vmatch = sp.vectorize(lambda x:bool(r.match(x)))
+                            vmatch(exportData[:,0].astype(str))
+                            tmarr = exportData[:,3].astype(str)[vmatch(exportData[:,0].astype(str))].astype(float)
+
+                            if(len(tmarr) == 0):
+                                continue;
+
+                            if(fl != 0):
+                                if(nfaver != 0):
+                                    flaver = (tmarr[0] + fl) / 2
     
+                                    if(gap != 0 and gap * 2.3 < (flaver - nfaver)):
+                                        levelUpDic[code.decode('utf-8')].append((flaver - nfaver))
+                                        if((flaver - nfaver) > 4.5 and ed > 0.4):
+                                            mdFile = open(mdFilePath, 'a')
+                                            mdFile.write(str(code.decode('utf-8')) + ',' + str(float(exportData[i, 3].decode('UTF-8'))) + ',' + str(exportData[i, 0].decode('UTF-8')) + ',' + str(datetime.datetime.now().strftime('%H:%M:%S')) + ',' + str(exportData[i, 8].decode('UTF-8')) + '\n')
+                                            mdFile.close()
+                                            medos.append(code)
+                                            comps.remove(code)
+                                            break;
+
+                                        if((flaver - nfaver) > 4.5 and second_oTime > mesuStart[code.decode('utf-8')] + 120):
+                                            mdFile = open(mdFilePath, 'a')
+                                            mdFile.write(str(code.decode('utf-8')) + ',' + str(float(exportData[i, 3].decode('UTF-8'))) + ',' + str(exportData[i, 0].decode('UTF-8')) + ',' + str(datetime.datetime.now().strftime('%H:%M:%S')) + ',' + str(exportData[i, 8].decode('UTF-8')) + '\n')
+                                            mdFile.close()
+                                            medos.append(code)
+                                            comps.remove(code)
+                                            break;
+
+                                    else:
+                                        levelUpDic[code.decode('utf-8')].append(0)
+                                    
+                                    if(flaver - nfaver < 0):
+                                        gap = 1.8
+                                    else:
+                                        gap = flaver - nfaver
+    
+                                nfaver = (fl + tmarr[0]) / 2
+                            
+                            nf = tmarr[0]
+                            fl = tmarr[-1]
+
+                        if(code not in comps):
+                            continue;
+
                         if((mmRate < rateLimit or mmRate > rateMLimit) and gcggrad < -1.7 and ed >= tempWan):
                             mdFile = open(mdFilePath, 'a')
                             mdFile.write(str(code.decode('utf-8')) + ',' + str(float(exportData[i, 3].decode('UTF-8'))) + ',' + str(exportData[i, 0].decode('UTF-8')) + ',' + str(datetime.datetime.now().strftime('%H:%M:%S')) + ',' + str(exportData[i, 8].decode('UTF-8')) + '\n')
