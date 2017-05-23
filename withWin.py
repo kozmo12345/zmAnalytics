@@ -264,9 +264,9 @@ while(True):
                                 if(nfaver != 0):
                                     flaver = (tmarr[0] + fl) / 2
     
-                                    if(gap != 0 and gap * 2.3 < (flaver - nfaver)):
+                                    if(gap != 0 and gap * 1.5 < (flaver - nfaver)):
                                         levelUpDic[code.decode('utf-8')].append((flaver - nfaver))
-                                        if((flaver - nfaver) > 4.5 and ed > 0.4):
+                                        if((flaver - nfaver) > 4.26 and ed > 0.4):
                                             mdFile = open(mdFilePath, 'a')
                                             mdFile.write(str(code.decode('utf-8')) + ',' + str(float(exportData[i, 3].decode('UTF-8'))) + ',' + str(exportData[i, 0].decode('UTF-8')) + ',' + str(datetime.datetime.now().strftime('%H:%M:%S')) + ',' + str(exportData[i, 8].decode('UTF-8')) + '\n')
                                             mdFile.close()
@@ -274,7 +274,7 @@ while(True):
                                             comps.remove(code)
                                             break;
 
-                                        if((flaver - nfaver) > 4.5 and second_oTime > mesuStart[code.decode('utf-8')] + 120):
+                                        if((flaver - nfaver) > 4.26 and second_oTime > mesuStart[code.decode('utf-8')] + 120):
                                             mdFile = open(mdFilePath, 'a')
                                             mdFile.write(str(code.decode('utf-8')) + ',' + str(float(exportData[i, 3].decode('UTF-8'))) + ',' + str(exportData[i, 0].decode('UTF-8')) + ',' + str(datetime.datetime.now().strftime('%H:%M:%S')) + ',' + str(exportData[i, 8].decode('UTF-8')) + '\n')
                                             mdFile.close()

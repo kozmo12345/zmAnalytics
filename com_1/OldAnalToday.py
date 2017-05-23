@@ -25,7 +25,7 @@ stdLimit = 2
 sumEd = 0
 gradient = 0
 today = now.strftime('%Y-%m-%d')
-today = '2017-05-19'
+today = '2017-05-02'
 
 print(today)
 setFile = open(os.path.join("C:\\", "Dropbox\\com_1\\" + today + "\\" + today + "moa3.txt"), 'w')
@@ -171,10 +171,6 @@ for ttime in times:
                         med = ed * 1.8
                     mmRate = (sp.sum(exportData[i-stdLimit:i+1,5].astype(float)))/(sp.sum(exportData[i-stdLimit:i+1,6].astype(float))) - ((med)/22)
 
-                    # if(code.decode('utf-8') == '043910'):
-                    #     cgfit = sp.polyfit(ti[:5], exportData[i-4:i+1,9].astype(float), 1)
-                    #     cggrad = sp.around(cgfit[0], decimals=2)
-                    #     print(code, ttime, cggrad)
                     if(exportData[i, 3].astype('float') > 19.5):
                         pick[code.decode('utf-8')] = True
 
@@ -217,19 +213,25 @@ for ttime in times:
                             vmatch = sp.vectorize(lambda x:bool(r.match(x)))
                             vmatch(exportData[:,0].astype(str))
                             tmarr = exportData[:,3].astype(str)[vmatch(exportData[:,0].astype(str))].astype(float)
+
+                            if(len(tmarr) == 0):
+                                continue;
     
                             if(fl != 0):
                                 if(nfaver != 0):
                                     flaver = (tmarr[0] + fl) / 2
 
-                                    if(gap != 0 and gap * 2.3 < (flaver - nfaver)):
+                                    # if(code.decode('utf-8') == '208870'):
+                                    #     print(code, ttime, (flaver - nfaver), levelUpDic[code.decode('utf-8')])
+
+                                    if(gap != 0 and gap * 1.5 < (flaver - nfaver)):
                                         levelUpDic[code.decode('utf-8')].append((flaver - nfaver))
                                         rrrr =  flaver - exportData[i, 3].astype(float)
 
-                                        if((flaver - nfaver) > 4.4):
+                                        if((flaver - nfaver) > 4.26 and ed > 0.4):
                                             pick[code.decode('utf-8')] = True
 
-                                        if((flaver - nfaver) > 4 and x == (xstime.tm_min)):
+                                        if((flaver - nfaver) > 4.26 and i > mesuStart[code.decode('utf-8')] + 12):
                                             edFile.write( str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMin) + ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(red) + ',' + str(msTime) + ',' + str(mdTime) + ',' + str(msCost) + ',' + str(mdCost) + ',' + str(msGradient[code.decode('utf-8')]) + ',' + str(msGr[code.decode('utf-8')]) + ',' + str(msSmdms[code.decode('utf-8')]) + ',' + str(msGrade[code.decode('utf-8')]) + ',' + str(msSrgrad[code.decode('utf-8')]) +'\n')
                                             comps.remove(code)
                                             medos.append(code)
