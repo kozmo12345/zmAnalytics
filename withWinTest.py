@@ -39,6 +39,7 @@ def createFiles(realfilePath, setFilePath, mdFilePath):
 
 now = datetime.datetime.now()
 today = now.strftime('%Y-%m-%d')
+today = '2017-05-25'
 
 startTime = datetime.timedelta(hours=9,minutes=00,seconds=00).total_seconds()
 endTime = datetime.timedelta(hours=9,minutes=12,seconds=30).total_seconds()
@@ -54,7 +55,7 @@ wanna = 1
 rateLimit = 0.31
 rateMLimit = 3.8
 gradient = 0
-realfilePath = os.path.join("C:\\", "Dropbox\\Diff\\" + today + "\\" + today + ".txt");
+realfilePath = os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + ".txt");
 dirn = os.path.dirname(realfilePath)
 try:
     os.stat(dirn)
@@ -99,6 +100,7 @@ isd = dict()
 isd2 = dict()
 levelUpDic = dict()
 pick = dict()
+delayMesu = dict()
 isRe = False
 
 with open(setFilePath, 'r') as f:
@@ -106,13 +108,13 @@ with open(setFilePath, 'r') as f:
         imCode = line.split(",")[0].strip()
         if(imCode != ''):
             isRe = True
-        if(imCode != '' and int(line.split(",")[8].strip()) == 2):
+        if(imCode != '' and int(line.split(",")[8].strip()) == 1):
             comps.append(str.encode(imCode))
             mesuStart[imCode] = float(line.split(",")[7].strip())
             msRate[imCode] = float(line.split(",")[1].strip())
             isd[imCode] = False
             isd2[imCode] = False
-        elif(imCode != '' and int(line.split(",")[8].strip()) == 1):
+        elif(imCode != '' and int(line.split(",")[8].strip()) == 2):
             nos.append(str.encode(imCode))
         else:
             continue;
@@ -138,7 +140,7 @@ while(True):
         now = datetime.datetime.now()
         nowTime = datetime.timedelta(hours=now.hour,minutes=now.minute,seconds=now.second).total_seconds()
 
-        wchkfilePath = os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + "w2.pchk");
+        wchkfilePath = os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + "w1.pchk");
         if not os.path.exists(wchkfilePath):
             wchkfile = open(wchkfilePath, 'a')
             wchkfile.close()
@@ -150,7 +152,7 @@ while(True):
         # if(nowTime > allMedoTime):
         #     time.sleep( 4 )
         #     continue;
-
+    
         print(today + str(times[len(times)-1]))
         print(comps)
         print(mesuDict)
@@ -245,6 +247,13 @@ while(True):
 
                         print(code.decode('utf-8') + '    ' + str(mmRate) + '    ' + str(str_oTime))
 
+                        grRate = 0
+                        if(len(exportData[:i, 4]) > 6 and int(exportData[i, 4].decode('UTF-8')) - int(exportData[i-3, 4].decode('UTF-8')) != 0 and int(exportData[i-3, 4].decode('UTF-8')) - int(exportData[i-6, 4].decode('UTF-8')) != 0):
+                            grRate = (int(exportData[i, 4].decode('UTF-8')) - int(exportData[i-3, 4].decode('UTF-8'))) / (int(exportData[i-3, 4].decode('UTF-8')) - int(exportData[i-6, 4].decode('UTF-8')))
+
+                        if(grRate > 2):
+                            pick[code.decode('utf-8')] = True
+
                         nf = 0
                         fl = 0
                         nfaver = 0
@@ -264,9 +273,6 @@ while(True):
                             if(fl != 0):
                                 if(nfaver != 0):
                                     flaver = (tmarr[0] + fl) / 2
-    
-                                    if((flaver - nfaver) > 3.5):
-                                        pick[code.decode('utf-8')] = True
 
                                     if(gap != 0 and gap * 1.5 < (flaver - nfaver)):
                                         levelUpDic[code.decode('utf-8')].append((flaver - nfaver))
@@ -331,7 +337,7 @@ while(True):
                             mdFile.write(str(code.decode('utf-8')) + ',' + str(float(exportData[i, 3].decode('UTF-8'))) + ',' + str(exportData[i, 0].decode('UTF-8')) + ',' + str(datetime.datetime.now().strftime('%H:%M:%S')) + ',' + str(exportData[i, 8].decode('UTF-8')) + '\n')
                             mdFile.close()
                             medos.append(code)
-                            comps.remove(code)                                             
+                            comps.remove(code)
 
                 if(second_oTime > endTime):
                     continue;
@@ -350,6 +356,27 @@ while(True):
                 cggrad = sp.around(cgfit[0], decimals=2)
                 chegang = exportData[i,9].astype(float)
 
+                grRate = 0
+                if(len(exportData[:i, 4]) > 6 and int(exportData[i, 4].decode('UTF-8')) - int(exportData[i-3, 4].decode('UTF-8')) != 0 and int(exportData[i-3, 4].decode('UTF-8')) - int(exportData[i-6, 4].decode('UTF-8')) != 0):
+                    grRate = (int(exportData[i, 4].decode('UTF-8')) - int(exportData[i-3, 4].decode('UTF-8'))) / (int(exportData[i-3, 4].decode('UTF-8')) - int(exportData[i-6, 4].decode('UTF-8')))
+
+                if(code.decode('utf-8') in delayMesu and delayMesu[code.decode('utf-8')] + 6 > i and grRate < 1 and (int(exportData[i, 4].decode('UTF-8')) - int(exportData[i-1, 4].decode('UTF-8'))) > 1000 and (int(exportData[i, 4].decode('UTF-8')) - int(exportData[i-1, 4].decode('UTF-8'))) > 1000 and code not in comps):
+                    if(exportData[i, 3].astype(float) + 1 >= exportData[delayMesu[code.decode('utf-8')], 3].astype(float)):
+                        continue                            
+
+                    comps.append(code)
+                    mesuStart[code.decode('utf-8')] = second_oTime
+                    msRate[code.decode('utf-8')] = float(rate)
+                    isd[code.decode('utf-8')] = False
+                    isd2[code.decode('utf-8')] = False
+                    pick[code.decode('utf-8')] = False
+                    cost = exportData[i, 8].decode('UTF-8')
+                    setFile = open(setFilePath, 'a')
+                    setFile.write( str(code.decode('utf-8')) + ',' + str(float(rate)) + ',' + str(tpg) +  ',' + str_oTime + ',' + str(wanna) + ',' + str(datetime.datetime.now().strftime('%H:%M:%S')) + ',' + str(cost) + ',' + str(second_oTime) + ',' + str(1) + '\n')
+                    setFile.close()
+                    del delayMesu[code.decode('utf-8')]
+
+ 
                 if(code.decode('utf-8') not in cggradDic):
                     cggradDic[code.decode('utf-8')] = []
                 else:
@@ -381,14 +408,10 @@ while(True):
                         if(mesuDict[code.decode('utf-8')] in mesuLimit and (code not in comps) and (code not in medos) and (code not in nos)):
                             if(exportData[i, 3].astype(float) < 4 or exportData[i, 3].astype(float) > 19.6):
                                 continue;
-
+                        
                             if(xstime.tm_min < 2):
                                 nos.append(code)
                                 continue;
-
-                            # if(exportData[i, 3].astype(float) < 5.3):
-                            #     nos.append(code)
-                            #     continue;
 
                             cost = int(exportData[i, 8].decode('UTF-8'))
                             if(cost > 7500):
@@ -488,6 +511,20 @@ while(True):
                             if(code in nos):
                                 continue;
 
+                            grRate1 = 0
+                            if(len(exportData[:i, 4]) > 7 and int(exportData[i-1, 4].decode('UTF-8')) - int(exportData[i-4, 4].decode('UTF-8')) != 0 and int(exportData[i-4, 4].decode('UTF-8')) - int(exportData[i-7, 4].decode('UTF-8')) != 0):
+                                grRate1 = (int(exportData[i-1, 4].decode('UTF-8')) - int(exportData[i-4, 4].decode('UTF-8'))) / (int(exportData[i-4, 4].decode('UTF-8')) - int(exportData[i-7, 4].decode('UTF-8')))                                        
+
+                            grRate2 = 0
+                            if(len(exportData[:i, 4]) > 8 and int(exportData[i-2, 4].decode('UTF-8')) - int(exportData[i-5, 4].decode('UTF-8')) != 0 and int(exportData[i-5, 4].decode('UTF-8')) - int(exportData[i-8, 4].decode('UTF-8')) != 0):
+                                grRate2 = (int(exportData[i-2, 4].decode('UTF-8')) - int(exportData[i-5, 4].decode('UTF-8'))) / (int(exportData[i-5, 4].decode('UTF-8')) - int(exportData[i-8, 4].decode('UTF-8')))                                        
+
+                            if(grRate > 1.9 or grRate1 > 1.9 or grRate2 > 1.9):
+                                print(ttime,code)
+                                time.sleep(5)
+                                delayMesu[code.decode('utf-8')] = i
+                                continue;
+
                             comps.append(code)
                             mesuStart[code.decode('utf-8')] = second_oTime
                             msRate[code.decode('utf-8')] = float(rate)
@@ -496,11 +533,13 @@ while(True):
                             pick[code.decode('utf-8')] = False
                             cost = exportData[i, 8].decode('UTF-8')
                             setFile = open(setFilePath, 'a')
-                            setFile.write( str(code.decode('utf-8')) + ',' + str(float(rate)) + ',' + str(tpg) +  ',' + str_oTime + ',' + str(wanna) + ',' + str(datetime.datetime.now().strftime('%H:%M:%S')) + ',' + str(cost) + ',' + str(second_oTime) + ',' + str(2) + '\n')
+                            setFile.write( str(code.decode('utf-8')) + ',' + str(float(rate)) + ',' + str(tpg) +  ',' + str_oTime + ',' + str(wanna) + ',' + str(datetime.datetime.now().strftime('%H:%M:%S')) + ',' + str(cost) + ',' + str(second_oTime) + ',' + str(1) + '\n')
                             setFile.close()
 
     except Exception as e:
         print('--------------------' + str(e))
         continue
+
+
 
 print(today)

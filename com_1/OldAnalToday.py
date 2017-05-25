@@ -25,7 +25,7 @@ stdLimit = 2
 sumEd = 0
 gradient = 0
 today = now.strftime('%Y-%m-%d')
-today = '2017-03-23'
+today = '2017-05-25'
 
 print(today)
 setFile = open(os.path.join("C:\\", "Dropbox\\com_1\\" + today + "\\" + today + "moa3.txt"), 'w')
@@ -182,8 +182,8 @@ for ttime in times:
                     nowGr = int(exportData[i, 4].decode('UTF-8')) - int(exportData[i-3, 4].decode('UTF-8'))
                     grRate = nowGr / thGr
 
-                    # if(exportData[i, 9].astype('float') < 103 or grRate > 2):
-                    #     pick[code.decode('utf-8')] = True
+                    if(exportData[i, 9].astype('float') < 103 or grRate > 2):
+                        pick[code.decode('utf-8')] = True
 
                     cgfit1 = sp.polyfit(ti[:5], exportData[i-4:i+1,9].astype(float), 1)
                     cggrad1 = sp.around(cgfit1[0], decimals=2)
@@ -207,7 +207,6 @@ for ttime in times:
                     s4 = ( s0 + s1 + s2 + s3 )/4
                     ssss = (exportData[i,4].astype(float) - exportData[i-1,4].astype(float)) * exportData[i,8].astype(float)
                     srate = round(ssss/s4, 2)
-
 
                     nf = 0
                     fl = 0
