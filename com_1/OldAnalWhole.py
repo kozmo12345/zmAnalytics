@@ -83,6 +83,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_1\\Data\\"):
         cggradDic = dict()
         nosDic = dict()
         levelUpDic = dict()
+        delayMesu = dict()
 
         for ttime in times:
             try:
@@ -166,8 +167,11 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_1\\Data\\"):
                             if(isd2[code.decode('utf-8')]):
                                 med = ed * 1.8
                             mmRate = (sp.sum(exportData[i-stdLimit:i+1,5].astype(float)))/(sp.sum(exportData[i-stdLimit:i+1,6].astype(float))) - ((med)/22)
+                            grRate = 0
+                            if(len(exportData[:i, 4]) > 6 and int(exportData[i, 4].decode('UTF-8')) - int(exportData[i-3, 4].decode('UTF-8')) != 0 and int(exportData[i-3, 4].decode('UTF-8')) - int(exportData[i-6, 4].decode('UTF-8')) != 0):
+                                grRate = (int(exportData[i, 4].decode('UTF-8')) - int(exportData[i-3, 4].decode('UTF-8'))) / (int(exportData[i-3, 4].decode('UTF-8')) - int(exportData[i-6, 4].decode('UTF-8')))
 
-                            if(exportData[i, 9].astype('float') < 103):
+                            if(exportData[i, 9].astype('float') < 103 or grRate > 2):
                                 pick[code.decode('utf-8')] = True
 
                             cgfit1 = sp.polyfit(ti[:5], exportData[i-4:i+1,9].astype(float), 1)
@@ -214,6 +218,9 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_1\\Data\\"):
                                 if(fl != 0):
                                     if(nfaver != 0):
                                         flaver = (tmarr[0] + fl) / 2
+
+                                        # if((flaver - nfaver) > 3.5):
+                                        #     pick[code.decode('utf-8')] = True
     
                                         if(gap != 0 and gap * 1.5 < (flaver - nfaver)):
                                             levelUpDic[code.decode('utf-8')].append((flaver - nfaver))
@@ -253,7 +260,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_1\\Data\\"):
                             if(code.decode('utf-8') not in pick):
                                 continue;
 
-                            if(pick[code.decode('utf-8')] and ed >= 0):
+                            if(pick[code.decode('utf-8')] and ed >= 0.4):
                                 edFile.write( str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMin) + ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(red) + ',' + str(msTime) + ',' + str(mdTime) + ',' + str(msCost) + ',' + str(mdCost) + ',' + str(msGradient[code.decode('utf-8')]) + ',' + str(msGr[code.decode('utf-8')]) + ',' + str(msSmdms[code.decode('utf-8')]) + ',' + str(msGrade[code.decode('utf-8')]) + ',' + str(msSrgrad[code.decode('utf-8')]) + ',' + str(nosDic[code.decode('utf-8')]) +  ',' + str(mesuIndex[code.decode('utf-8')]) + '\n')
                                 comps.remove(code)
                                 sumEd = sumEd + red
@@ -271,7 +278,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_1\\Data\\"):
                                 edFile.write( str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMin) + ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(red) + ',' + str(msTime) + ',' + str(mdTime) + ',' + str(msCost) + ',' + str(mdCost) + ',' + str(msGradient[code.decode('utf-8')]) + ',' + str(msGr[code.decode('utf-8')]) + ',' + str(msSmdms[code.decode('utf-8')]) + ',' + str(msGrade[code.decode('utf-8')]) + ',' + str(msSrgrad[code.decode('utf-8')]) + ',' + str(nosDic[code.decode('utf-8')]) +  ',' + str(mesuIndex[code.decode('utf-8')]) + '\n')
                                 comps.remove(code)
                                 sumEd = sumEd + red
-                                medos.append(code)
+                                medos.append(code)  
                                 originM = originM * (1 + (red/100))
                                 del pick[code.decode('utf-8')]
                             elif(mesuStart[code.decode('utf-8')] + 60 < i and ed > 0.4 and ed < 2.5):
@@ -280,14 +287,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_1\\Data\\"):
                                 sumEd = sumEd + red
                                 medos.append(code)
                                 originM = originM * (1 + (red/100))
-                                del pick[code.decode('utf-8')]                                                                
-                            # elif(srate > 3 and ed >= tempWan):
-                            #     edFile.write( str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMin) + ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(red) + ',' + str(msTime) + ',' + str(mdTime) + ',' + str(msCost) + ',' + str(mdCost) + ',' + str(msGradient[code.decode('utf-8')]) + ',' + str(msGr[code.decode('utf-8')]) + ',' + str(msSmdms[code.decode('utf-8')]) + ',' + str(msGrade[code.decode('utf-8')]) + ',' + str(msSrgrad[code.decode('utf-8')]) + ',' + str(nosDic[code.decode('utf-8')]) +  ',' + str(mesuIndex[code.decode('utf-8')]) + '\n')
-                            #     comps.remove(code)
-                            #     sumEd = sumEd + red
-                            #     medos.append(code)
-                            #     originM = originM * (1 + (red/100))
-                            #     del pick[code.decode('utf-8')]                                
+                                del pick[code.decode('utf-8')]                                                                                       
                             elif((mmRate < rateLimit or mmRate > rateMLimit or fMedoTime < second_oTime) and gcggrad < -1.7 and ed >= tempWan):
                                 edFile.write( str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMin) + ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(red) + ',' + str(msTime) + ',' + str(mdTime) + ',' + str(msCost) + ',' + str(mdCost) + ',' + str(msGradient[code.decode('utf-8')]) + ',' + str(msGr[code.decode('utf-8')]) + ',' + str(msSmdms[code.decode('utf-8')]) + ',' + str(msGrade[code.decode('utf-8')]) + ',' + str(msSrgrad[code.decode('utf-8')]) + ',' + str(nosDic[code.decode('utf-8')]) +  ',' + str(mesuIndex[code.decode('utf-8')]) + '\n')
                                 comps.remove(code)
@@ -309,21 +309,6 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_1\\Data\\"):
                                 medos.append(code)
                                 originM = originM * (1 + (red/100))
                                 del pick[code.decode('utf-8')]
-                            # elif(exportData[i, 3].astype(float) < 6 and chegang < 140 and ed >= 0):
-                            #     edFile.write( str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMin) + ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(red) + ',' + str(msTime) + ',' + str(mdTime) + ',' + str(msCost) + ',' + str(mdCost) + ',' + str(msGradient[code.decode('utf-8')]) + ',' + str(msGr[code.decode('utf-8')]) + ',' + str(msSmdms[code.decode('utf-8')]) + ',' + str(msGrade[code.decode('utf-8')]) + ',' + str(msSrgrad[code.decode('utf-8')]) + ',' + str(nosDic[code.decode('utf-8')]) +  ',' + str(mesuIndex[code.decode('utf-8')]) + '\n')
-                            #     comps.remove(code)
-                            #     sumEd = sumEd + red
-                            #     medos.append(code)
-                            #     originM = originM * (1 + (red/100))
-                            #     del pick[code.decode('utf-8')]                                
-                            # elif((gcggrad < -3) and ed >= tempWan):
-                            #     print(6666666666)
-                            #     edFile.write( str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMin) + ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(red) + ',' + str(msTime) + ',' + str(mdTime) + ',' + str(msCost) + ',' + str(mdCost) + ',' + str(msGradient[code.decode('utf-8')]) + ',' + str(msGr[code.decode('utf-8')]) + ',' + str(msSmdms[code.decode('utf-8')]) + ',' + str(msGrade[code.decode('utf-8')]) + ',' + str(msSrgrad[code.decode('utf-8')]) + ',' + str(nosDic[code.decode('utf-8')]) +  ',' + str(mesuIndex[code.decode('utf-8')]) + '\n')
-                            #     comps.remove(code)
-                            #     sumEd = sumEd + red
-                            #     medos.append(code)
-                            #     originM = originM * (1 + (red/100))
-                            #     del pick[code.decode('utf-8')]
                             elif(fMedoTime < second_oTime and ed > 0.4 and ed < 2.5):
                                 print(7777777777)
                                 edFile.write( str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMin) + ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(red) + ',' + str(msTime) + ',' + str(mdTime) + ',' + str(msCost) + ',' + str(mdCost) + ',' + str(msGradient[code.decode('utf-8')]) + ',' + str(msGr[code.decode('utf-8')]) + ',' + str(msSmdms[code.decode('utf-8')]) + ',' + str(msGrade[code.decode('utf-8')]) + ',' + str(msSrgrad[code.decode('utf-8')]) + ',' + str(nosDic[code.decode('utf-8')]) +  ',' + str(mesuIndex[code.decode('utf-8')]) + '\n')
@@ -345,13 +330,35 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_1\\Data\\"):
                         cgfit = sp.polyfit(ti, exportData[:i+1,9].astype(float), 1)
                         cggrad = sp.around(cgfit[0], decimals=2)
                         chegang = exportData[i,9].astype(float)
-
+                        grRate = 0
+                        if(len(exportData[:i, 4]) > 6 and int(exportData[i, 4].decode('UTF-8')) - int(exportData[i-3, 4].decode('UTF-8')) != 0 and int(exportData[i-3, 4].decode('UTF-8')) - int(exportData[i-6, 4].decode('UTF-8')) != 0):
+                            grRate = (int(exportData[i, 4].decode('UTF-8')) - int(exportData[i-3, 4].decode('UTF-8'))) / (int(exportData[i-3, 4].decode('UTF-8')) - int(exportData[i-6, 4].decode('UTF-8')))
+                        
+                        if(code.decode('utf-8') in delayMesu and delayMesu[code.decode('utf-8')] + 6 > i and grRate < 1 and (int(exportData[i, 4].decode('UTF-8')) - int(exportData[i-1, 4].decode('UTF-8'))) > 1000 and code not in comps):
+                            if(exportData[i, 3].astype(float) + 1 >= exportData[delayMesu[code.decode('utf-8')], 3].astype(float)):
+                                continue                                   
+                            comps.append((code))
+                            mesuStart[code.decode('utf-8')] = i
+                            msGradient[code.decode('utf-8')] = 0
+                            msGr[code.decode('utf-8')] = gr
+                            msSmdms[code.decode('utf-8')] = 0 
+                            msGrade[code.decode('utf-8')] = grade
+                            msSrgrad[code.decode('utf-8')] = 0
+                            msRate[code.decode('utf-8')] = float(exportData[i, 3].decode('UTF-8'))
+                            rmsRate[code.decode('utf-8')] = float(exportData[i+1, 3].decode('UTF-8'))
+                            pick[code.decode('utf-8')] = False
+                            mesuIndex[code.decode('utf-8')] = 0
+                            isd[code.decode('utf-8')] = False
+                            isd2[code.decode('utf-8')] = False
+                            del delayMesu[code.decode('utf-8')]
+                            setFile.write( str(code.decode('utf-8')) + ',' + str(float(rate)) +  ',' + str(float(exportData[i, 3].decode('UTF-8'))) +  '\n')
+ 
                         if(code.decode('utf-8') not in cggradDic):
                             cggradDic[code.decode('utf-8')] = []
                         else:
                             cggradDic[code.decode('utf-8')].append(cggrad)                        
 
-                        if(((ms_md > 0.96 and sms_md > 1 and gr > 420000) or (cggrad > 2.3 and chegang > 163)) and grade < 16 and exportData[i, 3].astype(float) > 5):
+                        if(((ms_md > 0.96 and sms_md > 1 and gr > 420000) or (cggrad > 2.3 and chegang > 163)) and grade < 16 and exportData[i, 3].astype(float) > 5 and code.decode('utf-8') not in delayMesu):
                             x = ti
                             y = exportData[:i+1,3].astype(float)
                             if(len(y) <= 1):
@@ -507,44 +514,18 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_1\\Data\\"):
                                     thmesu = ((exportData[i,4].astype(float) - exportData[i-1,4].astype(float)) * exportData[i,8].astype(float)) + ((exportData[i - 1,4].astype(float) - exportData[i - 2,4].astype(float)) * exportData[i-1,8].astype(float)) + ((exportData[i - 2,4].astype(float) - exportData[i - 3,4].astype(float)) * exportData[i-2,8].astype(float))
                                     tmsr = thmesu/sp.sum(exportData[i-11:i+1,4].astype(float) * exportData[i-11:i+1,8].astype(float))
 
-                                    # nf = 0
-                                    # fl = 0
-                                    # nfaver = 0
-                                    # flaver = 0
-                                    # gap = 0
-                                    # levelUpDic[code.decode('utf-8')] = []
-                                    # levelUpDic[code.decode('utf-8')].append(0)
-                                    # rrrr =  0
-                                    # for x in range(0,xstime.tm_min + 1):
-                                    #     r = re.compile('09:' + str(x).rjust(2, '0') + ':..')
-                                    #     vmatch = sp.vectorize(lambda x:bool(r.match(x)))
-                                    #     vmatch(exportData[:,0].astype(str))
-                                    #     tmarr = exportData[:,3].astype(str)[vmatch(exportData[:,0].astype(str))].astype(float)
-        
-                                    #     if(fl != 0):
-                                    #         if(nfaver != 0):
-                                    #             flaver = (tmarr[0] + fl) / 2
-    
-                                    #             if(gap != 0 and gap * 1.5 < (flaver - nfaver)):
-                                    #                 levelUpDic[code.decode('utf-8')].append((flaver - nfaver))
-                                    #                 rrrr =  flaver - exportData[i, 3].astype(float)
-                                    #                 if((flaver - nfaver) > 4):
-                                    #                     nos.append(code)
-                                    #             else:
-                                    #                 levelUpDic[code.decode('utf-8')].append(0)
-                                                
-                                    #             if(flaver - nfaver < 0):
-                                    #                 gap = 1.8
-                                    #             else:
-                                    #                 gap = flaver - nfaver
-    
-                                    #         nfaver = (fl + tmarr[0]) / 2
-                                        
-                                    #     nf = tmarr[0]
-                                    #     fl = tmarr[-1]
+                                    # if(grRate > 1):
+                                    grRate1 = 0
+                                    if(len(exportData[:i, 4]) > 7 and int(exportData[i-1, 4].decode('UTF-8')) - int(exportData[i-4, 4].decode('UTF-8')) != 0 and int(exportData[i-4, 4].decode('UTF-8')) - int(exportData[i-7, 4].decode('UTF-8')) != 0):
+                                        grRate1 = (int(exportData[i-1, 4].decode('UTF-8')) - int(exportData[i-4, 4].decode('UTF-8'))) / (int(exportData[i-4, 4].decode('UTF-8')) - int(exportData[i-7, 4].decode('UTF-8')))                                        
 
-                                    # if(code in nos):
-                                    #     continue;
+                                    grRate2 = 0
+                                    if(len(exportData[:i, 4]) > 8 and int(exportData[i-2, 4].decode('UTF-8')) - int(exportData[i-5, 4].decode('UTF-8')) != 0 and int(exportData[i-5, 4].decode('UTF-8')) - int(exportData[i-8, 4].decode('UTF-8')) != 0):
+                                        grRate2 = (int(exportData[i-2, 4].decode('UTF-8')) - int(exportData[i-5, 4].decode('UTF-8'))) / (int(exportData[i-5, 4].decode('UTF-8')) - int(exportData[i-8, 4].decode('UTF-8')))                                        
+
+                                    if(grRate > 1.9 or grRate1 > 1.9 or grRate2 > 1.9):
+                                        delayMesu[code.decode('utf-8')] = i
+                                        continue;                                        
 
                                     comps.append((code))
                                     mesuStart[code.decode('utf-8')] = i
@@ -625,6 +606,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_1\\diff\\"):
         cggradDic = dict()
         nosDic = dict()
         levelUpDic = dict()
+        delayMesu = dict()
 
         for ttime in times:
             try:
@@ -708,8 +690,11 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_1\\diff\\"):
                             if(isd2[code.decode('utf-8')]):
                                 med = ed * 1.8
                             mmRate = (sp.sum(exportData[i-stdLimit:i+1,5].astype(float)))/(sp.sum(exportData[i-stdLimit:i+1,6].astype(float))) - ((med)/22)
+                            grRate = 0
+                            if(len(exportData[:i, 4]) > 6 and int(exportData[i, 4].decode('UTF-8')) - int(exportData[i-3, 4].decode('UTF-8')) != 0 and int(exportData[i-3, 4].decode('UTF-8')) - int(exportData[i-6, 4].decode('UTF-8')) != 0):
+                                grRate = (int(exportData[i, 4].decode('UTF-8')) - int(exportData[i-3, 4].decode('UTF-8'))) / (int(exportData[i-3, 4].decode('UTF-8')) - int(exportData[i-6, 4].decode('UTF-8')))
 
-                            if(exportData[i, 9].astype('float') < 103):
+                            if(exportData[i, 9].astype('float') < 103 or grRate > 2):
                                 pick[code.decode('utf-8')] = True
 
                             cgfit1 = sp.polyfit(ti[:5], exportData[i-4:i+1,9].astype(float), 1)
@@ -735,9 +720,6 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_1\\diff\\"):
                             ssss = (exportData[i,4].astype(float) - exportData[i-1,4].astype(float)) * exportData[i,8].astype(float)
                             srate = round(ssss/s4, 2)
 
-
-
-
                             nf = 0
                             fl = 0
                             nfaver = 0
@@ -759,6 +741,9 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_1\\diff\\"):
                                     if(nfaver != 0):
                                         flaver = (tmarr[0] + fl) / 2
     
+                                        # if((flaver - nfaver) > 3.5):
+                                        #     pick[code.decode('utf-8')] = True
+
                                         if(gap != 0 and gap * 1.5 < (flaver - nfaver)):
                                             levelUpDic[code.decode('utf-8')].append((flaver - nfaver))
                                             rrrr =  flaver - exportData[i, 3].astype(float)
@@ -797,7 +782,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_1\\diff\\"):
                             if(code.decode('utf-8') not in pick):
                                 continue;
 
-                            if(pick[code.decode('utf-8')] and ed >= 0):
+                            if(pick[code.decode('utf-8')] and ed >= 0.4):
                                 edFile.write( str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMin) + ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(red) + ',' + str(msTime) + ',' + str(mdTime) + ',' + str(msCost) + ',' + str(mdCost) + ',' + str(msGradient[code.decode('utf-8')]) + ',' + str(msGr[code.decode('utf-8')]) + ',' + str(msSmdms[code.decode('utf-8')]) + ',' + str(msGrade[code.decode('utf-8')]) + ',' + str(msSrgrad[code.decode('utf-8')]) + ',' + str(nosDic[code.decode('utf-8')]) +  ',' + str(mesuIndex[code.decode('utf-8')]) + '\n')
                                 comps.remove(code)
                                 sumEd = sumEd + red
@@ -889,13 +874,35 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_1\\diff\\"):
                         cgfit = sp.polyfit(ti, exportData[:i+1,9].astype(float), 1)
                         cggrad = sp.around(cgfit[0], decimals=2)
                         chegang = exportData[i,9].astype(float)
+                        grRate = 0
+                        if(len(exportData[:i, 4]) > 6 and int(exportData[i, 4].decode('UTF-8')) - int(exportData[i-3, 4].decode('UTF-8')) != 0 and int(exportData[i-3, 4].decode('UTF-8')) - int(exportData[i-6, 4].decode('UTF-8')) != 0):
+                            grRate = (int(exportData[i, 4].decode('UTF-8')) - int(exportData[i-3, 4].decode('UTF-8'))) / (int(exportData[i-3, 4].decode('UTF-8')) - int(exportData[i-6, 4].decode('UTF-8')))
 
+                        if(code.decode('utf-8') in delayMesu and delayMesu[code.decode('utf-8')] + 6 > i and grRate < 1 and (int(exportData[i, 4].decode('UTF-8')) - int(exportData[i-1, 4].decode('UTF-8'))) > 1000 and (int(exportData[i, 4].decode('UTF-8')) - int(exportData[i-1, 4].decode('UTF-8'))) > 1000 and code not in comps):
+                            if(exportData[i, 3].astype(float) + 1 >= exportData[delayMesu[code.decode('utf-8')], 3].astype(float)):
+                                continue                            
+                            comps.append((code))
+                            mesuStart[code.decode('utf-8')] = i
+                            msGradient[code.decode('utf-8')] = 0
+                            msGr[code.decode('utf-8')] = gr
+                            msSmdms[code.decode('utf-8')] = 0 
+                            msGrade[code.decode('utf-8')] = grade
+                            msSrgrad[code.decode('utf-8')] = 0
+                            msRate[code.decode('utf-8')] = float(exportData[i, 3].decode('UTF-8'))
+                            rmsRate[code.decode('utf-8')] = float(exportData[i+1, 3].decode('UTF-8'))
+                            pick[code.decode('utf-8')] = False
+                            mesuIndex[code.decode('utf-8')] = 0
+                            isd[code.decode('utf-8')] = False
+                            isd2[code.decode('utf-8')] = False
+                            del delayMesu[code.decode('utf-8')]
+                            setFile.write( str(code.decode('utf-8')) + ',' + str(float(rate)) +  ',' + str(float(exportData[i, 3].decode('UTF-8'))) +  '\n')
+  
                         if(code.decode('utf-8') not in cggradDic):
                             cggradDic[code.decode('utf-8')] = []
                         else:
                             cggradDic[code.decode('utf-8')].append(cggrad)
 
-                        if(((ms_md > 0.96 and sms_md > 1 and gr > 420000) or (cggrad > 2.3 and chegang > 163)) and grade < 16 and exportData[i, 3].astype(float) > 5):
+                        if(((ms_md > 0.96 and sms_md > 1 and gr > 420000) or (cggrad > 2.3 and chegang > 163)) and grade < 16 and exportData[i, 3].astype(float) > 5 and code.decode('utf-8') not in delayMesu):
                             x = ti
                             y = exportData[:i+1,3].astype(float)
                             if(len(y) <= 1):
@@ -1052,45 +1059,18 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_1\\diff\\"):
                                     thmesu = ((exportData[i,4].astype(float) - exportData[i-1,4].astype(float)) * exportData[i,8].astype(float)) + ((exportData[i - 1,4].astype(float) - exportData[i - 2,4].astype(float)) * exportData[i-1,8].astype(float)) + ((exportData[i - 2,4].astype(float) - exportData[i - 3,4].astype(float)) * exportData[i-2,8].astype(float))
                                     tmsr = thmesu/sp.sum(exportData[i-11:i+1,4].astype(float) * exportData[i-11:i+1,8].astype(float))
 
-                                    # nf = 0
-                                    # fl = 0
-                                    # nfaver = 0
-                                    # flaver = 0
-                                    # gap = 0
-                                    # levelUpDic[code.decode('utf-8')] = []
-                                    # levelUpDic[code.decode('utf-8')].append(0)
-                                    # rrrr = 0
-                                    # for x in range(0,xstime.tm_min + 1):
-                                    #     r = re.compile('09:' + str(x).rjust(2, '0') + ':..')
-                                    #     vmatch = sp.vectorize(lambda x:bool(r.match(x)))
-                                    #     vmatch(exportData[:,0].astype(str))
-                                    #     tmarr = exportData[:,3].astype(str)[vmatch(exportData[:,0].astype(str))].astype(float)
-        
-                                    #     if(fl != 0):
-                                    #         if(nfaver != 0):
-                                    #             flaver = (tmarr[0] + fl) / 2
-    
-                                    #             if(gap != 0 and gap * 1.5 < (flaver - nfaver)):
-                                    #                 levelUpDic[code.decode('utf-8')].append((flaver - nfaver))
-                                    #                 rrrr =  flaver - exportData[i, 3].astype(float)
-                                    #                 if((flaver - nfaver) > 4):
-                                    #                     nos.append(code)
+                                    # if(grRate > 1):
+                                    grRate1 = 0
+                                    if(len(exportData[:i, 4]) > 7 and int(exportData[i-1, 4].decode('UTF-8')) - int(exportData[i-4, 4].decode('UTF-8')) != 0 and int(exportData[i-4, 4].decode('UTF-8')) - int(exportData[i-7, 4].decode('UTF-8')) != 0):
+                                        grRate1 = (int(exportData[i-1, 4].decode('UTF-8')) - int(exportData[i-4, 4].decode('UTF-8'))) / (int(exportData[i-4, 4].decode('UTF-8')) - int(exportData[i-7, 4].decode('UTF-8')))                                        
 
-                                    #             else:
-                                    #                 levelUpDic[code.decode('utf-8')].append(0)
-                                                
-                                    #             if(flaver - nfaver < 0):
-                                    #                 gap = 1.8
-                                    #             else:
-                                    #                 gap = flaver - nfaver
-    
-                                    #         nfaver = (fl + tmarr[0]) / 2
-                                        
-                                    #     nf = tmarr[0]
-                                    #     fl = tmarr[-1]
+                                    grRate2 = 0
+                                    if(len(exportData[:i, 4]) > 8 and int(exportData[i-2, 4].decode('UTF-8')) - int(exportData[i-5, 4].decode('UTF-8')) != 0 and int(exportData[i-5, 4].decode('UTF-8')) - int(exportData[i-8, 4].decode('UTF-8')) != 0):
+                                        grRate2 = (int(exportData[i-2, 4].decode('UTF-8')) - int(exportData[i-5, 4].decode('UTF-8'))) / (int(exportData[i-5, 4].decode('UTF-8')) - int(exportData[i-8, 4].decode('UTF-8')))                                        
 
-                                    # if(code in nos):
-                                    #     continue;
+                                    if(grRate > 1.9 or grRate1 > 1.9 or grRate2 > 1.9):
+                                        delayMesu[code.decode('utf-8')] = i
+                                        continue;                                        
 
                                     comps.append((code))
                                     mesuStart[code.decode('utf-8')] = i

@@ -98,6 +98,7 @@ msRate = dict()
 isd = dict()
 isd2 = dict()
 levelUpDic = dict()
+pick = dict()
 isRe = False
 
 with open(setFilePath, 'r') as f:
@@ -263,6 +264,9 @@ while(True):
                             if(fl != 0):
                                 if(nfaver != 0):
                                     flaver = (tmarr[0] + fl) / 2
+
+                                    if((flaver - nfaver) > 3.5):
+                                        pick[code.decode('utf-8')] = True                                    
     
                                     if(gap != 0 and gap * 1.5 < (flaver - nfaver)):
                                         levelUpDic[code.decode('utf-8')].append((flaver - nfaver))
@@ -322,6 +326,12 @@ while(True):
                             mdFile.close()
                             medos.append(code)
                             comps.remove(code)
+                        elif(pick[code.decode('utf-8')] and ed >= 0.4):
+                            mdFile = open(mdFilePath, 'a')
+                            mdFile.write(str(code.decode('utf-8')) + ',' + str(float(exportData[i, 3].decode('UTF-8'))) + ',' + str(exportData[i, 0].decode('UTF-8')) + ',' + str(datetime.datetime.now().strftime('%H:%M:%S')) + ',' + str(exportData[i, 8].decode('UTF-8')) + '\n')
+                            mdFile.close()
+                            medos.append(code)
+                            comps.remove(code)
 
                 if(second_oTime > endTime):
                     continue;
@@ -375,10 +385,6 @@ while(True):
                             if(xstime.tm_min < 2):
                                 nos.append(code)
                                 continue;
-
-                            # if(exportData[i, 3].astype(float) < 5.3):
-                            #     nos.append(code)
-                            #     continue;
 
                             cost = int(exportData[i, 8].decode('UTF-8'))
                             if(cost > 7500):
@@ -483,6 +489,7 @@ while(True):
                             msRate[code.decode('utf-8')] = float(rate)
                             isd[code.decode('utf-8')] = False
                             isd2[code.decode('utf-8')] = False
+                            pick[code.decode('utf-8')] = False
                             cost = exportData[i, 8].decode('UTF-8')
                             setFile = open(setFilePath, 'a')
                             setFile.write( str(code.decode('utf-8')) + ',' + str(float(rate)) + ',' + str(tpg) +  ',' + str_oTime + ',' + str(wanna) + ',' + str(datetime.datetime.now().strftime('%H:%M:%S')) + ',' + str(cost) + ',' + str(second_oTime) + ',' + str(1) + '\n')
