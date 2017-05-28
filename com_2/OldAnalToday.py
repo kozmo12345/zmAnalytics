@@ -6,6 +6,7 @@ import scipy as sp
 import matplotlib.pyplot as plt
 import datetime
 import time
+import re
 
 sp.random.seed(3)
 
@@ -24,7 +25,7 @@ stdLimit = 2
 sumEd = 0
 gradient = 0
 today = now.strftime('%Y-%m-%d')
-# today = '2017-03-20'
+today = '2017-04-05'
 
 print(today)
 setFile = open(os.path.join("C:\\", "Dropbox\\com_2\\" + today + "\\" + today + "moa3.txt"), 'w')
@@ -86,6 +87,8 @@ pick = dict()
 isd = dict()
 isd2 = dict()
 cggradDic = dict()
+levelUpDic = dict()
+delayMesu = dict()
 
 for ttime in times:
     try:
@@ -138,6 +141,12 @@ for ttime in times:
                 if(i == -1): continue
                 c = exportData[:i+1, 3].astype(float)
 
+                if(code.decode('utf-8') == '041460'): #testst
+                    thGr = int(exportData[i-3, 4].decode('UTF-8')) - int(exportData[i-6, 4].decode('UTF-8'))                  
+                    nowGr = int(exportData[i, 4].decode('UTF-8')) - int(exportData[i-3, 4].decode('UTF-8'))
+                    # if(thGr != 0 and nowGr != 0):
+                    print(ttime, code , c[-1],nowGr / thGr, exportData[i,8].astype(int))    
+
                 if(code in comps):
                     if(i < mesuStart[code.decode('utf-8')] + 3 ):
                         continue;
@@ -167,20 +176,112 @@ for ttime in times:
                         isd2[code.decode('utf-8')] = True
                     if(isd2[code.decode('utf-8')]):
                         med = ed * 1.8
-                    mmRate = (sp.sum(exportData[i-stdLimit:i+1,5].astype(float)))/(sp.sum(exportData[i-stdLimit:i+1,6].astype(float))) - ((med)/20)
+                    mmRate = (sp.sum(exportData[i-stdLimit:i+1,5].astype(float)))/(sp.sum(exportData[i-stdLimit:i+1,6].astype(float))) - ((med)/22)
 
-                    # if(code.decode('utf-8') == '043910'):
-                    #     cgfit = sp.polyfit(ti[:5], exportData[i-4:i+1,9].astype(float), 1)
-                    #     cggrad = sp.around(cgfit[0], decimals=2)
-                    #     print(code, ttime, cggrad)
-                    if(exportData[i, 3].astype('float') > 19.5):
+                    thGr = int(exportData[i-3, 4].decode('UTF-8')) - int(exportData[i-6, 4].decode('UTF-8'))                  
+                    nowGr = int(exportData[i, 4].decode('UTF-8')) - int(exportData[i-3, 4].decode('UTF-8'))
+                    grRate = 0
+                    if(len(exportData[:i, 4]) > 6 and int(exportData[i, 4].decode('UTF-8')) - int(exportData[i-3, 4].decode('UTF-8')) != 0 and int(exportData[i-3, 4].decode('UTF-8')) - int(exportData[i-6, 4].decode('UTF-8')) != 0):
+                        grRate = (int(exportData[i, 4].decode('UTF-8')) - int(exportData[i-3, 4].decode('UTF-8'))) / (int(exportData[i-3, 4].decode('UTF-8')) - int(exportData[i-6, 4].decode('UTF-8')))
+
+                    if(exportData[i, 9].astype('float') < 103 or grRate > 1.8):
                         pick[code.decode('utf-8')] = True
 
-                    cgfit = sp.polyfit(ti[:5], exportData[i-4:i+1,9].astype(float), 1)
-                    cggrad = sp.around(cgfit[0], decimals=2)
+                    cgfit1 = sp.polyfit(ti[:5], exportData[i-4:i+1,9].astype(float), 1)
+                    cggrad1 = sp.around(cgfit1[0], decimals=2)
 
-                    if(pick[code.decode('utf-8')] and exportData[i, 3].astype('float') < 19):
+                    cgfit2 = sp.polyfit(ti[:6], exportData[i-5:i+1,9].astype(float), 1)
+                    cggrad2 = sp.around(cgfit2[0], decimals=2)
+
+                    cgfit3 = sp.polyfit(ti[:7], exportData[i-6:i+1,9].astype(float), 1)
+                    cggrad3 = sp.around(cgfit3[0], decimals=2)
+                    
+                    gcggrad = min([cggrad1, cggrad2, cggrad3])
+                    chegang = exportData[i,9].astype(float)
+                    if(chegang < 120):
+                        gcggrad = -10
+
+                    s3 = (exportData[i-4,4].astype(float) - exportData[i-5,4].astype(float)) * exportData[i-4,8].astype(float)
+                    s2 = (exportData[i-3,4].astype(float) - exportData[i-4,4].astype(float)) * exportData[i-3,8].astype(float)
+                    s1 = (exportData[i-2,4].astype(float) - exportData[i-3,4].astype(float)) * exportData[i-2,8].astype(float)
+                    s0 = (exportData[i-1,4].astype(float) - exportData[i-2,4].astype(float)) * exportData[i-1,8].astype(float)
+                    
+                    s4 = ( s0 + s1 + s2 + s3 )/4
+                    ssss = (exportData[i,4].astype(float) - exportData[i-1,4].astype(float)) * exportData[i,8].astype(float)
+                    srate = round(ssss/s4, 2)
+
+                    nf = 0
+                    fl = 0
+                    nfaver = 0
+                    flaver = 0
+                    gap = 0
+                    levelUpDic[code.decode('utf-8')] = []
+                    levelUpDic[code.decode('utf-8')].append(0)
+                    rrrr =  0
+
+                    if(True):
+                        for x in range(0,xstime.tm_min + 1):
+                            r = re.compile('09:' + str(x).rjust(2, '0') + ':..')
+                            vmatch = sp.vectorize(lambda x:bool(r.match(x)))
+                            vmatch(exportData[:,0].astype(str))
+                            tmarr = exportData[:,3].astype(str)[vmatch(exportData[:,0].astype(str))].astype(float)
+
+                            if(len(tmarr) == 0):
+                                continue;
+    
+                            if(fl != 0):
+                                if(nfaver != 0):
+                                    flaver = (tmarr[0] + fl) / 2
+
+                                    # if(code.decode('utf-8') == '208870'):
+                                    #     print(code, ttime, (flaver - nfaver), levelUpDic[code.decode('utf-8')])
+
+                                    # if((flaver - nfaver) > 3.5):
+                                    #     pick[code.decode('utf-8')] = True
+
+                                    if(gap != 0 and gap * 1.5 < (flaver - nfaver)):
+                                        levelUpDic[code.decode('utf-8')].append((flaver - nfaver))
+                                        rrrr =  flaver - exportData[i, 3].astype(float)
+
+                                        if((flaver - nfaver) > 4.26 and ed > 0.4):
+                                            pick[code.decode('utf-8')] = True
+
+                                        if((flaver - nfaver) > 4.26 and i > mesuStart[code.decode('utf-8')] + 12):
+                                            edFile.write( str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMin) + ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(red) + ',' + str(msTime) + ',' + str(mdTime) + ',' + str(msCost) + ',' + str(mdCost) + ',' + str(msGradient[code.decode('utf-8')]) + ',' + str(msGr[code.decode('utf-8')]) + ',' + str(msSmdms[code.decode('utf-8')]) + ',' + str(msGrade[code.decode('utf-8')]) + ',' + str(msSrgrad[code.decode('utf-8')]) +'\n')
+                                            comps.remove(code)
+                                            medos.append(code)
+                                            sumEd = sumEd + red
+
+                                    else:
+                                        levelUpDic[code.decode('utf-8')].append(0)
+                                    
+                                    if(flaver - nfaver < 0):
+                                        gap = 1
+                                    else:
+                                        gap = flaver - nfaver
+
+                                nfaver = (fl + tmarr[0]) / 2
+                            
+                            nf = tmarr[0]
+                            fl = tmarr[-1]
+
+                    if(code not in comps):
+                        continue;
+
+                    if((pick[code.decode('utf-8')] and ed >= 0.4) or (i > mesuStart[code.decode('utf-8')] + 18 and pick[code.decode('utf-8')] and ed >= 0.1)):
                         print(ttime, code, 1111111111)
+                        edFile.write( str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMin) + ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(red) + ',' + str(msTime) + ',' + str(mdTime) + ',' + str(msCost) + ',' + str(mdCost) + ',' + str(msGradient[code.decode('utf-8')]) + ',' + str(msGr[code.decode('utf-8')]) + ',' + str(msSmdms[code.decode('utf-8')]) + ',' + str(msGrade[code.decode('utf-8')]) + ',' + str(msSrgrad[code.decode('utf-8')]) +'\n')
+                        comps.remove(code)
+                        medos.append(code)
+                        sumEd = sumEd + red
+                    elif(mesuStart[code.decode('utf-8')] + 60 < i and ed > 0.4 and ed < 2.5):
+                        print(ttime, code, 2222222222)
+                        edFile.write( str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMin) + ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(red) + ',' + str(msTime) + ',' + str(mdTime) + ',' + str(msCost) + ',' + str(mdCost) + ',' + str(msGradient[code.decode('utf-8')]) + ',' + str(msGr[code.decode('utf-8')]) + ',' + str(msSmdms[code.decode('utf-8')]) + ',' + str(msGrade[code.decode('utf-8')]) + ',' + str(msSrgrad[code.decode('utf-8')]) +'\n')
+                        comps.remove(code)
+                        medos.append(code)
+                        sumEd = sumEd + red
+                    elif(mesuStart[code.decode('utf-8')] + 36 < i and ed > -0.1 and ed < 1 and max(exportData[:i,9].astype(float)) < 275):
+                        print(ttime, code, 2222222222)
                         edFile.write( str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMin) + ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(red) + ',' + str(msTime) + ',' + str(mdTime) + ',' + str(msCost) + ',' + str(mdCost) + ',' + str(msGradient[code.decode('utf-8')]) + ',' + str(msGr[code.decode('utf-8')]) + ',' + str(msSmdms[code.decode('utf-8')]) + ',' + str(msGrade[code.decode('utf-8')]) + ',' + str(msSrgrad[code.decode('utf-8')]) +'\n')
                         comps.remove(code)
                         medos.append(code)
@@ -190,8 +291,9 @@ for ttime in times:
                         edFile.write( str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMin) + ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(red) + ',' + str(msTime) + ',' + str(mdTime) + ',' + str(msCost) + ',' + str(mdCost) + ',' + str(msGradient[code.decode('utf-8')]) + ',' + str(msGr[code.decode('utf-8')]) + ',' + str(msSmdms[code.decode('utf-8')]) + ',' + str(msGrade[code.decode('utf-8')]) + ',' + str(msSrgrad[code.decode('utf-8')]) +'\n')
                         comps.remove(code)
                         medos.append(code)
-                        sumEd = sumEd + red
-                    elif((mmRate < rateLimit or mmRate > rateMLimit or fMedoTime < second_oTime) and ed >= tempWan):
+                        sumEd = sumEd + red                        
+                    elif((mmRate < rateLimit or mmRate > rateMLimit or fMedoTime < second_oTime) and gcggrad < -1.7 and ed >= tempWan):
+                        print(cggrad1,cggrad2,cggrad3, gcggrad)
                         print(ttime, code, 4444444444)
                         edFile.write( str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMin) + ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(red) + ',' + str(msTime) + ',' + str(mdTime) + ',' + str(msCost) + ',' + str(mdCost) + ',' + str(msGradient[code.decode('utf-8')]) + ',' + str(msGr[code.decode('utf-8')]) + ',' + str(msSmdms[code.decode('utf-8')]) + ',' + str(msGrade[code.decode('utf-8')]) + ',' + str(msSrgrad[code.decode('utf-8')]) +'\n')
                         comps.remove(code)
@@ -203,18 +305,6 @@ for ttime in times:
                         comps.remove(code)
                         medos.append(code)
                         sumEd = sumEd + red
-                    # elif((cggrad < -3) and ed >= tempWan):
-                    #     print(6666666666) 
-                    #     edFile.write( str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMin) + ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(red) + ',' + str(msTime) + ',' + str(mdTime) + ',' + str(msCost) + ',' + str(mdCost) + ',' + str(msGradient[code.decode('utf-8')]) + ',' + str(msGr[code.decode('utf-8')]) + ',' + str(msSmdms[code.decode('utf-8')]) + ',' + str(msGrade[code.decode('utf-8')]) + ',' + str(msSrgrad[code.decode('utf-8')]) +'\n')
-                    #     comps.remove(code)
-                    #     medos.append(code)
-                    #     sumEd = sumEd + red
-                    # elif(i+2 >= len(exportData[:,4])):
-                    #     print(ttime, code, 7777777777) 
-                    #     edFile.write( str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMin) + ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(red) + ',' + str(msTime) + ',' + str(mdTime) + ',' + str(msCost) + ',' + str(mdCost) + ',' + str(msGradient[code.decode('utf-8')]) + ',' + str(msGr[code.decode('utf-8')]) + ',' + str(msSmdms[code.decode('utf-8')]) + ',' + str(msGrade[code.decode('utf-8')]) + ',' + str(msSrgrad[code.decode('utf-8')]) +'\n')
-                    #     comps.remove(code)
-                    #     medos.append(code)
-                    #     sumEd = sumEd + red
                     elif(mdpCost < 5500000 and mdpCost != 0 and md < 3):
                         print(ttime, code, 8888888888) 
                         edFile.write( str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMin) + ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(red) + ',' + str(msTime) + ',' + str(mdTime) + ',' + str(msCost) + ',' + str(mdCost) + ',' + str(msGradient[code.decode('utf-8')]) + ',' + str(msGr[code.decode('utf-8')]) + ',' + str(msSmdms[code.decode('utf-8')]) + ',' + str(msGrade[code.decode('utf-8')]) + ',' + str(msSrgrad[code.decode('utf-8')]) +'\n')
@@ -236,14 +326,44 @@ for ttime in times:
                 cggrad = sp.around(cgfit[0], decimals=2)
                 chegang = exportData[i,9].astype(float)
 
-                # if(code.decode('utf-8') == '014200'):
-                #     print(ttime, code, cggrad, chegang, ' 999999999999999999999999999999')
-                #     time.sleep(3)
-
                 if(code.decode('utf-8') not in cggradDic):
                     cggradDic[code.decode('utf-8')] = []
                 else:
                     cggradDic[code.decode('utf-8')].append(cggrad)
+
+                grRate = 0
+                if(len(exportData[:i, 4]) > 6 and int(exportData[i, 4].decode('UTF-8')) - int(exportData[i-3, 4].decode('UTF-8')) != 0 and int(exportData[i-3, 4].decode('UTF-8')) - int(exportData[i-6, 4].decode('UTF-8')) != 0):
+                    thGr = int(exportData[i-3, 4].decode('UTF-8')) - int(exportData[i-6, 4].decode('UTF-8'))                  
+                    nowGr = int(exportData[i, 4].decode('UTF-8')) - int(exportData[i-3, 4].decode('UTF-8'))
+                    grRate = nowGr / thGr
+
+                if(code.decode('utf-8') in delayMesu and delayMesu[code.decode('utf-8')] + 6 > i and grRate < 0.89 and (int(exportData[i, 4].decode('UTF-8')) - int(exportData[i-1, 4].decode('UTF-8'))) > 1000 and (int(exportData[i-3, 4].decode('UTF-8')) - int(exportData[i-6, 4].decode('UTF-8'))) > 1000 and code not in comps):
+                    if(exportData[i, 3].astype(float) + 1 >= exportData[delayMesu[code.decode('utf-8')], 3].astype(float)):
+                        continue
+
+                    fcgfitt = sp.polyfit(sp.array(range(i-delayMesu[code.decode('utf-8')]+1)), exportData[delayMesu[code.decode('utf-8')]:i+1,9].astype(float), 1)
+                    fcggradtt = sp.around(fcgfitt[0], decimals=2)
+
+                    print(ttime,code, fcggradtt)
+
+                    if(fcggradtt < -7):
+                        continue
+
+                    comps.append((code))
+                    mesuStart[code.decode('utf-8')] = i
+                    msGradient[code.decode('utf-8')] = 0
+                    msGr[code.decode('utf-8')] = gr
+                    msSmdms[code.decode('utf-8')] = sms_md 
+                    msGrade[code.decode('utf-8')] = grade
+                    msSrgrad[code.decode('utf-8')] = 0
+                    msRate[code.decode('utf-8')] = float(exportData[i, 3].decode('UTF-8'))
+                    rmsRate[code.decode('utf-8')] = float(exportData[i, 3].decode('UTF-8'))
+                    pick[code.decode('utf-8')] = False
+                    isd[code.decode('utf-8')] = False
+                    isd2[code.decode('utf-8')] = False
+                    del delayMesu[code.decode('utf-8')]
+                    setFile.write(str(ttime) + ',' + str(code.decode('utf-8')) + ',' + str(float(rate)) +  ',' + str(float(exportData[i, 3].decode('UTF-8'))) + '\n')
+                    continue
 
                 if(((ms_md > 0.96 and sms_md > 1 and gr > 420000 ) or (cggrad > 2.3 and chegang > 163)) and grade < 16 and exportData[i, 3].astype(float) > 5):
                     x = ti
@@ -261,31 +381,21 @@ for ttime in times:
                     srgrad = sp.around(srfit[0]*10, decimals=2)
                     ltdc = exportData[i,4].astype(float) - exportData[i-1,4].astype(float)
 
-                    if(gradient >= 0.8 and srgrad > 0 and ltdc != 0):
-                        # if(code.decode('utf-8') == '014200'):
-                        #     print(ttime, code, gr, cggrad, chegang, grade, exportData[i, 3].astype(float), ' 000000000000000000000000000000')
-                        #     time.sleep(3)
-                        # if(code.decode('utf-8') == '246690'):
-                        #     print(ttime, code, gradient, chegang, '----------------------')
-                        #     time.sleep(3)
-                        # if(code.decode('utf-8') == '118000'):
-                        #     print(ttime, code)
-                        #     time.sleep(3)                        
-                        # if(code.decode('utf-8') == '043580'):
-                        #     print(ttime, code, gradient, srgrad, ms_md, sms_md, ltdc, cggradDic)
-                        #     time.sleep(5)
+                    wlevel = 1
+                    if(code.decode('utf-8') in mesuDict):
+                        wlevel = mesuDict[code.decode('utf-8')] + 2
+
+                    if(gradient >= (0.8) and srgrad > 0 and ltdc != 0):
 
                         if(code.decode('utf-8') in mesuDict):
+
                             mesuDict[code.decode('utf-8')] = mesuDict[code.decode('utf-8')] + 1
                         else:
+
                             mesuSTime[code.decode('utf-8')] = str_oTime
                             mesuDict[code.decode('utf-8')] = mesuDict.get(code.decode('utf-8'), 0)
 
-                        if(mesuDict[code.decode('utf-8')] in mesuLimit and ((code) not in comps) and (code not in nos)):
-
-                            # if(code.decode('utf-8') == '001420'):
-                            #     print(ttime, code, mesuDict[code.decode('utf-8')])
-                            #     time.sleep(3)
+                        if(mesuDict[code.decode('utf-8')] in mesuLimit and ((code) not in comps) and (code not in nos) and (code not in medos)):
 
                             if(exportData[i, 3].astype(float) < 4 or exportData[i, 3].astype(float) > 19.6):
                                 continue;
@@ -295,12 +405,8 @@ for ttime in times:
                                 nos.append(ttime)
                                 continue;
 
-                            if(exportData[i, 3].astype(float) < 5.3):
-                                nos.append(code)
-                                continue;                                
-
                             cost = int(exportData[i, 8].decode('UTF-8'))
-                            if(cost > 7500):
+                            if(cost > 9500):
                                 nos.append(code)
                                 continue;
 
@@ -317,7 +423,7 @@ for ttime in times:
                             ammfit = sp.polyfit(x[:len(exportData[s:i,5])], ammlist, level)
                             ammgrad = sp.around(ammfit[0]*10, decimals=3)                                    
 
-                            if((mmgrad > 5 and ammgrad < 7) or (ammgrad < -9)):
+                            if((mmgrad > 8.1 and ammgrad < 7.2)):
                                 print(ttime, code, 'nos111111')
                                 nos.append(code)
                                 continue;
@@ -357,25 +463,24 @@ for ttime in times:
                                 nos.append(code)
                                 continue;                                
 
-                            fcgfit = sp.polyfit(ti[:4], exportData[i-3:i+1,9].astype(float), 1)
-                            fcggrad = sp.around(fcgfit[0], decimals=2)
+                            fcgfit1 = sp.polyfit(ti[:4], exportData[i-3:i+1,9].astype(float), 1)
+                            fcggrad1 = sp.around(fcgfit1[0], decimals=2)
 
+                            fcgfit2 = sp.polyfit(ti[:5], exportData[i-4:i+1,9].astype(float), 1)
+                            fcggrad2 = sp.around(fcgfit2[0], decimals=2)                            
+ 
+                            fcggrad = min([fcggrad1, fcggrad2])
 
-                            # if(code.decode('utf-8') == '043580'):
-                            #     print(ttime, code, mmgrad, ammgrad, cggrad, fcggrad)
-                            #     time.sleep(5)                                            
+                            lcgfit = sp.polyfit(ti[:6], exportData[i-5:i+1,9].astype(float), 1)
+                            lcggrad = sp.around(lcgfit[0], decimals=2)
 
-
-                            print(ttime, code, fcggrad)
-                            if(fcggrad < -12.8):
+                            if(chegang < 129 and lcggrad < -1.8 or lcggrad > 60):
                                 nos.append(code)
                                 continue;
 
-                            # print(ttime, code, ssrgrad, mmgrad, ammgrad/mmgrad)
-                            # time.sleep(3)
-
-                            # cgfit = sp.polyfit(ti[:5], exportData[i-4:i+1,9].astype(float), 1)
-                            # cggrad = sp.around(cgfit[0], decimals=2)
+                            if(fcggrad < -14.01):
+                                nos.append(code)
+                                continue;
 
                             tpg = 0
                             msi = 0
@@ -390,15 +495,46 @@ for ttime in times:
                                     tpg = pgradient
                                     msi = pi
 
-                            # print(code, tpg)
-                            # time.sleep(3)
                             tlen = len(cggradDic[code.decode('utf-8')])
                             tfit = sp.polyfit(ti[:tlen], cggradDic[code.decode('utf-8')], 1)
                             tgrad = sp.around(tfit[0], decimals=2)
 
                             if(tgrad < -6):
                                 nos.append(code)
-                                continue;                            
+                                continue;
+
+                            tmesu = ((exportData[i,4].astype(float) - exportData[i-1,4].astype(float)) * exportData[i,8].astype(float)) + ((exportData[i - 1,4].astype(float) - exportData[i - 2,4].astype(float)) * exportData[i-1,8].astype(float))
+
+                            if(tmesu > 250000000 and xstime.tm_min >= 6 and exportData[i, 3].astype(float) < 6.9):
+                                nos.append(code)
+                                continue;                                 
+
+                            if(chegang > 250 and xstime.tm_min <= 3 and exportData[i,3].astype(float) < 5.7):
+                                nos.append(code)
+                                continue;
+
+                            if(code in nos):
+                                continue;
+
+                            grRate1 = 0
+                            if(len(exportData[:i, 4]) > 7 and int(exportData[i-1, 4].decode('UTF-8')) - int(exportData[i-4, 4].decode('UTF-8')) != 0 and int(exportData[i-4, 4].decode('UTF-8')) - int(exportData[i-7, 4].decode('UTF-8')) != 0):
+                                grRate1 = (int(exportData[i-1, 4].decode('UTF-8')) - int(exportData[i-4, 4].decode('UTF-8'))) / (int(exportData[i-4, 4].decode('UTF-8')) - int(exportData[i-7, 4].decode('UTF-8')))                                        
+
+                            grRate2 = 0
+                            if(len(exportData[:i, 4]) > 8 and int(exportData[i-2, 4].decode('UTF-8')) - int(exportData[i-5, 4].decode('UTF-8')) != 0 and int(exportData[i-5, 4].decode('UTF-8')) - int(exportData[i-8, 4].decode('UTF-8')) != 0):
+                                grRate2 = (int(exportData[i-2, 4].decode('UTF-8')) - int(exportData[i-5, 4].decode('UTF-8'))) / (int(exportData[i-5, 4].decode('UTF-8')) - int(exportData[i-8, 4].decode('UTF-8')))                                        
+
+                            grRate3 = 0
+                            if(len(exportData[:i, 4]) > 9 and int(exportData[i-3, 4].decode('UTF-8')) - int(exportData[i-6, 4].decode('UTF-8')) != 0 and int(exportData[i-6, 4].decode('UTF-8')) - int(exportData[i-9, 4].decode('UTF-8')) != 0):
+                                grRate3 = (int(exportData[i-3, 4].decode('UTF-8')) - int(exportData[i-6, 4].decode('UTF-8'))) / (int(exportData[i-6, 4].decode('UTF-8')) - int(exportData[i-9, 4].decode('UTF-8')))                                        
+
+                            grRate4 = 0
+                            if(len(exportData[:i, 4]) > 10 and int(exportData[i-4, 4].decode('UTF-8')) - int(exportData[i-7, 4].decode('UTF-8')) != 0 and int(exportData[i-7, 4].decode('UTF-8')) - int(exportData[i-10, 4].decode('UTF-8')) != 0):
+                                grRate4 = (int(exportData[i-4, 4].decode('UTF-8')) - int(exportData[i-7, 4].decode('UTF-8'))) / (int(exportData[i-7, 4].decode('UTF-8')) - int(exportData[i-10, 4].decode('UTF-8')))                                        
+
+                            if(grRate > 1.9 or grRate1 > 1.9 or grRate2 > 1.9 or grRate3 > 1.9 or grRate4 > 1.9):
+                                delayMesu[code.decode('utf-8')] = i
+                                continue;
 
                             comps.append((code))
                             mesuStart[code.decode('utf-8')] = i
@@ -406,7 +542,7 @@ for ttime in times:
                             msGr[code.decode('utf-8')] = gr
                             msSmdms[code.decode('utf-8')] = sms_md 
                             msGrade[code.decode('utf-8')] = grade
-                            msSrgrad[code.decode('utf-8')] = cggrad
+                            msSrgrad[code.decode('utf-8')] = 0
                             msRate[code.decode('utf-8')] = float(exportData[i, 3].decode('UTF-8'))
                             rmsRate[code.decode('utf-8')] = float(exportData[i, 3].decode('UTF-8'))
                             pick[code.decode('utf-8')] = False

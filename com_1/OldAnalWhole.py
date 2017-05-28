@@ -336,7 +336,14 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_1\\Data\\"):
                         
                         if(code.decode('utf-8') in delayMesu and delayMesu[code.decode('utf-8')] + 6 > i and grRate < 0.89 and (int(exportData[i, 4].decode('UTF-8')) - int(exportData[i-1, 4].decode('UTF-8'))) > 1000 and code not in comps):
                             if(exportData[i, 3].astype(float) + 0.9 >= exportData[delayMesu[code.decode('utf-8')], 3].astype(float)):
-                                continue                                   
+                                continue
+
+                            fcgfitt = sp.polyfit(sp.array(range(i-delayMesu[code.decode('utf-8')]+1)), exportData[delayMesu[code.decode('utf-8')]:i+1,9].astype(float), 1)
+                            fcggradtt = sp.around(fcgfitt[0], decimals=2)
+
+                            # if(fcggradtt < -6.5 or chegang > 250):
+                            #     continue
+
                             comps.append((code))
                             mesuStart[code.decode('utf-8')] = i
                             msGradient[code.decode('utf-8')] = 0
@@ -509,6 +516,10 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_1\\Data\\"):
                                     
                                     tmesu = ((exportData[i,4].astype(float) - exportData[i-1,4].astype(float)) * exportData[i,8].astype(float)) + ((exportData[i - 1,4].astype(float) - exportData[i - 2,4].astype(float)) * exportData[i-1,8].astype(float))
                                     if(tmesu > 250000000 and xstime.tm_min >= 6 and exportData[i, 3].astype(float) < 6.6):
+                                        nos.append(code)
+                                        continue;
+
+                                    if(chegang > 250 and xstime.tm_min <= 3 and exportData[i,3].astype(float) < 5.7):
                                         nos.append(code)
                                         continue;
 
@@ -866,7 +877,14 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_1\\diff\\"):
 
                         if(code.decode('utf-8') in delayMesu and delayMesu[code.decode('utf-8')] + 6 > i and grRate < 0.89 and (int(exportData[i, 4].decode('UTF-8')) - int(exportData[i-1, 4].decode('UTF-8'))) > 1000 and (int(exportData[i, 4].decode('UTF-8')) - int(exportData[i-1, 4].decode('UTF-8'))) > 1000 and code not in comps):
                             if(exportData[i, 3].astype(float) + 0.9 >= exportData[delayMesu[code.decode('utf-8')], 3].astype(float)):
-                                continue                            
+                                continue
+
+                            fcgfitt = sp.polyfit(sp.array(range(i-delayMesu[code.decode('utf-8')]+1)), exportData[delayMesu[code.decode('utf-8')]:i+1,9].astype(float), 1)
+                            fcggradtt = sp.around(fcgfitt[0], decimals=2)
+
+                            # if(fcggradtt < -6.5 or chegang > 250):
+                            #     continue
+
                             comps.append((code))
                             mesuStart[code.decode('utf-8')] = i
                             msGradient[code.decode('utf-8')] = 0
@@ -1039,6 +1057,10 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_1\\diff\\"):
                                     
                                     tmesu = ((exportData[i,4].astype(float) - exportData[i-1,4].astype(float)) * exportData[i,8].astype(float)) + ((exportData[i - 1,4].astype(float) - exportData[i - 2,4].astype(float)) * exportData[i-1,8].astype(float))
                                     if(tmesu > 250000000 and xstime.tm_min >= 6 and exportData[i, 3].astype(float) < 6.6):
+                                        nos.append(code)
+                                        continue;
+
+                                    if(chegang > 250 and xstime.tm_min <= 3 and exportData[i,3].astype(float) < 5.7):
                                         nos.append(code)
                                         continue;
 
