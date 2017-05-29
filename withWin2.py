@@ -113,6 +113,7 @@ with open(setFilePath, 'r') as f:
             msRate[imCode] = float(line.split(",")[1].strip())
             isd[imCode] = False
             isd2[imCode] = False
+            pick[imCode] = False
         elif(imCode != '' and int(line.split(",")[8].strip()) == 1):
             nos.append(str.encode(imCode))
         else:
@@ -359,7 +360,7 @@ while(True):
                 if(len(exportData[:i, 4]) > 6 and int(exportData[i, 4].decode('UTF-8')) - int(exportData[i-3, 4].decode('UTF-8')) != 0 and int(exportData[i-3, 4].decode('UTF-8')) - int(exportData[i-6, 4].decode('UTF-8')) != 0):
                     grRate = (int(exportData[i, 4].decode('UTF-8')) - int(exportData[i-3, 4].decode('UTF-8'))) / (int(exportData[i-3, 4].decode('UTF-8')) - int(exportData[i-6, 4].decode('UTF-8')))
 
-                if(code.decode('utf-8') in delayMesu and delayMesu[code.decode('utf-8')] + 6 > i and grRate < 0.89 and (int(exportData[i, 4].decode('UTF-8')) - int(exportData[i-1, 4].decode('UTF-8'))) > 1000 and (int(exportData[i, 4].decode('UTF-8')) - int(exportData[i-1, 4].decode('UTF-8'))) > 1000 and code not in comps):
+                if(code.decode('utf-8') in delayMesu and delayMesu[code.decode('utf-8')] + 6 > i and delayMesu[code.decode('utf-8')] < i and grRate < 0.89 and (int(exportData[i, 4].decode('UTF-8')) - int(exportData[i-1, 4].decode('UTF-8'))) > 1000 and (int(exportData[i, 4].decode('UTF-8')) - int(exportData[i-1, 4].decode('UTF-8'))) > 1000 and code not in comps):
                     if(exportData[i, 3].astype(float) + 0.9 >= exportData[delayMesu[code.decode('utf-8')], 3].astype(float)):
                         continue                            
 

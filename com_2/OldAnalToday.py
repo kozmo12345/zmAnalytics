@@ -25,7 +25,7 @@ stdLimit = 2
 sumEd = 0
 gradient = 0
 today = now.strftime('%Y-%m-%d')
-today = '2017-04-05'
+
 
 print(today)
 setFile = open(os.path.join("C:\\", "Dropbox\\com_2\\" + today + "\\" + today + "moa3.txt"), 'w')
