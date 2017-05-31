@@ -25,7 +25,7 @@ stdLimit = 2
 sumEd = 0
 gradient = 0
 today = now.strftime('%Y-%m-%d')
-# today = '2017-03-02'
+today = '2017-05-02'
 
 print(today)
 setFile = open(os.path.join("C:\\", "Dropbox\\com_1\\" + today + "\\" + today + "moa3.txt"), 'w')
@@ -142,10 +142,10 @@ for ttime in times:
                 if(i == -1): continue
                 c = exportData[:i+1, 3].astype(float)
 
-                if(code.decode('utf-8') == '041460'): #testst
-                    thGr = int(exportData[i-3, 4].decode('UTF-8')) - int(exportData[i-6, 4].decode('UTF-8'))                  
-                    nowGr = int(exportData[i, 4].decode('UTF-8')) - int(exportData[i-3, 4].decode('UTF-8'))
-                    print(ttime, code , c[-1],nowGr / thGr, exportData[i,8].astype(int))    
+                # if(code.decode('utf-8') == '001840'): #testst
+                #     thGr = int(exportData[i-3, 4].decode('UTF-8')) - int(exportData[i-6, 4].decode('UTF-8'))                  
+                #     nowGr = int(exportData[i, 4].decode('UTF-8')) - int(exportData[i-3, 4].decode('UTF-8'))
+                #     print(ttime, code , c[-1],nowGr / thGr, exportData[i,8].astype(int))    
 
                 if(code in comps):
                     if(i < mesuStart[code.decode('utf-8')] + 3 ):
@@ -373,7 +373,11 @@ for ttime in times:
                     if(code.decode('utf-8') in mesuDict):
                         wlevel = mesuDict[code.decode('utf-8')] + 2
 
-                    if(gradient >= (0.8) and srgrad > 0 and ltdc != 0):
+                    if(code.decode('utf-8') == '122800'): #testst
+                        print(ttime, code, gradient)
+                        time.sleep(0.1)
+
+                    if(gradient >= 0.65 + (0.02 * wlevel) and srgrad > 0 and ltdc != 0):
                         if(code.decode('utf-8') in mesuDict):
 
                             mesuDict[code.decode('utf-8')] = mesuDict[code.decode('utf-8')] + 1

@@ -398,7 +398,11 @@ while(True):
                     srgrad = sp.around(srfit[0]*10, decimals=2)
                     ltdc = exportData[i,4].astype(float) - exportData[i-1,4].astype(float)
                     
-                    if(gradient >= 0.8 and srgrad > 0 and ltdc != 0):
+                    wlevel = 1
+                    if(code.decode('utf-8') in mesuDict):
+                        wlevel = mesuDict[code.decode('utf-8')] + 2
+                    
+                    if(gradient >= 0.65 + (0.02 * wlevel) and srgrad > 0 and ltdc != 0):
            
                         if(code.decode('utf-8') in mesuDict):
                             mesuDict[code.decode('utf-8')] = mesuDict[code.decode('utf-8')] + 1
