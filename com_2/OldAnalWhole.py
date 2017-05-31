@@ -325,7 +325,8 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_2\\Data\\"):
                         gr = int(exportData[i, 4].decode('UTF-8'))
 
                         ms_md = (exportData[i,5].astype(float))/(exportData[i,6].astype(float))
-                        sms_md = sp.sum(exportData[:i+1,5].astype(float))/sp.sum(exportData[:i+1,6].astype(float))
+                        sms_md = sp.sum(sp.unique(exportData[:i+1,5].astype(float)))/sp.sum(sp.unique(exportData[:i+1,6].astype(float)))
+                        gr1 = int(exportData[i, 4].decode('UTF-8')) - int(exportData[i-1, 4].decode('UTF-8')) != 0                        
 
                         cgfit = sp.polyfit(ti, exportData[:i+1,9].astype(float), 1)
                         cggrad = sp.around(cgfit[0], decimals=2)
@@ -359,7 +360,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_2\\Data\\"):
                         else:
                             cggradDic[code.decode('utf-8')].append(cggrad)                        
 
-                        if(((ms_md > 0.96 and sms_md > 1 and gr > 420000) or (cggrad > 2.3 and chegang > 163)) and grade < 16 and exportData[i, 3].astype(float) > 5 and code.decode('utf-8') not in delayMesu):
+                        if(((ms_md > 0.96 and sms_md > 1 and gr > 420000) or (cggrad > 2.3 and chegang > 163)) and grade < 16 and exportData[i, 3].astype(float) > 5 and code.decode('utf-8') not in delayMesu and gr1):
                             x = ti
                             y = exportData[:i+1,3].astype(float)
                             if(len(y) <= 1):
@@ -860,7 +861,8 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_2\\diff\\"):
                         gr = int(exportData[i, 4].decode('UTF-8'))
 
                         ms_md = (exportData[i,5].astype(float))/(exportData[i,6].astype(float))
-                        sms_md = sp.sum(exportData[:i+1,5].astype(float))/sp.sum(exportData[:i+1,6].astype(float))
+                        sms_md = sp.sum(sp.unique(exportData[:i+1,5].astype(float)))/sp.sum(sp.unique(exportData[:i+1,6].astype(float)))
+                        gr1 = int(exportData[i, 4].decode('UTF-8')) - int(exportData[i-1, 4].decode('UTF-8')) != 0
 
                         cgfit = sp.polyfit(ti, exportData[:i+1,9].astype(float), 1)
                         cggrad = sp.around(cgfit[0], decimals=2)
@@ -894,7 +896,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_2\\diff\\"):
                         else:
                             cggradDic[code.decode('utf-8')].append(cggrad)
 
-                        if(((ms_md > 0.96 and sms_md > 1 and gr > 420000) or (cggrad > 2.3 and chegang > 163)) and grade < 16 and exportData[i, 3].astype(float) > 5 and code.decode('utf-8') not in delayMesu):
+                        if(((ms_md > 0.96 and sms_md > 1 and gr > 420000) or (cggrad > 2.3 and chegang > 163)) and grade < 16 and exportData[i, 3].astype(float) > 5 and code.decode('utf-8') not in delayMesu and gr1):
                             x = ti
                             y = exportData[:i+1,3].astype(float)
                             if(len(y) <= 1):
