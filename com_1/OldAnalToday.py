@@ -25,7 +25,7 @@ stdLimit = 2
 sumEd = 0
 gradient = 0
 today = now.strftime('%Y-%m-%d')
-today = '2017-04-05'
+# today = '2017-04-05'
 
 print(today)
 setFile = open(os.path.join("C:\\", "Dropbox\\com_1\\" + today + "\\" + today + "moa3.txt"), 'w')
@@ -83,6 +83,7 @@ msSmdms = dict()
 msGrade = dict()
 msSrgrad = dict()
 pick = dict()
+pickI = dict()
 isd = dict()
 isd2 = dict()
 cggradDic = dict()
@@ -185,6 +186,7 @@ for ttime in times:
 
                     if(exportData[i, 9].astype('float') < 103 or grRate > 1.78):
                         pick[code.decode('utf-8')] = True
+                        pickI[code.decode('utf-8')] = i
 
                     cgfit1 = sp.polyfit(sp.array(range(5)), exportData[i-4:i+1,9].astype(float), 1)
                     cggrad1 = sp.around(cgfit1[0], decimals=2)
@@ -218,51 +220,57 @@ for ttime in times:
                     levelUpDic[code.decode('utf-8')].append(0)
                     rrrr =  0
 
-                    if(True):
-                        for x in range(0,xstime.tm_min + 1):
-                            r = re.compile('09:' + str(x).rjust(2, '0') + ':..')
-                            vmatch = sp.vectorize(lambda x:bool(r.match(x)))
-                            vmatch(exportData[:,0].astype(str))
-                            tmarr = exportData[:,3].astype(str)[vmatch(exportData[:,0].astype(str))].astype(float)
+                    for x in range(0,xstime.tm_min + 1):
+                        r = re.compile('09:' + str(x).rjust(2, '0') + ':..')
+                        vmatch = sp.vectorize(lambda x:bool(r.match(x)))
+                        vmatch(exportData[:,0].astype(str))
+                        tmarr = exportData[:,3].astype(str)[vmatch(exportData[:,0].astype(str))].astype(float)
 
-                            if(len(tmarr) == 0):
-                                continue;
+                        if(len(tmarr) == 0):
+                            continue;
     
-                            if(fl != 0):
-                                if(nfaver != 0):
-                                    flaver = (tmarr[0] + fl) / 2
+                        if(fl != 0):
+                            if(nfaver != 0):
+                                flaver = (tmarr[0] + fl) / 2
 
-                                    if(gap != 0 and gap * 1.5 < (flaver - nfaver)):
-                                        levelUpDic[code.decode('utf-8')].append((flaver - nfaver))
-                                        rrrr =  flaver - exportData[i, 3].astype(float)
+                                if(gap != 0 and gap * 1.5 < (flaver - nfaver)):
+                                    levelUpDic[code.decode('utf-8')].append((flaver - nfaver))
+                                    rrrr =  flaver - exportData[i, 3].astype(float)
 
-                                        if((flaver - nfaver) > 4.26 and ed > 0.4):
-                                            pick[code.decode('utf-8')] = True
+                                    if((flaver - nfaver) > 4.26 and ed > 0.4):
+                                        pick[code.decode('utf-8')] = True
+                                        pickI[code.decode('utf-8')] = i
+                                        break;
 
-                                        if((flaver - nfaver) > 4.26 and i > mesuStart[code.decode('utf-8')] + 12):
-                                            edFile.write( str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMin) + ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(red) + ',' + str(msTime) + ',' + str(mdTime) + ',' + str(msCost) + ',' + str(mdCost) + ',' + str(msGradient[code.decode('utf-8')]) + ',' + str(msGr[code.decode('utf-8')]) + ',' + str(msSmdms[code.decode('utf-8')]) + ',' + str(msGrade[code.decode('utf-8')]) + ',' + str(msSrgrad[code.decode('utf-8')]) +'\n')
-                                            comps.remove(code)
-                                            medos.append(code)
-                                            sumEd = sumEd + red
+                                    if((flaver - nfaver) > 4.26 and i > mesuStart[code.decode('utf-8')] + 12):
+                                        pick[code.decode('utf-8')] = True
+                                        pickI[code.decode('utf-8')] = i
+                                        break;
 
-                                    else:
-                                        levelUpDic[code.decode('utf-8')].append(0)
-                                    
-                                    if(flaver - nfaver < 0):
-                                        gap = 1
-                                    else:
-                                        gap = flaver - nfaver
+                                else:
+                                    levelUpDic[code.decode('utf-8')].append(0)
+                                
+                                if(flaver - nfaver < 0):
+                                    gap = 1
+                                else:
+                                    gap = flaver - nfaver
 
-                                nfaver = (fl + tmarr[0]) / 2
-                            
-                            nf = tmarr[0]
-                            fl = tmarr[-1]
+                            nfaver = (fl + tmarr[0]) / 2
+                        
+                        nf = tmarr[0]
+                        fl = tmarr[-1]
 
                     if(code not in comps):
                         continue;
 
                     if((pick[code.decode('utf-8')] and ed >= 0.4) or (i > mesuStart[code.decode('utf-8')] + 18 and pick[code.decode('utf-8')] and ed >= 0.1)):
                         print(ttime, code, 1111111111)
+                        edFile.write( str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMin) + ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(red) + ',' + str(msTime) + ',' + str(mdTime) + ',' + str(msCost) + ',' + str(mdCost) + ',' + str(msGradient[code.decode('utf-8')]) + ',' + str(msGr[code.decode('utf-8')]) + ',' + str(msSmdms[code.decode('utf-8')]) + ',' + str(msGrade[code.decode('utf-8')]) + ',' + str(msSrgrad[code.decode('utf-8')]) +'\n')
+                        comps.remove(code)
+                        medos.append(code)
+                        sumEd = sumEd + red
+                    elif(pick[code.decode('utf-8')] and pickI[code.decode('utf-8')] > i + 30):
+                        print(ttime, code, 9999999999)
                         edFile.write( str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMin) + ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(red) + ',' + str(msTime) + ',' + str(mdTime) + ',' + str(msCost) + ',' + str(mdCost) + ',' + str(msGradient[code.decode('utf-8')]) + ',' + str(msGr[code.decode('utf-8')]) + ',' + str(msSmdms[code.decode('utf-8')]) + ',' + str(msGrade[code.decode('utf-8')]) + ',' + str(msSrgrad[code.decode('utf-8')]) +'\n')
                         comps.remove(code)
                         medos.append(code)
@@ -274,7 +282,7 @@ for ttime in times:
                         medos.append(code)
                         sumEd = sumEd + red
                     elif(allmedo):
-                        print(ttime, code, 2222222222)
+                        print(ttime, code, 3333333333)
                         edFile.write( str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMin) + ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(red) + ',' + str(msTime) + ',' + str(mdTime) + ',' + str(msCost) + ',' + str(mdCost) + ',' + str(msGradient[code.decode('utf-8')]) + ',' + str(msGr[code.decode('utf-8')]) + ',' + str(msSmdms[code.decode('utf-8')]) + ',' + str(msGrade[code.decode('utf-8')]) + ',' + str(msSrgrad[code.decode('utf-8')]) +'\n')
                         comps.remove(code)
                         medos.append(code)
@@ -350,6 +358,7 @@ for ttime in times:
                     msRate[code.decode('utf-8')] = float(exportData[i, 3].decode('UTF-8'))
                     rmsRate[code.decode('utf-8')] = float(exportData[i, 3].decode('UTF-8'))
                     pick[code.decode('utf-8')] = False
+                    pickI[code.decode('utf-8')] = 0
                     isd[code.decode('utf-8')] = False
                     isd2[code.decode('utf-8')] = False
                     del delayMesu[code.decode('utf-8')]
@@ -546,6 +555,7 @@ for ttime in times:
                             msRate[code.decode('utf-8')] = float(exportData[i, 3].decode('UTF-8'))
                             rmsRate[code.decode('utf-8')] = float(exportData[i, 3].decode('UTF-8'))
                             pick[code.decode('utf-8')] = False
+                            pickI[code.decode('utf-8')] = 0
                             isd[code.decode('utf-8')] = False
                             isd2[code.decode('utf-8')] = False                            
                             setFile.write(str(ttime) + ',' + str(code.decode('utf-8')) + ',' + str(float(rate)) +  ',' + str(float(exportData[i, 3].decode('UTF-8'))) + '\n')
