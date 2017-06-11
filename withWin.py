@@ -448,7 +448,7 @@ while(True):
 
                             lfit = sp.polyfit(x[-3:], y[-3:], level)
                             lg = sp.around(lfit[0]*10, decimals=2)
-                            if((lg > 2 and True in (exportData[0:i,5].astype(float) == 0)) or lg > 13.8):
+                            if((lg > 2 and True in (sp.bincount(exportData[0:i,4].astype(int)) > 3)) or lg > 13.8):
                                 nos.append(code)
                                 continue;                                
 
@@ -496,7 +496,7 @@ while(True):
 
                             if(chegang > 250 and xstime.tm_min <= 3 and exportData[i,3].astype(float) < 5.7):
                                 nos.append(code)
-                                continue;                                        
+                                continue;
 
                             tpg = 0
                             for ii in range(1,i):
@@ -516,6 +516,23 @@ while(True):
                                     if(line.split(",")[0] == code.decode('utf-8') and code not in comps):
                                         nos.append(code)
                                         break
+
+                            levelUpDic[code.decode('utf-8')] = []
+                
+                            for xm in range(0,xstime.tm_min + 1):
+                                r = re.compile('09:' + str(xm).rjust(2, '0') + ':..')
+                                vmatch = sp.vectorize(lambda xm:bool(r.match(xm)))
+                                vmatch(exportData[:i+1,0].astype(str))
+                                tmarr = exportData[:i+1,3].astype(str)[vmatch(exportData[:i+1,0].astype(str))].astype(float)
+                                if(len(tmarr) == 0):
+                                    continue;
+        
+                                levelUpDic[code.decode('utf-8')].append((tmarr[-1] - tmarr[0]))
+        
+                            if(True in (sp.array(levelUpDic[code.decode('utf-8')]) > 7.4)):
+                                print(ttime, code, 'nos121211212')
+                                nos.append(code)
+                                continue;
 
                             if(code in nos):
                                 continue;
