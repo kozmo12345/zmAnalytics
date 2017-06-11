@@ -46,7 +46,7 @@ today = now.strftime('%Y-%m-%d')
 startTime = datetime.timedelta(hours=9,minutes=00,seconds=00).total_seconds()
 endTime = datetime.timedelta(hours=9,minutes=12,seconds=30).total_seconds()
 fMedoTime = datetime.timedelta(hours=9,minutes=18,seconds=30).total_seconds()
-allMedoTime = datetime.timedelta(hours=9,minutes=25,seconds=30).total_seconds()
+allMedoTime = datetime.timedelta(hours=9,minutes=21,seconds=30).total_seconds()
 closeTime = datetime.timedelta(hours=15,minutes=19,seconds=00).total_seconds()
 
 comps = []
@@ -167,8 +167,7 @@ while(True):
             continue;
     
         if(nowTime > allMedoTime):
-            time.sleep( 4 )
-            continue;
+            break;
 
         print(today + str(times[len(times)-1]))
         print(comps)
@@ -236,7 +235,7 @@ while(True):
 
                     med = ed
                     tempWan = wanna
-                    if((ms - md) > 1):
+                    if((ms - md) > 1 or ed > 1):
                         isd[code.decode('utf-8')] = True
                     if(isd[code.decode('utf-8')]):
                         tempWan = 0.4
@@ -268,7 +267,7 @@ while(True):
                         if(len(exportData[:i, 4]) > 6 and int(exportData[i, 4].decode('UTF-8')) - int(exportData[i-3, 4].decode('UTF-8')) != 0 and int(exportData[i-3, 4].decode('UTF-8')) - int(exportData[i-6, 4].decode('UTF-8')) != 0):
                             grRate = (int(exportData[i, 4].decode('UTF-8')) - int(exportData[i-3, 4].decode('UTF-8'))) / (int(exportData[i-3, 4].decode('UTF-8')) - int(exportData[i-6, 4].decode('UTF-8')))
 
-                        if(grRate > 1.78 and not pick[code.decode('utf-8')]):
+                        if(ed > 2.8 and int(exportData[i, 4].decode('UTF-8')) < 800000 and not pick[code.decode('utf-8')]) or (grRate > 1.78 and int(exportData[i, 4].decode('UTF-8')) < 800000 and not pick[code.decode('utf-8')]):
                             pFile = open(pFilePath, 'a')
                             pFile.write( str(code.decode('utf-8')) + ',' + str_oTime + ',' + str(datetime.datetime.now().strftime('%H:%M:%S')) + ',' + str(float(md)) + '\n')
                             pFile.close()
@@ -557,6 +556,10 @@ while(True):
                             grRate4 = 0
                             if(len(exportData[:i, 4]) > 10 and int(exportData[i-4, 4].decode('UTF-8')) - int(exportData[i-7, 4].decode('UTF-8')) != 0 and int(exportData[i-7, 4].decode('UTF-8')) - int(exportData[i-10, 4].decode('UTF-8')) != 0):
                                 grRate4 = (int(exportData[i-4, 4].decode('UTF-8')) - int(exportData[i-7, 4].decode('UTF-8'))) / (int(exportData[i-7, 4].decode('UTF-8')) - int(exportData[i-10, 4].decode('UTF-8')))                                        
+
+                            if(grRate > 6 or grRate1 > 6 or grRate2 > 6 or grRate3 > 6 or grRate4 > 6):
+                                nos.append(code)
+                                continue;
 
                             if(grRate > 1.9 or grRate1 > 1.9 or grRate2 > 1.9 or grRate3 > 1.9 or grRate4 > 1.9):
                                 delayMesu[code.decode('utf-8')] = i

@@ -15,8 +15,8 @@ print(str(datetime.datetime.now()))
 
 startTime = datetime.timedelta(hours=9,minutes=00,seconds=00).total_seconds()
 endTime = datetime.timedelta(hours=9,minutes=12,seconds=30).total_seconds()
-fMedoTime = datetime.timedelta(hours=9,minutes=20,seconds=00).total_seconds()
-allMedoTime = datetime.timedelta(hours=9,minutes=24,seconds=20).total_seconds()
+fMedoTime = datetime.timedelta(hours=9,minutes=18,seconds=20).total_seconds()
+allMedoTime = datetime.timedelta(hours=9,minutes=21,seconds=20).total_seconds()
 wanna = 1
 mesuLimit = [2]
 rateLimit = 0.31
@@ -25,7 +25,7 @@ stdLimit = 2
 sumEd = 0
 gradient = 0
 today = now.strftime('%Y-%m-%d')
-today = '2017-03-23'
+# today = '2017-04-03'
 
 print(today)
 setFile = open(os.path.join("C:\\", "Dropbox\\com_1\\" + today + "\\" + today + "moa3.txt"), 'w')
@@ -139,7 +139,7 @@ for ttime in times:
 
                 c = exportData[:i+1, 3].astype(float)
 
-                if(code.decode('utf-8') == '208140'): #testst
+                if(code.decode('utf-8') == '002780'): #testst
                     thGr = int(exportData[i-3, 4].decode('UTF-8')) - int(exportData[i-6, 4].decode('UTF-8'))                  
                     nowGr = int(exportData[i, 4].decode('UTF-8')) - int(exportData[i-3, 4].decode('UTF-8'))
                     if(thGr != 0 and nowGr != 0):
@@ -184,7 +184,7 @@ for ttime in times:
                     if(len(exportData[:i, 4]) > 6 and int(exportData[i, 4].decode('UTF-8')) - int(exportData[i-3, 4].decode('UTF-8')) != 0 and int(exportData[i-3, 4].decode('UTF-8')) - int(exportData[i-6, 4].decode('UTF-8')) != 0):
                         grRate = (int(exportData[i, 4].decode('UTF-8')) - int(exportData[i-3, 4].decode('UTF-8'))) / (int(exportData[i-3, 4].decode('UTF-8')) - int(exportData[i-6, 4].decode('UTF-8')))
 
-                    if(exportData[i, 9].astype('float') < 103):
+                    if(exportData[i, 9].astype('float') < 103 or (ed > 2.8 and int(exportData[i, 4].decode('UTF-8')) < 800000) or (grRate > 1.78 and int(exportData[i, 4].decode('UTF-8')) < 800000)):
                         pick[code.decode('utf-8')] = True
                         pickI[code.decode('utf-8')] = i
 
@@ -251,7 +251,7 @@ for ttime in times:
                                     levelUpDic[code.decode('utf-8')].append(0)
                                 
                                 if(flaver - nfaver < 0):
-                                    gap = 1
+                                    gap = 1.8
                                 else:
                                     gap = flaver - nfaver
 
@@ -262,6 +262,7 @@ for ttime in times:
 
                     if(code not in comps):
                         continue;
+                    print(ttime, code, mmRate > rateMLimit, gcggrad, tempWan, ed)
 
                     if((pick[code.decode('utf-8')] and ed >= 0.4) or (i > mesuStart[code.decode('utf-8')] + 18 and pick[code.decode('utf-8')] and ed >= 0.1)):
                         print(ttime, code, 1111111111)
@@ -300,7 +301,6 @@ for ttime in times:
                         medos.append(code)
                         sumEd = sumEd + red                        
                     elif((mmRate < rateLimit or mmRate > rateMLimit or fMedoTime < second_oTime) and gcggrad < -1.7 and ed >= tempWan):
-                        print(cggrad1,cggrad2,cggrad3, gcggrad)
                         print(ttime, code, 4444444444)
                         edFile.write( str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMin) + ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(red) + ',' + str(msTime) + ',' + str(mdTime) + ',' + str(msCost) + ',' + str(mdCost) + ',' + str(msGradient[code.decode('utf-8')]) + ',' + str(msGr[code.decode('utf-8')]) + ',' + str(msSmdms[code.decode('utf-8')]) + ',' + str(msGrade[code.decode('utf-8')]) + ',' + str(msSrgrad[code.decode('utf-8')]) +'\n')
                         comps.remove(code)
@@ -552,9 +552,11 @@ for ttime in times:
                             if(code in nos):
                                 continue;
 
+                            if(grRate > 6 or grRate1 > 6 or grRate2 > 6 or grRate3 > 6 or grRate4 > 6):
+                                nos.append(code)
+                                continue;
+
                             if(grRate > 1.9 or grRate1 > 1.9 or grRate2 > 1.9 or grRate3 > 1.9 or grRate4 > 1.9):
-                                print(ttime,code)
-                                time.sleep(3)
                                 delayMesu[code.decode('utf-8')] = i
                                 continue;
 
