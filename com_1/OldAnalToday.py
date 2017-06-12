@@ -15,8 +15,8 @@ print(str(datetime.datetime.now()))
 
 startTime = datetime.timedelta(hours=9,minutes=00,seconds=00).total_seconds()
 endTime = datetime.timedelta(hours=9,minutes=12,seconds=30).total_seconds()
-fMedoTime = datetime.timedelta(hours=9,minutes=18,seconds=20).total_seconds()
-allMedoTime = datetime.timedelta(hours=9,minutes=21,seconds=20).total_seconds()
+fMedoTime = datetime.timedelta(hours=9,minutes=19,seconds=50).total_seconds()
+allMedoTime = datetime.timedelta(hours=9,minutes=23,seconds=20).total_seconds()
 wanna = 1
 mesuLimit = [2]
 rateLimit = 0.31

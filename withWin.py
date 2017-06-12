@@ -167,7 +167,7 @@ while(True):
             continue;
     
         if(nowTime > allMedoTime):
-            break;
+            continue;
     
         print(today + str(times[len(times)-1]))
         print(comps)
