@@ -15,8 +15,8 @@ print(str(datetime.datetime.now()))
 
 startTime = datetime.timedelta(hours=9,minutes=00,seconds=00).total_seconds()
 endTime = datetime.timedelta(hours=9,minutes=12,seconds=30).total_seconds()
-fMedoTime = datetime.timedelta(hours=9,minutes=18,seconds=20).total_seconds()
-allMedoTime = datetime.timedelta(hours=9,minutes=21,seconds=20).total_seconds()
+fMedoTime = datetime.timedelta(hours=9,minutes=19,seconds=50).total_seconds()
+allMedoTime = datetime.timedelta(hours=9,minutes=23,seconds=20).total_seconds()
 wanna = 1
 mesuLimit = [2]
 rateLimit = 0.31
@@ -25,7 +25,7 @@ stdLimit = 2
 sumEd = 0
 gradient = 0
 today = now.strftime('%Y-%m-%d')
-today = '2017-04-03'
+# today = '2017-04-03'
 
 print(today)
 setFile = open(os.path.join("C:\\", "Dropbox\\com_2\\" + today + "\\" + today + "moa3.txt"), 'w')
@@ -139,7 +139,7 @@ for ttime in times:
 
                 c = exportData[:i+1, 3].astype(float)
 
-                if(code.decode('utf-8') == '002780'): #testst
+                if(code.decode('utf-8') == '018000'): #testst
                     thGr = int(exportData[i-3, 4].decode('UTF-8')) - int(exportData[i-6, 4].decode('UTF-8'))                  
                     nowGr = int(exportData[i, 4].decode('UTF-8')) - int(exportData[i-3, 4].decode('UTF-8'))
                     if(thGr != 0 and nowGr != 0):
@@ -262,7 +262,6 @@ for ttime in times:
 
                     if(code not in comps):
                         continue;
-                    print(ttime, code, mmRate > rateMLimit, gcggrad, tempWan, ed)
 
                     if((pick[code.decode('utf-8')] and ed >= 0.4) or (i > mesuStart[code.decode('utf-8')] + 18 and pick[code.decode('utf-8')] and ed >= 0.1)):
                         print(ttime, code, 1111111111)
@@ -321,7 +320,6 @@ for ttime in times:
                 gr = int(exportData[i, 4].decode('UTF-8'))
 
                 ms_md = (exportData[i,5].astype(float))/(exportData[i,6].astype(float))
-                # sms_md = sp.sum(exportData[:i+1,5].astype(float))/sp.sum(exportData[:i+1,6].astype(float))
                 sms_md = sp.sum(sp.unique(exportData[:i+1,5].astype(float)))/sp.sum(sp.unique(exportData[:i+1,6].astype(float)))
                 gr1 = int(exportData[i, 4].decode('UTF-8')) - int(exportData[i-1, 4].decode('UTF-8')) != 0
                 
@@ -340,7 +338,7 @@ for ttime in times:
                     nowGr = int(exportData[i, 4].decode('UTF-8')) - int(exportData[i-3, 4].decode('UTF-8'))
                     grRate = nowGr / thGr
 
-                if(code.decode('utf-8') in delayMesu and delayMesu[code.decode('utf-8')] + 1 < i and delayMesu[code.decode('utf-8')] + 6 > i and grRate < 0.89 and (int(exportData[i, 4].decode('UTF-8')) - int(exportData[i-1, 4].decode('UTF-8'))) > 1000 and (int(exportData[i-3, 4].decode('UTF-8')) - int(exportData[i-6, 4].decode('UTF-8'))) > 1000 and code not in comps and gr1):
+                if(code.decode('utf-8') in delayMesu and delayMesu[code.decode('utf-8')] + 1 < i and delayMesu[code.decode('utf-8')] + 6 > i and grRate < 0.89 and (int(exportData[i, 4].decode('UTF-8')) - int(exportData[i-1, 4].decode('UTF-8'))) > 1000 and (int(exportData[i-3, 4].decode('UTF-8')) - int(exportData[i-6, 4].decode('UTF-8'))) > 1000 and code not in comps and gr1 and chegang < 400):
 
                     comps.append((code))
                     mesuStart[code.decode('utf-8')] = i
@@ -380,8 +378,8 @@ for ttime in times:
                         wlevel = mesuDict[code.decode('utf-8')] + 2
 
                     if(gradient >= 0.65 + (0.02 * wlevel) and srgrad > 0 and ltdc != 0):
-                        if(code.decode('utf-8') in mesuDict):
 
+                        if(code.decode('utf-8') in mesuDict):
                             mesuDict[code.decode('utf-8')] = mesuDict[code.decode('utf-8')] + 1
                         else:
 
@@ -430,7 +428,6 @@ for ttime in times:
 
                             lfit = sp.polyfit(x[-3:], y[-3:], level)
                             lg = sp.around(lfit[0]*10, decimals=2)
-                            print(len(sp.bincount(exportData[0:i,4].astype(int))))
 
                             if((lg > 2 and True in (sp.bincount(exportData[0:i,4].astype(int)) > 3)) or lg > 13.8):
                                 print(ttime, code, 'nos333333')
@@ -549,14 +546,18 @@ for ttime in times:
                             if(len(exportData[:i, 4]) > 10 and int(exportData[i-4, 4].decode('UTF-8')) - int(exportData[i-7, 4].decode('UTF-8')) != 0 and int(exportData[i-7, 4].decode('UTF-8')) - int(exportData[i-10, 4].decode('UTF-8')) != 0):
                                 grRate4 = (int(exportData[i-4, 4].decode('UTF-8')) - int(exportData[i-7, 4].decode('UTF-8'))) / (int(exportData[i-7, 4].decode('UTF-8')) - int(exportData[i-10, 4].decode('UTF-8')))                                        
 
+                            grRate5 = 0
+                            if(len(exportData[:i, 4]) > 10 and int(exportData[i-4, 4].decode('UTF-8')) - int(exportData[i-7, 4].decode('UTF-8')) != 0 and int(exportData[i-7, 4].decode('UTF-8')) - int(exportData[i-10, 4].decode('UTF-8')) != 0):
+                                grRate5 = (int(exportData[i-5, 4].decode('UTF-8')) - int(exportData[i-8, 4].decode('UTF-8'))) / (int(exportData[i-8, 4].decode('UTF-8')) - int(exportData[i-11, 4].decode('UTF-8')))                                        
+
                             if(code in nos):
                                 continue;
 
-                            if(grRate > 6 or grRate1 > 6 or grRate2 > 6 or grRate3 > 6 or grRate4 > 6):
+                            if(grRate > 6 or grRate1 > 6 or grRate2 > 6 or grRate3 > 6 or grRate4 > 6 or grRate5 > 6):
                                 nos.append(code)
                                 continue;
 
-                            if(grRate > 1.9 or grRate1 > 1.9 or grRate2 > 1.9 or grRate3 > 1.9 or grRate4 > 1.9):
+                            if(grRate > 1.9 or grRate1 > 1.9 or grRate2 > 1.9 or grRate3 > 1.9 or grRate4 > 1.9 or grRate5 > 1.9 or chegang > 400):
                                 delayMesu[code.decode('utf-8')] = i
                                 continue;
 
