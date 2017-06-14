@@ -325,6 +325,15 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_1\\Data\\"):
 
                             fcgfit1 = sp.polyfit(sp.array(range(4)), exportData[i-3:i+1,9].astype(float), 1)
                             fcggrad1 = sp.around(fcgfit1[0], decimals=2)
+        
+                            fcgfit2 = sp.polyfit(sp.array(range(5)), exportData[i-4:i+1,9].astype(float), 1)
+                            fcggrad2 = sp.around(fcgfit2[0], decimals=2)                            
+         
+                            fcggrad = min([fcggrad1, fcggrad2])
+
+                            if(fcggrad < -19 and xstime.tm_min < 11 and chegang > 190):
+                                del delayMesu[code.decode('utf-8')]
+                                continue;
 
                             comps.append((code))
                             mesuStart[code.decode('utf-8')] = i
@@ -474,11 +483,6 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_1\\Data\\"):
                                         nos.append(code)
                                         continue;
 
-                                    if(fcggrad < -14.01):
-                                        # nosDic[code.decode('utf-8')].append('9')
-                                        nos.append(code)
-                                        continue;
-
                                     tpg = 0
                                     msi = 0
                                     for ii in range(1,i):
@@ -556,7 +560,12 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_1\\Data\\"):
 
                                     if(grRate > 1.9 or grRate1 > 1.9 or grRate2 > 1.9 or grRate3 > 1.9 or grRate4 > 1.9 or grRate5 > 1.9 or chegang > 400):
                                         delayMesu[code.decode('utf-8')] = i
-                                        continue;                                     
+                                        continue;
+
+                                    if(fcggrad < -19 and xstime.tm_min < 11 and chegang > 190):
+                                        # nosDic[code.decode('utf-8')].append('9')
+                                        nos.append(code)
+                                        continue;                                        
 
                                     grilen = len(gradiDic[code.decode('utf-8')][-4:])
                                     grifit = sp.polyfit(sp.array(range(grilen)), gradiDic[code.decode('utf-8')][-4:], 1)
@@ -888,6 +897,15 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_1\\diff\\"):
 
                             fcgfit1 = sp.polyfit(sp.array(range(4)), exportData[i-3:i+1,9].astype(float), 1)
                             fcggrad1 = sp.around(fcgfit1[0], decimals=2)
+        
+                            fcgfit2 = sp.polyfit(sp.array(range(5)), exportData[i-4:i+1,9].astype(float), 1)
+                            fcggrad2 = sp.around(fcgfit2[0], decimals=2)                            
+         
+                            fcggrad = min([fcggrad1, fcggrad2])
+
+                            if(fcggrad < -19 and xstime.tm_min < 11 and chegang > 190):
+                                del delayMesu[code.decode('utf-8')]
+                                continue;
 
                             comps.append((code))
                             mesuStart[code.decode('utf-8')] = i
@@ -1037,11 +1055,6 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_1\\diff\\"):
                                         nos.append(code)
                                         continue;
 
-                                    if(fcggrad < -14.01):
-                                        # nosDic[code.decode('utf-8')].append('9')
-                                        nos.append(code)
-                                        continue;
-
                                     tpg = 0
                                     msi = 0
                                     for ii in range(1,i):
@@ -1120,6 +1133,11 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_1\\diff\\"):
                                     if(grRate > 1.9 or grRate1 > 1.9 or grRate2 > 1.9 or grRate3 > 1.9 or grRate4 > 1.9 or grRate5 > 1.9 or chegang > 400):
                                         delayMesu[code.decode('utf-8')] = i
                                         continue;
+
+                                    if(fcggrad < -19 and xstime.tm_min < 11 and chegang > 190):
+                                        # nosDic[code.decode('utf-8')].append('9')
+                                        nos.append(code)
+                                        continue;                                        
 
                                     grilen = len(gradiDic[code.decode('utf-8')][-4:])
                                     grifit = sp.polyfit(sp.array(range(grilen)), gradiDic[code.decode('utf-8')][-4:], 1)
