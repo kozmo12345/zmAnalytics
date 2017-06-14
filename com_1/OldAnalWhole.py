@@ -331,7 +331,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_1\\Data\\"):
          
                             fcggrad = min([fcggrad1, fcggrad2])
 
-                            if(fcggrad < -19 and xstime.tm_min < 11 and chegang > 190):
+                            if(fcggrad < -19.5 and xstime.tm_min < 10 and chegang > 195):
                                 del delayMesu[code.decode('utf-8')]
                                 continue;
 
@@ -415,7 +415,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_1\\Data\\"):
                                         # continue;
 
                                     cost = int(exportData[i, 8].decode('UTF-8'))
-                                    if(cost > 8500):
+                                    if(cost > 9000):
                                         # nosDic[code.decode('utf-8')].append('3')
                                         nos.append(code)
                                         continue;
@@ -562,7 +562,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_1\\Data\\"):
                                         delayMesu[code.decode('utf-8')] = i
                                         continue;
 
-                                    if(fcggrad < -19 and xstime.tm_min < 11 and chegang > 190):
+                                    if(fcggrad < -19.5 and xstime.tm_min < 10 and chegang > 195):
                                         # nosDic[code.decode('utf-8')].append('9')
                                         nos.append(code)
                                         continue;                                        
@@ -903,7 +903,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_1\\diff\\"):
          
                             fcggrad = min([fcggrad1, fcggrad2])
 
-                            if(fcggrad < -19 and xstime.tm_min < 11 and chegang > 190):
+                            if(fcggrad < -19.5 and xstime.tm_min < 10 and chegang > 195):
                                 del delayMesu[code.decode('utf-8')]
                                 continue;
 
@@ -990,7 +990,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_1\\diff\\"):
                                         # continue;
 
                                     cost = int(exportData[i, 8].decode('UTF-8'))
-                                    if(cost > 8500):
+                                    if(cost > 9000):
                                         # nosDic[code.decode('utf-8')].append('3')
                                         nos.append(code)
                                         continue;
@@ -1134,7 +1134,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_1\\diff\\"):
                                         delayMesu[code.decode('utf-8')] = i
                                         continue;
 
-                                    if(fcggrad < -19 and xstime.tm_min < 11 and chegang > 190):
+                                    if(fcggrad < -19.5 and xstime.tm_min < 10 and chegang > 195):
                                         # nosDic[code.decode('utf-8')].append('9')
                                         nos.append(code)
                                         continue;                                        

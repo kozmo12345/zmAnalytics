@@ -368,6 +368,19 @@ while(True):
                     grRate = (int(exportData[i, 4].decode('UTF-8')) - int(exportData[i-3, 4].decode('UTF-8'))) / (int(exportData[i-3, 4].decode('UTF-8')) - int(exportData[i-6, 4].decode('UTF-8')))
 
                 if(code.decode('utf-8') in delayMesu and delayMesu[code.decode('utf-8')] + 1 < i and delayMesu[code.decode('utf-8')] + 6 > i and grRate < 0.89 and (int(exportData[i, 4].decode('UTF-8')) - int(exportData[i-1, 4].decode('UTF-8'))) > 1000 and (int(exportData[i, 4].decode('UTF-8')) - int(exportData[i-1, 4].decode('UTF-8'))) > 1000 and code not in comps and chegang < 400):
+
+                    fcgfit1 = sp.polyfit(sp.array(range(4)), exportData[i-3:i+1,9].astype(float), 1)
+                    fcggrad1 = sp.around(fcgfit1[0], decimals=2)
+        
+                    fcgfit2 = sp.polyfit(sp.array(range(5)), exportData[i-4:i+1,9].astype(float), 1)
+                    fcggrad2 = sp.around(fcgfit2[0], decimals=2)                            
+         
+                    fcggrad = min([fcggrad1, fcggrad2])
+
+                    if(fcggrad < -19.5 and xstime.tm_min < 10 and chegang > 195):
+                        del delayMesu[code.decode('utf-8')]
+                        continue;
+
                     comps.append(code)
                     mesuStart[code.decode('utf-8')] = second_oTime
                     msRate[code.decode('utf-8')] = float(rate)
@@ -421,7 +434,7 @@ while(True):
                                 continue;
 
                             cost = int(exportData[i, 8].decode('UTF-8'))
-                            if(cost > 8500):
+                            if(cost > 9000):
                                 nos.append(code)
                                 continue;                                
 
@@ -461,17 +474,13 @@ while(True):
                                 nos.append(code)
                                 continue;
 
-                            fcgfit1 = sp.polyfit(ti[:4], exportData[i-3:i+1,9].astype(float), 1)
+                            fcgfit1 = sp.polyfit(sp.array(range(4)), exportData[i-3:i+1,9].astype(float), 1)
                             fcggrad1 = sp.around(fcgfit1[0], decimals=2)
         
-                            fcgfit2 = sp.polyfit(ti[:5], exportData[i-4:i+1,9].astype(float), 1)
+                            fcgfit2 = sp.polyfit(sp.array(range(5)), exportData[i-4:i+1,9].astype(float), 1)
                             fcggrad2 = sp.around(fcgfit2[0], decimals=2)                            
          
                             fcggrad = min([fcggrad1, fcggrad2])
-
-                            if(fcggrad < -14.01):
-                                nos.append(code)
-                                continue;
 
                             lcgfit = sp.polyfit(ti[:6], exportData[i-5:i+1,9].astype(float), 1)
                             lcggrad = sp.around(lcgfit[0], decimals=2)
@@ -562,6 +571,10 @@ while(True):
 
                             if(grRate > 1.9 or grRate1 > 1.9 or grRate2 > 1.9 or grRate3 > 1.9 or grRate4 > 1.9 or grRate5 > 1.9 or chegang > 400):
                                 delayMesu[code.decode('utf-8')] = i
+                                continue;
+
+                            if(fcggrad < -19.5 and xstime.tm_min < 10 and chegang > 195):
+                                nos.append(code)
                                 continue;
 
                             comps.append(code)
