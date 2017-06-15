@@ -139,7 +139,7 @@ for ttime in times:
 
                 c = exportData[:i+1, 3].astype(float)
 
-                if(code.decode('utf-8') == '018000'): #testst
+                if(code.decode('utf-8') == '138490'): #testst
                     thGr = int(exportData[i-3, 4].decode('UTF-8')) - int(exportData[i-6, 4].decode('UTF-8'))                  
                     nowGr = int(exportData[i, 4].decode('UTF-8')) - int(exportData[i-3, 4].decode('UTF-8'))
                     if(thGr != 0 and nowGr != 0):
@@ -340,6 +340,18 @@ for ttime in times:
 
                 if(code.decode('utf-8') in delayMesu and delayMesu[code.decode('utf-8')] + 1 < i and delayMesu[code.decode('utf-8')] + 6 > i and grRate < 0.89 and (int(exportData[i, 4].decode('UTF-8')) - int(exportData[i-1, 4].decode('UTF-8'))) > 1000 and (int(exportData[i-3, 4].decode('UTF-8')) - int(exportData[i-6, 4].decode('UTF-8'))) > 1000 and code not in comps and gr1 and chegang < 400):
 
+                    fcgfit1 = sp.polyfit(sp.array(range(4)), exportData[i-3:i+1,9].astype(float), 1)
+                    fcggrad1 = sp.around(fcgfit1[0], decimals=2)
+        
+                    fcgfit2 = sp.polyfit(sp.array(range(5)), exportData[i-4:i+1,9].astype(float), 1)
+                    fcggrad2 = sp.around(fcgfit2[0], decimals=2)                            
+         
+                    fcggrad = min([fcggrad1, fcggrad2])
+
+                    if(fcggrad < -19.5 and xstime.tm_min < 10 and chegang > 195):
+                        del delayMesu[code.decode('utf-8')]
+                        continue;
+
                     comps.append((code))
                     mesuStart[code.decode('utf-8')] = i
                     msGradient[code.decode('utf-8')] = 0
@@ -398,7 +410,7 @@ for ttime in times:
                                 continue;
 
                             cost = int(exportData[i, 8].decode('UTF-8'))
-                            if(cost > 8500):
+                            if(cost > 9000):
                                 print(ttime, code, 'nos909090')
                                 nos.append(code)
                                 continue;
@@ -470,11 +482,6 @@ for ttime in times:
 
                             if(chegang < 129 and lcggrad < -1.8 or lcggrad > 60):
                                 print(ttime, code, 'nos66666')
-                                nos.append(code)
-                                continue;
-
-                            if(fcggrad < -14.01):
-                                print(ttime, code, 'nos77777')
                                 nos.append(code)
                                 continue;
 
@@ -559,6 +566,11 @@ for ttime in times:
 
                             if(grRate > 1.9 or grRate1 > 1.9 or grRate2 > 1.9 or grRate3 > 1.9 or grRate4 > 1.9 or grRate5 > 1.9 or chegang > 400):
                                 delayMesu[code.decode('utf-8')] = i
+                                continue;
+
+                            if(fcggrad < -19.5 and xstime.tm_min < 10 and chegang > 195):
+                                # nosDic[code.decode('utf-8')].append('9')
+                                nos.append(code)
                                 continue;
 
                             comps.append((code))
