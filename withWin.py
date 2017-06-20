@@ -34,7 +34,7 @@ def createFiles(realfilePath, setFilePath, mdFilePath, pFilePath):
         mdFile.close()
 
         pFile = open(pFilePath, 'w')
-        pFile.close()        
+        pFile.close()
     except Exception as e:
         createFiles(realfilePath, setFilePath, mdFilePath, pFilePath)
     else:
@@ -107,7 +107,7 @@ except:
         if exc.errno == errno.EEXIST and os.path.isdir(dirn4):
             pass
         else:
-            raise            
+            raise
 
 mesuStart = dict()
 msRate = dict()
@@ -168,7 +168,7 @@ while(True):
     
         if(nowTime > allMedoTime):
             continue;
-    
+
         print(today + str(times[len(times)-1]))
         print(comps)
         print(mesuDict)
@@ -337,7 +337,7 @@ while(True):
                             mdFile.write(str(code.decode('utf-8')) + ',' + str(float(exportData[i, 3].decode('UTF-8'))) + ',' + str(exportData[i, 0].decode('UTF-8')) + ',' + str(datetime.datetime.now().strftime('%H:%M:%S')) + ',' + str(exportData[i, 8].decode('UTF-8')) + '\n')
                             mdFile.close()
                             medos.append(code)
-                            comps.remove(code)                            
+                            comps.remove(code)
                         elif(mesuStart[code.decode('utf-8')] + 360 < second_oTime and ed > -0.1 and ed < 1 and max(exportData[:i,9].astype(float)) < 275):
                             mdFile = open(mdFilePath, 'a')
                             mdFile.write(str(code.decode('utf-8')) + ',' + str(float(exportData[i, 3].decode('UTF-8'))) + ',' + str(exportData[i, 0].decode('UTF-8')) + ',' + str(datetime.datetime.now().strftime('%H:%M:%S')) + ',' + str(exportData[i, 8].decode('UTF-8')) + '\n')
@@ -373,12 +373,21 @@ while(True):
                     fcggrad1 = sp.around(fcgfit1[0], decimals=2)
         
                     fcgfit2 = sp.polyfit(sp.array(range(5)), exportData[i-4:i+1,9].astype(float), 1)
-                    fcggrad2 = sp.around(fcgfit2[0], decimals=2)                            
+                    fcggrad2 = sp.around(fcgfit2[0], decimals=2)
          
                     fcggrad = min([fcggrad1, fcggrad2])
 
                     if(fcggrad < -19.5 and xstime.tm_min < 10 and chegang > 195):
                         del delayMesu[code.decode('utf-8')]
+                        continue;
+
+                    with open(setFilePath, 'r') as f:
+                        for line in f:
+                            if(line.split(",")[0] == code.decode('utf-8') and code not in comps):
+                                nos.append(code)
+                                break
+
+                    if(code in nos):
                         continue;
 
                     comps.append(code)
@@ -392,7 +401,7 @@ while(True):
                     setFile.write( str(code.decode('utf-8')) + ',' + str(float(rate)) + ',' + str(tpg) +  ',' + str_oTime + ',' + str(wanna) + ',' + str(datetime.datetime.now().strftime('%H:%M:%S')) + ',' + str(cost) + ',' + str(second_oTime) + ',' + str(1) + '\n')
                     setFile.close()
                     del delayMesu[code.decode('utf-8')]
- 
+
                 if(code.decode('utf-8') not in cggradDic):
                     cggradDic[code.decode('utf-8')] = []
                 else:
@@ -428,7 +437,7 @@ while(True):
                         if(mesuDict[code.decode('utf-8')] in mesuLimit and (code not in comps) and (code not in medos) and (code not in nos)):
                             if(exportData[i, 3].astype(float) < 4 or exportData[i, 3].astype(float) > 19):
                                 continue;
-                        
+
                             if(xstime.tm_min < 2):
                                 nos.append(code)
                                 continue;
@@ -478,7 +487,7 @@ while(True):
                             fcggrad1 = sp.around(fcgfit1[0], decimals=2)
         
                             fcgfit2 = sp.polyfit(sp.array(range(5)), exportData[i-4:i+1,9].astype(float), 1)
-                            fcggrad2 = sp.around(fcgfit2[0], decimals=2)                            
+                            fcggrad2 = sp.around(fcgfit2[0], decimals=2)
          
                             fcggrad = min([fcggrad1, fcggrad2])
 
@@ -507,23 +516,6 @@ while(True):
                                 continue;
 
                             tpg = 0
-                            for ii in range(1,i):
-                                pi = ii * 3
-                                if(pi >= i):
-                                    break
-
-                                pfit = sp.polyfit(x[:pi], y[-pi:], level)
-                                pgradient = sp.around(pfit[0]*10, decimals=2)
-                                if(tpg < pgradient and not sp.isinf(pgradient)):
-                                    tpg = pgradient
-                            
-                            tpg = tpg * sp.sqrt(ii * 0.77)
-
-                            with open(setFilePath, 'r') as f:
-                                for line in f:
-                                    if(line.split(",")[0] == code.decode('utf-8') and code not in comps):
-                                        nos.append(code)
-                                        break
 
                             levelUpDic[code.decode('utf-8')] = []
                 
@@ -540,9 +532,6 @@ while(True):
                             if(True in (sp.array(levelUpDic[code.decode('utf-8')]) > 7.4)):
                                 print(ttime, code, 'nos121211212')
                                 nos.append(code)
-                                continue;
-
-                            if(code in nos):
                                 continue;
 
                             grRate1 = 0
@@ -562,19 +551,28 @@ while(True):
                                 grRate4 = (int(exportData[i-4, 4].decode('UTF-8')) - int(exportData[i-7, 4].decode('UTF-8'))) / (int(exportData[i-7, 4].decode('UTF-8')) - int(exportData[i-10, 4].decode('UTF-8')))                                        
 
                             grRate5 = 0
-                            if(len(exportData[:i, 4]) > 10 and int(exportData[i-4, 4].decode('UTF-8')) - int(exportData[i-7, 4].decode('UTF-8')) != 0 and int(exportData[i-7, 4].decode('UTF-8')) - int(exportData[i-10, 4].decode('UTF-8')) != 0):
-                                grRate5 = (int(exportData[i-5, 4].decode('UTF-8')) - int(exportData[i-8, 4].decode('UTF-8'))) / (int(exportData[i-8, 4].decode('UTF-8')) - int(exportData[i-11, 4].decode('UTF-8')))                                        
+                            if(len(exportData[:i, 4]) > 11 and int(exportData[i-5, 4].decode('UTF-8')) - int(exportData[i-8, 4].decode('UTF-8')) != 0 and int(exportData[i-8, 4].decode('UTF-8')) - int(exportData[i-11, 4].decode('UTF-8')) != 0):
+                                grRate5 = (int(exportData[i-5, 4].decode('UTF-8')) - int(exportData[i-8, 4].decode('UTF-8'))) / (int(exportData[i-8, 4].decode('UTF-8')) - int(exportData[i-11, 4].decode('UTF-8')))
 
-                            if(grRate > 6 or grRate1 > 6 or grRate2 > 6 or grRate3 > 6 or grRate4 > 6 or grRate5 > 6):
+                            if(grRate > 5.89 or grRate1 > 5.89 or grRate2 > 5.89 or grRate3 > 5.89 or grRate4 > 5.89 or grRate5 > 5.89):
                                 nos.append(code)
                                 continue;
 
-                            if(grRate > 1.9 or grRate1 > 1.9 or grRate2 > 1.9 or grRate3 > 1.9 or grRate4 > 1.9 or grRate5 > 1.9 or chegang > 400):
+                            if(grRate > 1.9 or grRate1 > 1.9 or grRate2 > 1.9 or grRate3 > 1.9 or grRate4 > 1.9 or grRate5 > 1.9 or chegang > 400 or exportData[i, 3].astype(float) - exportData[i-1, 3].astype(float) > 2):
                                 delayMesu[code.decode('utf-8')] = i
                                 continue;
 
                             if(fcggrad < -19.5 and xstime.tm_min < 10 and chegang > 195):
                                 nos.append(code)
+                                continue;
+
+                            with open(setFilePath, 'r') as f:
+                                for line in f:
+                                    if(line.split(",")[0] == code.decode('utf-8') and code not in comps):
+                                        nos.append(code)
+                                        break
+
+                            if(code in nos):
                                 continue;
 
                             comps.append(code)
@@ -592,7 +590,5 @@ while(True):
     except Exception as e:
         print('--------------------' + str(e))
         continue
-
-
 
 print(today)
