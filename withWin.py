@@ -380,6 +380,9 @@ while(True):
                     if(fcggrad < -19.5 and xstime.tm_min < 10 and chegang > 195):
                         del delayMesu[code.decode('utf-8')]
                         continue;
+                    if(exportData[i, 3].astype(float) < 4.6 and chegang < 140):
+                        del delayMesu[code.decode('utf-8')]
+                        continue;
 
                     with open(setFilePath, 'r') as f:
                         for line in f:
