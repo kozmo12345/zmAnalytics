@@ -25,7 +25,7 @@ stdLimit = 2
 sumEd = 0
 gradient = 0
 today = now.strftime('%Y-%m-%d')
-today = '2017-04-26'
+today = '2017-06-27'
 
 print(today)
 setFile = open(os.path.join("C:\\", "Dropbox\\com_1\\" + today + "\\" + today + "moa3.txt"), 'w')
@@ -349,6 +349,16 @@ for ttime in times:
                     fcggrad = min([fcggrad1, fcggrad2])
 
                     if(fcggrad < -19.5 and xstime.tm_min < 10 and chegang > 195):
+                        del delayMesu[code.decode('utf-8')]
+                        continue;
+
+                    if(exportData[i, 3].astype(float) < 4.6 and chegang < 140):
+                        del delayMesu[code.decode('utf-8')]
+                        continue;
+
+                    mole = (exportData[i, 4].astype(int) - exportData[i-1, 4].astype(int))/exportData[i, 4].astype(int)
+
+                    if(exportData[i, 4].astype(float) > 2000000 and mole < 0.03):
                         del delayMesu[code.decode('utf-8')]
                         continue;
 
