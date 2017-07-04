@@ -41,7 +41,7 @@ def createFiles(realfilePath, setFilePath, mdFilePath, pFilePath):
         pass
 
 now = datetime.datetime.now()
-today = now.strftime('%Y-%m-%d')
+today = '2017-07-03'
 
 startTime = datetime.timedelta(hours=9,minutes=00,seconds=00).total_seconds()
 endTime = datetime.timedelta(hours=9,minutes=12,seconds=30).total_seconds()
@@ -247,14 +247,18 @@ while(True):
                     if(nowTime - 20 < second_oTime):
                         mmRate = (sp.sum(exportData[i-2:i+1,5].astype(float)))/(sp.sum(exportData[i-2:i+1,6].astype(float))) - (med/22)
 
-                        cgfit1 = sp.polyfit(ti[:5], exportData[i-4:i+1,9].astype(float), 1)
+                        cgfit1 = sp.polyfit(sp.array(range(5)), exportData[i-4:i+1,9].astype(float), 1)
                         cggrad1 = sp.around(cgfit1[0], decimals=2)
-    
-                        cgfit2 = sp.polyfit(ti[:6], exportData[i-5:i+1,9].astype(float), 1)
-                        cggrad2 = sp.around(cgfit2[0], decimals=2)
-    
-                        cgfit3 = sp.polyfit(ti[:7], exportData[i-6:i+1,9].astype(float), 1)
-                        cggrad3 = sp.around(cgfit3[0], decimals=2)
+                        
+                        cggrad2 = cggrad1
+                        if(i > 4):
+                            cgfit2 = sp.polyfit(sp.array(range(6)), exportData[i-5:i+1,9].astype(float), 1)
+                            cggrad2 = sp.around(cgfit2[0], decimals=2)
+                        
+                        cggrad3 = cggrad2
+                        if(i > 5):
+                            cgfit3 = sp.polyfit(sp.array(range(7)), exportData[i-6:i+1,9].astype(float), 1)
+                            cggrad3 = sp.around(cgfit3[0], decimals=2)
                         
                         gcggrad = min([cggrad1, cggrad2, cggrad3])
                         chegang = exportData[i,9].astype(float)
@@ -267,7 +271,7 @@ while(True):
                         if(len(exportData[:i, 4]) > 6 and int(exportData[i, 4].decode('UTF-8')) - int(exportData[i-3, 4].decode('UTF-8')) != 0 and int(exportData[i-3, 4].decode('UTF-8')) - int(exportData[i-6, 4].decode('UTF-8')) != 0):
                             grRate = (int(exportData[i, 4].decode('UTF-8')) - int(exportData[i-3, 4].decode('UTF-8'))) / (int(exportData[i-3, 4].decode('UTF-8')) - int(exportData[i-6, 4].decode('UTF-8')))
 
-                        if(ed > 2.8 and int(exportData[i, 4].decode('UTF-8')) < 800000 and not pick[code.decode('utf-8')]) or (grRate > 1.78 and int(exportData[i, 4].decode('UTF-8')) < 800000 and not pick[code.decode('utf-8')]):
+                        if((ed > 2.8 and int(exportData[i, 4].decode('UTF-8')) < 800000 and not pick[code.decode('utf-8')]) or (grRate > 1.78 and int(exportData[i, 4].decode('UTF-8')) < 800000 and not pick[code.decode('utf-8')]) or (grRate > 3 and chegang < 155)):
                             pFile = open(pFilePath, 'a')
                             pFile.write( str(code.decode('utf-8')) + ',' + str_oTime + ',' + str(datetime.datetime.now().strftime('%H:%M:%S')) + ',' + str(float(md)) + '\n')
                             pFile.close()
@@ -384,6 +388,11 @@ while(True):
                         del delayMesu[code.decode('utf-8')]
                         continue;
 
+                    mole = (exportData[i, 4].astype(int) - exportData[i-1, 4].astype(int))/exportData[i, 4].astype(int)
+                    if(exportData[i, 4].astype(float) > 2000000 and mole < 0.03):
+                        del delayMesu[code.decode('utf-8')]
+                        continue;
+
                     with open(setFilePath, 'r') as f:
                         for line in f:
                             if(line.split(",")[0] == code.decode('utf-8') and code not in comps):
@@ -489,20 +498,25 @@ while(True):
                             fcgfit1 = sp.polyfit(sp.array(range(4)), exportData[i-3:i+1,9].astype(float), 1)
                             fcggrad1 = sp.around(fcgfit1[0], decimals=2)
         
-                            fcgfit2 = sp.polyfit(sp.array(range(5)), exportData[i-4:i+1,9].astype(float), 1)
-                            fcggrad2 = sp.around(fcgfit2[0], decimals=2)
+                            fcggrad2 = fcggrad1
+                            if(i > 3):
+                                fcgfit2 = sp.polyfit(sp.array(range(5)), exportData[i-4:i+1,9].astype(float), 1)
+                                fcggrad2 = sp.around(fcgfit2[0], decimals=2)
          
                             fcggrad = min([fcggrad1, fcggrad2])
 
-                            lcgfit = sp.polyfit(ti[:6], exportData[i-5:i+1,9].astype(float), 1)
-                            lcggrad = sp.around(lcgfit[0], decimals=2)
+                            lcggrad = fcggrad
+
+                            if(i > 4):
+                                lcgfit = sp.polyfit(sp.array(range(6)), exportData[i-5:i+1,9].astype(float), 1)
+                                lcggrad = sp.around(lcgfit[0], decimals=2)
 
                             if((chegang < 129 and lcggrad < -1.8) or lcggrad > 60):
                                 nos.append(code)
                                 continue;
 
                             tlen = len(cggradDic[code.decode('utf-8')])
-                            tfit = sp.polyfit(ti[:tlen], cggradDic[code.decode('utf-8')], 1)
+                            tfit = sp.polyfit(sp.array(range(tlen)), cggradDic[code.decode('utf-8')], 1)
                             tgrad = sp.around(tfit[0], decimals=2)
 
                             if(tgrad < -6):
@@ -539,23 +553,23 @@ while(True):
 
                             grRate1 = 0
                             if(len(exportData[:i, 4]) > 7 and int(exportData[i-1, 4].decode('UTF-8')) - int(exportData[i-4, 4].decode('UTF-8')) != 0 and int(exportData[i-4, 4].decode('UTF-8')) - int(exportData[i-7, 4].decode('UTF-8')) != 0):
-                                grRate1 = (int(exportData[i-1, 4].decode('UTF-8')) - int(exportData[i-4, 4].decode('UTF-8'))) / (int(exportData[i-4, 4].decode('UTF-8')) - int(exportData[i-7, 4].decode('UTF-8')))                                        
+                                grRate1 = (int(exportData[i-1, 4].decode('UTF-8')) - int(exportData[i-4, 4].decode('UTF-8'))) / (int(exportData[i-4, 4].decode('UTF-8')) - int(exportData[i-7, 4].decode('UTF-8'))) + (exportData[i-1, 4].astype(int) / 10000000)
         
                             grRate2 = 0
                             if(len(exportData[:i, 4]) > 8 and int(exportData[i-2, 4].decode('UTF-8')) - int(exportData[i-5, 4].decode('UTF-8')) != 0 and int(exportData[i-5, 4].decode('UTF-8')) - int(exportData[i-8, 4].decode('UTF-8')) != 0):
-                                grRate2 = (int(exportData[i-2, 4].decode('UTF-8')) - int(exportData[i-5, 4].decode('UTF-8'))) / (int(exportData[i-5, 4].decode('UTF-8')) - int(exportData[i-8, 4].decode('UTF-8')))                                        
+                                grRate2 = (int(exportData[i-2, 4].decode('UTF-8')) - int(exportData[i-5, 4].decode('UTF-8'))) / (int(exportData[i-5, 4].decode('UTF-8')) - int(exportData[i-8, 4].decode('UTF-8'))) + (exportData[i-2, 4].astype(int) / 10000000)
         
                             grRate3 = 0
                             if(len(exportData[:i, 4]) > 9 and int(exportData[i-3, 4].decode('UTF-8')) - int(exportData[i-6, 4].decode('UTF-8')) != 0 and int(exportData[i-6, 4].decode('UTF-8')) - int(exportData[i-9, 4].decode('UTF-8')) != 0):
-                                grRate3 = (int(exportData[i-3, 4].decode('UTF-8')) - int(exportData[i-6, 4].decode('UTF-8'))) / (int(exportData[i-6, 4].decode('UTF-8')) - int(exportData[i-9, 4].decode('UTF-8')))                                        
+                                grRate3 = (int(exportData[i-3, 4].decode('UTF-8')) - int(exportData[i-6, 4].decode('UTF-8'))) / (int(exportData[i-6, 4].decode('UTF-8')) - int(exportData[i-9, 4].decode('UTF-8'))) + (exportData[i-3, 4].astype(int) / 10000000)
         
                             grRate4 = 0
                             if(len(exportData[:i, 4]) > 10 and int(exportData[i-4, 4].decode('UTF-8')) - int(exportData[i-7, 4].decode('UTF-8')) != 0 and int(exportData[i-7, 4].decode('UTF-8')) - int(exportData[i-10, 4].decode('UTF-8')) != 0):
-                                grRate4 = (int(exportData[i-4, 4].decode('UTF-8')) - int(exportData[i-7, 4].decode('UTF-8'))) / (int(exportData[i-7, 4].decode('UTF-8')) - int(exportData[i-10, 4].decode('UTF-8')))                                        
-
+                                grRate4 = (int(exportData[i-4, 4].decode('UTF-8')) - int(exportData[i-7, 4].decode('UTF-8'))) / (int(exportData[i-7, 4].decode('UTF-8')) - int(exportData[i-10, 4].decode('UTF-8'))) + (exportData[i-4, 4].astype(int) / 10000000)
+        
                             grRate5 = 0
                             if(len(exportData[:i, 4]) > 11 and int(exportData[i-5, 4].decode('UTF-8')) - int(exportData[i-8, 4].decode('UTF-8')) != 0 and int(exportData[i-8, 4].decode('UTF-8')) - int(exportData[i-11, 4].decode('UTF-8')) != 0):
-                                grRate5 = (int(exportData[i-5, 4].decode('UTF-8')) - int(exportData[i-8, 4].decode('UTF-8'))) / (int(exportData[i-8, 4].decode('UTF-8')) - int(exportData[i-11, 4].decode('UTF-8')))
+                                grRate5 = (int(exportData[i-5, 4].decode('UTF-8')) - int(exportData[i-8, 4].decode('UTF-8'))) / (int(exportData[i-8, 4].decode('UTF-8')) - int(exportData[i-11, 4].decode('UTF-8'))) + (exportData[i-5, 4].astype(int) / 10000000)
 
                             if(grRate > 5.89 or grRate1 > 5.89 or grRate2 > 5.89 or grRate3 > 5.89 or grRate4 > 5.89 or grRate5 > 5.89):
                                 nos.append(code)
@@ -568,6 +582,11 @@ while(True):
                             if(fcggrad < -19.5 and xstime.tm_min < 10 and chegang > 195):
                                 nos.append(code)
                                 continue;
+
+                            mole = (exportData[i, 4].astype(int) - exportData[i-1, 4].astype(int))/exportData[i, 4].astype(int)
+                            if(exportData[i, 4].astype(float) > 2000000 and mole < 0.03):
+                                nos.append(code)
+                                continue;                                
 
                             with open(setFilePath, 'r') as f:
                                 for line in f:

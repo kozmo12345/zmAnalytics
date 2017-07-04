@@ -247,14 +247,18 @@ while(True):
                     if(nowTime - 20 < second_oTime):
                         mmRate = (sp.sum(exportData[i-2:i+1,5].astype(float)))/(sp.sum(exportData[i-2:i+1,6].astype(float))) - (med/22)
 
-                        cgfit1 = sp.polyfit(ti[:5], exportData[i-4:i+1,9].astype(float), 1)
+                        cgfit1 = sp.polyfit(sp.array(range(5)), exportData[i-4:i+1,9].astype(float), 1)
                         cggrad1 = sp.around(cgfit1[0], decimals=2)
     
-                        cgfit2 = sp.polyfit(ti[:6], exportData[i-5:i+1,9].astype(float), 1)
-                        cggrad2 = sp.around(cgfit2[0], decimals=2)
-    
-                        cgfit3 = sp.polyfit(ti[:7], exportData[i-6:i+1,9].astype(float), 1)
-                        cggrad3 = sp.around(cgfit3[0], decimals=2)
+                        cggrad2 = cggrad1
+                        if(i > 4):
+                            cgfit2 = sp.polyfit(sp.array(range(6)), exportData[i-5:i+1,9].astype(float), 1)
+                            cggrad2 = sp.around(cgfit2[0], decimals=2)
+                        
+                        cggrad3 = cggrad2
+                        if(i > 5):
+                            cgfit3 = sp.polyfit(sp.array(range(7)), exportData[i-6:i+1,9].astype(float), 1)
+                            cggrad3 = sp.around(cgfit3[0], decimals=2)
                         
                         gcggrad = min([cggrad1, cggrad2, cggrad3])
                         chegang = exportData[i,9].astype(float)
@@ -493,21 +497,26 @@ while(True):
 
                             fcgfit1 = sp.polyfit(sp.array(range(4)), exportData[i-3:i+1,9].astype(float), 1)
                             fcggrad1 = sp.around(fcgfit1[0], decimals=2)
-        
-                            fcgfit2 = sp.polyfit(sp.array(range(5)), exportData[i-4:i+1,9].astype(float), 1)
-                            fcggrad2 = sp.around(fcgfit2[0], decimals=2)
+
+                            fcggrad2 = fcggrad1
+                            if(i > 3):
+                                fcgfit2 = sp.polyfit(sp.array(range(5)), exportData[i-4:i+1,9].astype(float), 1)
+                                fcggrad2 = sp.around(fcgfit2[0], decimals=2)
          
                             fcggrad = min([fcggrad1, fcggrad2])
 
-                            lcgfit = sp.polyfit(ti[:6], exportData[i-5:i+1,9].astype(float), 1)
-                            lcggrad = sp.around(lcgfit[0], decimals=2)
+                            lcggrad = fcggrad
+
+                            if(i > 4):
+                                lcgfit = sp.polyfit(sp.array(range(6)), exportData[i-5:i+1,9].astype(float), 1)
+                                lcggrad = sp.around(lcgfit[0], decimals=2)
 
                             if((chegang < 129 and lcggrad < -1.8) or lcggrad > 60):
                                 nos.append(code)
                                 continue;
 
                             tlen = len(cggradDic[code.decode('utf-8')])
-                            tfit = sp.polyfit(ti[:tlen], cggradDic[code.decode('utf-8')], 1)
+                            tfit = sp.polyfit(sp.array(range(tlen)), cggradDic[code.decode('utf-8')], 1)
                             tgrad = sp.around(tfit[0], decimals=2)
 
                             if(tgrad < -6):
