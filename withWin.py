@@ -396,6 +396,7 @@ while(True):
                     with open(setFilePath, 'r') as f:
                         for line in f:
                             if(line.split(",")[0] == code.decode('utf-8') and code not in comps):
+                                del delayMesu[code.decode('utf-8')]
                                 nos.append(code)
                                 break
 

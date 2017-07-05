@@ -370,7 +370,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_1\\Data\\"):
                         else:
                             cggradDic[code.decode('utf-8')].append(cggrad)                        
 
-                        if(((ms_md > 0.96 and sms_md > 1 and gr > 420000) or (cggrad > 2.3 and chegang > 163)) and grade < 16 and exportData[i, 3].astype(float) > 5 and code.decode('utf-8') not in delayMesu and gr1):
+                        if(((ms_md > 0.96 and sms_md > 1 and gr > 420000 and not (cggrad < -5 and chegang < 170)) or (cggrad > 2.3 and chegang > 163)) and grade < 16 and exportData[i, 3].astype(float) > 5 and code.decode('utf-8') not in delayMesu and gr1):
                             x = sp.array(range(i+1))
                             y = exportData[:i+1,3].astype(float)
                             if(len(y) <= 1):
@@ -967,7 +967,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_1\\diff\\"):
                         else:
                             cggradDic[code.decode('utf-8')].append(cggrad)
 
-                        if(((ms_md > 0.96 and sms_md > 1 and gr > 420000) or (cggrad > 2.3 and chegang > 163)) and grade < 16 and exportData[i, 3].astype(float) > 5 and code.decode('utf-8') not in delayMesu and gr1):
+                        if(((ms_md > 0.96 and sms_md > 1 and gr > 420000 and not (cggrad < -5 and chegang < 170)) or (cggrad > 2.3 and chegang > 163)) and grade < 16 and exportData[i, 3].astype(float) > 5 and code.decode('utf-8') not in delayMesu and gr1):
                             x = sp.array(range(i+1))
                             y = exportData[:i+1,3].astype(float)
                             if(len(y) <= 1):
