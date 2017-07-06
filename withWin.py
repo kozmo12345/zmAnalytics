@@ -367,6 +367,10 @@ while(True):
                 cggrad = sp.around(cgfit[0], decimals=2)
                 chegang = exportData[i,9].astype(float)
 
+                if(chegang < 80 and exportData[i, 1].astype(int) < 4 and code not in nos):
+                    nos.append(code)
+                    continue;
+
                 grRate = 0
                 if(len(exportData[:i, 4]) > 6 and int(exportData[i, 4].decode('UTF-8')) - int(exportData[i-3, 4].decode('UTF-8')) != 0 and int(exportData[i-3, 4].decode('UTF-8')) - int(exportData[i-6, 4].decode('UTF-8')) != 0):
                     grRate = (int(exportData[i, 4].decode('UTF-8')) - int(exportData[i-3, 4].decode('UTF-8'))) / (int(exportData[i-3, 4].decode('UTF-8')) - int(exportData[i-6, 4].decode('UTF-8')))
@@ -420,7 +424,7 @@ while(True):
                 else:
                     cggradDic[code.decode('utf-8')].append(cggrad)
 
-                if(((ms_md > 0.96 and sms_md > 1 and gr > 420000) or (cggrad > 2.3 and chegang > 163)) and grade < 16 and exportData[i, 3].astype(float) > 5 and gr1):
+                if(((ms_md > 0.96 and sms_md > 1 and gr > 420000 and not (cggrad < -4 and chegang < 160)) or (cggrad > 2.3 and chegang > 163)) and grade < 16 and exportData[i, 3].astype(float) > 5 and gr1):
                     x = ti
                     y = exportData[:i+1,3].astype(float)
                     if(len(y) <= 1):

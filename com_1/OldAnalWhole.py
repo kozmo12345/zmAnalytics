@@ -320,12 +320,15 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_1\\Data\\"):
                         cggrad = sp.around(cgfit[0], decimals=2)
                         chegang = exportData[i,9].astype(float)
                         grRate = 0
+
+                        if(chegang < 80 and exportData[i, 1].astype(int) < 4 and code not in nos):
+                            nos.append(code)
+                            continue;
+
                         if(len(exportData[:i, 4]) > 6 and int(exportData[i, 4].decode('UTF-8')) - int(exportData[i-3, 4].decode('UTF-8')) != 0 and int(exportData[i-3, 4].decode('UTF-8')) - int(exportData[i-6, 4].decode('UTF-8')) != 0):
                             grRate = (int(exportData[i, 4].decode('UTF-8')) - int(exportData[i-3, 4].decode('UTF-8'))) / (int(exportData[i-3, 4].decode('UTF-8')) - int(exportData[i-6, 4].decode('UTF-8')))
                         
                         if(code.decode('utf-8') in delayMesu and delayMesu[code.decode('utf-8')] + 1 < i and delayMesu[code.decode('utf-8')] + 6 > i and grRate < 0.89 and (int(exportData[i, 4].decode('UTF-8')) - int(exportData[i-1, 4].decode('UTF-8'))) > 1000 and code not in comps and chegang < 400):
-                            # if(exportData[i, 3].astype(float) >= exportData[delayMesu[code.decode('utf-8')], 3].astype(float)):
-                            #     continue
 
                             fcgfit1 = sp.polyfit(sp.array(range(4)), exportData[i-3:i+1,9].astype(float), 1)
                             fcggrad1 = sp.around(fcgfit1[0], decimals=2)
@@ -370,7 +373,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_1\\Data\\"):
                         else:
                             cggradDic[code.decode('utf-8')].append(cggrad)                        
 
-                        if(((ms_md > 0.96 and sms_md > 1 and gr > 420000 and not (cggrad < -5 and chegang < 170)) or (cggrad > 2.3 and chegang > 163)) and grade < 16 and exportData[i, 3].astype(float) > 5 and code.decode('utf-8') not in delayMesu and gr1):
+                        if(((ms_md > 0.96 and sms_md > 1 and gr > 420000 and not (cggrad < -4 and chegang < 160)) or (cggrad > 2.3 and chegang > 163)) and grade < 16 and exportData[i, 3].astype(float) > 5 and code.decode('utf-8') not in delayMesu and gr1):
                             x = sp.array(range(i+1))
                             y = exportData[:i+1,3].astype(float)
                             if(len(y) <= 1):
@@ -632,7 +635,6 @@ mesuLimit = [2]
 rateLimit = 0.31
 rateMLimit = 3.8
 stdLimit = 2
-originM = 2000000
 for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_1\\diff\\"):
     for subdirname in dirnames:
         today = subdirname
@@ -916,6 +918,11 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_1\\diff\\"):
                         cgfit = sp.polyfit(sp.array(range(i+1)), exportData[:i+1,9].astype(float), 1)
                         cggrad = sp.around(cgfit[0], decimals=2)
                         chegang = exportData[i,9].astype(float)
+                        
+                        if(chegang < 80 and exportData[i, 1].astype(int) < 4 and code not in nos):
+                            nos.append(code)
+                            continue;
+
                         grRate = 0
                         if(len(exportData[:i, 4]) > 6 and int(exportData[i, 4].decode('UTF-8')) - int(exportData[i-3, 4].decode('UTF-8')) != 0 and int(exportData[i-3, 4].decode('UTF-8')) - int(exportData[i-6, 4].decode('UTF-8')) != 0):
                             grRate = (int(exportData[i, 4].decode('UTF-8')) - int(exportData[i-3, 4].decode('UTF-8'))) / (int(exportData[i-3, 4].decode('UTF-8')) - int(exportData[i-6, 4].decode('UTF-8')))
@@ -967,7 +974,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_1\\diff\\"):
                         else:
                             cggradDic[code.decode('utf-8')].append(cggrad)
 
-                        if(((ms_md > 0.96 and sms_md > 1 and gr > 420000 and not (cggrad < -5 and chegang < 170)) or (cggrad > 2.3 and chegang > 163)) and grade < 16 and exportData[i, 3].astype(float) > 5 and code.decode('utf-8') not in delayMesu and gr1):
+                        if(((ms_md > 0.96 and sms_md > 1 and gr > 420000 and not (cggrad < -4 and chegang < 160)) or (cggrad > 2.3 and chegang > 163)) and grade < 16 and exportData[i, 3].astype(float) > 5 and code.decode('utf-8') not in delayMesu and gr1):
                             x = sp.array(range(i+1))
                             y = exportData[:i+1,3].astype(float)
                             if(len(y) <= 1):
