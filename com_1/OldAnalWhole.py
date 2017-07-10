@@ -304,7 +304,16 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_1\\Data\\"):
                                 sumEd = sumEd + red
                                 medos.append(code)
                                 originM = originM - 1
-                                del pick[code.decode('utf-8')]                                
+                                del pick[code.decode('utf-8')]
+                            elif(len(exportData[:,3].astype(float)) - 2 < i):
+                                print(7777777777)
+                                edFile.write( str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMin) + ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(red) + ',' + str(msTime) + ',' + str(mdTime) + ',' + str(msCost) + ',' + str(mdCost) + ',' + str(msGradient[code.decode('utf-8')]) + ',' + str(msGr[code.decode('utf-8')]) + ',' + str(msSmdms[code.decode('utf-8')]) + ',' + str(msGrade[code.decode('utf-8')]) + ',' + str(msSrgrad[code.decode('utf-8')]) + ',' + str(nosDic[code.decode('utf-8')]) +  ',' + str(mesuIndex[code.decode('utf-8')]) + '\n')
+                                comps.remove(code)
+                                sumEd = sumEd + red
+                                medos.append(code)
+                                originM = originM - 1
+                                del pick[code.decode('utf-8')]
+
                         if(second_oTime > endTime or allmedo):
                             continue;
 
@@ -903,7 +912,15 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_1\\diff\\"):
                                 sumEd = sumEd + red
                                 medos.append(code)
                                 originM = originM - 1
-                                del pick[code.decode('utf-8')]                                
+                                del pick[code.decode('utf-8')]
+                            elif(len(exportData[:,3].astype(float)) - 2 < i):
+                                print(7777777777)
+                                edFile.write( str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMin) + ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(red) + ',' + str(msTime) + ',' + str(mdTime) + ',' + str(msCost) + ',' + str(mdCost) + ',' + str(msGradient[code.decode('utf-8')]) + ',' + str(msGr[code.decode('utf-8')]) + ',' + str(msSmdms[code.decode('utf-8')]) + ',' + str(msGrade[code.decode('utf-8')]) + ',' + str(msSrgrad[code.decode('utf-8')]) + ',' + str(nosDic[code.decode('utf-8')]) +  ',' + str(mesuIndex[code.decode('utf-8')]) + '\n')
+                                comps.remove(code)
+                                sumEd = sumEd + red
+                                medos.append(code)
+                                originM = originM - 1
+                                del pick[code.decode('utf-8')]                                                         
                         if(second_oTime > endTime or allmedo):
                             continue;
 

@@ -57,7 +57,7 @@ wanna = 1
 rateLimit = 0.31
 rateMLimit = 3.8
 gradient = 0
-realfilePath = os.path.join("C:\\", "Dropbox\\Diff\\" + today + "\\" + today + ".txt");
+realfilePath = os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + ".txt");
 dirn = os.path.dirname(realfilePath)
 try:
     os.stat(dirn)
@@ -124,14 +124,14 @@ with open(setFilePath, 'r') as f:
         imCode = line.split(",")[0].strip()
         if(imCode != ''):
             isRe = True
-        if(imCode != '' and int(line.split(",")[8].strip()) == 2):
+        if(imCode != '' and int(line.split(",")[8].strip()) == 1):
             comps.append(str.encode(imCode))
             mesuStart[imCode] = float(line.split(",")[7].strip())
             msRate[imCode] = float(line.split(",")[1].strip())
             isd[imCode] = False
             isd2[imCode] = False
             pick[imCode] = False
-        elif(imCode != '' and int(line.split(",")[8].strip()) == 1):
+        elif(imCode != '' and int(line.split(",")[8].strip()) == 2):
             nos.append(str.encode(imCode))
         else:
             continue;
@@ -157,7 +157,7 @@ while(True):
         now = datetime.datetime.now()
         nowTime = 0
 
-        wchkfilePath = os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + "w2.pchk");
+        wchkfilePath = os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + "w1.pchk");
         if not os.path.exists(wchkfilePath):
             wchkfile = open(wchkfilePath, 'a')
             wchkfile.close()
@@ -249,7 +249,7 @@ while(True):
 
                         cgfit1 = sp.polyfit(sp.array(range(5)), exportData[i-4:i+1,9].astype(float), 1)
                         cggrad1 = sp.around(cgfit1[0], decimals=2)
-                        
+    
                         cggrad2 = cggrad1
                         if(i > 4):
                             cgfit2 = sp.polyfit(sp.array(range(6)), exportData[i-5:i+1,9].astype(float), 1)
@@ -363,7 +363,7 @@ while(True):
                 sms_md = sp.sum(sp.unique(exportData[:i+1,5].astype(float)))/sp.sum(sp.unique(exportData[:i+1,6].astype(float)))
                 gr1 = int(exportData[i, 4].decode('UTF-8')) - int(exportData[i-1, 4].decode('UTF-8')) != 0
 
-                cgfit = sp.polyfit(ti, exportData[:i+1,9].astype(float), 1)
+                cgfit = sp.polyfit(sp.array(range(i+1)), exportData[:i+1,9].astype(float), 1)
                 cggrad = sp.around(cgfit[0], decimals=2)
                 chegang = exportData[i,9].astype(float)
 
@@ -415,7 +415,7 @@ while(True):
                     pick[code.decode('utf-8')] = False
                     cost = exportData[i, 8].decode('UTF-8')
                     setFile = open(setFilePath, 'a')
-                    setFile.write( str(code.decode('utf-8')) + ',' + str(float(rate)) + ',' + str(tpg) +  ',' + str_oTime + ',' + str(wanna) + ',' + str(datetime.datetime.now().strftime('%H:%M:%S')) + ',' + str(cost) + ',' + str(second_oTime) + ',' + str(2) + '\n')
+                    setFile.write( str(code.decode('utf-8')) + ',' + str(float(rate)) + ',' + str(tpg) +  ',' + str_oTime + ',' + str(wanna) + ',' + str(datetime.datetime.now().strftime('%H:%M:%S')) + ',' + str(cost) + ',' + str(second_oTime) + ',' + str(1) + '\n')
                     setFile.close()
                     del delayMesu[code.decode('utf-8')]
 
@@ -502,7 +502,7 @@ while(True):
 
                             fcgfit1 = sp.polyfit(sp.array(range(4)), exportData[i-3:i+1,9].astype(float), 1)
                             fcggrad1 = sp.around(fcgfit1[0], decimals=2)
-        
+
                             fcggrad2 = fcggrad1
                             if(i > 3):
                                 fcgfit2 = sp.polyfit(sp.array(range(5)), exportData[i-4:i+1,9].astype(float), 1)
@@ -591,7 +591,7 @@ while(True):
                             mole = (exportData[i, 4].astype(int) - exportData[i-1, 4].astype(int))/exportData[i, 4].astype(int)
                             if(exportData[i, 4].astype(float) > 2000000 and mole < 0.03):
                                 nos.append(code)
-                                continue;                                
+                                continue;
 
                             with open(setFilePath, 'r') as f:
                                 for line in f:
@@ -611,7 +611,7 @@ while(True):
                             pickI[code.decode('utf-8')] = second_oTime
                             cost = exportData[i, 8].decode('UTF-8')
                             setFile = open(setFilePath, 'a')
-                            setFile.write( str(code.decode('utf-8')) + ',' + str(float(rate)) + ',' + str(tpg) +  ',' + str_oTime + ',' + str(wanna) + ',' + str(datetime.datetime.now().strftime('%H:%M:%S')) + ',' + str(cost) + ',' + str(second_oTime) + ',' + str(2) + '\n')
+                            setFile.write( str(code.decode('utf-8')) + ',' + str(float(rate)) + ',' + str(tpg) +  ',' + str_oTime + ',' + str(wanna) + ',' + str(datetime.datetime.now().strftime('%H:%M:%S')) + ',' + str(cost) + ',' + str(second_oTime) + ',' + str(1) + '\n')
                             setFile.close()
 
     except Exception as e:
