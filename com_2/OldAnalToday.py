@@ -25,7 +25,7 @@ stdLimit = 2
 sumEd = 0
 gradient = 0
 today = now.strftime('%Y-%m-%d')
-# today = '2017-07-03'
+today = '2017-06-09'
 
 print(today)
 setFile = open(os.path.join("C:\\", "Dropbox\\com_2\\" + today + "\\" + today + "moa3.txt"), 'w')
@@ -129,6 +129,10 @@ for ttime in times:
                 if(code == b''):
                     continue;
                 exportData = data[data[:,7] == code]
+                exportData = exportData[exportData[:,9].astype(float) != 0]
+
+                if(len(exportData[:,0])==0):
+                    continue;
 
                 xtime = time.strptime(exportData[0,0].decode('utf-8'), '%H:%M:%S')
                 firstSecond = datetime.timedelta(hours=xtime.tm_hour,minutes=xtime.tm_min,seconds=xtime.tm_sec).total_seconds()
@@ -139,13 +143,14 @@ for ttime in times:
 
                 c = exportData[:i+1, 3].astype(float)
 
-                # if(code.decode('utf-8') == '043580'): #testst
-                #     thGr = int(exportData[i-3, 4].decode('UTF-8')) - int(exportData[i-6, 4].decode('UTF-8'))                  
-                #     nowGr = int(exportData[i, 4].decode('UTF-8')) - int(exportData[i-3, 4].decode('UTF-8'))
-                #     if(thGr != 0 and nowGr != 0):
-                #         print(ttime, code , c[-1],nowGr / thGr, exportData[i,8].astype(int), exportData[i,9].astype(float))    
-                #     else:
-                #         print(ttime, code, 'stopted')
+                if(code.decode('utf-8') == '900130'): #testst
+                    thGr = int(exportData[i-3, 4].decode('UTF-8')) - int(exportData[i-6, 4].decode('UTF-8'))                  
+                    nowGr = int(exportData[i, 4].decode('UTF-8')) - int(exportData[i-3, 4].decode('UTF-8'))
+                    if(thGr != 0 and nowGr != 0):
+                        print(ttime, code , c[-1],nowGr / thGr, exportData[i,8].astype(int), exportData[i,9].astype(float))
+
+                    else:
+                        print(ttime, code, 'stopted')
 
                 if(code in comps):
                     if(i < mesuStart[code.decode('utf-8')] + 3 ):
@@ -352,9 +357,12 @@ for ttime in times:
                     fcggrad1 = sp.around(fcgfit1[0], decimals=2)
         
                     fcgfit2 = sp.polyfit(sp.array(range(5)), exportData[i-4:i+1,9].astype(float), 1)
-                    fcggrad2 = sp.around(fcgfit2[0], decimals=2)                            
+                    fcggrad2 = sp.around(fcgfit2[0], decimals=2)
          
-                    fcggrad = min([fcggrad1, fcggrad2])
+                    fcgfit3 = sp.polyfit(sp.array(range(6)), exportData[i-5:i+1,9].astype(float), 1)
+                    fcggrad3 = sp.around(fcgfit3[0], decimals=2)
+
+                    fcggrad = min([fcggrad1, fcggrad2, fcggrad3])
 
                     if(fcggrad < -19.5 and xstime.tm_min < 10 and chegang > 195):
                         del delayMesu[code.decode('utf-8')]
@@ -435,6 +443,7 @@ for ttime in times:
 
                             if(i < 4):
                                 s = 0
+                                continue;
                             else:
                                 s = i-4
                             
@@ -542,7 +551,6 @@ for ttime in times:
                                 nos.append(code)
                                 continue;
 
-
                             levelUpDic[code.decode('utf-8')] = []
 
                             for x in range(0,xstime.tm_min + 1):
@@ -561,6 +569,11 @@ for ttime in times:
                                 continue;
 
                             if(fcggrad < -15 and lg > 5):
+                                # nosDic[code.decode('utf-8')].append('9')
+                                nos.append(code)
+                                continue;
+
+                            if(fcggrad < -19.5 and xstime.tm_min < 10 and chegang > 195):
                                 # nosDic[code.decode('utf-8')].append('9')
                                 nos.append(code)
                                 continue;                                
@@ -594,11 +607,6 @@ for ttime in times:
 
                             if(grRate > 1.9 or grRate1 > 1.9 or grRate2 > 1.9 or grRate3 > 1.9 or grRate4 > 1.9 or grRate5 > 1.9 or chegang > 400 or exportData[i, 3].astype(float) - exportData[i-1, 3].astype(float) > 2):
                                 delayMesu[code.decode('utf-8')] = i
-                                continue;
-
-                            if(fcggrad < -19.5 and xstime.tm_min < 10 and chegang > 195):
-                                # nosDic[code.decode('utf-8')].append('9')
-                                nos.append(code)
                                 continue;
 
                             comps.append((code))

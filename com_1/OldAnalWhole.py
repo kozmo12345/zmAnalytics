@@ -123,7 +123,11 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_1\\Data\\"):
                         if(code == b''):
                             continue;
                         exportData = data[data[:,7] == code]
+                        exportData = exportData[exportData[:,9].astype(float) != 0]
                         
+                        if(len(exportData[:,0])==0):
+                            continue;
+ 
                         xtime = time.strptime(exportData[0,0].decode('utf-8'), '%H:%M:%S')
                         firstSecond = datetime.timedelta(hours=xtime.tm_hour,minutes=xtime.tm_min,seconds=xtime.tm_sec).total_seconds()
                     
@@ -344,8 +348,17 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_1\\Data\\"):
         
                             fcgfit2 = sp.polyfit(sp.array(range(5)), exportData[i-4:i+1,9].astype(float), 1)
                             fcggrad2 = sp.around(fcgfit2[0], decimals=2)                            
-         
-                            fcggrad = min([fcggrad1, fcggrad2])
+
+                            fcgfit3 = sp.polyfit(sp.array(range(6)), exportData[i-5:i+1,9].astype(float), 1)
+                            fcggrad3 = sp.around(fcgfit3[0], decimals=2)
+
+                            fcggrad = min([fcggrad1, fcggrad2, fcggrad3])
+
+                            findRate = exportData[delayMesu[code.decode('utf-8')], 3].astype(float)
+
+                            if(findRate + 3 < exportData[i, 3].astype(float)):
+                                del delayMesu[code.decode('utf-8')]
+                                continue;
 
                             if(fcggrad < -19.5 and xstime.tm_min < 10 and chegang > 195):
                                 del delayMesu[code.decode('utf-8')]
@@ -448,6 +461,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_1\\Data\\"):
 
                                     if(i < 4):
                                         s = 0
+                                        continue;
                                     else:
                                         s = i-4
 
@@ -483,10 +497,10 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_1\\Data\\"):
 
                                     lfit = sp.polyfit(sp.array(range(3)), y[-3:], level)
                                     lg = sp.around(lfit[0]*10, decimals=2)
-                                    if((lg > 2 and True in (sp.bincount(exportData[0:i,4].astype(int)) > 3)) or lg > 13.8):
-                                        # nosDic[code.decode('utf-8')].append('6')
-                                        nos.append(code)
-                                        continue;
+                                    # if((lg > 2 and True in (sp.bincount(exportData[0:i,4].astype(int)) > 3)) or lg > 13.8):
+                                    #     # nosDic[code.decode('utf-8')].append('6')
+                                    #     nos.append(code)
+                                    #     continue;
 
                                     if(gradient < 1.1 and ssrgrad < -1):
                                         # nosDic[code.decode('utf-8')].append('7')
@@ -562,6 +576,16 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_1\\Data\\"):
                                         nos.append(code)
                                         continue;
 
+                                    if(fcggrad < -15 and lg > 5):
+                                        # nosDic[code.decode('utf-8')].append('9')
+                                        nos.append(code)
+                                        continue;                                                                        
+
+                                    if(fcggrad < -19.5 and xstime.tm_min < 10 and chegang > 195):
+                                        # nosDic[code.decode('utf-8')].append('9')
+                                        nos.append(code)
+                                        continue;
+
                                     thmesu = ((exportData[i,4].astype(float) - exportData[i-1,4].astype(float)) * exportData[i,8].astype(float)) + ((exportData[i - 1,4].astype(float) - exportData[i - 2,4].astype(float)) * exportData[i-1,8].astype(float)) + ((exportData[i - 2,4].astype(float) - exportData[i - 3,4].astype(float)) * exportData[i-2,8].astype(float))
                                     tmsr = thmesu/sp.sum(exportData[i-11:i+1,4].astype(float) * exportData[i-11:i+1,8].astype(float))
 
@@ -591,11 +615,6 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_1\\Data\\"):
 
                                     if(grRate > 1.9 or grRate1 > 1.9 or grRate2 > 1.9 or grRate3 > 1.9 or grRate4 > 1.9 or grRate5 > 1.9 or chegang > 400 or exportData[i, 3].astype(float) - exportData[i-1, 3].astype(float) > 2):
                                         delayMesu[code.decode('utf-8')] = i
-                                        continue;
-
-                                    if(fcggrad < -19.5 and xstime.tm_min < 10 and chegang > 195):
-                                        # nosDic[code.decode('utf-8')].append('9')
-                                        nos.append(code)
                                         continue;
 
                                     mole = (exportData[i, 4].astype(int) - exportData[i-1, 4].astype(int))/exportData[i, 4].astype(int)
@@ -728,6 +747,10 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_1\\diff\\"):
                         if(code == b''):
                             continue;
                         exportData = data[data[:,7] == code]
+                        exportData = exportData[exportData[:,9].astype(float) != 0]
+
+                        if(len(exportData[:,0])==0):
+                            continue;
                         
                         xtime = time.strptime(exportData[0,0].decode('utf-8'), '%H:%M:%S')
                         firstSecond = datetime.timedelta(hours=xtime.tm_hour,minutes=xtime.tm_min,seconds=xtime.tm_sec).total_seconds()
@@ -952,9 +975,18 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_1\\diff\\"):
                             fcggrad1 = sp.around(fcgfit1[0], decimals=2)
         
                             fcgfit2 = sp.polyfit(sp.array(range(5)), exportData[i-4:i+1,9].astype(float), 1)
-                            fcggrad2 = sp.around(fcgfit2[0], decimals=2)                            
+                            fcggrad2 = sp.around(fcgfit2[0], decimals=2)
+
+                            fcgfit3 = sp.polyfit(sp.array(range(6)), exportData[i-5:i+1,9].astype(float), 1)
+                            fcggrad3 = sp.around(fcgfit3[0], decimals=2)
          
-                            fcggrad = min([fcggrad1, fcggrad2])
+                            fcggrad = min([fcggrad1, fcggrad2, fcggrad3])
+
+                            findRate = exportData[delayMesu[code.decode('utf-8')], 3].astype(float)
+
+                            if(findRate + 3 < exportData[i, 3].astype(float)):
+                                del delayMesu[code.decode('utf-8')]
+                                continue;
 
                             if(fcggrad < -19.5 and xstime.tm_min < 10 and chegang > 195):
                                 del delayMesu[code.decode('utf-8')]
@@ -1060,6 +1092,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_1\\diff\\"):
 
                                     if(i < 4):
                                         s = 0
+                                        continue;
                                     else:
                                         s = i-4
 
@@ -1092,10 +1125,10 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_1\\diff\\"):
 
                                     lfit = sp.polyfit(sp.array(range(3)), y[-3:], level)
                                     lg = sp.around(lfit[0]*10, decimals=2)
-                                    if((lg > 2 and True in (sp.bincount(exportData[0:i,4].astype(int)) > 3)) or lg > 13.8):
-                                        # nosDic[code.decode('utf-8')].append('6')
-                                        nos.append(code)
-                                        continue;
+                                    # if((lg > 2 and True in (sp.bincount(exportData[0:i,4].astype(int)) > 3)) or lg > 13.8):
+                                    #     # nosDic[code.decode('utf-8')].append('6')
+                                    #     nos.append(code)
+                                    #     continue;
 
                                     if(gradient < 1.1 and ssrgrad < -1):
                                         # nosDic[code.decode('utf-8')].append('7')
@@ -1171,6 +1204,16 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_1\\diff\\"):
                                         nos.append(code)
                                         continue;
 
+                                    if(fcggrad < -15 and lg > 5):
+                                        # nosDic[code.decode('utf-8')].append('9')
+                                        nos.append(code)
+                                        continue;
+
+                                    if(fcggrad < -19.5 and xstime.tm_min < 10 and chegang > 195):
+                                        # nosDic[code.decode('utf-8')].append('9')
+                                        nos.append(code)
+                                        continue;
+
                                     thmesu = ((exportData[i,4].astype(float) - exportData[i-1,4].astype(float)) * exportData[i,8].astype(float)) + ((exportData[i - 1,4].astype(float) - exportData[i - 2,4].astype(float)) * exportData[i-1,8].astype(float)) + ((exportData[i - 2,4].astype(float) - exportData[i - 3,4].astype(float)) * exportData[i-2,8].astype(float))
                                     tmsr = thmesu/sp.sum(exportData[i-11:i+1,4].astype(float) * exportData[i-11:i+1,8].astype(float))
 
@@ -1202,10 +1245,6 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_1\\diff\\"):
                                         delayMesu[code.decode('utf-8')] = i
                                         continue;
 
-                                    if(fcggrad < -19.5 and xstime.tm_min < 10 and chegang > 195):
-                                        # nosDic[code.decode('utf-8')].append('9')
-                                        nos.append(code)
-                                        continue;
 
                                     mole = (exportData[i, 4].astype(int) - exportData[i-1, 4].astype(int))/exportData[i, 4].astype(int)
                                     if(exportData[i, 4].astype(float) > 2000000 and mole < 0.03):

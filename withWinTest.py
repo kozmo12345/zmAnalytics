@@ -42,7 +42,7 @@ def createFiles(realfilePath, setFilePath, mdFilePath, pFilePath):
 
 now = datetime.datetime.now()
 today = now.strftime('%Y-%m-%d')
-
+today = '2017-07-10'
 startTime = datetime.timedelta(hours=9,minutes=00,seconds=00).total_seconds()
 endTime = datetime.timedelta(hours=9,minutes=12,seconds=30).total_seconds()
 fMedoTime = datetime.timedelta(hours=9,minutes=18,seconds=30).total_seconds()
@@ -209,7 +209,11 @@ while(True):
                 if(code == b''):
                     continue;
                 exportData = data[data[:,7] == code]
-                
+                exportData = exportData[exportData[:,9].astype(float) != 0]
+
+                if(len(exportData[:,0])==0):
+                    continue;
+
                 xtime = time.strptime(exportData[0,0].decode('utf-8'), '%H:%M:%S')
                 firstSecond = datetime.timedelta(hours=xtime.tm_hour,minutes=xtime.tm_min,seconds=xtime.tm_sec).total_seconds()
                 
@@ -249,7 +253,7 @@ while(True):
 
                         cgfit1 = sp.polyfit(sp.array(range(5)), exportData[i-4:i+1,9].astype(float), 1)
                         cggrad1 = sp.around(cgfit1[0], decimals=2)
-    
+
                         cggrad2 = cggrad1
                         if(i > 4):
                             cgfit2 = sp.polyfit(sp.array(range(6)), exportData[i-5:i+1,9].astype(float), 1)
@@ -486,9 +490,6 @@ while(True):
 
                             lfit = sp.polyfit(x[-3:], y[-3:], level)
                             lg = sp.around(lfit[0]*10, decimals=2)
-                            if((lg > 2 and True in (sp.bincount(exportData[0:i,4].astype(int)) > 3)) or lg > 13.8):
-                                nos.append(code)
-                                continue;                                
 
                             maxr = 100000
                             sry = (exportData[i-4:i+1,4].astype(float))/maxr
@@ -556,6 +557,14 @@ while(True):
                                 nos.append(code)
                                 continue;
 
+                            if(fcggrad < -15 and lg > 5):
+                                nos.append(code)
+                                continue;
+
+                            if(fcggrad < -19.5 and xstime.tm_min < 10 and chegang > 195):
+                                nos.append(code)
+                                continue;
+
                             grRate1 = 0
                             if(len(exportData[:i, 4]) > 7 and int(exportData[i-1, 4].decode('UTF-8')) - int(exportData[i-4, 4].decode('UTF-8')) != 0 and int(exportData[i-4, 4].decode('UTF-8')) - int(exportData[i-7, 4].decode('UTF-8')) != 0):
                                 grRate1 = (int(exportData[i-1, 4].decode('UTF-8')) - int(exportData[i-4, 4].decode('UTF-8'))) / (int(exportData[i-4, 4].decode('UTF-8')) - int(exportData[i-7, 4].decode('UTF-8'))) + (exportData[i-1, 4].astype(int) / 10000000)
@@ -582,10 +591,6 @@ while(True):
 
                             if(grRate > 1.9 or grRate1 > 1.9 or grRate2 > 1.9 or grRate3 > 1.9 or grRate4 > 1.9 or grRate5 > 1.9 or chegang > 400 or exportData[i, 3].astype(float) - exportData[i-1, 3].astype(float) > 2):
                                 delayMesu[code.decode('utf-8')] = i
-                                continue;
-
-                            if(fcggrad < -19.5 and xstime.tm_min < 10 and chegang > 195):
-                                nos.append(code)
                                 continue;
 
                             mole = (exportData[i, 4].astype(int) - exportData[i-1, 4].astype(int))/exportData[i, 4].astype(int)
