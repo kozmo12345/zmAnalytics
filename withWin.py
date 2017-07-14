@@ -383,11 +383,29 @@ while(True):
 
                     fcgfit1 = sp.polyfit(sp.array(range(4)), exportData[i-3:i+1,9].astype(float), 1)
                     fcggrad1 = sp.around(fcgfit1[0], decimals=2)
-        
+
                     fcgfit2 = sp.polyfit(sp.array(range(5)), exportData[i-4:i+1,9].astype(float), 1)
                     fcggrad2 = sp.around(fcgfit2[0], decimals=2)
-         
-                    fcggrad = min([fcggrad1, fcggrad2])
+
+                    fcgfit3 = sp.polyfit(sp.array(range(6)), exportData[i-5:i+1,9].astype(float), 1)
+                    fcggrad3 = sp.around(fcgfit3[0], decimals=2)
+
+                    fcggrad = min([fcggrad1, fcggrad2, fcggrad3])                    
+
+                    findRate = exportData[delayMesu[code.decode('utf-8')], 3].astype(float)
+
+                    maxminamin = max(exportData[i-5:i+1,3].astype(float)) - min(exportData[i-5:i+1,3].astype(float))
+                    if(maxminamin > 5):
+                        del delayMesu[code.decode('utf-8')]
+                        continue;
+
+                    if(findRate + 3 < exportData[i, 3].astype(float)):
+                        del delayMesu[code.decode('utf-8')]
+                        continue;
+
+                    if(findRate + 1.5 < exportData[i, 3].astype(float)):
+                        delayMesu[code.decode('utf-8')] = delayMesu[code.decode('utf-8')] + 1
+                        continue;
 
                     if(fcggrad < -19.5 and xstime.tm_min < 10 and chegang > 195):
                         del delayMesu[code.decode('utf-8')]
@@ -555,6 +573,11 @@ while(True):
 
                             if(True in (sp.array(levelUpDic[code.decode('utf-8')]) > 7.4)):
                                 print(ttime, code, 'nos121211212')
+                                nos.append(code)
+                                continue;
+
+                            maxminamin = max(exportData[i-5:i+1,3].astype(float)) - min(exportData[i-5:i+1,3].astype(float))
+                            if(maxminamin > 5):
                                 nos.append(code)
                                 continue;
 
