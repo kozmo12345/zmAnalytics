@@ -11,7 +11,6 @@ import re
 sp.random.seed(3)
 
 def error(f, x, y):
-
     return sp.sum(abs(f(x) - y))
 
 def isDowning(arr_six, num):
@@ -61,7 +60,7 @@ stdLimit = 2
 sumEd = 0
 gradient = 0
 today = now.strftime('%Y-%m-%d')
-today = '2017-05-18'
+today = '2017-04-05'
 
 print(today)
 setFile = open(os.path.join("C:\\", "Dropbox\\com_1\\" + today + "\\" + today + "moa3.txt"), 'w')
