@@ -45,9 +45,8 @@ today = now.strftime('%Y-%m-%d')
 
 startTime = datetime.timedelta(hours=9,minutes=00,seconds=00).total_seconds()
 endTime = datetime.timedelta(hours=9,minutes=12,seconds=30).total_seconds()
-fMedoTime = datetime.timedelta(hours=9,minutes=18,seconds=30).total_seconds()
-allMedoTime = datetime.timedelta(hours=9,minutes=21,seconds=30).total_seconds()
-closeTime = datetime.timedelta(hours=15,minutes=19,seconds=00).total_seconds()
+fMedoTime = datetime.timedelta(hours=9,minutes=19,seconds=50).total_seconds()
+allMedoTime = datetime.timedelta(hours=9,minutes=33,seconds=30).total_seconds()
 
 comps = []
 medos = []
@@ -117,6 +116,7 @@ levelUpDic = dict()
 pick = dict()
 pickI = dict()
 delayMesu = dict()
+endIndex = dict()
 isRe = False
 
 with open(setFilePath, 'r') as f:
@@ -131,6 +131,7 @@ with open(setFilePath, 'r') as f:
             isd[imCode] = False
             isd2[imCode] = False
             pick[imCode] = False
+            endIndex[imCode] = 0
         elif(imCode != '' and int(line.split(",")[8].strip()) == 1):
             nos.append(str.encode(imCode))
         else:
@@ -153,7 +154,8 @@ while(True):
         tmp_time = 0
         mesuDict = dict()
         cggradDic = dict()
-
+        allmedo = False
+        prev_oTime = 0
         now = datetime.datetime.now()
         nowTime = datetime.timedelta(hours=now.hour,minutes=now.minute,seconds=now.second).total_seconds()
 
@@ -187,6 +189,10 @@ while(True):
             
             if(second_oTime > endTime and len(comps) == 0):
                 break;
+
+            if(second_oTime - prev_oTime > 60 and prev_oTime != 0):
+                allmedo = True
+            prev_oTime = datetime.timedelta(hours=xstime.tm_hour,minutes=xstime.tm_min,seconds=xstime.tm_sec).total_seconds() #계산시간
 
             tmp_time = second_oTime
 
@@ -235,7 +241,7 @@ while(True):
                     ms = float(msRate[code.decode('utf-8')])
                     md = float(exportData[i, 3].decode('UTF-8'))
                     ed = round(md - ms, 2)
-                    mdpCost = (exportData[i,4].astype(float) - exportData[i-1,4].astype(float)) * exportData[i-1,8].astype(float)
+                    mdpCost = (exportData[i,4].astype(float) - exportData[i-2,4].astype(float)) * exportData[i-1,8].astype(float)
 
                     med = ed
                     tempWan = wanna
@@ -269,6 +275,12 @@ while(True):
                         if(chegang < 120):
                             gcggrad = -10
 
+                        endcggrad = 0
+                        if(endIndex[code.decode('utf-8')] != 0):
+                            end_arr = exportData[endIndex[code.decode('utf-8')]:i+1,9].astype(float)
+                            endcgfit = sp.polyfit(sp.array(range(len(end_arr))), end_arr, 1)
+                            endcggrad = sp.around(endcgfit[0], decimals=2)
+
                         print(code.decode('utf-8') + '    ' + str(mmRate) + '    ' + str(str_oTime))
 
                         grRate = 0
@@ -276,10 +288,6 @@ while(True):
                             grRate = (int(exportData[i, 4].decode('UTF-8')) - int(exportData[i-3, 4].decode('UTF-8'))) / (int(exportData[i-3, 4].decode('UTF-8')) - int(exportData[i-6, 4].decode('UTF-8')))
 
                         if((ed > 2.8 and int(exportData[i, 4].decode('UTF-8')) < 800000 and not pick[code.decode('utf-8')]) or (grRate > 1.78 and int(exportData[i, 4].decode('UTF-8')) < 800000 and not pick[code.decode('utf-8')]) or (grRate > 3 and chegang < 155)):
-                            pFile = open(pFilePath, 'a')
-                            pFile.write( str(code.decode('utf-8')) + ',' + str_oTime + ',' + str(datetime.datetime.now().strftime('%H:%M:%S')) + ',' + str(float(md)) + '\n')
-                            pFile.close()
-                            pickI[code.decode('utf-8')] = second_oTime
                             pick[code.decode('utf-8')] = True
 
                         nf = 0
@@ -305,10 +313,6 @@ while(True):
                                     if(gap != 0 and gap * 1.5 < (flaver - nfaver)):
                                         levelUpDic[code.decode('utf-8')].append((flaver - nfaver))
                                         if((flaver - nfaver) > 4.26 and (ed > 0.4 or second_oTime > mesuStart[code.decode('utf-8')] + 120) and not pick[code.decode('utf-8')]):
-                                            pFile = open(pFilePath, 'a')
-                                            pFile.write( str(code.decode('utf-8')) + ',' + str_oTime + ',' + str(datetime.datetime.now().strftime('%H:%M:%S')) + ',' + str(float(md)) + '\n')
-                                            pFile.close()                                            
-                                            pickI[code.decode('utf-8')] = second_oTime
                                             pick[code.decode('utf-8')] = True
                                             break;
 
@@ -325,6 +329,18 @@ while(True):
                             nf = tmarr[0]
                             fl = tmarr[-1]
 
+                        if(code.decode('utf-8') in pick and pick[code.decode('utf-8')] and (chegang < 200 or mdpCost < 10000000) and code.decode('utf-8') not in pickI):
+                            pFile = open(pFilePath, 'a')
+                            pFile.write( str(code.decode('utf-8')) + ',' + str_oTime + ',' + str(datetime.datetime.now().strftime('%H:%M:%S')) + ',' + str(float(md)) + '\n')
+                            pFile.close()
+                            pickI[code.decode('utf-8')] = second_oTime
+
+                        if(fMedoTime < second_oTime and ed > -0.1 and ed < 2.5 and code.decode('utf-8') not in pickI):
+                            pFile = open(pFilePath, 'a')
+                            pFile.write( str(code.decode('utf-8')) + ',' + str_oTime + ',' + str(datetime.datetime.now().strftime('%H:%M:%S')) + ',' + str(float(md)) + '\n')
+                            pFile.close()
+                            pickI[code.decode('utf-8')] = second_oTime
+
                         if(code not in comps):
                             continue;
 
@@ -334,26 +350,47 @@ while(True):
                             mdFile.close()
                             medos.append(code)
                             comps.remove(code)
-                        elif(pick[code.decode('utf-8')] and ed > 0.4):
+                            del endIndex[code.decode('utf-8')]
+                        elif(pick[code.decode('utf-8')] and ed > 0.4 and (chegang < 200 or mdpCost < 10000000)):
                             mdFile = open(mdFilePath, 'a')
                             mdFile.write(str(code.decode('utf-8')) + ',' + str(float(exportData[i, 3].decode('UTF-8'))) + ',' + str(exportData[i, 0].decode('UTF-8')) + ',' + str(datetime.datetime.now().strftime('%H:%M:%S')) + ',' + str(exportData[i, 8].decode('UTF-8')) + '\n')
                             mdFile.close()
                             medos.append(code)
                             comps.remove(code)
+                            del endIndex[code.decode('utf-8')]
                         elif(mesuStart[code.decode('utf-8')] + 600 < second_oTime and ed > 0.4 and ed < 2.5):
                             mdFile = open(mdFilePath, 'a')
                             mdFile.write(str(code.decode('utf-8')) + ',' + str(float(exportData[i, 3].decode('UTF-8'))) + ',' + str(exportData[i, 0].decode('UTF-8')) + ',' + str(datetime.datetime.now().strftime('%H:%M:%S')) + ',' + str(exportData[i, 8].decode('UTF-8')) + '\n')
                             mdFile.close()
                             medos.append(code)
                             comps.remove(code)
+                            del endIndex[code.decode('utf-8')]
                         elif(mesuStart[code.decode('utf-8')] + 360 < second_oTime and ed > -0.1 and ed < 1 and max(exportData[:i,9].astype(float)) < 275):
                             mdFile = open(mdFilePath, 'a')
                             mdFile.write(str(code.decode('utf-8')) + ',' + str(float(exportData[i, 3].decode('UTF-8'))) + ',' + str(exportData[i, 0].decode('UTF-8')) + ',' + str(datetime.datetime.now().strftime('%H:%M:%S')) + ',' + str(exportData[i, 8].decode('UTF-8')) + '\n')
                             mdFile.close()
                             medos.append(code)
                             comps.remove(code)
+                            del endIndex[code.decode('utf-8')]
+                        elif(allmedo and (chegang < 200 and mdpCost < 10000000)):
+                            mdFile = open(mdFilePath, 'a')
+                            mdFile.write(str(code.decode('utf-8')) + ',' + str(float(exportData[i, 3].decode('UTF-8'))) + ',' + str(exportData[i, 0].decode('UTF-8')) + ',' + str(datetime.datetime.now().strftime('%H:%M:%S')) + ',' + str(exportData[i, 8].decode('UTF-8')) + '\n')
+                            mdFile.close()
+                            medos.append(code)
+                            comps.remove(code)
+                            del endIndex[code.decode('utf-8')]
+                        elif(fMedoTime < second_oTime and (chegang < 90 or mdpCost < 5000000) and endcggrad < 0):
+                            mdFile = open(mdFilePath, 'a')
+                            mdFile.write(str(code.decode('utf-8')) + ',' + str(float(exportData[i, 3].decode('UTF-8'))) + ',' + str(exportData[i, 0].decode('UTF-8')) + ',' + str(datetime.datetime.now().strftime('%H:%M:%S')) + ',' + str(exportData[i, 8].decode('UTF-8')) + '\n')
+                            mdFile.close()
+                            medos.append(code)
+                            comps.remove(code)       
+                            del endIndex[code.decode('utf-8')]
+                            
+                if(second_oTime > endTime and code.decode('utf-8') in endIndex and endIndex[code.decode('utf-8')] != 0):
+                    endIndex[code.decode('utf-8')] = i;                                                 
 
-                if(second_oTime > endTime):
+                if(second_oTime > endTime or allmedo):
                     continue;
 
                 if(nowTime > endTime):
@@ -435,6 +472,7 @@ while(True):
                     isd[code.decode('utf-8')] = False
                     isd2[code.decode('utf-8')] = False
                     pick[code.decode('utf-8')] = False
+                    endIndex[code.decode('utf-8')] = 0
                     cost = exportData[i, 8].decode('UTF-8')
                     setFile = open(setFilePath, 'a')
                     setFile.write( str(code.decode('utf-8')) + ',' + str(float(rate)) + ',' + str(tpg) +  ',' + str_oTime + ',' + str(wanna) + ',' + str(datetime.datetime.now().strftime('%H:%M:%S')) + ',' + str(cost) + ',' + str(second_oTime) + ',' + str(2) + '\n')
@@ -447,7 +485,7 @@ while(True):
                     cggradDic[code.decode('utf-8')].append(cggrad)
 
                 if(((ms_md > 0.96 and sms_md > 1 and gr > 420000 and not (cggrad < -4 and chegang < 160)) or (cggrad > 2.3 and chegang > 163)) and grade < 16 and exportData[i, 3].astype(float) > 5 and gr1):
-                    x = ti
+                    x = sp.array(range(i+1))
                     y = exportData[:i+1,3].astype(float)
                     if(len(y) <= 1):
                         break
@@ -637,7 +675,7 @@ while(True):
                             isd[code.decode('utf-8')] = False
                             isd2[code.decode('utf-8')] = False
                             pick[code.decode('utf-8')] = False
-                            pickI[code.decode('utf-8')] = second_oTime
+                            endIndex[code.decode('utf-8')] = 0
                             cost = exportData[i, 8].decode('UTF-8')
                             setFile = open(setFilePath, 'a')
                             setFile.write( str(code.decode('utf-8')) + ',' + str(float(rate)) + ',' + str(tpg) +  ',' + str_oTime + ',' + str(wanna) + ',' + str(datetime.datetime.now().strftime('%H:%M:%S')) + ',' + str(cost) + ',' + str(second_oTime) + ',' + str(2) + '\n')

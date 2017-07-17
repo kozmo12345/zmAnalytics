@@ -10,41 +10,40 @@ import re
 
 sp.random.seed(3)
 
-def error(f, x, y):
+# def error(f, x, y):
+#     return sp.sum(abs(f(x) - y))
 
-    return sp.sum(abs(f(x) - y))
+# def isDowning(arr_six, num):
+#     if(len(arr_six) < num):
+#         return False
 
-def isDowning(arr_six, num):
-    if(len(arr_six) < num):
-        return False
+#     grd = sp.polyfit(sp.array(range(num)), arr_six, 1)
+#     grdf = sp.around(grd[0], decimals=2)
 
-    grd = sp.polyfit(sp.array(range(num)), arr_six, 1)
-    grdf = sp.around(grd[0], decimals=2)
-
-    fp1, res1, rank1, sv1, rcond1 = sp.polyfit(sp.array(range(num)), arr_six, 1, full=True)
-    f1 = sp.poly1d(fp1)
-    er = error(f1, sp.array(range(num)), arr_six)
-    # print(arr_six, grdf, er)
-    if(grdf < -5 and er < 5 * num):
-        # print(arr_six, grdf, er)
-        return True
+#     fp1, res1, rank1, sv1, rcond1 = sp.polyfit(sp.array(range(num)), arr_six, 1, full=True)
+#     f1 = sp.poly1d(fp1)
+#     er = error(f1, sp.array(range(num)), arr_six)
+#     # print(arr_six, grdf, er)
+#     if(grdf < -5 and er < 5 * num):
+#         # print(arr_six, grdf, er)
+#         return True
     
-    return False
+#     return False
 
-def shouldCell(arr_six, num, r):
-    if(len(arr_six) < num):
-        return True
+# def shouldCell(arr_six, num, r):
+#     if(len(arr_six) < num):
+#         return True
 
-    abs_diff = abs(arr_six[0]*num - sum(arr_six))
-    grd = sp.polyfit(sp.array(range(num)), arr_six, 1)
-    grdf = sp.around(grd[0], decimals=2)
-    std = sp.std(arr_six)
+#     abs_diff = abs(arr_six[0]*num - sum(arr_six))
+#     grd = sp.polyfit(sp.array(range(num)), arr_six, 1)
+#     grdf = sp.around(grd[0], decimals=2)
+#     std = sp.std(arr_six)
 
-    if(grdf > -0.4 and grdf < 0.5 and std < 3 and arr_six[num-1] > (r * 25)):
-        # print(arr_six, grdf, std)
-        return False
+#     if(grdf > -0.4 and grdf < 0.5 and std < 3 and arr_six[num-1] > (r * 25)):
+#         # print(arr_six, grdf, std)
+#         return False
     
-    return True
+#     return True
 
 now = datetime.datetime.now()
 print(str(datetime.datetime.now()))
@@ -61,7 +60,7 @@ stdLimit = 2
 sumEd = 0
 gradient = 0
 today = now.strftime('%Y-%m-%d')
-today = '2017-05-18'
+today = '2017-06-29'
 
 print(today)
 setFile = open(os.path.join("C:\\", "Dropbox\\com_2\\" + today + "\\" + today + "moa3.txt"), 'w')
@@ -189,7 +188,7 @@ for ttime in times:
                         print(ttime, code, 'stopted')
 
                 if(code in comps):
-                    if(i < mesuStart[code.decode('utf-8')] + 3 or not shouldCell(exportData[i-5:i+1, 9].astype(float), 6, exportData[i, 3].astype(float))):
+                    if(i < mesuStart[code.decode('utf-8')] + 3):
                         continue;
 
                     mdpCost = (exportData[i,4].astype(float) - exportData[i-1,4].astype(float)) * exportData[i-1,8].astype(float)
@@ -218,6 +217,7 @@ for ttime in times:
                     if(isd2[code.decode('utf-8')]):
                         med = ed * 1.8
                     mmRate = (sp.sum(exportData[i-stdLimit:i+1,5].astype(float)))/(sp.sum(exportData[i-stdLimit:i+1,6].astype(float))) - ((med)/22)
+                    chegang = exportData[i,9].astype(float)
 
                     thGr = int(exportData[i-3, 4].decode('UTF-8')) - int(exportData[i-6, 4].decode('UTF-8'))                  
                     nowGr = int(exportData[i, 4].decode('UTF-8')) - int(exportData[i-3, 4].decode('UTF-8'))
@@ -243,7 +243,7 @@ for ttime in times:
                         cggrad3 = sp.around(cgfit3[0], decimals=2)
                     
                     gcggrad = min([cggrad1, cggrad2, cggrad3])
-                    chegang = exportData[i,9].astype(float)
+
                     if(chegang < 120):
                         gcggrad = -10
 
@@ -308,7 +308,7 @@ for ttime in times:
                     if(code not in comps):
                         continue;
 
-                    if(((pick[code.decode('utf-8')] and ed >= 0.4) or (i > mesuStart[code.decode('utf-8')] + 18 and pick[code.decode('utf-8')] and ed >= 0.1))):
+                    if((pick[code.decode('utf-8')] and ed >= 0.4) and (chegang < 200 or mdpCost < 10000000)):
                         print(ttime, code, 1111111111)
                         edFile.write( str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMin) + ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(red) + ',' + str(msTime) + ',' + str(mdTime) + ',' + str(msCost) + ',' + str(mdCost) + ',' + str(msGradient[code.decode('utf-8')]) + ',' + str(msGr[code.decode('utf-8')]) + ',' + str(msSmdms[code.decode('utf-8')]) + ',' + str(msGrade[code.decode('utf-8')]) + ',' + str(msSrgrad[code.decode('utf-8')]) +'\n')
                         comps.remove(code)
@@ -326,7 +326,7 @@ for ttime in times:
                         comps.remove(code)
                         medos.append(code)
                         sumEd = sumEd + red
-                    elif(allmedo):
+                    elif(allmedo and (chegang < 200 and mdpCost < 10000000)):
                         print(ttime, code, 3333333333)
                         edFile.write( str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMin) + ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(red) + ',' + str(msTime) + ',' + str(mdTime) + ',' + str(msCost) + ',' + str(mdCost) + ',' + str(msGradient[code.decode('utf-8')]) + ',' + str(msGr[code.decode('utf-8')]) + ',' + str(msSmdms[code.decode('utf-8')]) + ',' + str(msGrade[code.decode('utf-8')]) + ',' + str(msSrgrad[code.decode('utf-8')]) +'\n')
                         comps.remove(code)
@@ -356,6 +356,12 @@ for ttime in times:
                         comps.remove(code)
                         medos.append(code)
                         sumEd = sumEd + red
+                    elif(len(exportData[:,3].astype(float)) - 3 < i):
+                        print(ttime, code, 5555555555)
+                        edFile.write( str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMin) + ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(red) + ',' + str(msTime) + ',' + str(mdTime) + ',' + str(msCost) + ',' + str(mdCost) + ',' + str(msGradient[code.decode('utf-8')]) + ',' + str(msGr[code.decode('utf-8')]) + ',' + str(msSmdms[code.decode('utf-8')]) + ',' + str(msGrade[code.decode('utf-8')]) + ',' + str(msSrgrad[code.decode('utf-8')]) +'\n')
+                        comps.remove(code)
+                        medos.append(code)
+                        sumEd = sumEd + red                        
 
                 if((second_oTime > endTime) or allmedo):
                     continue;
