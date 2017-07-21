@@ -112,7 +112,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_2\\Data\\"):
                     nzData = data[data[:,2] != b'']
                     ttimeData = nzData[nzData[:,0] == ttime]                    
                     ttimeData2 = ttimeData[ttimeData[:,1].astype(int) < 30]
-                    ttimeData3 = ttimeData2[ttimeData2[:,4].astype(int) > 110000]
+                    ttimeData3 = ttimeData2[ttimeData2[:,4].astype(int) > 97000]
                     ttimeData4 = ttimeData3[ttimeData3[:,3].astype(float) < 25]
                     ttimeData5 = ttimeData4[ttimeData4[:,8].astype(float) > 2200]
                     codes = ttimeData5[:,7]
@@ -783,7 +783,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_2\\diff\\"):
                     # diffGr = ( xstime.tm_min - 2 ) * 10000
                     ttimeData = nzData[nzData[:,0] == ttime]                    
                     ttimeData2 = ttimeData[ttimeData[:,1].astype(int) < 30]
-                    ttimeData3 = ttimeData2[ttimeData2[:,4].astype(int) > 110000]
+                    ttimeData3 = ttimeData2[ttimeData2[:,4].astype(int) > 97000]
                     ttimeData4 = ttimeData3[ttimeData3[:,3].astype(float) < 25]
                     ttimeData5 = ttimeData4[ttimeData4[:,8].astype(float) > 2200]
                     codes = ttimeData5[:,7]
