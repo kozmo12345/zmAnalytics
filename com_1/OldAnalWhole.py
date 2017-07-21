@@ -111,8 +111,8 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_1\\Data\\"):
                 if(bool_oTime == True):
                     nzData = data[data[:,2] != b'']
                     ttimeData = nzData[nzData[:,0] == ttime]                    
-                    ttimeData2 = ttimeData[ttimeData[:,1].astype(int) < 100]
-                    ttimeData3 = ttimeData2[ttimeData2[:,4].astype(int) > 100000]
+                    ttimeData2 = ttimeData[ttimeData[:,1].astype(int) < 30]
+                    ttimeData3 = ttimeData2[ttimeData2[:,4].astype(int) > 110000]
                     ttimeData4 = ttimeData3[ttimeData3[:,3].astype(float) < 25]
                     ttimeData5 = ttimeData4[ttimeData4[:,8].astype(float) > 2200]
                     codes = ttimeData5[:,7]
@@ -401,6 +401,11 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_1\\Data\\"):
                                 del delayMesu[code.decode('utf-8')]
                                 continue;
 
+                            if(exportData[i, 3].astype(float) > 16.3):
+                                print(ttime, code, 'dela 1717171717')
+                                del delayMesu[code.decode('utf-8')]
+                                continue;                                
+
                             comps.append((code))
                             mesuStart[code.decode('utf-8')] = i
                             msGradient[code.decode('utf-8')] = gradient
@@ -424,7 +429,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_1\\Data\\"):
                         else:
                             cggradDic[code.decode('utf-8')].append(cggrad)                        
 
-                        if(((ms_md > 0.96 and sms_md > 1 and gr > 420000 and not (cggrad < -4 and chegang < 160)) or (cggrad > 2.3 and chegang > 163)) and grade < 16 and exportData[i, 3].astype(float) > 5 and code.decode('utf-8') not in delayMesu and gr1):
+                        if(((ms_md > 0.96 and sms_md > 1 and gr > 330000 and not (cggrad < -4 and chegang < 160)) or (cggrad > 2.3 and chegang > 163)) and grade < 16 and exportData[i, 3].astype(float) > 5 and code.decode('utf-8') not in delayMesu and gr1):
                             x = sp.array(range(i+1))
                             y = exportData[:i+1,3].astype(float)
                             if(len(y) <= 1):
@@ -648,7 +653,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_1\\Data\\"):
                                         nos.append(code)
                                         continue;
 
-                                    if(grRate > 1.9 or grRate1 > 1.9 or grRate2 > 1.9 or grRate3 > 1.9 or grRate4 > 1.9 or grRate5 > 1.9 or chegang > 400 or exportData[i, 3].astype(float) - exportData[i-1, 3].astype(float) > 2):
+                                    if(grRate > 1.8 or grRate1 > 1.8 or grRate2 > 1.8 or grRate3 > 1.8 or grRate4 > 1.8 or grRate5 > 1.8 or chegang > 400 or exportData[i, 3].astype(float) - exportData[i-1, 3].astype(float) > 2):
                                         delayMesu[code.decode('utf-8')] = i
                                         continue;
 
@@ -661,6 +666,11 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_1\\Data\\"):
                                     grifit = sp.polyfit(sp.array(range(grilen)), gradiDic[code.decode('utf-8')][-4:], 1)
                                     grigrad = sp.around(grifit[0], decimals=2)                                               
 
+                                    if(exportData[i, 3].astype(float) > 16.3):
+                                        print(ttime, code, 'nos1717171717')
+                                        nos.append(code)
+                                        continue;
+        
                                     comps.append((code))
                                     mesuStart[code.decode('utf-8')] = i
                                     msGradient[code.decode('utf-8')] = gradient
@@ -772,8 +782,8 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_1\\diff\\"):
                     nzData = data[data[:,2] != b'']
                     # diffGr = ( xstime.tm_min - 2 ) * 10000
                     ttimeData = nzData[nzData[:,0] == ttime]                    
-                    ttimeData2 = ttimeData[ttimeData[:,1].astype(int) < 100]
-                    ttimeData3 = ttimeData2[ttimeData2[:,4].astype(int) > 100000]
+                    ttimeData2 = ttimeData[ttimeData[:,1].astype(int) < 30]
+                    ttimeData3 = ttimeData2[ttimeData2[:,4].astype(int) > 110000]
                     ttimeData4 = ttimeData3[ttimeData3[:,3].astype(float) < 25]
                     ttimeData5 = ttimeData4[ttimeData4[:,8].astype(float) > 2200]
                     codes = ttimeData5[:,7]
@@ -1068,6 +1078,11 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_1\\diff\\"):
                                 del delayMesu[code.decode('utf-8')]
                                 continue;
 
+                            if(exportData[i, 3].astype(float) > 16.3):
+                                print(ttime, code, 'dela 1717171717')
+                                del delayMesu[code.decode('utf-8')]
+                                continue;
+        
                             comps.append((code))
                             mesuStart[code.decode('utf-8')] = i
                             msGradient[code.decode('utf-8')] = gradient
@@ -1091,7 +1106,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_1\\diff\\"):
                         else:
                             cggradDic[code.decode('utf-8')].append(cggrad)
 
-                        if(((ms_md > 0.96 and sms_md > 1 and gr > 420000 and not (cggrad < -4 and chegang < 160)) or (cggrad > 2.3 and chegang > 163)) and grade < 16 and exportData[i, 3].astype(float) > 5 and code.decode('utf-8') not in delayMesu and gr1):
+                        if(((ms_md > 0.96 and sms_md > 1 and gr > 330000 and not (cggrad < -4 and chegang < 160)) or (cggrad > 2.3 and chegang > 163)) and grade < 16 and exportData[i, 3].astype(float) > 5 and code.decode('utf-8') not in delayMesu and gr1):
                             x = sp.array(range(i+1))
                             y = exportData[:i+1,3].astype(float)
                             if(len(y) <= 1):
@@ -1315,7 +1330,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_1\\diff\\"):
                                         nos.append(code)
                                         continue;
 
-                                    if(grRate > 1.9 or grRate1 > 1.9 or grRate2 > 1.9 or grRate3 > 1.9 or grRate4 > 1.9 or grRate5 > 1.9 or chegang > 400 or exportData[i, 3].astype(float) - exportData[i-1, 3].astype(float) > 2):
+                                    if(grRate > 1.8 or grRate1 > 1.8 or grRate2 > 1.8 or grRate3 > 1.8 or grRate4 > 1.8 or grRate5 > 1.8 or chegang > 400 or exportData[i, 3].astype(float) - exportData[i-1, 3].astype(float) > 2):
                                         delayMesu[code.decode('utf-8')] = i
                                         continue;
 
@@ -1328,6 +1343,11 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_1\\diff\\"):
                                     grilen = len(gradiDic[code.decode('utf-8')][-4:])
                                     grifit = sp.polyfit(sp.array(range(grilen)), gradiDic[code.decode('utf-8')][-4:], 1)
                                     grigrad = sp.around(grifit[0], decimals=2)                                               
+
+                                    if(exportData[i, 3].astype(float) > 16.3):
+                                        print(ttime, code, 'nos1717171717')
+                                        nos.append(code)
+                                        continue;
 
                                     comps.append((code))
                                     mesuStart[code.decode('utf-8')] = i
@@ -1347,6 +1367,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_1\\diff\\"):
                                     setFile.write( str(code.decode('utf-8')) + ',' + str(float(rate)) +  ',' + str(float(exportData[i, 3].decode('UTF-8'))) +  '\n')
 
             except Exception as e:
+                ss
                 errFilePath = os.path.join("C:\\", "Dropbox\\com_1\\diff\\" + "err.txt");
                 errFile = open(errFilePath, 'a')
                 errFile.write(today + '\t' + str(e) + '\n')

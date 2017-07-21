@@ -41,7 +41,7 @@ def createFiles(realfilePath, setFilePath, mdFilePath, pFilePath):
         pass
 
 now = datetime.datetime.now()
-today = '2017-05-04'
+today = now.strftime('%Y-%m-%d')
 
 startTime = datetime.timedelta(hours=9,minutes=00,seconds=00).total_seconds()
 endTime = datetime.timedelta(hours=9,minutes=12,seconds=30).total_seconds()
@@ -456,6 +456,10 @@ while(True):
                         del delayMesu[code.decode('utf-8')]
                         continue;
 
+                    if(exportData[i, 3].astype(float) > 16.3):
+                        del delayMesu[code.decode('utf-8')]
+                        continue;                        
+
                     with open(setFilePath, 'r') as f:
                         for line in f:
                             if(line.split(",")[0] == code.decode('utf-8') and code not in comps):
@@ -484,7 +488,7 @@ while(True):
                 else:
                     cggradDic[code.decode('utf-8')].append(cggrad)
 
-                if(((ms_md > 0.96 and sms_md > 1 and gr > 420000 and not (cggrad < -4 and chegang < 160)) or (cggrad > 2.3 and chegang > 163)) and grade < 16 and exportData[i, 3].astype(float) > 5 and gr1):
+                if(((ms_md > 0.96 and sms_md > 1 and gr > 330000 and not (cggrad < -4 and chegang < 160)) or (cggrad > 2.3 and chegang > 163)) and grade < 16 and exportData[i, 3].astype(float) > 5 and gr1):
                     x = sp.array(range(i+1))
                     y = exportData[:i+1,3].astype(float)
                     if(len(y) <= 1):
@@ -659,6 +663,10 @@ while(True):
                             if(exportData[i, 4].astype(float) > 2000000 and mole < 0.03):
                                 nos.append(code)
                                 continue;
+
+                            if(exportData[i, 3].astype(float) > 16.3):
+                                nos.append(code)
+                                continue;      
 
                             with open(setFilePath, 'r') as f:
                                 for line in f:
