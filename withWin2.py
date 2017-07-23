@@ -199,7 +199,7 @@ while(True):
             nzData = data[data[:,2] != b'']            
             ttimeData = nzData[nzData[:,0] == ttime]            
             ttimeData2 = ttimeData[ttimeData[:,1].astype(int) < 31]
-            ttimeData3 = ttimeData2[ttimeData2[:,4].astype(int) > 100000]
+            ttimeData3 = ttimeData2[ttimeData2[:,4].astype(int) > 97000]
             ttimeData4 = ttimeData3[ttimeData3[:,3].astype(float) < 25]
             ttimeData5 = ttimeData4[ttimeData4[:,8].astype(float) > 2200]
             codes = ttimeData5[:,7]
