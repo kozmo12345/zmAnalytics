@@ -34,7 +34,7 @@ print(str(datetime.datetime.now()))
 startTime = datetime.timedelta(hours=9,minutes=00,seconds=00).total_seconds()
 endTime = datetime.timedelta(hours=9,minutes=12,seconds=30).total_seconds()
 fMedoTime = datetime.timedelta(hours=9,minutes=19,seconds=50).total_seconds()
-allMedoTime = datetime.timedelta(hours=9,minutes=30,seconds=20).total_seconds()
+allMedoTime = datetime.timedelta(hours=9,minutes=24,seconds=20).total_seconds()
 
 mesuLimit = [2]
 rateLimit = 0.31
@@ -274,7 +274,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_2\\Data\\"):
                                 del pick[code.decode('utf-8')]
                                 del endIndex[code.decode('utf-8')]
 
-                            elif(mesuStart[code.decode('utf-8')] + 36 < i and ed > -0.1 and ed < 1 and max(exportData[:i,9].astype(float)) < 275):
+                            elif(mesuStart[code.decode('utf-8')] + 36 < i and ed > -1 and ed < 1 and (ms > 8 or chegang < 190)):
                                 edFile.write( str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMin) + ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(red) + ',' + str(msTime) + ',' + str(mdTime) + ',' + str(msCost) + ',' + str(mdCost) + ',' + str(msGradient[code.decode('utf-8')]) + ',' + str(msGr[code.decode('utf-8')]) + ',' + str(msSmdms[code.decode('utf-8')]) + ',' + str(msGrade[code.decode('utf-8')]) + ',' + str(msSrgrad[code.decode('utf-8')]) + ',' + str(nosDic[code.decode('utf-8')]) +  ',' + str(mesuIndex[code.decode('utf-8')]) + '\n')
                                 comps.remove(code)
                                 sumEd = sumEd + red
@@ -705,7 +705,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_2\\Data\\"):
 startTime = datetime.timedelta(hours=9,minutes=00,seconds=00).total_seconds()
 endTime = datetime.timedelta(hours=9,minutes=12,seconds=30).total_seconds()
 fMedoTime = datetime.timedelta(hours=9,minutes=19,seconds=50).total_seconds()
-allMedoTime = datetime.timedelta(hours=9,minutes=30,seconds=20).total_seconds()
+allMedoTime = datetime.timedelta(hours=9,minutes=24,seconds=20).total_seconds()
 mesuLimit = [2]
 rateLimit = 0.31
 rateMLimit = 3.8
@@ -949,7 +949,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_2\\diff\\"):
                                 del pick[code.decode('utf-8')]
                                 del endIndex[code.decode('utf-8')]
 
-                            elif(mesuStart[code.decode('utf-8')] + 36 < i and ed > -0.1 and ed < 1 and max(exportData[:i,9].astype(float)) < 275):
+                            elif(mesuStart[code.decode('utf-8')] + 36 < i and ed > -1 and ed < 1 and (ms > 8 or chegang < 190)):
                                 edFile.write( str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMin) + ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(red) + ',' + str(msTime) + ',' + str(mdTime) + ',' + str(msCost) + ',' + str(mdCost) + ',' + str(msGradient[code.decode('utf-8')]) + ',' + str(msGr[code.decode('utf-8')]) + ',' + str(msSmdms[code.decode('utf-8')]) + ',' + str(msGrade[code.decode('utf-8')]) + ',' + str(msSrgrad[code.decode('utf-8')]) + ',' + str(nosDic[code.decode('utf-8')]) +  ',' + str(mesuIndex[code.decode('utf-8')]) + '\n')
                                 comps.remove(code)
                                 sumEd = sumEd + red

@@ -60,7 +60,7 @@ stdLimit = 2
 sumEd = 0
 gradient = 0
 today = now.strftime('%Y-%m-%d')
-today = '2017-04-05'
+# today = '2017-04-05'
 
 print(today)
 setFile = open(os.path.join("C:\\", "Dropbox\\com_1\\" + today + "\\" + today + "moa3.txt"), 'w')
@@ -179,14 +179,14 @@ for ttime in times:
 
                 c = exportData[:i+1, 3].astype(float)
 
-                if(code.decode('utf-8') == '037950'): #testst
-                    thGr = int(exportData[i-3, 4].decode('UTF-8')) - int(exportData[i-6, 4].decode('UTF-8'))                  
-                    nowGr = int(exportData[i, 4].decode('UTF-8')) - int(exportData[i-3, 4].decode('UTF-8'))
-                    if(thGr != 0 and nowGr != 0):
-                        print(ttime, code , c[-1],nowGr / thGr, exportData[i,8].astype(int), exportData[i,9].astype(float))
+                # if(code.decode('utf-8') == '037950'): #testst
+                #     thGr = int(exportData[i-3, 4].decode('UTF-8')) - int(exportData[i-6, 4].decode('UTF-8'))                  
+                #     nowGr = int(exportData[i, 4].decode('UTF-8')) - int(exportData[i-3, 4].decode('UTF-8'))
+                #     if(thGr != 0 and nowGr != 0):
+                #         print(ttime, code , c[-1],nowGr / thGr, exportData[i,8].astype(int), exportData[i,9].astype(float))
 
-                    else:
-                        print(ttime, code, 'stopted')
+                #     else:
+                #         print(ttime, code, 'stopted')
 
                 if(code in comps):
                     if(i < mesuStart[code.decode('utf-8')] + 3):
@@ -343,7 +343,7 @@ for ttime in times:
                         medos.append(code)
                         sumEd = sumEd + red                        
                         del endIndex[code.decode('utf-8')]
-                    elif(mesuStart[code.decode('utf-8')] + 36 < i and ed > -0.1 and ed < 1 and max(exportData[:i,9].astype(float)) < 275):
+                    elif(mesuStart[code.decode('utf-8')] + 36 < i and ed > -1 and ed < 1):
                         print(ttime, code, 6666666666)
                         edFile.write( str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMin) + ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(red) + ',' + str(msTime) + ',' + str(mdTime) + ',' + str(msCost) + ',' + str(mdCost) + ',' + str(msGradient[code.decode('utf-8')]) + ',' + str(msGr[code.decode('utf-8')]) + ',' + str(msSmdms[code.decode('utf-8')]) + ',' + str(msGrade[code.decode('utf-8')]) + ',' + str(msSrgrad[code.decode('utf-8')]) +'\n')
                         comps.remove(code)
