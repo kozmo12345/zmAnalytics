@@ -51,7 +51,7 @@ print(str(datetime.datetime.now()))
 startTime = datetime.timedelta(hours=9,minutes=00,seconds=00).total_seconds()
 endTime = datetime.timedelta(hours=9,minutes=12,seconds=30).total_seconds()
 fMedoTime = datetime.timedelta(hours=9,minutes=19,seconds=50).total_seconds()
-allMedoTime = datetime.timedelta(hours=9,minutes=30,seconds=20).total_seconds()
+allMedoTime = datetime.timedelta(hours=9,minutes=24,seconds=20).total_seconds()
 wanna = 1
 mesuLimit = [2]
 rateLimit = 0.31
@@ -60,7 +60,7 @@ stdLimit = 2
 sumEd = 0
 gradient = 0
 today = now.strftime('%Y-%m-%d')
-today = '2017-04-05'
+# today = '2017-04-05'
 
 print(today)
 setFile = open(os.path.join("C:\\", "Dropbox\\com_2\\" + today + "\\" + today + "moa3.txt"), 'w')
@@ -179,7 +179,7 @@ for ttime in times:
 
                 c = exportData[:i+1, 3].astype(float)
 
-                if(code.decode('utf-8') == '037950'): #testst
+                if(code.decode('utf-8') == '043200'): #testst
                     thGr = int(exportData[i-3, 4].decode('UTF-8')) - int(exportData[i-6, 4].decode('UTF-8'))                  
                     nowGr = int(exportData[i, 4].decode('UTF-8')) - int(exportData[i-3, 4].decode('UTF-8'))
                     if(thGr != 0 and nowGr != 0):
@@ -226,7 +226,7 @@ for ttime in times:
                     if(len(exportData[:i, 4]) > 6 and int(exportData[i, 4].decode('UTF-8')) - int(exportData[i-3, 4].decode('UTF-8')) != 0 and int(exportData[i-3, 4].decode('UTF-8')) - int(exportData[i-6, 4].decode('UTF-8')) != 0):
                         grRate = (int(exportData[i, 4].decode('UTF-8')) - int(exportData[i-3, 4].decode('UTF-8'))) / (int(exportData[i-3, 4].decode('UTF-8')) - int(exportData[i-6, 4].decode('UTF-8')))
 
-                    if(exportData[i, 9].astype('float') < 103 or (ed > 2.8 and int(exportData[i, 4].decode('UTF-8')) < 800000) or (grRate > 1.78 and int(exportData[i, 4].decode('UTF-8')) < 800000) or (grRate > 3 and chegang < 155)):
+                    if(exportData[i, 9].astype('float') < 103 or (ed > 2.8 and int(exportData[i, 4].decode('UTF-8')) < 800000) or (grRate > 1.78 and int(exportData[i, 4].decode('UTF-8')) < 800000) or (grRate > 3 and chegang < 160)):
                         pick[code.decode('utf-8')] = True
                         pickI[code.decode('utf-8')] = i
 
@@ -343,7 +343,7 @@ for ttime in times:
                         medos.append(code)
                         sumEd = sumEd + red                        
                         del endIndex[code.decode('utf-8')]
-                    elif(mesuStart[code.decode('utf-8')] + 36 < i and ed > -0.1 and ed < 1 and max(exportData[:i,9].astype(float)) < 275):
+                    elif(mesuStart[code.decode('utf-8')] + 36 < i and ed > -1 and ed < 1):
                         print(ttime, code, 6666666666)
                         edFile.write( str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMin) + ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(red) + ',' + str(msTime) + ',' + str(mdTime) + ',' + str(msCost) + ',' + str(mdCost) + ',' + str(msGradient[code.decode('utf-8')]) + ',' + str(msGr[code.decode('utf-8')]) + ',' + str(msSmdms[code.decode('utf-8')]) + ',' + str(msGrade[code.decode('utf-8')]) + ',' + str(msSrgrad[code.decode('utf-8')]) +'\n')
                         comps.remove(code)

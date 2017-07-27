@@ -287,7 +287,7 @@ while(True):
                         if(len(exportData[:i, 4]) > 6 and int(exportData[i, 4].decode('UTF-8')) - int(exportData[i-3, 4].decode('UTF-8')) != 0 and int(exportData[i-3, 4].decode('UTF-8')) - int(exportData[i-6, 4].decode('UTF-8')) != 0):
                             grRate = (int(exportData[i, 4].decode('UTF-8')) - int(exportData[i-3, 4].decode('UTF-8'))) / (int(exportData[i-3, 4].decode('UTF-8')) - int(exportData[i-6, 4].decode('UTF-8')))
 
-                        if((ed > 2.8 and int(exportData[i, 4].decode('UTF-8')) < 800000 and not pick[code.decode('utf-8')]) or (grRate > 1.78 and int(exportData[i, 4].decode('UTF-8')) < 800000 and not pick[code.decode('utf-8')]) or (grRate > 3 and chegang < 155)):
+                        if((ed > 2.8 and int(exportData[i, 4].decode('UTF-8')) < 800000 and not pick[code.decode('utf-8')]) or (grRate > 1.78 and int(exportData[i, 4].decode('UTF-8')) < 800000 and not pick[code.decode('utf-8')]) or (grRate > 3 and chegang < 160)):
                             pick[code.decode('utf-8')] = True
 
                         nf = 0

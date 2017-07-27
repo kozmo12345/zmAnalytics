@@ -175,7 +175,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_1\\Data\\"):
                             if(len(exportData[:i, 4]) > 6 and thGr != 0 and nowGr != 0):
                                 grRate = nowGr/thGr
 
-                            if(exportData[i, 9].astype('float') < 103 or (ed > 2.8 and int(exportData[i, 4].decode('UTF-8')) < 800000) or (grRate > 1.78 and int(exportData[i, 4].decode('UTF-8')) < 800000) or (grRate > 3 and chegang < 155)):
+                            if(exportData[i, 9].astype('float') < 103 or (ed > 2.8 and int(exportData[i, 4].decode('UTF-8')) < 800000) or (grRate > 1.78 and int(exportData[i, 4].decode('UTF-8')) < 800000) or (grRate > 3 and chegang < 160)):
                                 pick[code.decode('utf-8')] = True
 
                             cgfit1 = sp.polyfit(sp.array(range(5)), exportData[i-4:i+1,9].astype(float), 1)
@@ -846,7 +846,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_1\\diff\\"):
                             if(len(exportData[:i, 4]) > 6 and thGr != 0 and nowGr != 0):
                                 grRate = nowGr/thGr
 
-                            if(exportData[i, 9].astype('float') < 103 or (ed > 2.8 and int(exportData[i, 4].decode('UTF-8')) < 800000) or (grRate > 1.78 and int(exportData[i, 4].decode('UTF-8')) < 800000) or (grRate > 3 and chegang < 155)):
+                            if(exportData[i, 9].astype('float') < 103 or (ed > 2.8 and int(exportData[i, 4].decode('UTF-8')) < 800000) or (grRate > 1.78 and int(exportData[i, 4].decode('UTF-8')) < 800000) or (grRate > 3 and chegang < 160)):
                                 pick[code.decode('utf-8')] = True
 
                             cgfit1 = sp.polyfit(sp.array(range(5)), exportData[i-4:i+1,9].astype(float), 1)

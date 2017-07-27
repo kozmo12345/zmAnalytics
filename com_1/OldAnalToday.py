@@ -51,7 +51,7 @@ print(str(datetime.datetime.now()))
 startTime = datetime.timedelta(hours=9,minutes=00,seconds=00).total_seconds()
 endTime = datetime.timedelta(hours=9,minutes=12,seconds=30).total_seconds()
 fMedoTime = datetime.timedelta(hours=9,minutes=19,seconds=50).total_seconds()
-allMedoTime = datetime.timedelta(hours=9,minutes=30,seconds=20).total_seconds()
+allMedoTime = datetime.timedelta(hours=9,minutes=24,seconds=20).total_seconds()
 wanna = 1
 mesuLimit = [2]
 rateLimit = 0.31
@@ -179,14 +179,14 @@ for ttime in times:
 
                 c = exportData[:i+1, 3].astype(float)
 
-                # if(code.decode('utf-8') == '037950'): #testst
-                #     thGr = int(exportData[i-3, 4].decode('UTF-8')) - int(exportData[i-6, 4].decode('UTF-8'))                  
-                #     nowGr = int(exportData[i, 4].decode('UTF-8')) - int(exportData[i-3, 4].decode('UTF-8'))
-                #     if(thGr != 0 and nowGr != 0):
-                #         print(ttime, code , c[-1],nowGr / thGr, exportData[i,8].astype(int), exportData[i,9].astype(float))
+                if(code.decode('utf-8') == '043200'): #testst
+                    thGr = int(exportData[i-3, 4].decode('UTF-8')) - int(exportData[i-6, 4].decode('UTF-8'))                  
+                    nowGr = int(exportData[i, 4].decode('UTF-8')) - int(exportData[i-3, 4].decode('UTF-8'))
+                    if(thGr != 0 and nowGr != 0):
+                        print(ttime, code , c[-1],nowGr / thGr, exportData[i,8].astype(int), exportData[i,9].astype(float))
 
-                #     else:
-                #         print(ttime, code, 'stopted')
+                    else:
+                        print(ttime, code, 'stopted')
 
                 if(code in comps):
                     if(i < mesuStart[code.decode('utf-8')] + 3):
@@ -226,7 +226,7 @@ for ttime in times:
                     if(len(exportData[:i, 4]) > 6 and int(exportData[i, 4].decode('UTF-8')) - int(exportData[i-3, 4].decode('UTF-8')) != 0 and int(exportData[i-3, 4].decode('UTF-8')) - int(exportData[i-6, 4].decode('UTF-8')) != 0):
                         grRate = (int(exportData[i, 4].decode('UTF-8')) - int(exportData[i-3, 4].decode('UTF-8'))) / (int(exportData[i-3, 4].decode('UTF-8')) - int(exportData[i-6, 4].decode('UTF-8')))
 
-                    if(exportData[i, 9].astype('float') < 103 or (ed > 2.8 and int(exportData[i, 4].decode('UTF-8')) < 800000) or (grRate > 1.78 and int(exportData[i, 4].decode('UTF-8')) < 800000) or (grRate > 3 and chegang < 155)):
+                    if(exportData[i, 9].astype('float') < 103 or (ed > 2.8 and int(exportData[i, 4].decode('UTF-8')) < 800000) or (grRate > 1.78 and int(exportData[i, 4].decode('UTF-8')) < 800000) or (grRate > 3 and chegang < 160)):
                         pick[code.decode('utf-8')] = True
                         pickI[code.decode('utf-8')] = i
 

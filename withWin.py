@@ -3,7 +3,6 @@
 import os
 import datetime
 import scipy as sp
-import matplotlib.pyplot as plt
 import datetime
 import time
 import re
@@ -287,7 +286,7 @@ while(True):
                         if(len(exportData[:i, 4]) > 6 and int(exportData[i, 4].decode('UTF-8')) - int(exportData[i-3, 4].decode('UTF-8')) != 0 and int(exportData[i-3, 4].decode('UTF-8')) - int(exportData[i-6, 4].decode('UTF-8')) != 0):
                             grRate = (int(exportData[i, 4].decode('UTF-8')) - int(exportData[i-3, 4].decode('UTF-8'))) / (int(exportData[i-3, 4].decode('UTF-8')) - int(exportData[i-6, 4].decode('UTF-8')))
 
-                        if((ed > 2.8 and int(exportData[i, 4].decode('UTF-8')) < 800000 and not pick[code.decode('utf-8')]) or (grRate > 1.78 and int(exportData[i, 4].decode('UTF-8')) < 800000 and not pick[code.decode('utf-8')]) or (grRate > 3 and chegang < 155)):
+                        if((ed > 2.8 and int(exportData[i, 4].decode('UTF-8')) < 800000 and not pick[code.decode('utf-8')]) or (grRate > 1.78 and int(exportData[i, 4].decode('UTF-8')) < 800000 and not pick[code.decode('utf-8')]) or (grRate > 3 and chegang < 160)):
                             pick[code.decode('utf-8')] = True
 
                         nf = 0
@@ -365,7 +364,7 @@ while(True):
                             medos.append(code)
                             comps.remove(code)
                             del endIndex[code.decode('utf-8')]
-                        elif(mesuStart[code.decode('utf-8')] + 360 < second_oTime and ed > -0.1 and ed < 1 and max(exportData[:i,9].astype(float)) < 180):
+                        elif(mesuStart[code.decode('utf-8')] + 360 < second_oTime and ed > 0.4 and ed < 1 and max(exportData[:i,9].astype(float)) < 180):
                             mdFile = open(mdFilePath, 'a')
                             mdFile.write(str(code.decode('utf-8')) + ',' + str(float(exportData[i, 3].decode('UTF-8'))) + ',' + str(exportData[i, 0].decode('UTF-8')) + ',' + str(datetime.datetime.now().strftime('%H:%M:%S')) + ',' + str(exportData[i, 8].decode('UTF-8')) + '\n')
                             mdFile.close()
