@@ -328,64 +328,17 @@ while(True):
                             nf = tmarr[0]
                             fl = tmarr[-1]
 
-                        # if(code.decode('utf-8') in pick and pick[code.decode('utf-8')] and (chegang < 200 or mdpCost < 10000000) and code.decode('utf-8') not in pickI):
-                        #     pFile = open(pFilePath, 'a')
-                        #     pFile.write( str(code.decode('utf-8')) + ',' + str_oTime + ',' + str(datetime.datetime.now().strftime('%H:%M:%S')) + ',' + str(float(md)) + '\n')
-                        #     pFile.close()
-                        #     pickI[code.decode('utf-8')] = second_oTime
-
-                        # if(fMedoTime < second_oTime and ed > -0.1 and ed < 2.5 and code.decode('utf-8') not in pickI):
-                        #     pFile = open(pFilePath, 'a')
-                        #     pFile.write( str(code.decode('utf-8')) + ',' + str_oTime + ',' + str(datetime.datetime.now().strftime('%H:%M:%S')) + ',' + str(float(md)) + '\n')
-                        #     pFile.close()
-                        #     pickI[code.decode('utf-8')] = second_oTime
-
                         if(code not in comps):
                             continue;
 
-                        if((mmRate < rateLimit or mmRate > rateMLimit) and gcggrad < -1.7 and ed >= tempWan):
+                        if(mesuStart[code.decode('utf-8')] + 510 < second_oTime):
                             mdFile = open(mdFilePath, 'a')
                             mdFile.write(str(code.decode('utf-8')) + ',' + str(float(exportData[i, 3].decode('UTF-8'))) + ',' + str(exportData[i, 0].decode('UTF-8')) + ',' + str(datetime.datetime.now().strftime('%H:%M:%S')) + ',' + str(exportData[i, 8].decode('UTF-8')) + '\n')
                             mdFile.close()
                             medos.append(code)
                             comps.remove(code)
                             del endIndex[code.decode('utf-8')]
-                        elif(pick[code.decode('utf-8')] and ed > 0.4 and (chegang < 200 or mdpCost < 10000000)):
-                            mdFile = open(mdFilePath, 'a')
-                            mdFile.write(str(code.decode('utf-8')) + ',' + str(float(exportData[i, 3].decode('UTF-8'))) + ',' + str(exportData[i, 0].decode('UTF-8')) + ',' + str(datetime.datetime.now().strftime('%H:%M:%S')) + ',' + str(exportData[i, 8].decode('UTF-8')) + '\n')
-                            mdFile.close()
-                            medos.append(code)
-                            comps.remove(code)
-                            del endIndex[code.decode('utf-8')]
-                        elif(mesuStart[code.decode('utf-8')] + 600 < second_oTime and ed > 0.4 and ed < 2.5):
-                            mdFile = open(mdFilePath, 'a')
-                            mdFile.write(str(code.decode('utf-8')) + ',' + str(float(exportData[i, 3].decode('UTF-8'))) + ',' + str(exportData[i, 0].decode('UTF-8')) + ',' + str(datetime.datetime.now().strftime('%H:%M:%S')) + ',' + str(exportData[i, 8].decode('UTF-8')) + '\n')
-                            mdFile.close()
-                            medos.append(code)
-                            comps.remove(code)
-                            del endIndex[code.decode('utf-8')]
-                        elif(mesuStart[code.decode('utf-8')] + 360 < second_oTime and ed > 0.4 and ed < 1 and max(exportData[:i,9].astype(float)) < 180):
-                            mdFile = open(mdFilePath, 'a')
-                            mdFile.write(str(code.decode('utf-8')) + ',' + str(float(exportData[i, 3].decode('UTF-8'))) + ',' + str(exportData[i, 0].decode('UTF-8')) + ',' + str(datetime.datetime.now().strftime('%H:%M:%S')) + ',' + str(exportData[i, 8].decode('UTF-8')) + '\n')
-                            mdFile.close()
-                            medos.append(code)
-                            comps.remove(code)
-                            del endIndex[code.decode('utf-8')]
-                        elif(allmedo and (chegang < 200 and mdpCost < 10000000)):
-                            mdFile = open(mdFilePath, 'a')
-                            mdFile.write(str(code.decode('utf-8')) + ',' + str(float(exportData[i, 3].decode('UTF-8'))) + ',' + str(exportData[i, 0].decode('UTF-8')) + ',' + str(datetime.datetime.now().strftime('%H:%M:%S')) + ',' + str(exportData[i, 8].decode('UTF-8')) + '\n')
-                            mdFile.close()
-                            medos.append(code)
-                            comps.remove(code)
-                            del endIndex[code.decode('utf-8')]
-                        elif(fMedoTime < second_oTime and (chegang < 90 or mdpCost < 5000000) and endcggrad < 0):
-                            mdFile = open(mdFilePath, 'a')
-                            mdFile.write(str(code.decode('utf-8')) + ',' + str(float(exportData[i, 3].decode('UTF-8'))) + ',' + str(exportData[i, 0].decode('UTF-8')) + ',' + str(datetime.datetime.now().strftime('%H:%M:%S')) + ',' + str(exportData[i, 8].decode('UTF-8')) + '\n')
-                            mdFile.close()
-                            medos.append(code)
-                            comps.remove(code)       
-                            del endIndex[code.decode('utf-8')]
-                            
+
                 if(second_oTime > endTime and code.decode('utf-8') in endIndex and endIndex[code.decode('utf-8')] != 0):
                     endIndex[code.decode('utf-8')] = i;                                                 
 

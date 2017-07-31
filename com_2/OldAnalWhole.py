@@ -388,7 +388,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_2\\Data\\"):
                                 delayMesu[code.decode('utf-8')] = delayMesu[code.decode('utf-8')] + 1
                                 continue;                                
 
-                            if(fcggrad < -19.5 and xstime.tm_min < 10 and chegang > 195):
+                            if(fcggrad < -18 and xstime.tm_min < 8 and chegang > 160):
                                 del delayMesu[code.decode('utf-8')]
                                 continue;
 
@@ -1065,7 +1065,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_2\\diff\\"):
                                 delayMesu[code.decode('utf-8')] = delayMesu[code.decode('utf-8')] + 1
                                 continue;
 
-                            if(fcggrad < -19.5 and xstime.tm_min < 10 and chegang > 195):
+                            if(fcggrad < -18 and xstime.tm_min < 8 and chegang > 160):
                                 del delayMesu[code.decode('utf-8')]
                                 continue;
 

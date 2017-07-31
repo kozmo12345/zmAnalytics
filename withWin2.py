@@ -328,17 +328,17 @@ while(True):
                             nf = tmarr[0]
                             fl = tmarr[-1]
 
-                        if(code.decode('utf-8') in pick and pick[code.decode('utf-8')] and (chegang < 200 or mdpCost < 10000000) and code.decode('utf-8') not in pickI):
-                            pFile = open(pFilePath, 'a')
-                            pFile.write( str(code.decode('utf-8')) + ',' + str_oTime + ',' + str(datetime.datetime.now().strftime('%H:%M:%S')) + ',' + str(float(md)) + '\n')
-                            pFile.close()
-                            pickI[code.decode('utf-8')] = second_oTime
+                        # if(code.decode('utf-8') in pick and pick[code.decode('utf-8')] and (chegang < 200 or mdpCost < 10000000) and code.decode('utf-8') not in pickI):
+                        #     pFile = open(pFilePath, 'a')
+                        #     pFile.write( str(code.decode('utf-8')) + ',' + str_oTime + ',' + str(datetime.datetime.now().strftime('%H:%M:%S')) + ',' + str(float(md)) + '\n')
+                        #     pFile.close()
+                        #     pickI[code.decode('utf-8')] = second_oTime
 
-                        if(fMedoTime < second_oTime and ed > -0.1 and ed < 2.5 and code.decode('utf-8') not in pickI):
-                            pFile = open(pFilePath, 'a')
-                            pFile.write( str(code.decode('utf-8')) + ',' + str_oTime + ',' + str(datetime.datetime.now().strftime('%H:%M:%S')) + ',' + str(float(md)) + '\n')
-                            pFile.close()
-                            pickI[code.decode('utf-8')] = second_oTime
+                        # if(fMedoTime < second_oTime and ed > -0.1 and ed < 2.5 and code.decode('utf-8') not in pickI):
+                        #     pFile = open(pFilePath, 'a')
+                        #     pFile.write( str(code.decode('utf-8')) + ',' + str_oTime + ',' + str(datetime.datetime.now().strftime('%H:%M:%S')) + ',' + str(float(md)) + '\n')
+                        #     pFile.close()
+                        #     pickI[code.decode('utf-8')] = second_oTime
 
                         if(code not in comps):
                             continue;
@@ -443,7 +443,7 @@ while(True):
                         delayMesu[code.decode('utf-8')] = delayMesu[code.decode('utf-8')] + 1
                         continue;
 
-                    if(fcggrad < -19.5 and xstime.tm_min < 10 and chegang > 195):
+                    if(fcggrad < -18 and xstime.tm_min < 8 and chegang > 160):
                         del delayMesu[code.decode('utf-8')]
                         continue;
                     if(exportData[i, 3].astype(float) < 4.6 and chegang < 140):

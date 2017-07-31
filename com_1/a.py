@@ -68,8 +68,8 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_1\\Data\\"):
                     str_oTime = "ttime.decode('utf-8')"
                     bool_oTime = True
                     
-                    # if(str(xstime.tm_sec)[-1] == '8'):
-                    #     continue;
+                    if(str(xstime.tm_sec)[-1] == '8'):
+                        continue;
         
                     tempData = data[data[:,0] == ttime]
                     
@@ -136,8 +136,8 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_1\\Data\\"):
                     nzData = data[data[:,2] != b'']
                     ttimeData = nzData[nzData[:,0] == ttime]
                     ttimeData2 = ttimeData[ttimeData[:,1].astype(int) < 10]
-                    ttimeData3 = ttimeData2[ttimeData2[:,4].astype(int) > 300000]
-                    ttimeData4 = ttimeData3[ttimeData3[:,3].astype(float) > 7   ]
+                    ttimeData3 = ttimeData2[ttimeData2[:,4].astype(int) > 100000]
+                    ttimeData4 = ttimeData3[ttimeData3[:,3].astype(float) < 7   ]
                     ttimeData5 = ttimeData4[ttimeData4[:,8].astype(float) > 2200]
                     codes = ttimeData5[:,7]
         
@@ -162,7 +162,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_1\\Data\\"):
                         else: continue
         
                         c = exportData[:i+1, 3].astype(float)
-                        
+        
                         if(code in comps):
                             if(i < mesuStart[code.decode('utf-8')] + 3 ):
                                 continue;
@@ -173,7 +173,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_1\\Data\\"):
                             rms = float(rmsRate[code.decode('utf-8')])
                             md = float(exportData[i, 3].decode('UTF-8'))
                             ed = round(md - ms, 2)
-                            red = round(md - ms - 1, 2)
+                            red = round(md - ms, 2)
                             mdTime = exportData[i, 0].decode('UTF-8')
                             msTime = exportData[mesuStart[code.decode('utf-8')],0].decode('UTF-8')
                             allMax = max(exportData[i:, 3].astype(float))
@@ -355,10 +355,10 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_1\\Data\\"):
                             nowGr = int(exportData[i, 4].decode('UTF-8')) - int(exportData[i-3, 4].decode('UTF-8'))
                             grRate = nowGr / thGr
         
-                        if(chegang < 200):
+                        if(chegang < 140 or chegang > 300):
                             continue;
         
-                        if(True):
+                        if(cggrad < -0.1):
                             x = sp.array(range(i+1))
                             y = exportData[:i+1,3].astype(float)
                             if(len(y) <= 1):
@@ -387,9 +387,11 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_1\\Data\\"):
                                     mesuSTime[code.decode('utf-8')] = str_oTime
                                     mesuDict[code.decode('utf-8')] = mesuDict.get(code.decode('utf-8'), 0)
                                 num = 6
-
-                                if(exportData[i-1, 4].astype(int) - exportData[i-2, 4].astype(int) == 0 and exportData[i-2, 4].astype(int) - exportData[i-3, 4].astype(int) == 0 and exportData[i, 4].astype(int) - exportData[i-1, 4].astype(int) != 0):
-
+                                if(shouldBuy(exportData[i-num+1:i+1,9].astype(float), num) and code not in comps and code not in medos):
+        
+                                    if(True in (exportData[:i+1, 9].astype(float) < chegang - 8)):
+                                        continue;
+        
                                     if(exportData[i, 3].astype(float) < 4 or exportData[i, 3].astype(float) > 19.6):
                                         print(ttime, code, 'nostttttt')
                                         continue;
