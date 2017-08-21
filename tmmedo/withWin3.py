@@ -55,7 +55,7 @@ wanna = 1
 rateLimit = 0.31
 rateMLimit = 3.8
 gradient = 0
-realfilePath = os.path.join("C:\\", "Dropbox\\Diff\\" + today + "\\" + today + ".txt");
+realfilePath = os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + today + ".txt");
 dirn = os.path.dirname(realfilePath)
 try:
     os.stat(dirn)
@@ -125,7 +125,7 @@ with open(setFilePath, 'r') as f:
         imCode = line.split(",")[0].strip()
         if(imCode != ''):
             isRe = True
-        if(imCode != '' and int(line.split(",")[8].strip()) == 2):
+        if(imCode != '' and int(line.split(",")[8].strip()) == 3):
             comps.append(str.encode(imCode))
             mesuStart[imCode] = float(line.split(",")[7].strip())
             msRate[imCode] = float(line.split(",")[1].strip())
@@ -133,7 +133,7 @@ with open(setFilePath, 'r') as f:
             isd2[imCode] = False
             pick[imCode] = False
             endIndex[imCode] = 0
-        elif(imCode != '' and int(line.split(",")[8].strip()) != 2):
+        elif(imCode != '' and int(line.split(",")[8].strip()) != 3):
             nos.append(str.encode(imCode))
         else:
             continue;
@@ -158,9 +158,9 @@ while(True):
         allmedo = False
         prev_oTime = 0
         now = datetime.datetime.now()
-        nowTime = 0
+        nowTime = datetime.timedelta(hours=now.hour,minutes=now.minute,seconds=now.second).total_seconds()
 
-        wchkfilePath = os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + "w2.pchk");
+        wchkfilePath = os.path.join("C:\\", "Dropbox\\Data\\" + today + "\\" + "w3.pchk");
         if not os.path.exists(wchkfilePath):
             wchkfile = open(wchkfilePath, 'a')
             wchkfile.close()
@@ -242,7 +242,7 @@ while(True):
                     ms = float(msRate[code.decode('utf-8')])
                     md = float(exportData[i, 3].decode('UTF-8'))
                     ed = round(md - ms, 2)
-                    mdpCost = (exportData[i,4].astype(float) - exportData[i-2,4].astype(float)) * exportData[i-1,8].astype(float)
+                    mdpCost = (exportData[i,4].astype(float) - exportData[i-1,4].astype(float)) * exportData[i-1,8].astype(float)
 
                     med = ed
                     tempWan = wanna
@@ -357,6 +357,22 @@ while(True):
                             comps.remove(code)
                             del endIndex[code.decode('utf-8')]
 
+                        elif(mdpCost > 280000000 and exportData[i,9].astype(float) - exportData[i-1,9].astype(float) < -20 and exportData[i-1,4].astype(float) - exportData[i-2,4].astype(float) != 0):
+                            mdFile = open(mdFilePath, 'a')
+                            mdFile.write(str(code.decode('utf-8')) + ',' + str(float(exportData[i, 3].decode('UTF-8'))) + ',' + str(exportData[i, 0].decode('UTF-8')) + ',' + str(datetime.datetime.now().strftime('%H:%M:%S')) + ',' + str(exportData[i, 8].decode('UTF-8')) + '\n')
+                            mdFile.close()
+                            medos.append(code)
+                            comps.remove(code)
+                            del endIndex[code.decode('utf-8')]
+
+                        elif((exportData[i,4].astype(float) - exportData[i-1,4].astype(float))/exportData[i,4].astype(float) > 0.05 and exportData[i,9].astype(float) - exportData[i-1,9].astype(float) < -60 and exportData[i-1,4].astype(float) - exportData[i-2,4].astype(float) != 0):
+                            mdFile = open(mdFilePath, 'a')
+                            mdFile.write(str(code.decode('utf-8')) + ',' + str(float(exportData[i, 3].decode('UTF-8'))) + ',' + str(exportData[i, 0].decode('UTF-8')) + ',' + str(datetime.datetime.now().strftime('%H:%M:%S')) + ',' + str(exportData[i, 8].decode('UTF-8')) + '\n')
+                            mdFile.close()
+                            medos.append(code)
+                            comps.remove(code)
+                            del endIndex[code.decode('utf-8')]
+
                 if(second_oTime > endTime and code.decode('utf-8') in endIndex and endIndex[code.decode('utf-8')] != 0):
                     endIndex[code.decode('utf-8')] = i;                                                 
 
@@ -424,11 +440,6 @@ while(True):
                         del findRate[code.decode('utf-8')]
                         continue;
 
-                    # mole = (exportData[i, 4].astype(int) - exportData[i-1, 4].astype(int))/exportData[i, 4].astype(int)
-                    # if(exportData[i, 4].astype(float) > 2000000 and mole < 0.03):
-                    #     del delayMesu[code.decode('utf-8')]
-                    #     continue;
-
                     if(exportData[i, 3].astype(float) > 16.3):
                         del delayMesu[code.decode('utf-8')]
                         del findRate[code.decode('utf-8')]
@@ -449,7 +460,14 @@ while(True):
                         del findRate[code.decode('utf-8')]
                         continue;
 
-                    if(code.decode('utf-8') not in bbamd and gr > 660000 and gr < 2200000 and mole2 < 0.09):
+                    cheFee2 = (exportData[i, 4].astype(int) - exportData[i-1, 4].astype(int)) * exportData[i-2, 8].astype(int)
+                    cheFee3 = (exportData[i-1, 4].astype(int) - exportData[i-2, 4].astype(int)) * exportData[i-2, 8].astype(int)
+                    if(gr < 86000 and (cheFee2 > 200000 and cheFee2 < 4000000) or (cheFee3 > 200000 and cheFee3 < 4000000)):
+                        del delayMesu[code.decode('utf-8')]
+                        del findRate[code.decode('utf-8')]
+                        continue;
+
+                    if(code.decode('utf-8') not in bbamd and code.decode('utf-8') not in bbamd and gr > 660000 and gr < 2200000 and mole2 < 0.09):
                         bbamd[code.decode('utf-8')] = i
 
                     if(i < 4):
@@ -474,7 +492,7 @@ while(True):
                     ammfit = sp.polyfit(x[:len(exportData[s+1:i+1,5])], ammlist, 1)
                     ammgrad = sp.around(ammfit[0]*10, decimals=3)
 
-                    if(code.decode('utf-8') not in bbamd and mmgrad > 10.07 and ammgrad < 15):
+                    if(mmgrad > 10.07 and ammgrad < 15):
                         bbamd[code.decode('utf-8')] = i
 
                     with open(setFilePath, 'r') as f:
@@ -496,7 +514,7 @@ while(True):
                     endIndex[code.decode('utf-8')] = 0
                     cost = exportData[i, 8].decode('UTF-8')
                     setFile = open(setFilePath, 'a')
-                    setFile.write( str(code.decode('utf-8')) + ',' + str(float(rate)) + ',' + str(tpg) +  ',' + str_oTime + ',' + str(wanna) + ',' + str(datetime.datetime.now().strftime('%H:%M:%S')) + ',' + str(cost) + ',' + str(second_oTime) + ',' + str(2) + '\n')
+                    setFile.write( str(code.decode('utf-8')) + ',' + str(float(rate)) + ',' + str(tpg) +  ',' + str_oTime + ',' + str(wanna) + ',' + str(datetime.datetime.now().strftime('%H:%M:%S')) + ',' + str(cost) + ',' + str(second_oTime) + ',' + str(3) + '\n')
                     setFile.close()
                     del delayMesu[code.decode('utf-8')]
 
@@ -525,9 +543,11 @@ while(True):
                     wlevel = 1
                     if(code.decode('utf-8') in mesuDict):
                         wlevel = mesuDict[code.decode('utf-8')] + 2
-                    
-                    if(gradient >= 0.65 + (0.02 * wlevel) and srgrad > 0 and ltdc != 0):
-           
+
+                    cheFee1 = (exportData[i,4].astype(int) - exportData[i-1,4].astype(float)) * (exportData[i,8].astype(int) + exportData[i-1,8].astype(float)) / 2
+
+                    if(gradient >= 0.65 + (0.02 * wlevel) and cheFee1 > (10000000 + 5000000 * wlevel/2) and srgrad > 0 and ltdc != 0):
+
                         if(code.decode('utf-8') in mesuDict):
                             mesuDict[code.decode('utf-8')] = mesuDict[code.decode('utf-8')] + 1
                         else:
@@ -690,6 +710,12 @@ while(True):
                                 nos.append(code)
                                 continue;      
 
+                            cheFee2 = (exportData[i, 4].astype(int) - exportData[i-1, 4].astype(int)) * exportData[i-2, 8].astype(int)
+                            cheFee3 = (exportData[i-1, 4].astype(int) - exportData[i-2, 4].astype(int)) * exportData[i-2, 8].astype(int)
+                            if(gr < 86000 and (cheFee2 > 200000 and cheFee2 < 4000000) or (cheFee3 > 200000 and cheFee3 < 4000000)):
+                                nos.append(code)
+                                continue;
+
                             if(code in nos):
                                 continue;
 
@@ -714,7 +740,7 @@ while(True):
                             endIndex[code.decode('utf-8')] = 0
                             cost = exportData[i, 8].decode('UTF-8')
                             setFile = open(setFilePath, 'a')
-                            setFile.write( str(code.decode('utf-8')) + ',' + str(float(rate)) + ',' + str(tpg) +  ',' + str_oTime + ',' + str(wanna) + ',' + str(datetime.datetime.now().strftime('%H:%M:%S')) + ',' + str(cost) + ',' + str(second_oTime) + ',' + str(2) + '\n')
+                            setFile.write( str(code.decode('utf-8')) + ',' + str(float(rate)) + ',' + str(tpg) +  ',' + str_oTime + ',' + str(wanna) + ',' + str(datetime.datetime.now().strftime('%H:%M:%S')) + ',' + str(cost) + ',' + str(second_oTime) + ',' + str(3) + '\n')
                             setFile.close()
 
     except Exception as e:

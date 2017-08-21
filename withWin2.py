@@ -197,7 +197,7 @@ while(True):
 
             nzData = data[data[:,2] != b'']            
             ttimeData = nzData[nzData[:,0] == ttime]            
-            ttimeData2 = ttimeData[ttimeData[:,1].astype(int) < 31]
+            ttimeData2 = ttimeData[ttimeData[:,1].astype(int) < 51]
             ttimeData3 = ttimeData2[ttimeData2[:,4].astype(int) > 97000]
             ttimeData4 = ttimeData3[ttimeData3[:,3].astype(float) < 25]
             ttimeData5 = ttimeData4[ttimeData4[:,8].astype(float) > 2200]
@@ -487,7 +487,7 @@ while(True):
                 else:
                     cggradDic[code.decode('utf-8')].append(cggrad)
 
-                if(((ms_md > 0.96 and sms_md > 1 and gr > 330000 and not (cggrad < -4 and chegang < 160)) or (cggrad > 2.3 and chegang > 163)) and grade < 16 and exportData[i, 3].astype(float) > 5 and gr1):
+                if(((ms_md > 0.96 and sms_md > 1 and gr > 330000 and not (cggrad < -4 and chegang < 160)) or (cggrad > 1.3 and chegang > 163)) and grade < 16 and exportData[i, 3].astype(float) > 5 and gr1):
                     x = sp.array(range(i+1))
                     y = exportData[:i+1,3].astype(float)
                     if(len(y) <= 1):
@@ -654,7 +654,7 @@ while(True):
                                 nos.append(code)
                                 continue;
 
-                            if(grRate > 1.9 or grRate1 > 1.9 or grRate2 > 1.9 or grRate3 > 1.9 or grRate4 > 1.9 or grRate5 > 1.9 or chegang > 400 or exportData[i, 3].astype(float) - exportData[i-1, 3].astype(float) > 2):
+                            if(grRate > 3 or grRate1 > 3 or grRate2 > 3 or grRate3 > 3 or grRate4 > 3 or grRate5 > 3 or chegang > 400 or exportData[i, 3].astype(float) - exportData[i-1, 3].astype(float) > 2):
                                 delayMesu[code.decode('utf-8')] = i
                                 continue;
 

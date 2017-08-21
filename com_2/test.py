@@ -44,16 +44,16 @@ rateMLimit = 3.8
 stdLimit = 2
 sumEd = 0
 originM = 0
-for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_1\\Data\\"):
+for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_2\\Data\\"):
     for subdirname in dirnames:
         today = subdirname
         # if(today != '2017-02-28'):
         #     break;
         # today = '2017-05-22'
         print(today)
-        setFile = open(os.path.join("C:\\", "Dropbox\\com_1\\Data\\" + today + "\\" + today + "moa3.txt"), 'w')
-        edFile = open(os.path.join("C:\\", "Dropbox\\com_1\\Data\\" + today + "\\" + today + "ed.txt"), 'w')
-        realfilePath = os.path.join("C:\\", "Dropbox\\com_1\\Data\\" + today + "\\" + today + ".txt");
+        setFile = open(os.path.join("C:\\", "Dropbox\\com_2\\Data\\" + today + "\\" + today + "moa3.txt"), 'w')
+        edFile = open(os.path.join("C:\\", "Dropbox\\com_2\\Data\\" + today + "\\" + today + "ed.txt"), 'w')
+        realfilePath = os.path.join("C:\\", "Dropbox\\com_2\\Data\\" + today + "\\" + today + ".txt");
         
         data = sp.genfromtxt(realfilePath, delimiter="\t", dtype='|S20')
         codes = sp.unique(data[data[:,7] != b''][:,7])
@@ -423,6 +423,10 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_1\\Data\\"):
                                         continue;
 
                                     cost = int(exportData[i, 8].decode('UTF-8'))
+                                    # if(cost > 9000):
+                                    #     # nosDic[code.decode('utf-8')].append('3')
+                                    #     nos.append(code)
+                                    #     continue;
 
                                     if(i < 4):
                                         s = 0
@@ -444,6 +448,10 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_1\\Data\\"):
                                     ammfit = sp.polyfit(x[:len(exportData[s+1:i+1,5])], ammlist, level)
                                     ammgrad = sp.around(ammfit[0]*10, decimals=3)
                                     
+                                    # if((mmgrad > 8.1 and ammgrad < 7.2)):
+                                    #     nos.append(code)
+                                    #     continue;
+
                                     if(True in (exportData[0:i,3].astype(float) > 22.5)):
                                         # nosDic[code.decode('utf-8')].append('5')
                                         nos.append(code)
@@ -638,7 +646,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_1\\Data\\"):
 
             except Exception as e:
                 ss
-                errFilePath = os.path.join("C:\\", "Dropbox\\com_1\\Data\\" + "err.txt");
+                errFilePath = os.path.join("C:\\", "Dropbox\\com_2\\Data\\" + "err.txt");
                 errFile = open(errFilePath, 'a')
                 errFile.write(today + '\t' + str(e) + '\n')
                 continue
@@ -658,7 +666,7 @@ mesuLimit = [2]
 rateLimit = 0.31
 rateMLimit = 3.8
 stdLimit = 2
-for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_1\\diff\\"):
+for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_2\\diff\\"):
     for subdirname in dirnames:
         today = subdirname
         # if(today != '2017-03-31'):
@@ -666,9 +674,9 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_1\\diff\\"):
         # today = '2017-04-05'
 
         print(today)
-        setFile = open(os.path.join("C:\\", "Dropbox\\com_1\\diff\\" + today + "\\" + today + "moa3.txt"), 'w')
-        edFile = open(os.path.join("C:\\", "Dropbox\\com_1\\diff\\" + today + "\\" + today + "ed.txt"), 'w')
-        realfilePath = os.path.join("C:\\", "Dropbox\\com_1\\diff\\" + today + "\\" + today + ".txt");
+        setFile = open(os.path.join("C:\\", "Dropbox\\com_2\\diff\\" + today + "\\" + today + "moa3.txt"), 'w')
+        edFile = open(os.path.join("C:\\", "Dropbox\\com_2\\diff\\" + today + "\\" + today + "ed.txt"), 'w')
+        realfilePath = os.path.join("C:\\", "Dropbox\\com_2\\diff\\" + today + "\\" + today + ".txt");
         
         data = sp.genfromtxt(realfilePath, delimiter="\t", dtype='|S20')
         codes = sp.unique(data[data[:,7] != b''][:,7])
@@ -1276,7 +1284,7 @@ for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_1\\diff\\"):
 
             except Exception as e:
                 ss
-                errFilePath = os.path.join("C:\\", "Dropbox\\com_1\\diff\\" + "err.txt");
+                errFilePath = os.path.join("C:\\", "Dropbox\\com_2\\diff\\" + "err.txt");
                 errFile = open(errFilePath, 'a')
                 errFile.write(today + '\t' + str(e) + '\n')
                 continue
@@ -1291,45 +1299,45 @@ for code, today, time, no in ones:
         else:
             ones.remove(matchs[1])
 
-analFilePath = os.path.join("C:\\", "Dropbox\\com_1\\Data\\" + "anal.txt");
+analFilePath = os.path.join("C:\\", "Dropbox\\com_2\\Data\\" + "anal.txt");
 analFile = open(analFilePath, 'w')
 
-edFilePath = os.path.join("C:\\", "Dropbox\\com_1\\Data\\" + "ed.txt");
+edFilePath = os.path.join("C:\\", "Dropbox\\com_2\\Data\\" + "ed.txt");
 edFile = open(edFilePath, 'w')
 
 edFile.write('day' +  ',' + 'originM' +  ',' + 'sumEd' +  ',' + 'code' +  ',' + 'max' ',' + 'termMin' +  ',' + 'termMax' +  ',' + 'md' +  ',' + 'ms' +  ',' + 'ed' +  ',' + 'msTime' +  ',' + 'mdTime' + '\n')
 
-for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_1\\Data\\"):
+for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_2\\Data\\"):
     for subdirname in dirnames:
         today = subdirname
 
-        setFilePath = os.path.join("C:\\", "Dropbox\\com_1\\Data\\" + today + "\\" + today + "moa3.txt");
+        setFilePath = os.path.join("C:\\", "Dropbox\\com_2\\Data\\" + today + "\\" + today + "moa3.txt");
         setFile = open(setFilePath, 'r')
         
         for line in setFile:
             analFile.write(today + ',' + line)
 
-        set2FilePath = os.path.join("C:\\", "Dropbox\\com_1\\Data\\" + today + "\\" + today + "ed.txt");
+        set2FilePath = os.path.join("C:\\", "Dropbox\\com_2\\Data\\" + today + "\\" + today + "ed.txt");
         set2File = open(set2FilePath, 'r')
         
         for line in set2File:
             edFile.write(today + ',' + str(int(originM)) + ',' + str(sumEd) + ',' + line)
 
 
-analFilePath = os.path.join("C:\\", "Dropbox\\com_1\\diff\\" + "anal.txt");
+analFilePath = os.path.join("C:\\", "Dropbox\\com_2\\diff\\" + "anal.txt");
 analFile = open(analFilePath, 'w')
 
-for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_1\\diff\\"):
+for dirname, dirnames, filenames in os.walk("C:\\Dropbox\\com_2\\diff\\"):
     for subdirname in dirnames:
         today = subdirname
 
-        setFilePath = os.path.join("C:\\", "Dropbox\\com_1\\diff\\" + today + "\\" + today + "moa3.txt");
+        setFilePath = os.path.join("C:\\", "Dropbox\\com_2\\diff\\" + today + "\\" + today + "moa3.txt");
         setFile = open(setFilePath, 'r')
         
         for line in setFile:
             analFile.write(today + ',' + line)
 
-        set2FilePath = os.path.join("C:\\", "Dropbox\\com_1\\diff\\" + today + "\\" + today + "ed.txt");
+        set2FilePath = os.path.join("C:\\", "Dropbox\\com_2\\diff\\" + today + "\\" + today + "ed.txt");
         set2File = open(set2FilePath, 'r')
         
         for line in set2File:
