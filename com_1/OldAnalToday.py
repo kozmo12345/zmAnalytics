@@ -454,11 +454,11 @@ for ttime in times:
                         del delayMesu[code.decode('utf-8')]
                         continue;
 
-                    if(findRate + 3 < exportData[i, 3].astype(float)):
+                    if(findRate[code.decode('utf-8')] + 3 < exportData[i, 3].astype(float)):
                         del delayMesu[code.decode('utf-8')]
                         continue;
 
-                    if(findRate + 1.5 < exportData[i, 3].astype(float)):
+                    if(findRate[code.decode('utf-8')] + 1.5 < exportData[i, 3].astype(float)):
                         delayMesu[code.decode('utf-8')] = delayMesu[code.decode('utf-8')] + 1
                         continue;
 

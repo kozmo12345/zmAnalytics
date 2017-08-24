@@ -26,7 +26,7 @@ stdLimit = 2
 sumEd = 0
 gradient = 0
 today = now.strftime('%Y-%m-%d')
-# today = '2017-04-12'
+today = '2017-03-22'
 
 print(today)
 setFile = open(os.path.join("C:\\", "Dropbox\\com_1\\" + today + "\\" + today + "moa3.txt"), 'w')
@@ -122,7 +122,7 @@ for ttime in times:
             ttimeData = nzData[nzData[:,0] == ttime]
             ttimeData2 = ttimeData[ttimeData[:,1].astype(int) < 99]
             ttimeData3 = ttimeData2[ttimeData2[:,4].astype(int) > 97000]
-            ttimeData4 = ttimeData3[ttimeData3[:,3].astype(float) < 25]
+            ttimeData4 = ttimeData3[ttimeData3[:,3].astype(float) < 30]
             ttimeData5 = ttimeData4[ttimeData4[:,8].astype(float) > 800]
             codes = ttimeData5[:,7]
 
@@ -305,6 +305,14 @@ for ttime in times:
                         continue;
 
                     if(mesuStart[code.decode('utf-8')] + 53 < i and chegang < 200):
+                        print(ttime, code, 1111111111)
+                        edFile.write( str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMin) + ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(red) + ',' + str(msTime) + ',' + str(mdTime) + ',' + str(msCost) + ',' + str(mdCost) + ',' + str(msGradient[code.decode('utf-8')]) + ',' + str(msGr[code.decode('utf-8')]) + ',' + str(msSmdms[code.decode('utf-8')]) + ',' + str(msGrade[code.decode('utf-8')]) + ',' + str(msSrgrad[code.decode('utf-8')]) +'\n')
+                        comps.remove(code)
+                        medos.append(code)
+                        sumEd = sumEd + red
+                        del endIndex[code.decode('utf-8')]
+
+                    elif((i - mesuStart[code.decode('utf-8')]) % 6 == 0 and ed > 1.95):
                         print(ttime, code, 1111111111)
                         edFile.write( str(code.decode('utf-8')) + ',' + str(allMax) +  ',' + str(termMin) + ',' + str(termMax) + ',' + str(md) + ',' + str(ms) + ',' + str(red) + ',' + str(msTime) + ',' + str(mdTime) + ',' + str(msCost) + ',' + str(mdCost) + ',' + str(msGradient[code.decode('utf-8')]) + ',' + str(msGr[code.decode('utf-8')]) + ',' + str(msSmdms[code.decode('utf-8')]) + ',' + str(msGrade[code.decode('utf-8')]) + ',' + str(msSrgrad[code.decode('utf-8')]) +'\n')
                         comps.remove(code)
