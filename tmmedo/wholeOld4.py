@@ -200,9 +200,9 @@ while(True):
             nzData = data[data[:,2] != b'']            
             ttimeData = nzData[nzData[:,0] == ttime]            
             ttimeData2 = ttimeData[ttimeData[:,1].astype(int) < 51]
-            ttimeData3 = ttimeData2[ttimeData2[:,4].astype(int) > 97000]
+            ttimeData3 = ttimeData2[ttimeData2[:,4].astype(int) > 57000]
             ttimeData4 = ttimeData3[ttimeData3[:,3].astype(float) < 30]
-            ttimeData5 = ttimeData4[ttimeData4[:,8].astype(float) > 900]
+            ttimeData5 = ttimeData4[ttimeData4[:,8].astype(float) < 10650]
             codes = ttimeData5[:,7]
 
             if(second_oTime > endTime and len(comps) > 0):
@@ -333,7 +333,15 @@ while(True):
                         if(code not in comps):
                             continue;
 
-                        if(mesuStart[code.decode('utf-8')] + 530 < second_oTime and chegang < 200):
+                        if(mesuStart[code.decode('utf-8')] + 530 < second_oTime):
+                            mdFile = open(mdFilePath, 'a')
+                            mdFile.write(str(code.decode('utf-8')) + ',' + str(float(exportData[i, 3].decode('UTF-8'))) + ',' + str(exportData[i, 0].decode('UTF-8')) + ',' + str(datetime.datetime.now().strftime('%H:%M:%S')) + ',' + str(exportData[i, 8].decode('UTF-8')) + '\n')
+                            mdFile.close()
+                            medos.append(code)
+                            comps.remove(code)
+                            del endIndex[code.decode('utf-8')]
+
+                        elif((second_oTime - mesuStart[code.decode('utf-8')]) % 60 < 5 and ed > 1.92):
                             mdFile = open(mdFilePath, 'a')
                             mdFile.write(str(code.decode('utf-8')) + ',' + str(float(exportData[i, 3].decode('UTF-8'))) + ',' + str(exportData[i, 0].decode('UTF-8')) + ',' + str(datetime.datetime.now().strftime('%H:%M:%S')) + ',' + str(exportData[i, 8].decode('UTF-8')) + '\n')
                             mdFile.close()
@@ -342,14 +350,6 @@ while(True):
                             del endIndex[code.decode('utf-8')]
 
                         elif(code.decode('utf-8') in bbamd and ed > 0.7 and chegang < 200 and mesuStart[code.decode('utf-8')] + 30 < second_oTime):
-                            mdFile = open(mdFilePath, 'a')
-                            mdFile.write(str(code.decode('utf-8')) + ',' + str(float(exportData[i, 3].decode('UTF-8'))) + ',' + str(exportData[i, 0].decode('UTF-8')) + ',' + str(datetime.datetime.now().strftime('%H:%M:%S')) + ',' + str(exportData[i, 8].decode('UTF-8')) + '\n')
-                            mdFile.close()
-                            medos.append(code)
-                            comps.remove(code)
-                            del endIndex[code.decode('utf-8')]
-
-                        elif(mesuStart[code.decode('utf-8')] + 620 < second_oTime):
                             mdFile = open(mdFilePath, 'a')
                             mdFile.write(str(code.decode('utf-8')) + ',' + str(float(exportData[i, 3].decode('UTF-8'))) + ',' + str(exportData[i, 0].decode('UTF-8')) + ',' + str(datetime.datetime.now().strftime('%H:%M:%S')) + ',' + str(exportData[i, 8].decode('UTF-8')) + '\n')
                             mdFile.close()
@@ -467,6 +467,11 @@ while(True):
                         del findRate[code.decode('utf-8')]
                         continue;
 
+                    if(chegang < 183 and min(exportData[:i+1, 9].astype(float)) < 100 and min(exportData[:i+1, 9].astype(float)) > 0.1 and exportData[i, 3].astype(float) >= max(exportData[:i+1, 3].astype(float)) - 1):
+                        del delayMesu[code.decode('utf-8')]
+                        del findRate[code.decode('utf-8')]
+                        continue;                        
+
                     if(code.decode('utf-8') not in bbamd and code.decode('utf-8') not in bbamd and gr > 660000 and gr < 2200000 and mole2 < 0.09):
                         bbamd[code.decode('utf-8')] = i
 
@@ -492,9 +497,6 @@ while(True):
                     ammfit = sp.polyfit(x[:len(exportData[s+1:i+1,5])], ammlist, 1)
                     ammgrad = sp.around(ammfit[0]*10, decimals=3)
 
-                    if(mmgrad > 10.07 and ammgrad < 15):
-                        bbamd[code.decode('utf-8')] = i
-
                     with open(setFilePath, 'r') as f:
                         for line in f:
                             if(line.split(",")[0] == code.decode('utf-8') and code not in comps):
@@ -504,6 +506,9 @@ while(True):
 
                     if(code in nos):
                         continue;
+
+                    if(mmgrad > 10.07 and ammgrad < 15):
+                        bbamd[code.decode('utf-8')] = i
 
                     comps.append(code)
                     mesuStart[code.decode('utf-8')] = second_oTime
@@ -524,7 +529,7 @@ while(True):
                     cggradDic[code.decode('utf-8')].append(cggrad)
 
                 cost = int(exportData[i, 8].decode('UTF-8'))
-                if(((ms_md > 0.96 and sms_md > 1 and gr > 330000 and not (cggrad < -4 and chegang < 160)) or (cggrad > 2.3 and chegang > 163)) and grade < 16 and exportData[i, 3].astype(float) > 5 and gr1):
+                if(((ms_md > 0.96 and sms_md > 1 and gr > 330000 and not (cggrad < -4 and chegang < 160)) or (cggrad > 2 and chegang > 159)) and grade < 16 and exportData[i, 3].astype(float) > 5 and gr1):
                     x = sp.array(range(i+1))
                     y = exportData[:i+1,3].astype(float)
                     if(len(y) <= 1):
@@ -716,6 +721,12 @@ while(True):
                                 nos.append(code)
                                 continue;
 
+                            with open(setFilePath, 'r') as f:
+                                for line in f:
+                                    if(line.split(",")[0] == code.decode('utf-8') and code not in comps):
+                                        nos.append(code)
+                                        break
+
                             if(code in nos):
                                 continue;
 
@@ -724,12 +735,6 @@ while(True):
 
                             if(code.decode('utf-8') not in bbamd and mmgrad > 10.07 and ammgrad < 15):
                                 bbamd[code.decode('utf-8')] = i
-
-                            with open(setFilePath, 'r') as f:
-                                for line in f:
-                                    if(line.split(",")[0] == code.decode('utf-8') and code not in comps):
-                                        nos.append(code)
-                                        break
 
                             comps.append(code)
                             mesuStart[code.decode('utf-8')] = second_oTime

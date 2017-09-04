@@ -50,7 +50,7 @@ allMedoTime = datetime.timedelta(hours=9,minutes=33,seconds=30).total_seconds()
 comps = []
 medos = []
 nos = []
-mesuLimit = [2]
+mesuLimit = [1]
 wanna = 1
 rateLimit = 0.31
 rateMLimit = 3.8
@@ -198,7 +198,7 @@ while(True):
             nzData = data[data[:,2] != b'']            
             ttimeData = nzData[nzData[:,0] == ttime]            
             ttimeData2 = ttimeData[ttimeData[:,1].astype(int) < 51]
-            ttimeData3 = ttimeData2[ttimeData2[:,4].astype(int) > 97000]
+            ttimeData3 = ttimeData2[ttimeData2[:,4].astype(int) > 37000]
             ttimeData4 = ttimeData3[ttimeData3[:,3].astype(float) < 25]
             ttimeData5 = ttimeData4[ttimeData4[:,8].astype(float) > 2200]
             codes = ttimeData5[:,7]
